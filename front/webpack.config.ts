@@ -1,0 +1,52 @@
+import path from "path";
+import webpack from "webpack";
+import "webpack-dev-server";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+
+const isDevelopment = process.env.NODE_ENV !== "production";
+
+const config: webpack.Configuration = {
+  mode: isDevelopment ? "development" : "production",
+  entry: {
+    app: "./src/index.tsx",
+  },
+  resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].bundle.js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: "babel-loader",
+        options: {
+          presets: [
+            "@babel/preset-env",
+            ["@babel/preset-react", { runtime: "automatic" }],
+            "@babel/preset-typescript",
+          ],
+        },
+        exclude: path.join(__dirname, "node_modules"),
+      },
+      {
+        test: /\.css?$/,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "public/index.html",
+      favicon: "public/favicon.ico",
+    }),
+  ],
+  devServer: {
+    historyApiFallback: true,
+    port: 3000,
+  },
+};
+
+export default config;
