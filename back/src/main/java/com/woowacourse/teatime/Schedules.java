@@ -11,8 +11,15 @@ public class Schedules {
         this.schedules = schedules;
     }
 
-    public boolean isExist(LocalDateTime localDateTime) {
+    public void reserve(LocalDateTime localDateTime) {
+        Schedule schedule = findSchedule(localDateTime);
+        schedule.reserve();
+    }
+
+    private Schedule findSchedule(LocalDateTime localDateTime) {
         return schedules.stream()
-                .anyMatch(schedule -> schedule.isSameTime(localDateTime));
+                .filter(schedule -> schedule.isSameTime(localDateTime))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
     }
 }
