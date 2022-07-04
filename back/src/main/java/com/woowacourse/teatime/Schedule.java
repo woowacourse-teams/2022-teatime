@@ -1,34 +1,30 @@
 package com.woowacourse.teatime;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Schedule {
 
     private final LocalDateTime localDateTime;
+    private boolean isPossible;
 
     public Schedule(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Schedule)) {
-            return false;
-        }
-        Schedule schedule = (Schedule) o;
-        return Objects.equals(localDateTime, schedule.localDateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(localDateTime);
+        this.isPossible = true;
     }
 
     public boolean isSameTime(LocalDateTime localDateTime) {
         return this.localDateTime.equals(localDateTime);
     }
+
+    public void reserve() {
+        if (!this.isPossible) {
+            throw new IllegalArgumentException("이미 예약이 되어 있습니다.");
+        }
+        this.isPossible = false;
+    }
+
+    public boolean isPossible() {
+        return isPossible;
+    }
+
 }
