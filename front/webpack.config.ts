@@ -16,6 +16,8 @@ const config: webpack.Configuration = {
       '@hooks': path.resolve(__dirname, 'src/hooks'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@pages': path.resolve(__dirname, 'src/pages'),
+      '@typings': path.resolve(__dirname, 'src/typings'),
+      '@constants': path.resolve(__dirname, 'src/constants'),
     },
   },
   output: {

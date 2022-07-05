@@ -13,7 +13,9 @@
     "paths": {
       "@hooks/*": ["src/hooks/*"],
       "@components/*": ["src/components/*"],
-      "@pages/*": ["src/pages/*"]
+      "@pages/*": ["src/pages/*"],
+      "@typings/*": ["src/typings/*"],
+      "@constants/*": ["src/constants/*"]
     }
   },
   "ts-node": {
