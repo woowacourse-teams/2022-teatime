@@ -9,6 +9,10 @@ public class CoachResponse {
     private final String description;
     private final String image;
 
+    private CoachResponse() {
+        this(null, null, null, null);
+    }
+
     public CoachResponse(Coach coach) {
         this(coach.getId(), coach.getName(), coach.getDescription(), coach.getImage());
     }
