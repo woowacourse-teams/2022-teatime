@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '@components/Card';
 import useFetch from '@hooks/useFetch';
 import type { Coach } from '@typings/domain';
+import { ROUTES } from '@constants/index';
 import { HomeContainer } from './styles';
 
 const Home = () => {
@@ -9,7 +10,7 @@ const Home = () => {
   const { data: coaches } = useFetch<Coach[]>('/coaches');
 
   const handleClickCard = (id: number) => {
-    navigate(`/schedule/${id}`);
+    navigate(`${ROUTES.SCHEDULE}/${id}`);
   };
 
   return (

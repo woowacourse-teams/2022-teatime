@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import useSchedule from '@hooks/useSchedules';
-import { DAY_OF_WEEKS } from '@constants/index';
+import { CALENDAR_DATE_LENGTH, DAY_OF_WEEKS } from '@constants/index';
 import DateBox from './DateBox';
 import { CalendarTitle, DateGrid, DayOfWeekBox, Month, Year } from './styles';
 
@@ -9,8 +9,10 @@ const Calendar = () => {
   const { monthYear, setMonthYear, schedules } = useSchedule(id);
   const { firstDOW, lastDate, year, month } = monthYear;
 
-  const dateBoxLength = firstDOW + lastDate < 35 ? 35 : 42;
-
+  const dateBoxLength =
+    firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
+      ? CALENDAR_DATE_LENGTH.MIN
+      : CALENDAR_DATE_LENGTH.MAX;
   return (
     <>
       <CalendarTitle>
