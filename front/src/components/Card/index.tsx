@@ -4,11 +4,12 @@ import { CardContainer } from './styles';
 
 interface CoachProps {
   coach: CoachType;
+  onClick: (id: number) => void;
 }
 
-const Card = ({ coach }: CoachProps) => {
+const Card = ({ coach, onClick }: CoachProps) => {
   return (
-    <CardContainer color={COACH_COLORS[coach.id]}>
+    <CardContainer color={COACH_COLORS[coach.id]} onClick={() => onClick(coach.id)}>
       <div>
         <img src={coach.image} alt="코치 프로필 이미지" />
         <span>{coach.name}</span>

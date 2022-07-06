@@ -2,12 +2,14 @@ import styled from 'styled-components';
 
 const DateContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
   width: 100px;
   height: 80px;
   margin: -1px;
   padding: 10px;
   border: 2px solid #e2e2e2;
+  overflow: hidden;
 `;
 
 const DateGrid = styled.div`
@@ -39,4 +41,11 @@ const Month = styled.span`
   font-size: 36px;
 `;
 
-export { DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month };
+const ScheduleBar = styled.div`
+  width: 100%;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  background-color: #cce6ba;
+`;
+
+export { DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month, ScheduleBar };

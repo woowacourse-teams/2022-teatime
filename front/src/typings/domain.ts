@@ -15,4 +15,12 @@ interface MonthYear {
   year: string; // YY
 }
 
-export { Coach, MonthYear };
+interface Schedule {
+  id: number;
+  dateTime: Date;
+  isPossible: boolean;
+}
+
+type ScheduleMap = Record<number, Schedule[]>;
+
+export { Coach, MonthYear, Schedule, ScheduleMap };
