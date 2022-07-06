@@ -8,14 +8,14 @@ const Home = () => {
   const navigate = useNavigate();
   const { data: coaches } = useFetch<Coach[]>('/coaches');
 
-  const handleCardClick = (id: number) => {
+  const handleClickCard = (id: number) => {
     navigate(`/schedule/${id}`);
   };
 
   return (
     <HomeContainer>
       {coaches?.map((coach) => {
-        return <Card key={coach.id} coach={coach} onClick={handleCardClick} />;
+        return <Card key={coach.id} coach={coach} onClick={handleClickCard} />;
       })}
     </HomeContainer>
   );

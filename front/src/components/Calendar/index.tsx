@@ -1,8 +1,8 @@
-import DateBox from './DateBox';
-import { CalendarTitle, DateGrid, DayOfWeekBox, Month, Year } from './styles';
-import { DAY_OF_WEEKS } from '@constants/index';
 import { useParams } from 'react-router-dom';
 import useSchedule from '@hooks/useSchedules';
+import { DAY_OF_WEEKS } from '@constants/index';
+import DateBox from './DateBox';
+import { CalendarTitle, DateGrid, DayOfWeekBox, Month, Year } from './styles';
 
 const Calendar = () => {
   const { id } = useParams();
