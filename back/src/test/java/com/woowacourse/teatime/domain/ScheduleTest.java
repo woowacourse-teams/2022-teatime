@@ -43,4 +43,12 @@ class ScheduleTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("스케줄이 2022년 이전이면 예외가 발생한다.")
+    void schedule_boundException() {
+        LocalDateTime dateTime = LocalDateTime.of(2021, 1, 1, 0, 0);
+
+        assertThatThrownBy(() -> new Schedule(dateTime))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
