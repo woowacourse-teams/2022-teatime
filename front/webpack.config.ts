@@ -22,6 +22,7 @@ const config: webpack.Configuration = {
     },
   },
   output: {
+    publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
   },
@@ -54,6 +55,7 @@ const config: webpack.Configuration = {
   devServer: {
     historyApiFallback: true,
     port: 3000,
+    static: { directory: path.resolve(__dirname, 'public') },
   },
 };
 
