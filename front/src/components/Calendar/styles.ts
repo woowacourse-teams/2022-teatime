@@ -46,6 +46,7 @@ const ScheduleBar = styled.div`
   margin-bottom: 4px;
   border-radius: 4px;
   background-color: #cce6ba;
+  cursor: pointer;
 `;
 
 export { DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month, ScheduleBar };
