@@ -5,11 +5,7 @@ interface DateBoxProps {
 }
 
 const DateBox = ({ date }: DateBoxProps) => {
-  return (
-    <div>
-      <DateContainer>{date}</DateContainer>
-    </div>
-  );
+  return <DateContainer>{date}</DateContainer>;
 };
 
 export default DateBox;

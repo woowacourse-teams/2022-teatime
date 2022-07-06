@@ -5,4 +5,6 @@ const COACH_COLORS = [
   'lightCyan, skyBlue, deepSkyBlue',
 ];
 
-export { COACH_COLORS };
+const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+
+export { COACH_COLORS, DAY_OF_WEEKS };

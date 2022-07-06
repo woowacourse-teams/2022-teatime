@@ -13,7 +13,30 @@ const DateContainer = styled.div`
 const DateGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  width: 600px;
+  width: 854px;
 `;
 
-export { DateContainer, DateGrid };
+const DayOfWeekBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 8px;
+`;
+
+const CalendarTitle = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 854px;
+  margin-bottom: 20px;
+`;
+
+const Year = styled.span`
+  margin-bottom: 8px;
+  font-size: 24px;
+`;
+
+const Month = styled.span`
+  font-size: 36px;
+`;
+
+export { DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month };
