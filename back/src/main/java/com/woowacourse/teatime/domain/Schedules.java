@@ -1,4 +1,4 @@
-package com.woowacourse.teatime;
+package com.woowacourse.teatime.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;

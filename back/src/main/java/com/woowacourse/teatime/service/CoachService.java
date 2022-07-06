@@ -2,7 +2,7 @@ package com.woowacourse.teatime.service;
 
 import com.woowacourse.teatime.CoachResponse;
 import com.woowacourse.teatime.domain.Coach;
-import com.woowacourse.teatime.domain.CoachRepository;
+import com.woowacourse.teatime.repository.CoachRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

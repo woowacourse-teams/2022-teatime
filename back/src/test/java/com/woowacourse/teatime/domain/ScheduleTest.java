@@ -1,4 +1,4 @@
-package com.woowacourse.teatime;
+package com.woowacourse.teatime.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -1,7 +1,8 @@
-package com.woowacourse.teatime.domain;
+package com.woowacourse.teatime.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.woowacourse.teatime.domain.Coach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
