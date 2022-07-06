@@ -26,4 +26,12 @@ const coaches = [
   },
 ];
 
-export { coaches };
+const schedules = {
+  1: [
+    { id: 13415, dateTime: '2022-07-04T01:00:00.000Z', isPossible: true },
+    { id: 12345, dateTime: '2022-07-04T01:00:00.000Z', isPossible: true },
+  ],
+  4: [{ id: 44444, dateTime: '2022-07-04T01:00:00.000Z', isPossible: true }],
+};
+
+export { coaches, schedules };

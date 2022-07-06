@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 interface Coach {
   id: number;
   name: string;
@@ -5,4 +7,12 @@ interface Coach {
   image: string;
 }
 
-export { Coach };
+interface MonthYear {
+  startDate: dayjs.Dayjs;
+  firstDOW: number; // 0 === Sunday
+  lastDate: number;
+  month: string; // MM
+  year: string; // YY
+}
+
+export { Coach, MonthYear };
