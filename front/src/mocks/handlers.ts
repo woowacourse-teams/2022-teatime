@@ -13,8 +13,13 @@ const handlers = [
   rest.get<CoachResponse>('/coaches', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(coaches));
   }),
+
   rest.get<ScheduleMapResponse>(`/coaches/:id/schedules`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(schedules));
+  }),
+
+  rest.post(`/coaches/:id/schedules/:scheduleId`, (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];
 
