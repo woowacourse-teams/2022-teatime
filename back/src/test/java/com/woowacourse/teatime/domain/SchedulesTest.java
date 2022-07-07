@@ -24,8 +24,9 @@ public class SchedulesTest {
     @DisplayName("예약 불가능한 일정에 예약할 경우, 예외를 반환한다.")
     void reserve_exception_impossible() {
         LocalDateTime now = LocalDateTime.now();
+        Coach coach = new Coach("제이슨");
 
-        Schedules schedules = new Schedules(List.of(new Schedule(now)));
+        Schedules schedules = new Schedules(List.of(new Schedule(coach, now)));
         schedules.reserve(now);
 
         assertThatThrownBy(() -> schedules.reserve(LocalDateTime.now()))
@@ -36,8 +37,9 @@ public class SchedulesTest {
     @DisplayName("존재하는 예약 가능한 일정에 예약할 경우, 예약을 한다.")
     void reserve() {
         LocalDateTime now = LocalDateTime.now();
+        Coach coach = new Coach("제이슨");
 
-        Schedules schedules = new Schedules(List.of(new Schedule(now)));
+        Schedules schedules = new Schedules(List.of(new Schedule(coach, now)));
         assertDoesNotThrow(() -> schedules.reserve(now));
     }
 

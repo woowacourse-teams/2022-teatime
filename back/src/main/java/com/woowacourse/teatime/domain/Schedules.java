@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Schedules {
 
-    private final List<Schedule> schedules;
+    public final List<Schedule> schedules;
 
     public Schedules(List<Schedule> schedules) {
         this.schedules = schedules;

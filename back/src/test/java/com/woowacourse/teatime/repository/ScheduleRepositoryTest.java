@@ -2,6 +2,7 @@ package com.woowacourse.teatime.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,11 +17,16 @@ public class ScheduleRepositoryTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    @Autowired
+    private CoachRepository coachRepository;
+
     @Test
     @DisplayName("스케줄 전체 목록을 조회한다.")
     void findAll() {
         LocalDateTime now = LocalDateTime.now();
-        scheduleRepository.save(new Schedule(now));
+        Coach coach = new Coach("제이슨");
+        coachRepository.save(coach);
+        scheduleRepository.save(new Schedule(coach, now));
 
         List<Schedule> schedules = this.scheduleRepository.findAll();
 
