@@ -17,8 +17,10 @@
       "@typings/*": ["src/typings/*"],
       "@constants/*": ["src/constants/*"],
       "@utils/*": ["src/utils/*"],
-      "@styles/*": ["src/styles/*"]
-    }
+      "@styles/*": ["src/styles/*"],
+      "@assets/*": ["src/assets/*"]
+    },
+    "typeRoots": ["src/typings"]
   },
   "ts-node": {
     "compilerOptions": {
