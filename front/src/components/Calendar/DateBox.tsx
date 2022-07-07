@@ -1,7 +1,7 @@
 import { Schedule } from '@typings/domain';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { DateContainer, ScheduleBar } from './styles';
+import { Date, DateContainer, ScheduleBar } from './styles';
 
 interface DateBoxProps {
   date?: number;
@@ -16,11 +16,11 @@ const DateBox = ({ date, schedules = [] }: DateBoxProps) => {
 
   return (
     <DateContainer>
-      <div>{date}</div>
+      <Date>{date}</Date>
       {schedules.map((schedule) => {
         return (
           <ScheduleBar key={schedule.id} onClick={() => handleSubmitCrewName(schedule.id)}>
-            {dayjs(schedule.dateTime).format('H:MM')} ~ {dayjs(schedule.dateTime).format('H:MM')}
+            {dayjs(schedule.dateTime).format('H:mm')} - {dayjs(schedule.dateTime).format('H:mm')}
           </ScheduleBar>
         );
       })}

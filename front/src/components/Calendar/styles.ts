@@ -1,44 +1,45 @@
 import styled from 'styled-components';
 
-const Layout = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 25px;
-`;
-
 const DateContainer = styled.div`
   display: flex;
-  align-items: flex-end;
   flex-direction: column;
-  width: 100px;
-  height: 80px;
-  margin: -1px;
+  width: 150px;
+  height: 110px;
+  margin: -0.5px;
   padding: 10px;
-  border: 2px solid #e2e2e2;
+  border: 1px solid #e8e8e8;
   overflow: hidden;
+`;
+
+const Date = styled.div`
+  color: #969696;
+  margin-bottom: 5px;
 `;
 
 const DateGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  width: 854px;
+  grid-template-columns: repeat(7, 149px);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  overflow: hidden;
 `;
 
 const DayOfWeekBox = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding-left: 10px;
+  height: 40px;
   padding-top: 3px;
-  background-color: #dedede;
+  color: #969696;
+  background-color: #cce6ba;
+  margin: -0.5px;
+  border: 1px solid #e8e8e8;
 `;
 
-const CalendarTitle = styled.div`
+const YearMonthContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 854px;
   margin-bottom: 20px;
 `;
 
@@ -52,11 +53,23 @@ const Month = styled.span`
 `;
 
 const ScheduleBar = styled.div`
+  padding-left: 3px;
+  font-size: 16px;
   width: 100%;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   border-radius: 4px;
-  background-color: #cce6ba;
+  background-color: #e6f3ff;
+  color: #0085ff;
   cursor: pointer;
 `;
 
-export { Layout, DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month, ScheduleBar };
+export {
+  DateContainer,
+  Date,
+  DateGrid,
+  DayOfWeekBox,
+  YearMonthContainer,
+  Year,
+  Month,
+  ScheduleBar,
+};

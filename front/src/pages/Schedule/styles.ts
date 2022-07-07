@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { Container } from '@pages/Layout/styles';
 
-const ScheduleContainer = styled(Container)`
+const ScheduleContainer = styled.div`
   flex-direction: column;
 `;
 

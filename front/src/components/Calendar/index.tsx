@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import useSchedule from '@hooks/useSchedules';
 import { CALENDAR_DATE_LENGTH, DAY_OF_WEEKS } from '@constants/index';
 import DateBox from './DateBox';
-import { CalendarTitle, DateGrid, DayOfWeekBox, Month, Year } from './styles';
+import { YearMonthContainer, DateGrid, DayOfWeekBox, Month, Year } from './styles';
 
 const Calendar = () => {
   const { id } = useParams();
@@ -15,10 +15,10 @@ const Calendar = () => {
       : CALENDAR_DATE_LENGTH.MAX;
   return (
     <>
-      <CalendarTitle>
-        <Year>{year}년</Year>
-        <Month>{Number(month)}월</Month>
-      </CalendarTitle>
+      <YearMonthContainer>
+        <Year>{year}</Year>
+        <Month>{month}</Month>
+      </YearMonthContainer>
       <DateGrid>
         {DAY_OF_WEEKS.map((day) => {
           return <DayOfWeekBox key={day}>{day}</DayOfWeekBox>;
