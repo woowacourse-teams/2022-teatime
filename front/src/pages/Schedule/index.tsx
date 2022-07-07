@@ -1,10 +1,11 @@
 import Calendar from '@components/Calendar';
+import { ScheduleContainer } from './styles';
 
 const Schedule = () => {
   return (
-    <div>
+    <ScheduleContainer>
       <Calendar />
-    </div>
+    </ScheduleContainer>
   );
 };
 

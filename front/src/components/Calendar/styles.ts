@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+const Layout = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 25px;
+`;
+
 const DateContainer = styled.div`
   display: flex;
   align-items: flex-end;
@@ -20,8 +28,10 @@ const DateGrid = styled.div`
 
 const DayOfWeekBox = styled.div`
   display: flex;
-  justify-content: flex-end;
-  padding-right: 8px;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3px;
+  background-color: #dedede;
 `;
 
 const CalendarTitle = styled.div`
@@ -49,4 +59,4 @@ const ScheduleBar = styled.div`
   cursor: pointer;
 `;
 
-export { DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month, ScheduleBar };
+export { Layout, DateContainer, DateGrid, DayOfWeekBox, CalendarTitle, Year, Month, ScheduleBar };

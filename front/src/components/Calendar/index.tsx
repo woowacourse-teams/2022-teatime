@@ -24,16 +24,13 @@ const Calendar = () => {
           return <DayOfWeekBox key={day}>{day}</DayOfWeekBox>;
         })}
         {Array.from({ length: dateBoxLength }, (_, index) => {
-          const isOutOfCalendar = index < firstDOW || lastDate <= index - firstDOW;
+          const date = index - firstDOW;
+          const isOutOfCalendar = index < firstDOW || lastDate <= date;
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
           ) : (
-            <DateBox
-              key={index}
-              date={index - firstDOW + 1}
-              schedules={schedules?.[index - firstDOW + 1]}
-            />
+            <DateBox key={index} date={date + 1} schedules={schedules?.[date + 1]} />
           );
         })}
       </DateGrid>
