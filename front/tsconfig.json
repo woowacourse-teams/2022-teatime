@@ -16,7 +16,8 @@
       "@pages/*": ["src/pages/*"],
       "@typings/*": ["src/typings/*"],
       "@constants/*": ["src/constants/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["src/styles/*"]
     }
   },
   "ts-node": {
