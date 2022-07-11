@@ -28,6 +28,7 @@ const config: webpack.Configuration = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     assetModuleFilename: 'images/[hash][ext][query]',
+    clean: true,
   },
   module: {
     rules: [
@@ -48,7 +49,11 @@ const config: webpack.Configuration = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.png/,
+        test: /\.(png|svg)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
     ],
@@ -62,6 +67,8 @@ const config: webpack.Configuration = {
   devServer: {
     historyApiFallback: true,
     port: 3000,
+    open: true,
+    hot: true,
     static: { directory: path.resolve(__dirname, 'public') },
   },
 };
