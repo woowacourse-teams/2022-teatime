@@ -3,7 +3,7 @@ const ROUTES = {
   SCHEDULE: '/schedule',
 };
 
-const DAY_OF_WEEKS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 const CALENDAR_DATE_LENGTH = {
   MIN: 35,

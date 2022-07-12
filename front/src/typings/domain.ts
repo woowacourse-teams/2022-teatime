@@ -21,6 +21,8 @@ interface Schedule {
   isPossible: boolean;
 }
 
+type DaySchedule = { day: number; schedules: Schedule[] };
+
 type ScheduleMap = Record<number, Schedule[]>;
 
-export { Coach, MonthYear, Schedule, ScheduleMap };
+export { Coach, MonthYear, Schedule, DaySchedule, ScheduleMap };

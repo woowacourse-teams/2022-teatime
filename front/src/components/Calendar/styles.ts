@@ -1,75 +1,67 @@
 import styled from 'styled-components';
 
-const DateContainer = styled.div`
+const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 150px;
-  height: 110px;
-  margin: -0.5px;
-  padding: 10px;
-  border: 1px solid #e8e8e8;
-  overflow: hidden;
+
+  h1 {
+    margin: 0 0 60px 10px;
+    font-size: 28px;
+  }
+`;
+
+const DateContainer = styled.div<{ hasSchedule: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 25px;
+  color: ${(props) => (props.hasSchedule ? '#000' : '#969696')};
+  background-color: ${(props) => props.hasSchedule && '#cce6ba'};
 `;
 
 const Date = styled.div`
-  color: #969696;
-  margin-bottom: 5px;
+  font-weight: bolder;
 `;
 
 const DateGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(7, 149px);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  overflow: hidden;
+  gap: 8px;
+  grid-template-columns: repeat(7, 40px);
 `;
 
 const DayOfWeekBox = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  justify-content: center;
+  width: 40px;
   height: 40px;
   padding-top: 3px;
-  color: #969696;
-  background-color: #cce6ba;
-  margin: -0.5px;
-  border: 1px solid #e8e8e8;
+  color: black;
+  font-weight: bolder;
+  font-size: 20px;
 `;
 
 const YearMonthContainer = styled.div`
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  justify-content: space-between;
   margin-bottom: 20px;
+  padding: 0 10px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    width: 70px;
+  }
+  span {
+    font-size: 24px;
+    font-weight: bolder;
+  }
+  img {
+    width: 13px;
+    cursor: pointer;
+  }
 `;
 
-const Year = styled.span`
-  margin-bottom: 8px;
-  font-size: 24px;
-`;
-
-const Month = styled.span`
-  font-size: 36px;
-`;
-
-const ScheduleBar = styled.div`
-  padding-left: 3px;
-  font-size: 16px;
-  width: 100%;
-  margin-bottom: 6px;
-  border-radius: 4px;
-  background-color: #e6f3ff;
-  color: #0085ff;
-  cursor: pointer;
-`;
-
-export {
-  DateContainer,
-  Date,
-  DateGrid,
-  DayOfWeekBox,
-  YearMonthContainer,
-  Year,
-  Month,
-  ScheduleBar,
-};
+export { CalendarContainer, DateContainer, Date, DateGrid, DayOfWeekBox, YearMonthContainer };
