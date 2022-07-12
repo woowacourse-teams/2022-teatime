@@ -53,8 +53,11 @@ public class Schedule {
         this.isPossible = false;
     }
 
+    public boolean isSameDay(int day) {
+        return this.localDateTime.getDayOfMonth() == day;
+    }
+
     public boolean isPossible() {
         return isPossible;
     }
-
 }
