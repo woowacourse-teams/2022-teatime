@@ -3,7 +3,7 @@ import Card from '@components/Card';
 import useFetch from '@hooks/useFetch';
 import type { Coach } from '@typings/domain';
 import { ROUTES } from '@constants/index';
-import { CardListContainer } from './styles';
+import { CardListContainer, Layout } from './styles';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,11 +14,22 @@ const Home = () => {
   };
 
   return (
-    <CardListContainer>
-      {coaches?.map((coach) => {
-        return <Card key={coach.id} coach={coach} onClick={handleClickCard} />;
-      })}
-    </CardListContainer>
+    <Layout>
+      <CardListContainer>
+        {coaches?.map((coach) => {
+          return (
+            <Card
+              key={coach.id}
+              name={coach.name}
+              image={coach.image}
+              description={coach.description}
+              buttonName="예약하기"
+              onClick={() => handleClickCard(coach.id)}
+            />
+          );
+        })}
+      </CardListContainer>
+    </Layout>
   );
 };
 

@@ -1,22 +1,24 @@
-import type { Coach as CoachType } from '@typings/domain';
 import { ButtonWrapper, CardContainer, ImageWrapper } from './styles';
 
-interface CoachProps {
-  coach: CoachType;
-  onClick: (id: number) => void;
+interface CardProps {
+  image: string;
+  name: string;
+  description: string;
+  buttonName: string;
+  onClick: () => void;
 }
 
-const Card = ({ coach, onClick }: CoachProps) => {
+const Card = ({ name, image, description, buttonName, onClick }: CardProps) => {
   return (
-    <CardContainer onClick={() => onClick(coach.id)}>
+    <CardContainer onClick={onClick}>
       <div>
         <ImageWrapper>
-          <img src={coach.image} alt="코치 프로필 이미지" />
+          <img src={image} alt={`${name} 카드 이미지`} />
         </ImageWrapper>
-        <span>{coach.name}</span>
-        <p>{coach.description}</p>
+        <span>{name}</span>
+        <p>{description}</p>
         <ButtonWrapper>
-          <button>예약하기</button>
+          <button>{buttonName}</button>
         </ButtonWrapper>
       </div>
     </CardContainer>

@@ -39,20 +39,20 @@ const CardContainer = styled.div`
   }
 
   button {
-    width: 65%;
-    height: 32px;
+    width: 67%;
+    height: 35px;
     background-color: #797d6b;
     color: white;
     border: none;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bolder;
     cursor: pointer;
   }
 
-  /* &:hover {
+  &:hover {
     transform: scale(1.03);
-  } */
+  }
 `;
 
 const ImageWrapper = styled.div`
