@@ -1,4 +1,4 @@
-const coaches = [
+const coachList = [
   {
     id: 0,
     name: '준',
@@ -57,25 +57,35 @@ const coaches = [
   },
 ];
 
-const schedules = {
-  1: [
-    { id: 13415, dateTime: '2022-07-04T01:00:00.000Z', isPossible: true },
-    { id: 15151, dateTime: '2022-07-04T02:00:00.000Z', isPossible: true },
-    { id: 42241, dateTime: '2022-07-04T05:00:00.000Z', isPossible: true },
-  ],
-  4: [{ id: 57382, dateTime: '2022-07-04T01:00:00.000Z', isPossible: true }],
-  13: [
-    { id: 51513, dateTime: '2022-07-04T01:00:00.000Z', isPossible: true },
-    { id: 12555, dateTime: '2022-07-04T04:00:00.000Z', isPossible: true },
-  ],
-  14: [
-    { id: 41413, dateTime: '2022-07-04T06:00:00.000Z', isPossible: true },
-    { id: 14141, dateTime: '2022-07-04T11:00:00.000Z', isPossible: true },
-  ],
-  19: [
-    { id: 91919, dateTime: '2022-07-19T06:00:00.000Z', isPossible: true },
-    { id: 39295, dateTime: '2022-07-04T11:00:00.000Z', isPossible: true },
-  ],
-};
+const scheduleList = [
+  {
+    day: 5,
+    schedules: [
+      { id: 11111, dateTime: '2022-07-05T01:00:00.000Z', isPossible: true },
+      { id: 22222, dateTime: '2022-07-05T01:00:00.000Z', isPossible: true },
+    ],
+  },
+  {
+    day: 6,
+    schedules: [
+      { id: 33333, dateTime: '2022-07-06T01:00:00.000Z', isPossible: true },
+      { id: 44444, dateTime: '2022-07-06T01:00:00.000Z', isPossible: true },
+    ],
+  },
+  {
+    day: 14,
+    schedules: [
+      { id: 55555, dateTime: '2022-07-14T01:00:00.000Z', isPossible: true },
+      { id: 66666, dateTime: '2022-07-14T01:00:00.000Z', isPossible: true },
+    ],
+  },
+  {
+    day: 15,
+    schedules: [
+      { id: 77777, dateTime: '2022-07-15T01:00:00.000Z', isPossible: true },
+      { id: 88888, dateTime: '2022-07-15T01:00:00.000Z', isPossible: true },
+    ],
+  },
+];
 
-export { coaches, schedules };
+export { coachList, scheduleList };
