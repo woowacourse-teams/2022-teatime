@@ -2,8 +2,8 @@ package com.woowacourse.teatime.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.woowacourse.teatime.ScheduleRequest;
-import com.woowacourse.teatime.ScheduleResponse;
+import com.woowacourse.teatime.controller.dto.ScheduleRequest;
+import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

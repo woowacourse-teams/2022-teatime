@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.CoachResponse;
+import com.woowacourse.teatime.controller.dto.CoachResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.repository.CoachRepository;
 import java.util.List;

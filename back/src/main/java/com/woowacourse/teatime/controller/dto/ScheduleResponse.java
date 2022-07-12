@@ -1,4 +1,4 @@
-package com.woowacourse.teatime;
+package com.woowacourse.teatime.controller.dto;
 
 import com.woowacourse.teatime.domain.Schedule;
 import java.util.List;

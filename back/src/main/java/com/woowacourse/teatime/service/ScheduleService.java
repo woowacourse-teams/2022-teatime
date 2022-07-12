@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.ScheduleRequest;
-import com.woowacourse.teatime.ScheduleResponse;
+import com.woowacourse.teatime.controller.dto.ScheduleRequest;
+import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.domain.Schedules;
 import com.woowacourse.teatime.repository.ScheduleRepository;

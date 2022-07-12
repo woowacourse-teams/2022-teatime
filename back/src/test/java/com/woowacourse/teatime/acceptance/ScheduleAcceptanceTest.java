@@ -3,7 +3,7 @@ package com.woowacourse.teatime.acceptance;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.woowacourse.teatime.ScheduleResponse;
+import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.controller;
 
-import com.woowacourse.teatime.CoachResponse;
+import com.woowacourse.teatime.controller.dto.CoachResponse;
 import com.woowacourse.teatime.service.CoachService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
