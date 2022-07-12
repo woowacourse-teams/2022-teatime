@@ -11,13 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional(readOnly = true)
     public List<ScheduleResponse> find(Long id, ScheduleRequest request) {
         LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findEndDay(request.getYear(), request.getMonth());
