@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LeftArrow from '@assets/left-arrow.svg';
 import RightArrow from '@assets/right-arrow.svg';
@@ -11,13 +12,12 @@ const Calendar = () => {
   const { id } = useParams();
   const { monthYear, setMonthYear, schedules } = useSchedule(id);
   const { firstDOW, lastDate, year, month } = monthYear;
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  const monthSchedule = schedules?.reduce((newObj, data) => {
-    newObj[data.day] = data.schedules;
+  const monthSchedule = schedules?.reduce((newObj, { day, schedules }) => {
+    newObj[day] = schedules;
     return newObj;
   }, {} as ScheduleMap);
-
-  console.log(monthSchedule);
 
   const dateBoxLength =
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
@@ -47,7 +47,13 @@ const Calendar = () => {
           return isOutOfCalendar ? (
             <DateBox key={index} />
           ) : (
-            <DateBox key={index} date={date + 1} monthSchedule={monthSchedule?.[date + 1]} />
+            <DateBox
+              key={index}
+              date={date + 1}
+              monthSchedule={monthSchedule?.[date + 1]}
+              onClick={() => setSelectedDay(date + 1)}
+              selectedDay={selectedDay}
+            />
           );
         })}
       </DateGrid>

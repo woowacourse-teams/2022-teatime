@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const CalendarContainer = styled.div`
   display: flex;
@@ -10,20 +10,27 @@ const CalendarContainer = styled.div`
   }
 `;
 
-const DateContainer = styled.div<{ hasSchedule: boolean }>`
+const DateContainer = styled.div<{ hasSchedule: boolean; isSelected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
   height: 40px;
   border-radius: 25px;
-  color: ${(props) => (props.hasSchedule ? '#000' : '#969696')};
   background-color: ${(props) => props.hasSchedule && '#cce6ba'};
+  color: ${(props) => !props.hasSchedule && '#C4C4C4'};
+  font-weight: bolder;
+  cursor: ${(props) => props.hasSchedule && 'pointer'};
+
+  ${(props) =>
+    props.isSelected &&
+    css`
+      background-color: #404338;
+      color: #fff;
+    `}
 `;
 
-const Date = styled.div`
-  font-weight: bolder;
-`;
+const Date = styled.div``;
 
 const DateGrid = styled.div`
   display: grid;
