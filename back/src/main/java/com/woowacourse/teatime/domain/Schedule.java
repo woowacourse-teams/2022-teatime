@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,8 +43,13 @@ public class Schedule {
         }
     }
 
-    public boolean isSameTime(LocalDateTime localDateTime) {
+    public boolean isSame(LocalDateTime localDateTime) {
         return this.localDateTime.equals(localDateTime);
+    }
+
+    public boolean isSameDate(LocalDate other) {
+        LocalDate localDate = this.localDateTime.toLocalDate();
+        return localDate.equals(other);
     }
 
     public void reserve() {
