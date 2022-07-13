@@ -3,14 +3,17 @@ import styled, { css } from 'styled-components';
 const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0 40px;
 
   h1 {
-    margin: 0 0 60px 10px;
+    height: 90px;
+    margin-left: 10px;
     font-size: 28px;
   }
 `;
 
 const DateContainer = styled.div<{ hasSchedule: boolean; isSelected: boolean }>`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +33,14 @@ const DateContainer = styled.div<{ hasSchedule: boolean; isSelected: boolean }>`
     `}
 `;
 
-const Date = styled.div``;
+const TodayIndicator = styled.div`
+  position: absolute;
+  bottom: 5px;
+  width: 5px;
+  height: 5px;
+  background-color: #ff008a;
+  border-radius: 5px;
+`;
 
 const DateGrid = styled.div`
   display: grid;
@@ -71,4 +81,11 @@ const YearMonthContainer = styled.div`
   }
 `;
 
-export { CalendarContainer, DateContainer, Date, DateGrid, DayOfWeekBox, YearMonthContainer };
+export {
+  CalendarContainer,
+  DateContainer,
+  DateGrid,
+  DayOfWeekBox,
+  YearMonthContainer,
+  TodayIndicator,
+};

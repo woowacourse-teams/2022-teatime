@@ -60,30 +60,40 @@ const coachList = [
 const scheduleList = [
   {
     day: 5,
-    schedules: [
-      { id: 11111, dateTime: '2022-07-05T01:00:00.000Z', isPossible: true },
-      { id: 22222, dateTime: '2022-07-05T01:00:00.000Z', isPossible: true },
-    ],
+    schedules: [{ id: 11111, dateTime: '2022-07-05T01:00:00.000Z', isPossible: true }],
   },
   {
     day: 6,
-    schedules: [
-      { id: 33333, dateTime: '2022-07-06T01:00:00.000Z', isPossible: true },
-      { id: 44444, dateTime: '2022-07-06T01:00:00.000Z', isPossible: true },
-    ],
+    schedules: [{ id: 33333, dateTime: '2022-07-06T01:00:00.000Z', isPossible: true }],
   },
   {
     day: 14,
     schedules: [
       { id: 55555, dateTime: '2022-07-14T01:00:00.000Z', isPossible: true },
-      { id: 66666, dateTime: '2022-07-14T01:00:00.000Z', isPossible: true },
+      { id: 66666, dateTime: '2022-07-14T01:30:00.000Z', isPossible: true },
+      { id: 141513, dateTime: '2022-07-14T02:00:00.000Z', isPossible: true },
+      { id: 13524536, dateTime: '2022-07-14T06:00:00.000Z', isPossible: true },
+      { id: 1516146, dateTime: '2022-07-14T06:30:00.000Z', isPossible: true },
+      { id: 4132346325, dateTime: '2022-07-14T08:00:00.000Z', isPossible: true },
     ],
   },
   {
     day: 15,
     schedules: [
       { id: 77777, dateTime: '2022-07-15T01:00:00.000Z', isPossible: true },
-      { id: 88888, dateTime: '2022-07-15T01:00:00.000Z', isPossible: true },
+      { id: 88888, dateTime: '2022-07-15T01:30:00.000Z', isPossible: true },
+      { id: 127678, dateTime: '2022-07-15T03:00:00.000Z', isPossible: true },
+      { id: 335372, dateTime: '2022-07-15T04:00:00.000Z', isPossible: true },
+      { id: 283351, dateTime: '2022-07-15T05:00:00.000Z', isPossible: true },
+      { id: 283352, dateTime: '2022-07-15T05:30:00.000Z', isPossible: true },
+      { id: 283353, dateTime: '2022-07-15T06:00:00.000Z', isPossible: true },
+      { id: 283354, dateTime: '2022-07-15T06:30:00.000Z', isPossible: true },
+      { id: 283355, dateTime: '2022-07-15T07:00:00.000Z', isPossible: true },
+      { id: 283356, dateTime: '2022-07-15T07:30:00.000Z', isPossible: true },
+      { id: 283357, dateTime: '2022-07-15T08:00:00.000Z', isPossible: true },
+      { id: 283358, dateTime: '2022-07-15T08:30:00.000Z', isPossible: true },
+      { id: 283359, dateTime: '2022-07-15T09:00:00.000Z', isPossible: true },
+      { id: 283350, dateTime: '2022-07-15T10:00:00.000Z', isPossible: true },
     ],
   },
 ];

@@ -1,18 +1,23 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import LeftArrow from '@assets/left-arrow.svg';
 import RightArrow from '@assets/right-arrow.svg';
 import useSchedule from '@hooks/useSchedules';
 import { CALENDAR_DATE_LENGTH, DAY_OF_WEEKS } from '@constants/index';
-import { ScheduleMap } from '@typings/domain';
+import { Schedule, ScheduleMap } from '@typings/domain';
+import { ScheduleDispatchContext } from '@context/ScheduleProvider';
 import DateBox from './DateBox';
 import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
 
 const Calendar = () => {
   const { id } = useParams();
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const dispatch = useContext(ScheduleDispatchContext);
   const { monthYear, setMonthYear, schedules } = useSchedule(id);
   const { firstDOW, lastDate, year, month } = monthYear;
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+
+  const today = dayjs().format('DD');
 
   const monthSchedule = schedules?.reduce((newObj, { day, schedules }) => {
     newObj[day] = schedules;
@@ -23,6 +28,11 @@ const Calendar = () => {
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
       : CALENDAR_DATE_LENGTH.MAX;
+
+  const handleClickDate = (monthSchedule: Schedule[] = [], date: number) => {
+    setSelectedDay(date);
+    dispatch({ type: 'SET_SCHEDULES', data: monthSchedule });
+  };
 
   return (
     <CalendarContainer>
@@ -51,8 +61,9 @@ const Calendar = () => {
               key={index}
               date={date + 1}
               monthSchedule={monthSchedule?.[date + 1]}
-              onClick={() => setSelectedDay(date + 1)}
+              onClick={() => handleClickDate(monthSchedule?.[date + 1], date + 1)}
               selectedDay={selectedDay}
+              today={today}
             />
           );
         })}

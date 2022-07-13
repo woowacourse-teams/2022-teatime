@@ -21,6 +21,7 @@ const config: webpack.Configuration = {
       '@utils': path.resolve(__dirname, 'src/utils'),
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@assets': path.resolve(__dirname, 'src/assets'),
+      '@context': path.resolve(__dirname, 'src/context'),
     },
   },
   output: {

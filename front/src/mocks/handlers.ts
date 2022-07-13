@@ -7,11 +7,11 @@ const handlers = [
     return res(ctx.status(200), ctx.json(coachList));
   }),
 
-  rest.get<DayScheduleResponse[]>(`/coaches/:id/schedules`, (req, res, ctx) => {
+  rest.get<DayScheduleResponse[]>('/coaches/:id/schedules', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(scheduleList));
   }),
 
-  rest.post(`/coaches/:id/schedules/:scheduleId`, (req, res, ctx) => {
+  rest.post('/coaches/:id/schedules/:scheduleId', (req, res, ctx) => {
     return res(ctx.status(200));
   }),
 ];

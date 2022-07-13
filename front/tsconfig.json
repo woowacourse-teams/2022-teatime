@@ -18,7 +18,8 @@
       "@constants/*": ["src/constants/*"],
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@context/*": ["src/context/*"]
     },
     "typeRoots": ["src/typings"]
   },
