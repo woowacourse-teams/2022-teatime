@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.domain;
 
+import com.woowacourse.teatime.AlreadyExistedReservationException;
+import com.woowacourse.teatime.InvalidYearException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +40,7 @@ public class Schedule {
 
     private void validateDateTime(LocalDateTime localDateTime) {
         if (localDateTime.getYear() < 2022) {
-            throw new IllegalArgumentException("년도는 2022년 이후여야 합니다.");
+            throw new InvalidYearException();
         }
     }
 
@@ -48,7 +50,7 @@ public class Schedule {
 
     public void reserve() {
         if (!this.isPossible) {
-            throw new IllegalArgumentException("이미 예약이 되어 있습니다.");
+            throw new AlreadyExistedReservationException();
         }
         this.isPossible = false;
     }

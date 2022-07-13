@@ -3,6 +3,8 @@ package com.woowacourse.teatime.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.woowacourse.teatime.AlreadyExistedReservationException;
+import com.woowacourse.teatime.InvalidYearException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +45,7 @@ class ScheduleTest {
         schedule.reserve();
 
         assertThatThrownBy(schedule::reserve)
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(AlreadyExistedReservationException.class);
     }
 
     @Test
@@ -53,6 +55,6 @@ class ScheduleTest {
         Coach coach = new Coach("제이슨");
 
         assertThatThrownBy(() -> new Schedule(coach, dateTime))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidYearException.class);
     }
 }
