@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(Long coachId, LocalDateTime start,
                                                                             LocalDateTime end);
+
     void deleteAllByCoachIdAndLocalDateTimeBetween(Long coachId, LocalDateTime start, LocalDateTime end);
 }

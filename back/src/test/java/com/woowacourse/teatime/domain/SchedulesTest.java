@@ -1,10 +1,8 @@
 package com.woowacourse.teatime.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,29 +42,4 @@ public class SchedulesTest {
         Schedules schedules = new Schedules(List.of(new Schedule(coach, now)));
         assertDoesNotThrow(() -> schedules.reserve(now));
     }
-
-    @Test
-    @DisplayName("해당 날짜의 하루 예약을 모두 삭제한다.")
-    void deleteByDate() {
-        // given
-        LocalDateTime july1_1 = LocalDateTime.of(2022, 7, 1, 1, 0, 0);
-        LocalDateTime july1_2 = LocalDateTime.of(2022, 7, 1, 2, 0, 0);
-        LocalDateTime july1_3 = LocalDateTime.of(2022, 7, 1, 3, 0, 0);
-        LocalDateTime july2_1 = LocalDateTime.of(2022, 7, 2, 1, 0, 0);
-        LocalDateTime july3_1 = LocalDateTime.of(2022, 7, 3, 1, 0, 0);
-        Coach coach = new Coach("제이슨");
-
-        Schedules schedules = new Schedules(List.of(new Schedule(coach, july1_1),
-                new Schedule(coach, july1_2),
-                new Schedule(coach, july1_3),
-                new Schedule(coach, july2_1),
-                new Schedule(coach, july3_1)));
-
-        // when
-        Schedules newSchedules = schedules.deleteByMonthAndDay(LocalDate.of(2022, 7, 1));
-
-        // then
-        assertThat(newSchedules.findByDay(1)).isEmpty();
-    }
-
 }

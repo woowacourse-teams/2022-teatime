@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,12 +36,5 @@ public class Schedules {
         return schedules.stream()
                 .filter(schedule -> schedule.isSameDay(day))
                 .collect(Collectors.toList());
-    }
-
-    public Schedules deleteByMonthAndDay(LocalDate localDate) {
-        List<Schedule> newSchedules = schedules.stream()
-                .filter(schedule -> !schedule.isSameDate(localDate))
-                .collect(Collectors.toList());
-        return new Schedules(newSchedules);
     }
 }
