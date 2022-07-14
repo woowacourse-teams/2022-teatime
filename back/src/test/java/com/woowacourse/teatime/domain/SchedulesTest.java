@@ -3,6 +3,8 @@ package com.woowacourse.teatime.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.woowacourse.teatime.AlreadyReservedException;
+import com.woowacourse.teatime.NotFoundScheduleException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class SchedulesTest {
         Schedules schedules = new Schedules(new ArrayList<>());
 
         assertThatThrownBy(() -> schedules.reserve(LocalDateTime.now()))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotFoundScheduleException.class);
     }
 
     @Test
@@ -29,8 +31,8 @@ public class SchedulesTest {
         Schedules schedules = new Schedules(List.of(new Schedule(coach, now)));
         schedules.reserve(now);
 
-        assertThatThrownBy(() -> schedules.reserve(LocalDateTime.now()))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> schedules.reserve(now))
+                .isInstanceOf(AlreadyReservedException.class);
     }
 
     @Test

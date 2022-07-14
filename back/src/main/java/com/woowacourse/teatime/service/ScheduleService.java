@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -74,7 +73,7 @@ public class ScheduleService {
 
     private void saveAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
         Coach coach = coachRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NotFoundCoachException::new);
         List<Schedule> schedules = request.getSchedules().stream()
                 .map(schedule -> new Schedule(coach, schedule))
                 .collect(Collectors.toList());
