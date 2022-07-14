@@ -4,11 +4,12 @@ import { ScheduleStateContext } from '@context/ScheduleProvider';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import CheckCircle from '@assets/check-circle.svg';
+import useModal from '@hooks/useModal';
 import { TimeListContainer, TimeBox, ReserveButtonWrapper } from './styles';
 
 const TimeList = () => {
   const { schedules } = useContext(ScheduleStateContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
 
   const handleClickTime = (id: number) => {
@@ -25,7 +26,7 @@ const TimeList = () => {
             <Conditional condition={selectedTimeId === schedule.id}>
               <ReserveButtonWrapper>
                 <div>{time}</div>
-                <button onClick={() => setIsModalOpen(true)}>예약하기</button>
+                <button onClick={openModal}>예약하기</button>
               </ReserveButtonWrapper>
             </Conditional>
             <Conditional condition={selectedTimeId !== schedule.id}>
@@ -41,6 +42,7 @@ const TimeList = () => {
           content="면담 내용을 지금 작성 하시겠습니까?"
           firstButtonName="나중에"
           secondButtonName="작성하기"
+          closeModal={closeModal}
         />
       )}
     </TimeListContainer>

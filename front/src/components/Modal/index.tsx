@@ -17,16 +17,24 @@ interface ModalProps {
   content: string;
   firstButtonName: string;
   secondButtonName: string;
+  closeModal: () => void;
 }
 
-const Modal = ({ icon, title, content, firstButtonName, secondButtonName }: ModalProps) => {
+const Modal = ({
+  icon,
+  title,
+  content,
+  firstButtonName,
+  secondButtonName,
+  closeModal,
+}: ModalProps) => {
   return (
     <ModalPotal>
       <Background>
         <ModalContainer>
           <InnerContainer>
             <CloseIconWrapper>
-              <img src={CloseIcon} alt="닫기 아이콘" />
+              <img src={CloseIcon} alt="닫기 아이콘" onClick={closeModal} />
             </CloseIconWrapper>
             <TitleWrapper>
               <h1>{title}</h1>
