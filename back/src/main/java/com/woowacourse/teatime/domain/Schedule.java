@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.domain;
 
-import com.woowacourse.teatime.AlreadyExistedReservationException;
+import com.woowacourse.teatime.AlreadyReservedException;
 import com.woowacourse.teatime.InvalidYearException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -51,7 +51,7 @@ public class Schedule {
 
     public void reserve() {
         if (!this.isPossible) {
-            throw new AlreadyExistedReservationException();
+            throw new AlreadyReservedException();
         }
         this.isPossible = false;
     }

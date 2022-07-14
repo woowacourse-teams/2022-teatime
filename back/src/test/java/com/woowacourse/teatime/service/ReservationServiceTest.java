@@ -3,7 +3,7 @@ package com.woowacourse.teatime.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.woowacourse.teatime.AlreadyExistedReservationException;
+import com.woowacourse.teatime.AlreadyReservedException;
 import com.woowacourse.teatime.NotExistedCrewException;
 import com.woowacourse.teatime.NotExistedScheduleException;
 import com.woowacourse.teatime.NotMatchedIdException;
@@ -62,9 +62,9 @@ class ReservationServiceTest {
     @DisplayName("예약을 한다.")
     @Test
     void reserve() {
-        final Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
+        Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
 
-        final Optional<Reservation> actual = reservationRepository.findById(reservation.getId());
+        Optional<Reservation> actual = reservationRepository.findById(reservation.getId());
         assertThat(actual.isPresent()).isTrue();
     }
 
@@ -97,6 +97,6 @@ class ReservationServiceTest {
         reservationService.save(crew.getId(), coach.getId(), schedule.getId());
 
         assertThatThrownBy(() -> reservationService.save(crew.getId(), coach.getId(), schedule.getId()))
-                .isInstanceOf(AlreadyExistedReservationException.class);
+                .isInstanceOf(AlreadyReservedException.class);
     }
 }
