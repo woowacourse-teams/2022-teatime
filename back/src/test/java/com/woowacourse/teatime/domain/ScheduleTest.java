@@ -3,7 +3,7 @@ package com.woowacourse.teatime.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.woowacourse.teatime.AlreadyExistedReservationException;
+import com.woowacourse.teatime.AlreadyReservedException;
 import com.woowacourse.teatime.InvalidYearException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +45,7 @@ class ScheduleTest {
         schedule.reserve();
 
         assertThatThrownBy(schedule::reserve)
-                .isInstanceOf(AlreadyExistedReservationException.class);
+                .isInstanceOf(AlreadyReservedException.class);
     }
 
     @Test

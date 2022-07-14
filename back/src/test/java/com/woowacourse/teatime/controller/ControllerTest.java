@@ -22,9 +22,6 @@ public class ControllerTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @MockBean
-    protected ScheduleService scheduleService;
-
     protected MockHttpServletRequestBuilder get(String url) {
         return MockMvcRequestBuilders.get(url)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.NotExistedCoachException;
+import com.woowacourse.teatime.NotFoundCoachException;
 import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.domain.Schedule;
@@ -37,7 +37,7 @@ public class ScheduleService {
 
     private void validateCoachId(Long id) {
         if (!coachRepository.existsById(id)) {
-            throw new NotExistedCoachException();
+            throw new NotFoundCoachException();
         }
     }
 
