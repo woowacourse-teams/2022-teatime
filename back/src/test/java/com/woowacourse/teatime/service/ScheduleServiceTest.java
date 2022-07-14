@@ -43,8 +43,8 @@ class ScheduleServiceTest {
     @DisplayName("코치의 한달 스케줄 목록을 조회한다.")
     void find() {
         Coach coach = coachRepository.save(new Coach("brown"));
-        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(schedule.getId(), REQUEST);
+        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
+        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
 
         assertThat(scheduleResponses).hasSize(1);
     }
