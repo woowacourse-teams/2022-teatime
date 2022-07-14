@@ -9,11 +9,9 @@ import com.woowacourse.teatime.NotExistedScheduleException;
 import com.woowacourse.teatime.NotMatchedIdException;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.repository.ReservationRepository;
-import com.woowacourse.teatime.repository.ScheduleRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
@@ -24,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @TestConstructor(autowireMode = AutowireMode.ALL)
 class ReservationServiceTest {
 
-    @Autowired
     private ReservationService reservationService;
-
-    @Autowired
     private ReservationRepository reservationRepository;
 
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+    public ReservationServiceTest(ReservationService reservationService,
+                                  ReservationRepository reservationRepository) {
+        this.reservationService = reservationService;
+        this.reservationRepository = reservationRepository;
+    }
 
     @DisplayName("예약을 한다.")
     @Test

@@ -24,14 +24,16 @@ class ScheduleControllerTest extends ControllerTest {
     @DisplayName("코치 스케줄 조회에 실패한다 - 유효하지 않은 년도")
     @Test
     void findCoachScheduleFailWrongYear() throws Exception {
-        mockMvc.perform(get("/api/coaches/1/schedules?year=2002&month=07")).andDo(print())
+        mockMvc.perform(get("/api/coaches/1/schedules?year=2002&month=07"))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @DisplayName("코치 스케줄 조회에 실패한다 - 유효하지 않은 월")
     @Test
     void findCoachScheduleFailWrongMonth() throws Exception {
-        mockMvc.perform(get("/api/coaches/1/schedules?year=2022&month=13")).andDo(print())
+        mockMvc.perform(get("/api/coaches/1/schedules?year=2022&month=13"))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 }
