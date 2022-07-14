@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,21 +64,15 @@ public class ScheduleRepositoryTest {
     @DisplayName("해당 코치와, 날짜에 해당하는 하루 스케줄을 모두 삭제한다.")
     void deleteAllByCoachIdAndLocalDateTimeBetween() {
         LocalDateTime july1_1 = LocalDateTime.of(2022, 7, 1, 1, 0, 0);
-        LocalDateTime july1_2 = LocalDateTime.of(2022, 7, 1, 2, 0, 0);
-        LocalDateTime july1_3 = LocalDateTime.of(2022, 7, 1, 3, 0, 0);
         LocalDateTime july2_1 = LocalDateTime.of(2022, 7, 2, 1, 0, 0);
-        LocalDateTime july3_1 = LocalDateTime.of(2022, 7, 3, 1, 0, 0);
 
         Coach coach = coachRepository.save(new Coach("제이슨"));
         scheduleRepository.save(new Schedule(coach, july1_1));
-        scheduleRepository.save(new Schedule(coach, july1_2));
-        scheduleRepository.save(new Schedule(coach, july1_3));
         scheduleRepository.save(new Schedule(coach, july2_1));
-        scheduleRepository.save(new Schedule(coach, july3_1));
-        LocalDate localDate = LocalDate.of(2022, 7, 1);
-        LocalDateTime start = LocalDateTime.of(localDate, LocalTime.MIN);
-        LocalDateTime end = LocalDateTime.of(localDate, LocalTime.MAX);
 
+        LocalDate localDate = LocalDate.of(2022, 7, 1);
+        LocalDateTime start = Date.findFirstTime(localDate);
+        LocalDateTime end = Date.findLastTime(localDate);
         scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coach.getId(), start, end);
 
         List<Schedule> schedules = scheduleRepository.findAll();

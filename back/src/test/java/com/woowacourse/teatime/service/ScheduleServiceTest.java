@@ -52,8 +52,8 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치 아이디가 존재하지 않는 다면 예외를 발생시킨다,")
     void find_NotExistedCoachException() {
-        final Coach coach = coachRepository.save(new Coach("brown"));
-        final Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
+        Coach coach = coachRepository.save(new Coach("brown"));
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
         Long notExistedId = schedule.getId() + 100L;
 
         assertThatThrownBy(() -> scheduleService.find(notExistedId, REQUEST))
