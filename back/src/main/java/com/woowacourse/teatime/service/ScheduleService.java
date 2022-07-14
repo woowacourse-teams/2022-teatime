@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.NotFoundCoachException;
 import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
@@ -29,11 +30,19 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public List<ScheduleResponse> find(Long id, ScheduleRequest request) {
+        validateCoachId(id);
+
         LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findEndDay(request.getYear(), request.getMonth());
         Schedules schedules = getSchedules(id, start, end);
 
         return getScheduleResponses(schedules, schedules.findDays());
+    }
+
+    private void validateCoachId(Long id) {
+        if (!coachRepository.existsById(id)) {
+            throw new NotFoundCoachException();
+        }
     }
 
     private Schedules getSchedules(Long id, LocalDateTime start, LocalDateTime end) {
@@ -65,7 +74,7 @@ public class ScheduleService {
 
     private void saveAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
         Coach coach = coachRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException());
+                .orElseThrow(NoSuchElementException::new);
         List<Schedule> schedules = request.getSchedules().stream()
                 .map(schedule -> new Schedule(coach, schedule))
                 .collect(Collectors.toList());
