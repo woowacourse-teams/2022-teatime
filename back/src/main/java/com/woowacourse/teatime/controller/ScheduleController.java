@@ -5,6 +5,8 @@ import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.service.ScheduleService;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +23,8 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping("/{id}/schedules")
-    public ResponseEntity<List<ScheduleResponse>> findCoachList(@PathVariable Long id,
-                                                                @ModelAttribute ScheduleRequest request) {
+    public ResponseEntity<List<ScheduleResponse>> findCoachList(@PathVariable @NotNull Long id,
+                                                                @Valid @ModelAttribute ScheduleRequest request) {
         List<ScheduleResponse> scheduleResponses = scheduleService.find(id, request);
         return ResponseEntity.ok(scheduleResponses);
     }
