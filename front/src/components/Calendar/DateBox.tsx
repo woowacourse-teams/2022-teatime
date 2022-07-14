@@ -14,7 +14,7 @@ const DateBox = ({ date, monthSchedule = [], onClick, selectedDay, today }: Date
   const isToday = Number(today) === date;
 
   return (
-    <DateContainer hasSchedule={!!monthSchedule.length} onClick={onClick} isSelected={!!isSelected}>
+    <DateContainer hasSchedule={!!monthSchedule.length} isSelected={!!isSelected} onClick={onClick}>
       {date}
       {isToday && <TodayIndicator />}
     </DateContainer>

@@ -4,6 +4,8 @@ const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 40px;
+  padding-left: 40px;
+  border-left: 1px solid #e7e7e7;
 
   h1 {
     height: 90px;
