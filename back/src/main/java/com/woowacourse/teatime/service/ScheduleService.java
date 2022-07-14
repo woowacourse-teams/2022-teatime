@@ -11,7 +11,6 @@ import com.woowacourse.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -53,15 +52,24 @@ public class ScheduleService {
     }
 
     public void update(Long id, ScheduleUpdateRequest request) {
+        deleteAllByCoachAndDate(id, request);
+        saveAllByCoachAndDate(id, request);
+    }
+
+    private void deleteAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
         LocalDate date = request.getDate();
-        LocalDateTime start = LocalDateTime.of(date, LocalTime.MIN);
-        LocalDateTime end = LocalDateTime.of(date, LocalTime.MAX);
+        LocalDateTime start = Date.findFirstTime(date);
+        LocalDateTime end = Date.findLastTime(date);
+        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(id, start, end);
+    }
+
+    private void saveAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
         Coach coach = coachRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException());
-        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(id, start, end);
-        List<Schedule> collect = request.getSchedules().stream()
-                .map(s -> new Schedule(coach, s))
+        List<Schedule> schedules = request.getSchedules().stream()
+                .map(schedule -> new Schedule(coach, schedule))
                 .collect(Collectors.toList());
-        scheduleRepository.saveAll(collect);
+        scheduleRepository.saveAll(schedules);
     }
+
 }

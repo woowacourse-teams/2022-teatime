@@ -16,4 +16,12 @@ public class Date {
         LocalDate endDate = YearMonth.from(startDate).atEndOfMonth();
         return LocalDateTime.of(endDate, LocalTime.MAX);
     }
+
+    public static LocalDateTime findFirstTime(LocalDate date) {
+        return LocalDateTime.of(date, LocalTime.MIN);
+    }
+
+    public static LocalDateTime findLastTime(LocalDate date) {
+        return LocalDateTime.of(date, LocalTime.MAX);
+    }
 }
