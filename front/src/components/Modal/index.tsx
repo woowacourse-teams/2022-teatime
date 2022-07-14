@@ -28,9 +28,15 @@ const Modal = ({
   secondButtonName,
   closeModal,
 }: ModalProps) => {
+  const handleClickDimmer = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
+
   return (
     <ModalPotal>
-      <Background>
+      <Background onClick={handleClickDimmer}>
         <ModalContainer>
           <InnerContainer>
             <CloseIconWrapper>
