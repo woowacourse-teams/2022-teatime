@@ -62,4 +62,8 @@ public class Schedule {
     public boolean isPossible() {
         return isPossible;
     }
+
+    public boolean isSameCoach(Long coachId) {
+        return this.coach.getId().equals(coachId);
+    }
 }
