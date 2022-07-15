@@ -1,12 +1,11 @@
 package com.woowacourse.teatime.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.woowacourse.teatime.AlreadyReservedException;
 import com.woowacourse.teatime.NotExistedCrewException;
-import com.woowacourse.teatime.NotExistedScheduleException;
-import com.woowacourse.teatime.NotMatchedIdException;
+import com.woowacourse.teatime.NotFoundScheduleException;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
@@ -65,7 +64,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
 
         Optional<Reservation> actual = reservationRepository.findById(reservation.getId());
-        assertThat(actual.isPresent()).isTrue();
+        assertTrue(actual.isPresent());
     }
 
     @DisplayName("예약을 할 때 크루 아이디가 존재하지 않는 아이디면 예외를 반환한다.")
@@ -79,16 +78,16 @@ class ReservationServiceTest {
     @Test
     void reserveFailNotExistedSchedule() {
         assertThatThrownBy(() -> reservationService.save(crew.getId(), coach.getId(), schedule.getId() + +100L))
-                .isInstanceOf(NotExistedScheduleException.class);
+                .isInstanceOf(NotFoundScheduleException.class);
     }
 
     @DisplayName("예약을 할 때 코치 아이디가 일치하지 않으면 예외를 반환한다.")
     @Test
     void reserveFailNotMatchedCoach() {
-        final Coach fakeCoach = coachRepository.save(new Coach("ori"));
+        Coach fakeCoach = coachRepository.save(new Coach("ori"));
 
         assertThatThrownBy(() -> reservationService.save(crew.getId(), fakeCoach.getId(), schedule.getId()))
-                .isInstanceOf(NotMatchedIdException.class);
+                .isInstanceOf(NotFoundScheduleException.class);
     }
 
     @DisplayName("예약을 할 때 예약할 수 없는 스케줄이면 예외를 반환한다.")

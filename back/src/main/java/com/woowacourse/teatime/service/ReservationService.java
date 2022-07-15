@@ -1,8 +1,7 @@
 package com.woowacourse.teatime.service;
 
 import com.woowacourse.teatime.NotExistedCrewException;
-import com.woowacourse.teatime.NotExistedScheduleException;
-import com.woowacourse.teatime.NotMatchedIdException;
+import com.woowacourse.teatime.NotFoundScheduleException;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
@@ -25,16 +24,10 @@ public class ReservationService {
     public Reservation save(Long crewId, Long coachId, Long scheduleId) {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotExistedCrewException::new);
-
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(NotExistedScheduleException::new);
+        Schedule schedule = scheduleRepository.findByIdAndCoachId(scheduleId, coachId)
+                .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
-
-        if (!schedule.isSameCoach(coachId)) {
-            throw new NotMatchedIdException("해당 스케줄의 코치 아이디가 아닙니다.");
-        }
-
         return reservationRepository.save(new Reservation(schedule, crew));
     }
 }

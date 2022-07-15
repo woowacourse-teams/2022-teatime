@@ -76,6 +76,6 @@ public class ScheduleRepositoryTest {
         scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coach.getId(), start, end);
 
         List<Schedule> schedules = scheduleRepository.findAll();
-        assertThat(schedules).hasSize(4);
+        assertThat(schedules).hasSize(3);
     }
 }
