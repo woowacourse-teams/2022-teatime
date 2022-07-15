@@ -45,7 +45,7 @@ public class Schedule {
         }
     }
 
-    public boolean isSameTime(LocalDateTime localDateTime) {
+    public boolean isSame(LocalDateTime localDateTime) {
         return this.localDateTime.equals(localDateTime);
     }
 

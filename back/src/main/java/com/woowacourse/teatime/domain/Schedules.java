@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.domain;
 
+import com.woowacourse.teatime.NotFoundScheduleException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,9 +20,9 @@ public class Schedules {
 
     private Schedule findSchedule(LocalDateTime localDateTime) {
         return schedules.stream()
-                .filter(schedule -> schedule.isSameTime(localDateTime))
+                .filter(schedule -> schedule.isSame(localDateTime))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
+                .orElseThrow(NotFoundScheduleException::new);
     }
 
     public List<Integer> findDays() {

@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 @DirtiesContext
 public class AcceptanceTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Value("${local.server.port}")
     int port;
 
@@ -24,8 +26,6 @@ public class AcceptanceTest {
     public void setUp() {
         RestAssured.port = port;
     }
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private String toJson(Object object) {
         try {
