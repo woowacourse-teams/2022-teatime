@@ -16,6 +16,8 @@ const TimeList = () => {
     setSelectedTimeId(id);
   };
 
+  console.log('schedules', schedules);
+
   return (
     <TimeListContainer>
       {schedules.map((schedule) => {
@@ -29,8 +31,13 @@ const TimeList = () => {
                 <button onClick={openModal}>예약하기</button>
               </ReserveButtonWrapper>
             </Conditional>
-            <Conditional condition={selectedTimeId !== schedule.id}>
+            <Conditional condition={selectedTimeId !== schedule.id && schedule.isPossible}>
               <TimeBox onClick={() => handleClickTime(schedule.id)}>{time}</TimeBox>
+            </Conditional>
+            <Conditional condition={selectedTimeId !== schedule.id && !schedule.isPossible}>
+              <TimeBox aria-disabled={false} disabled>
+                {time}
+              </TimeBox>
             </Conditional>
           </React.Fragment>
         );

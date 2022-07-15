@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 const FadeIn = keyframes`
  from {
@@ -18,7 +18,7 @@ const TimeListContainer = styled.div`
   }
 `;
 
-const TimeBox = styled.div`
+const TimeBox = styled.div<{ disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,6 +33,16 @@ const TimeBox = styled.div`
   &:hover {
     border: 2px solid #404338;
   }
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      background-color: #e2e1e1;
+      color: #a0a0a0;
+      cursor: default;
+      text-decoration: line-through;
+      pointer-events: none;
+    `}
 `;
 
 const ReserveButtonWrapper = styled.div`
@@ -54,6 +64,7 @@ const ReserveButtonWrapper = styled.div`
     font-weight: bold;
     cursor: pointer;
   }
+
   button {
     width: 120px;
     height: 50px;

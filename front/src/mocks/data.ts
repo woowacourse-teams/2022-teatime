@@ -71,7 +71,7 @@ const scheduleList = [
     schedules: [
       { id: 55555, dateTime: '2022-07-14T01:00:00.000Z', isPossible: true },
       { id: 66666, dateTime: '2022-07-14T01:30:00.000Z', isPossible: true },
-      { id: 141513, dateTime: '2022-07-14T02:00:00.000Z', isPossible: true },
+      { id: 141513, dateTime: '2022-07-14T02:00:00.000Z', isPossible: false },
       { id: 13524536, dateTime: '2022-07-14T06:00:00.000Z', isPossible: true },
       { id: 1516146, dateTime: '2022-07-14T06:30:00.000Z', isPossible: true },
       { id: 4132346325, dateTime: '2022-07-14T08:00:00.000Z', isPossible: true },
@@ -87,9 +87,6 @@ const scheduleList = [
       { id: 283351, dateTime: '2022-07-15T05:00:00.000Z', isPossible: true },
       { id: 283352, dateTime: '2022-07-15T05:30:00.000Z', isPossible: true },
       { id: 283353, dateTime: '2022-07-15T06:00:00.000Z', isPossible: true },
-      { id: 283354, dateTime: '2022-07-15T06:30:00.000Z', isPossible: true },
-      { id: 283355, dateTime: '2022-07-15T07:00:00.000Z', isPossible: true },
-      { id: 283356, dateTime: '2022-07-15T07:30:00.000Z', isPossible: true },
       { id: 283357, dateTime: '2022-07-15T08:00:00.000Z', isPossible: true },
       { id: 283358, dateTime: '2022-07-15T08:30:00.000Z', isPossible: true },
       { id: 283359, dateTime: '2022-07-15T09:00:00.000Z', isPossible: true },
