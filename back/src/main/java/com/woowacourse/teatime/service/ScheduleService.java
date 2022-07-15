@@ -74,10 +74,14 @@ public class ScheduleService {
     private void saveAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
         Coach coach = coachRepository.findById(id)
                 .orElseThrow(NotFoundCoachException::new);
-        List<Schedule> schedules = request.getSchedules().stream()
+        List<Schedule> schedules = toSchedules(request, coach);
+        scheduleRepository.saveAll(schedules);
+    }
+
+    private List<Schedule> toSchedules(ScheduleUpdateRequest request, Coach coach) {
+        return request.getSchedules().stream()
                 .map(schedule -> new Schedule(coach, schedule))
                 .collect(Collectors.toList());
-        scheduleRepository.saveAll(schedules);
     }
 
 }

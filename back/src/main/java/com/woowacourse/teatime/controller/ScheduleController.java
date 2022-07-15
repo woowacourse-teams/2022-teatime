@@ -26,14 +26,14 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> findCoachList(@PathVariable @NotNull Long id,
+    public ResponseEntity<List<ScheduleResponse>> findSchedules(@PathVariable @NotNull Long id,
                                                                 @Valid @ModelAttribute ScheduleRequest request) {
         List<ScheduleResponse> scheduleResponses = scheduleService.find(id, request);
         return ResponseEntity.ok(scheduleResponses);
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateCoachList(@PathVariable Long id,
+    public ResponseEntity<Void> updateSchedules(@PathVariable @NotNull Long id,
                                                 @RequestBody ScheduleUpdateRequest request) {
         scheduleService.update(id, request);
         return ResponseEntity.ok().build();
