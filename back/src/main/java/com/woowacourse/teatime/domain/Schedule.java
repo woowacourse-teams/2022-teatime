@@ -10,11 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Schedule {
 
@@ -61,5 +62,9 @@ public class Schedule {
 
     public boolean isPossible() {
         return isPossible;
+    }
+
+    public boolean isSameCoach(Long coachId) {
+        return this.coach.getId().equals(coachId);
     }
 }

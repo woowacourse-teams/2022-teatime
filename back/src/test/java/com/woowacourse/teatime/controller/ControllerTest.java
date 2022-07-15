@@ -2,19 +2,18 @@ package com.woowacourse.teatime.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.woowacourse.teatime.service.ReservationService;
+import com.woowacourse.teatime.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class ControllerTest {
 
@@ -23,6 +22,12 @@ public class ControllerTest {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @MockBean
+    protected ScheduleService scheduleService;
+
+    @MockBean
+    protected ReservationService reservationService;
 
     protected MockHttpServletRequestBuilder get(String url) {
         return MockMvcRequestBuilders.get(url)

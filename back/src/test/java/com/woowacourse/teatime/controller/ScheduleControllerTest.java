@@ -3,15 +3,10 @@ package com.woowacourse.teatime.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.woowacourse.teatime.service.ScheduleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class ScheduleControllerTest extends ControllerTest {
-
-    @MockBean
-    protected ScheduleService scheduleService;
 
     @DisplayName("코치 스케줄 조회에 성공한다.")
     @Test
