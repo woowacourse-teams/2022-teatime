@@ -3,14 +3,18 @@ package com.woowacourse.teatime.service;
 import com.woowacourse.teatime.NotFoundCoachException;
 import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
+import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.domain.Schedules;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.util.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-
     private final CoachRepository coachRepository;
 
     @Transactional(readOnly = true)
@@ -55,4 +58,30 @@ public class ScheduleService {
         }
         return scheduleResponses;
     }
+
+    public void update(Long id, ScheduleUpdateRequest request) {
+        deleteAllByCoachAndDate(id, request);
+        saveAllByCoachAndDate(id, request);
+    }
+
+    private void deleteAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
+        LocalDate date = request.getDate();
+        LocalDateTime start = Date.findFirstTime(date);
+        LocalDateTime end = Date.findLastTime(date);
+        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(id, start, end);
+    }
+
+    private void saveAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
+        Coach coach = coachRepository.findById(id)
+                .orElseThrow(NotFoundCoachException::new);
+        List<Schedule> schedules = toSchedules(request, coach);
+        scheduleRepository.saveAll(schedules);
+    }
+
+    private List<Schedule> toSchedules(ScheduleUpdateRequest request, Coach coach) {
+        return request.getSchedules().stream()
+                .map(schedule -> new Schedule(coach, schedule))
+                .collect(Collectors.toList());
+    }
+
 }
