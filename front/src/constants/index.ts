@@ -1,8 +1,15 @@
-const COACH_COLORS = [
-  '#76bae8, #e8bdf0',
-  'Violet, Orange',
-  'yellow, lightGreen',
-  'lightCyan, skyBlue, deepSkyBlue',
-];
+const ROUTES = {
+  SELECT_USER: '/',
+  HOME: '/crew',
+  SCHEDULE: '/schedule',
+  RESERVATION: '/reservation',
+};
 
-export { COACH_COLORS };
+const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+
+const CALENDAR_DATE_LENGTH = {
+  MIN: 35,
+  MAX: 42,
+};
+
+export { ROUTES, DAY_OF_WEEKS, CALENDAR_DATE_LENGTH };

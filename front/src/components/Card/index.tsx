@@ -1,19 +1,25 @@
-import { COACH_COLORS } from '@constants/index';
-import type { Coach as CoachType } from '@typings/domain';
-import { CardContainer } from './styles';
+import { ButtonWrapper, CardContainer, ImageWrapper } from './styles';
 
-interface CoachProps {
-  coach: CoachType;
+interface CardProps {
+  image: string;
+  name: string;
+  description: string;
+  buttonName: string;
+  onClick: () => void;
 }
 
-const Card = ({ coach }: CoachProps) => {
+const Card = ({ name, image, description, buttonName, onClick }: CardProps) => {
   return (
-    <CardContainer color={COACH_COLORS[coach.id]}>
+    <CardContainer onClick={onClick}>
       <div>
-        <img src={coach.image} alt="코치 프로필 이미지" />
-        <span>{coach.name}</span>
-        <p>{coach.description}</p>
-        <button>예약하기</button>
+        <ImageWrapper>
+          <img src={image} alt={`${name} 카드 이미지`} />
+        </ImageWrapper>
+        <span>{name}</span>
+        <p>{description}</p>
+        <ButtonWrapper>
+          <button>{buttonName}</button>
+        </ButtonWrapper>
       </div>
     </CardContainer>
   );

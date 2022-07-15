@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open --hot",
+    "start": "webpack serve",
     "build": "webpack"
   },
   "author": "",
@@ -19,7 +19,6 @@
     "@types/react-dom": "^18.0.5",
     "@types/styled-components": "^5.1.25",
     "@types/webpack": "^5.28.0",
-    "@types/webpack-dev-server": "^4.7.2",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",
     "babel-loader": "^8.2.5",
@@ -40,6 +39,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "dayjs": "^1.11.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
