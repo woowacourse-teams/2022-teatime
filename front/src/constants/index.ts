@@ -1,6 +1,8 @@
 const ROUTES = {
-  HOME: '/',
+  SELECT_USER: '/',
+  HOME: '/crew',
   SCHEDULE: '/schedule',
+  RESERVATION: '/reservation',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];

@@ -10,7 +10,7 @@ const Home = () => {
   const { data: coaches } = useFetch<Coach[]>('/coaches');
 
   const handleClickCard = (id: number) => {
-    navigate(`${ROUTES.SCHEDULE}/${id}`);
+    navigate(`${ROUTES.RESERVATION}/${id}`);
   };
 
   return (

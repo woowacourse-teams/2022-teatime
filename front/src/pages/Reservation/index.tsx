@@ -3,7 +3,7 @@ import TimeList from '@components/TimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 
-const Schedule = () => {
+const Reservation = () => {
   return (
     <Frame>
       <ReservationInfo />
@@ -13,4 +13,4 @@ const Schedule = () => {
   );
 };
 
-export default Schedule;
+export default Reservation;
