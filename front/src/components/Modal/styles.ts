@@ -1,4 +1,13 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+`;
 
 const Background = styled.div`
   height: 100%;
@@ -10,7 +19,8 @@ const Background = styled.div`
   left: 0;
   top: 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
+  animation: ${fadeIn} 0.3s;
 `;
 
 const ModalContainer = styled.div`
@@ -71,6 +81,7 @@ const FirstButton = styled.button`
   width: 50%;
   height: 45px;
   background-color: #e9e9e9;
+
   &:hover {
     background-color: #d3d3d3;
   }
