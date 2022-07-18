@@ -5,7 +5,7 @@ import { SelectUserContainer } from './styles';
 const SelectUser = () => {
   return (
     <SelectUserContainer>
-      <Link to={ROUTES.SCHEDULE}>
+      <Link to={ROUTES.COACH}>
         <button>코치</button>
       </Link>
       <Link to={ROUTES.HOME}>
