@@ -3,7 +3,7 @@ package com.woowacourse.teatime.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.woowacourse.teatime.NotFoundCoachException;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;

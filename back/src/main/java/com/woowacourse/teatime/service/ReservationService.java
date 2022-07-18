@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.NotExistedCrewException;
-import com.woowacourse.teatime.NotFoundScheduleException;
+import com.woowacourse.teatime.exception.NotExistedCrewException;
+import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;

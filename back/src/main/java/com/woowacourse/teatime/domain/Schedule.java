@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.domain;
 
-import com.woowacourse.teatime.AlreadyReservedException;
-import com.woowacourse.teatime.InvalidYearException;
+import com.woowacourse.teatime.exception.AlreadyReservedException;
+import com.woowacourse.teatime.exception.InvalidYearException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -3,9 +3,9 @@ package com.woowacourse.teatime.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.woowacourse.teatime.AlreadyReservedException;
-import com.woowacourse.teatime.NotExistedCrewException;
-import com.woowacourse.teatime.NotFoundScheduleException;
+import com.woowacourse.teatime.exception.AlreadyReservedException;
+import com.woowacourse.teatime.exception.NotExistedCrewException;
+import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
@@ -77,7 +77,7 @@ class ReservationServiceTest {
     @DisplayName("예약을 할 때 스케줄 아이디가 존재하지 않는 아이디면 예외를 반환한다.")
     @Test
     void reserveFailNotExistedSchedule() {
-        assertThatThrownBy(() -> reservationService.save(crew.getId(), coach.getId(), schedule.getId() + +100L))
+        assertThatThrownBy(() -> reservationService.save(crew.getId(), coach.getId(), schedule.getId() + 100L))
                 .isInstanceOf(NotFoundScheduleException.class);
     }
 

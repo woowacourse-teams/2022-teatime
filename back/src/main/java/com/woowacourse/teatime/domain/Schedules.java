@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.domain;
 
-import com.woowacourse.teatime.NotFoundScheduleException;
+import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
