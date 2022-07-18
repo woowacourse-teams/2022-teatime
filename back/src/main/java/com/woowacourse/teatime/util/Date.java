@@ -11,7 +11,12 @@ public class Date {
         return LocalDateTime.of(startDate, LocalTime.MIN);
     }
 
-    public static LocalDateTime findEndDay(int year, int month) {
+    public static LocalDateTime findToday(int year, int month) {
+        LocalDate startDate = LocalDate.now();
+        return LocalDateTime.of(startDate, LocalTime.MIN);
+    }
+
+    public static LocalDateTime findLastDay(int year, int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = YearMonth.from(startDate).atEndOfMonth();
         return LocalDateTime.of(endDate, LocalTime.MAX);
