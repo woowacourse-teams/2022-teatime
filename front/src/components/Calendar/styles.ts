@@ -1,53 +1,15 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 40px;
-  padding-left: 40px;
-  border-left: 1px solid #e7e7e7;
-
-  h1 {
-    height: 90px;
-    margin-left: 10px;
-    font-size: 28px;
-  }
-`;
-
-const DateContainer = styled.div<{ hasSchedule: boolean; isSelected: boolean }>`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 25px;
-  background-color: ${(props) => props.hasSchedule && '#cce6ba'};
-  color: ${(props) => !props.hasSchedule && '#C4C4C4'};
-  font-weight: bolder;
-  cursor: ${(props) => props.hasSchedule && 'pointer'};
-
-  ${(props) =>
-    props.isSelected &&
-    css`
-      background-color: #404338;
-      color: #fff;
-    `}
-`;
-
-const TodayIndicator = styled.div`
-  position: absolute;
-  bottom: 5px;
-  width: 5px;
-  height: 5px;
-  background-color: #ff008a;
-  border-radius: 5px;
+  margin-right: 60px;
 `;
 
 const DateGrid = styled.div`
   display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(7, 40px);
+  gap: 10px;
+  grid-template-columns: repeat(7, 50px);
 `;
 
 const DayOfWeekBox = styled.div`
@@ -83,11 +45,4 @@ const YearMonthContainer = styled.div`
   }
 `;
 
-export {
-  CalendarContainer,
-  DateContainer,
-  DateGrid,
-  DayOfWeekBox,
-  YearMonthContainer,
-  TodayIndicator,
-};
+export { CalendarContainer, DateGrid, DayOfWeekBox, YearMonthContainer };

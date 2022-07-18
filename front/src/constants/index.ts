@@ -1,6 +1,7 @@
 const ROUTES = {
   SELECT_USER: '/',
   HOME: '/crew',
+  COACH: '/coach',
   SCHEDULE: '/schedule',
   RESERVATION: '/reservation',
 };

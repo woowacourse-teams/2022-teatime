@@ -7,10 +7,14 @@ import useSchedule from '@hooks/useSchedules';
 import { CALENDAR_DATE_LENGTH, DAY_OF_WEEKS } from '@constants/index';
 import { Schedule, ScheduleMap } from '@typings/domain';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
-import DateBox from './DateBox';
+import DateBox from '@components/DateBox';
 import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
 
-const Calendar = () => {
+interface CalendarProps {
+  isCoach?: boolean;
+}
+
+const Calendar = ({ isCoach }: CalendarProps) => {
   const { id } = useParams();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const dispatch = useContext(ScheduleDispatchContext);
@@ -22,21 +26,34 @@ const Calendar = () => {
   const monthSchedule = schedules?.reduce((newObj, { day, schedules }) => {
     newObj[day] = schedules;
     return newObj;
-  }, {} as ScheduleMap);
+  }, {} as ScheduleMap); // useSchedule안에 넣어서 리턴하는게 깔끔할듯
 
   const dateBoxLength =
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX;
+      : CALENDAR_DATE_LENGTH.MAX; // DATE_BOX 길이가 맞지않을까
 
-  const handleClickDate = (monthSchedule: Schedule[] = [], date: number) => {
+  const handleClickDate = (daySchedule: Schedule[] = [], date: number, isWeekend: boolean) => {
+    if (isWeekend) {
+      return;
+    }
+
     setSelectedDay(date);
-    dispatch({ type: 'SET_SCHEDULES', data: monthSchedule });
+    if (isCoach) {
+      dispatch({
+        type: 'SET_ALL_SCHEDULES',
+        data: daySchedule,
+        date: `${year}-${month}-${String(date).padStart(2, '0')}`,
+      });
+      return;
+    }
+
+    console.log('여기는 크루한테만');
+    dispatch({ type: 'SET_SCHEDULES', data: daySchedule });
   };
 
   return (
     <CalendarContainer>
-      <h1>날짜를 선택해주세요.</h1>
       <YearMonthContainer>
         <span>
           {year}년 {month}월
@@ -53,6 +70,8 @@ const Calendar = () => {
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW;
           const isOutOfCalendar = index < firstDOW || lastDate <= date;
+          const dayNumber = dayjs(`${year}${month}${date}`).day();
+          const isWeekend = dayNumber === 5 || dayNumber === 6; // 5=토요일, 6=일요일
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
@@ -61,9 +80,11 @@ const Calendar = () => {
               key={index}
               date={date + 1}
               monthSchedule={monthSchedule?.[date + 1]}
-              onClick={() => handleClickDate(monthSchedule?.[date + 1], date + 1)}
+              onClick={() => handleClickDate(monthSchedule?.[date + 1], date + 1, isWeekend)}
               selectedDay={selectedDay}
               today={today}
+              isCoach={isCoach}
+              isWeekend={isWeekend}
             />
           );
         })}
