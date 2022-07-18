@@ -30,4 +30,10 @@ public class Coach {
     public Coach(String name) {
         this.name = name;
     }
+
+    public Coach(String name, String description, String image) {
+        this.name = name;
+        this.description = description;
+        this.image = image;
+    }
 }

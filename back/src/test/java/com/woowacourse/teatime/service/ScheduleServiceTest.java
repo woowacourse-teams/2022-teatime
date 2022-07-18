@@ -63,11 +63,12 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     void update() {
+        Coach coach = coachRepository.save(new Coach("brown"));
         LocalDate date = LocalDate.of(2022, 7, 4);
         ScheduleUpdateRequest request = new ScheduleUpdateRequest(date, List.of(Date.findFirstTime(date)));
-        scheduleService.update(1L, request);
+        scheduleService.update(coach.getId(), request);
 
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(1L, new ScheduleRequest(2022, 7));
-        assertThat(scheduleResponses).hasSize(2);
+        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), new ScheduleRequest(2022, 7));
+        assertThat(scheduleResponses).hasSize(1);
     }
 }
