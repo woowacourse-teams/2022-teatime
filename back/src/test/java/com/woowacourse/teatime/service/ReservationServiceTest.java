@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.woowacourse.teatime.exception.AlreadyReservedException;
@@ -97,5 +97,16 @@ class ReservationServiceTest {
 
         assertThatThrownBy(() -> reservationService.save(crew.getId(), coach.getId(), schedule.getId()))
                 .isInstanceOf(AlreadyReservedException.class);
+    }
+
+    @DisplayName("예약을 승인한다.")
+    @Test
+    void approveReservation() {
+        Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
+
+        reservationService.approve(coach.getId(), reservation.getId());
+
+        Reservation foundReservation = reservationRepository.findById(reservation.getId()).get();
+        assertThat(foundReservation.isApproved()).isTrue();
     }
 }

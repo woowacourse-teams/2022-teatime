@@ -9,7 +9,7 @@ import com.woowacourse.teatime.domain.Crew;
 
 public class DomainFixture {
 
-    public static final Coach COACH_BROWN = new Coach("브라운");
+    public static final Coach COACH_BROWN = new Coach("브라운", "i am legend", "image");
 
     public static final LocalDate LOCAL_DATE = LocalDate.of(2022, 7, 18);
     public static final LocalTime LOCAL_TIME = LocalTime.MIN;
