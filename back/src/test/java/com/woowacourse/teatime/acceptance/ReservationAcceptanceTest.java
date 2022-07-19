@@ -2,8 +2,6 @@ package com.woowacourse.teatime.acceptance;
 
 import static com.woowacourse.teatime.fixture.DomainFixture.*;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
