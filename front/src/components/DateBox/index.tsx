@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { Schedule } from '@typings/domain';
 import { DateContainer, TodayIndicator } from './styles';
 
@@ -21,7 +22,7 @@ const DateBox = ({
   isWeekend,
 }: DateBoxProps) => {
   const isSelected = (monthSchedule.length > 0 || isCoach) && selectedDay === date;
-  const isToday = Number(today) === date;
+  const isToday = today === dayjs().format('YYYY-MM-DD');
 
   return (
     <DateContainer

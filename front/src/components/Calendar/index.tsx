@@ -21,8 +21,6 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const { monthYear, updateMonth, monthSchedule } = useSchedule(id);
   const { firstDOW, lastDate, year, month } = monthYear;
 
-  const today = dayjs().format('DD');
-
   const dateBoxLength =
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
@@ -74,7 +72,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
               monthSchedule={monthSchedule?.[date + 1]}
               onClick={() => handleClickDate(monthSchedule?.[date + 1], date + 1, isWeekend)}
               selectedDay={selectedDay}
-              today={today}
+              today={`${year}-${month}-${String(date + 1).padStart(2, '0')}`}
               isCoach={isCoach}
               isWeekend={isWeekend}
             />
