@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DaySchedule } from '@typings/domain';
+import { DaySchedule, ScheduleMap } from '@typings/domain';
 import { getMonthYearDetails } from '@utils/index';
 import dayjs from 'dayjs';
 import useFetch from './useFetch';
@@ -12,7 +12,12 @@ const useSchedules = (id?: string) => {
     `/api/coaches/${id}/schedules?year=${monthYear.year}&month=${monthYear.month}`
   );
 
-  return { monthYear, setMonthYear, schedules };
+  const monthSchedule = schedules?.reduce((newObj, { day, schedules }) => {
+    newObj[day] = schedules;
+    return newObj;
+  }, {} as ScheduleMap);
+
+  return { monthYear, setMonthYear, monthSchedule };
 };
 
 export default useSchedules;

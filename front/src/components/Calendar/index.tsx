@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import LeftArrow from '@assets/left-arrow.svg';
 import RightArrow from '@assets/right-arrow.svg';
 import useSchedule from '@hooks/useSchedules';
-import { CALENDAR_DATE_LENGTH, DAY_OF_WEEKS } from '@constants/index';
-import { Schedule, ScheduleMap } from '@typings/domain';
+import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { Schedule } from '@typings/domain';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
 import DateBox from '@components/DateBox';
 import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
@@ -18,20 +18,15 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const { id } = useParams();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const dispatch = useContext(ScheduleDispatchContext);
-  const { monthYear, setMonthYear, schedules } = useSchedule(id);
+  const { monthYear, setMonthYear, monthSchedule } = useSchedule(id);
   const { firstDOW, lastDate, year, month } = monthYear;
 
   const today = dayjs().format('DD');
 
-  const monthSchedule = schedules?.reduce((newObj, { day, schedules }) => {
-    newObj[day] = schedules;
-    return newObj;
-  }, {} as ScheduleMap); // useSchedule안에 넣어서 리턴하는게 깔끔할듯
-
   const dateBoxLength =
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX; // DATE_BOX 길이가 맞지않을까
+      : CALENDAR_DATE_LENGTH.MAX;
 
   const handleClickDate = (daySchedule: Schedule[] = [], date: number, isWeekend: boolean) => {
     if (isWeekend) return;
@@ -68,7 +63,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
           const date = index - firstDOW;
           const isOutOfCalendar = index < firstDOW || lastDate <= date;
           const dayNumber = dayjs(`${year}${month}${date}`).day();
-          const isWeekend = dayNumber === 5 || dayNumber === 6; // 5=토요일, 6=일요일
+          const isWeekend = dayNumber === DAY_NUMBER.SATURDAY || dayNumber === DAY_NUMBER.SUNDAY;
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
