@@ -1,11 +1,11 @@
 package com.woowacourse.teatime.acceptance;
 
+import static com.woowacourse.teatime.fixture.DtoFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +16,8 @@ import org.springframework.http.MediaType;
 
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
-import com.woowacourse.teatime.domain.Coach;
-import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.service.CoachService;
+import com.woowacourse.teatime.service.ScheduleService;
 import com.woowacourse.teatime.util.Date;
 
 import io.restassured.RestAssured;
@@ -32,18 +30,18 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
     private static final int MONTH = 7;
 
     @Autowired
-    private CoachRepository coachRepository;
+    private CoachService coachService;
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private ScheduleService scheduleService;
 
     @DisplayName("코치에 해당하는 스케줄 목록을 조회한다.")
     @Test
     void findByCoachIdAndDate() {
-        Coach coach = coachRepository.save(new Coach("brown", "i am legend", "image"));
-        scheduleRepository.save(new Schedule(coach, Date.findFirstDay(YEAR, MONTH)));
-        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(YEAR, MONTH, 31, 23, 59)));
+        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
+        scheduleService.save(coachId, LocalDateTime.of(YEAR, MONTH, 31, 23, 59));
 
-        ExtractableResponse<Response> response = 스케쥴_조회_요청됨(coach.getId(), YEAR, MONTH);
+        ExtractableResponse<Response> response = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
         List<ScheduleResponse> result = response.jsonPath().getList(".", ScheduleResponse.class);
 
         assertAll(
@@ -55,16 +53,16 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void updateByCoachAndDate() {
-        Coach savedCoach = coachRepository.save(new Coach("brown", "i am legend", "image"));
-        scheduleRepository.save(new Schedule(savedCoach, Date.findFirstDay(YEAR, MONTH)));
+        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
 
         LocalDate date = LocalDate.of(YEAR, MONTH, 31);
         LocalDateTime localDateTime = LocalDateTime.of(YEAR, MONTH, 31, 23, 59);
         ScheduleUpdateRequest request = new ScheduleUpdateRequest(date, List.of(localDateTime));
 
-        ExtractableResponse<Response> updateResponse = 스케쥴_수정_요청됨(savedCoach.getId(), request);
+        ExtractableResponse<Response> updateResponse = 스케쥴_수정_요청됨(coachId, request);
 
-        ExtractableResponse<Response> findResponse = 스케쥴_조회_요청됨(savedCoach.getId(), YEAR, MONTH);
+        ExtractableResponse<Response> findResponse = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
         List<ScheduleResponse> result = findResponse.jsonPath().getList(".", ScheduleResponse.class);
         assertAll(
                 () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
