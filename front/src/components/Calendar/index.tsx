@@ -34,9 +34,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
       : CALENDAR_DATE_LENGTH.MAX; // DATE_BOX 길이가 맞지않을까
 
   const handleClickDate = (daySchedule: Schedule[] = [], date: number, isWeekend: boolean) => {
-    if (isWeekend) {
-      return;
-    }
+    if (isWeekend) return;
 
     setSelectedDay(date);
     if (isCoach) {
@@ -48,7 +46,6 @@ const Calendar = ({ isCoach }: CalendarProps) => {
       return;
     }
 
-    console.log('여기는 크루한테만');
     dispatch({ type: 'SET_SCHEDULES', data: daySchedule });
   };
 

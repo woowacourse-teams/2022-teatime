@@ -17,8 +17,8 @@ interface MonthYear {
 
 interface Schedule {
   id: number;
-  dateTime: Date | string;
-  isPossible: boolean;
+  dateTime: string;
+  isPossible?: boolean;
 }
 
 type DaySchedule = { day: number; schedules: Schedule[] };

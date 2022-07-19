@@ -14,6 +14,10 @@ const handlers = [
   rest.post('/coaches/:id/schedules/:scheduleId', (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+
+  rest.put('/coaches/:id/schedules', (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
 
 export default handlers;

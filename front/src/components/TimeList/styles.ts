@@ -11,7 +11,6 @@ const FadeIn = keyframes`
 
 const TimeListContainer = styled.div`
   width: 250px;
-  margin-top: 90px;
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -25,7 +24,7 @@ const TimeBox = styled.div<{ disabled?: boolean }>`
   height: 50px;
   margin-bottom: 10px;
   border: 1px solid #404338;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
