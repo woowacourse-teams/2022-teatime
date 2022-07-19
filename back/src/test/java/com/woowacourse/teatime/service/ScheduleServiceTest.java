@@ -1,20 +1,12 @@
 package com.woowacourse.teatime.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
-import com.woowacourse.teatime.exception.NotFoundCoachException;
-import com.woowacourse.teatime.controller.dto.ScheduleRequest;
-import com.woowacourse.teatime.controller.dto.ScheduleResponse;
-import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
-import com.woowacourse.teatime.domain.Coach;
-import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.repository.ScheduleRepository;
-import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +14,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.woowacourse.teatime.controller.dto.ScheduleRequest;
+import com.woowacourse.teatime.controller.dto.ScheduleResponse;
+import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.domain.Coach;
+import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
+import com.woowacourse.teatime.repository.CoachRepository;
+import com.woowacourse.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.util.Date;
 
 @Transactional
 @SpringBootTest
@@ -40,10 +42,20 @@ class ScheduleServiceTest {
     private ScheduleRepository scheduleRepository;
 
     @Test
-    @DisplayName("코치의 한달 스케줄 목록을 조회한다.")
-    void find() {
+    @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
+    void find_past() {
         Coach coach = coachRepository.save(new Coach("brown"));
         scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
+        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
+
+        assertThat(scheduleResponses).hasSize(0);
+    }
+
+    @Test
+    @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
+    void find_future() {
+        Coach coach = coachRepository.save(new Coach("brown"));
+        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(LocalDate.now(), LocalTime.MAX)));
         List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
 
         assertThat(scheduleResponses).hasSize(1);
@@ -63,11 +75,13 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     void update() {
-        LocalDate date = LocalDate.of(2022, 7, 4);
-        ScheduleUpdateRequest request = new ScheduleUpdateRequest(date, List.of(Date.findFirstTime(date)));
-        scheduleService.update(1L, request);
+        Coach coach = coachRepository.save(new Coach("brown", "i am legend", "image"));
+        LocalDate date = LocalDate.now();
+        ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date, List.of(Date.findFirstTime(date)));
+        scheduleService.update(coach.getId(), updateRequest);
 
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(1L, new ScheduleRequest(2022, 7));
-        assertThat(scheduleResponses).hasSize(2);
+        ScheduleRequest request = new ScheduleRequest(date.getYear(), date.getMonthValue());
+        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), request);
+        assertThat(scheduleResponses).hasSize(1);
     }
 }

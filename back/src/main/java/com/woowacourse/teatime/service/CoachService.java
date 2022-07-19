@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.service;
 
 import com.woowacourse.teatime.controller.dto.CoachResponse;
+import com.woowacourse.teatime.controller.dto.CoachSaveRequest;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.repository.CoachRepository;
 import java.util.List;
@@ -22,5 +23,10 @@ public class CoachService {
         return coaches.stream()
                 .map(CoachResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public Long save(CoachSaveRequest request) {
+        Coach coach = new Coach(request.getName(), request.getDescription(), request.getImage());
+        return coachRepository.save(coach).getId();
     }
 }

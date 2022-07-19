@@ -1,23 +1,26 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.exception.NotFoundCoachException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.domain.Schedules;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.util.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -31,8 +34,8 @@ public class ScheduleService {
     public List<ScheduleResponse> find(Long id, ScheduleRequest request) {
         validateCoachId(id);
 
-        LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
-        LocalDateTime end = Date.findEndDay(request.getYear(), request.getMonth());
+        LocalDateTime start = Date.findToday(request.getYear(), request.getMonth());
+        LocalDateTime end = Date.findLastDay(request.getYear(), request.getMonth());
         Schedules schedules = getSchedules(id, start, end);
 
         return getScheduleResponses(schedules, schedules.findDays());

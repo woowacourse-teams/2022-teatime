@@ -33,7 +33,7 @@ public class ScheduleRepositoryTest {
 
         List<Schedule> schedules = this.scheduleRepository.findAll();
 
-        assertThat(schedules).hasSize(3);
+        assertThat(schedules).hasSize(1);
     }
 
     @Test
@@ -76,6 +76,6 @@ public class ScheduleRepositoryTest {
         scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coach.getId(), start, end);
 
         List<Schedule> schedules = scheduleRepository.findAll();
-        assertThat(schedules).hasSize(3);
+        assertThat(schedules).hasSize(1);
     }
 }
