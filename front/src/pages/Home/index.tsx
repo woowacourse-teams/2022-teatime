@@ -7,7 +7,7 @@ import { CardListContainer, Layout } from './styles';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { data: coaches } = useFetch<Coach[]>('/coaches');
+  const { data: coaches } = useFetch<Coach[]>('/api/coaches');
 
   const handleClickCard = (id: number) => {
     navigate(`${ROUTES.RESERVATION}/${id}`);

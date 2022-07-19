@@ -4,20 +4,20 @@ import worker from './mocks/browser';
 import App from './App';
 import GlobalStyle from '@styles/GlobalStyle';
 
-const main = async () => {
-  if (process.env.NODE_ENV === 'development') {
-    if (window.location.pathname === '') {
-      window.location.pathname = '/';
-      return;
-    }
+// const main = async () => {
+//   if (process.env.NODE_ENV === 'development') {
+//     if (window.location.pathname === '') {
+//       window.location.pathname = '/';
+//       return;
+//     }
 
-    await worker.start({
-      serviceWorker: {
-        url: '/mockServiceWorker.js',
-      },
-    });
-  }
-};
+//     await worker.start({
+//       serviceWorker: {
+//         url: '/mockServiceWorker.js',
+//       },
+//     });
+//   }
+// };
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -27,4 +27,4 @@ root.render(
   </BrowserRouter>
 );
 
-main();
+// main();

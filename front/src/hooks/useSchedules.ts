@@ -9,7 +9,7 @@ const useSchedules = (id?: string) => {
   const [monthYear, setMonthYear] = useState(currentMonthYear);
 
   const { data: schedules } = useFetch<DaySchedule[]>(
-    `/coaches/${id}/schedules?year=${monthYear.year}&month=${monthYear.month}`
+    `/api/coaches/${id}/schedules?year=${monthYear.year}&month=${monthYear.month}`
   );
 
   return { monthYear, setMonthYear, schedules };

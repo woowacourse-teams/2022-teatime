@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@api/index';
 
 interface UseFetch<T> {
   data: null | T;
@@ -16,7 +16,7 @@ const useFetch = <T>(url: string): UseFetch<T> => {
     const requestData = async () => {
       setIsLoading(true);
       try {
-        const { data } = await axios.get(url);
+        const { data } = await api.get(url);
         setData(data);
       } catch (error) {
         setIsError(true);

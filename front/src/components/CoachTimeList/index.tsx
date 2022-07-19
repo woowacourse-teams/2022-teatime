@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import api from '@api/index';
 import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
 
 const CoachTimeList = () => {
@@ -26,7 +26,7 @@ const CoachTimeList = () => {
   }, [] as string[]);
 
   const handleEnrollSchedules = async () => {
-    await axios.put(`/coaches/1/schedules`, {
+    await api.put(`/api/coaches/1/schedules`, {
       date,
       schedules: selectedTimes,
     });
