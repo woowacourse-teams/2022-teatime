@@ -30,13 +30,20 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final CoachRepository coachRepository;
 
+    public Long save(Long coachId, LocalDateTime dateTime) {
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, dateTime));
+        return schedule.getId();
+    }
+
     @Transactional(readOnly = true)
-    public List<ScheduleResponse> find(Long id, ScheduleRequest request) {
-        validateCoachId(id);
+    public List<ScheduleResponse> find(Long coachId, ScheduleRequest request) {
+        validateCoachId(coachId);
 
         LocalDateTime start = Date.findToday(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findLastDay(request.getYear(), request.getMonth());
-        Schedules schedules = getSchedules(id, start, end);
+        Schedules schedules = getSchedules(coachId, start, end);
 
         return getScheduleResponses(schedules, schedules.findDays());
     }
@@ -47,9 +54,9 @@ public class ScheduleService {
         }
     }
 
-    private Schedules getSchedules(Long id, LocalDateTime start, LocalDateTime end) {
+    private Schedules getSchedules(Long coachId, LocalDateTime start, LocalDateTime end) {
         List<Schedule> schedules
-                = scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(id, start, end);
+                = scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);
         return new Schedules(schedules);
     }
 
@@ -62,20 +69,20 @@ public class ScheduleService {
         return scheduleResponses;
     }
 
-    public void update(Long id, ScheduleUpdateRequest request) {
-        deleteAllByCoachAndDate(id, request);
-        saveAllByCoachAndDate(id, request);
+    public void update(Long coachId, ScheduleUpdateRequest request) {
+        deleteAllByCoachAndDate(coachId, request);
+        saveAllByCoachAndDate(coachId, request);
     }
 
-    private void deleteAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
+    private void deleteAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
         LocalDate date = request.getDate();
         LocalDateTime start = Date.findFirstTime(date);
         LocalDateTime end = Date.findLastTime(date);
-        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(id, start, end);
+        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coachId, start, end);
     }
 
-    private void saveAllByCoachAndDate(Long id, ScheduleUpdateRequest request) {
-        Coach coach = coachRepository.findById(id)
+    private void saveAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
+        Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
         List<Schedule> schedules = toSchedules(request, coach);
         scheduleRepository.saveAll(schedules);
