@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.NotExistedCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
@@ -37,9 +38,16 @@ public class ReservationService {
     public void approve(Long coachId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
+        validateStatus(reservation);
         validateReservation(coachId, reservation);
 
         reservation.approve();
+    }
+
+    private void validateStatus(Reservation reservation) {
+        if (reservation.isApproved()) {
+            throw new AlreadyApprovedException();
+        }
     }
 
     private void validateReservation(Long coachId, Reservation reservation) {
