@@ -7,6 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config: webpack.Configuration = {
   mode: isDevelopment ? 'development' : 'production',
+  devtool: isDevelopment ? 'inline-source-map' : 'hidden-source-map',
   entry: {
     app: './src/index.tsx',
   },

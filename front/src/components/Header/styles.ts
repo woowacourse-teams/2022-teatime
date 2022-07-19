@@ -7,7 +7,7 @@ const HeaderContainer = styled.div`
   width: 100%;
   height: 50px;
   padding: 0 10%;
-  box-shadow: 0px 3px 4px #ececec;
+  box-shadow: 0px 3px 4px ${({ theme }) => theme.colors.GRAY_300};
 
   h1 {
     font-size: 18px;
