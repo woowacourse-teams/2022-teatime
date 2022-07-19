@@ -25,14 +25,15 @@ public class ReservationService {
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public Reservation save(Long crewId, Long coachId, Long scheduleId) {
+    public Long save(Long crewId, Long coachId, Long scheduleId) {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotExistedCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(scheduleId, coachId)
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
-        return reservationRepository.save(new Reservation(schedule, crew));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        return reservation.getId();
     }
 
     public void approve(Long coachId, Long reservationId) {

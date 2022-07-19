@@ -56,9 +56,9 @@ class ReservationServiceTest {
     @DisplayName("예약을 한다.")
     @Test
     void reserve() {
-        Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
+        Long reservationId = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
 
-        Optional<Reservation> actual = reservationRepository.findById(reservation.getId());
+        Optional<Reservation> actual = reservationRepository.findById(reservationId);
         assertTrue(actual.isPresent());
     }
 
@@ -97,11 +97,11 @@ class ReservationServiceTest {
     @DisplayName("예약을 승인한다.")
     @Test
     void approveReservation() {
-        Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
+        Long reservationId = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
 
-        reservationService.approve(coach.getId(), reservation.getId());
+        reservationService.approve(coach.getId(), reservationId);
 
-        Reservation foundReservation = reservationRepository.findById(reservation.getId()).get();
+        Reservation foundReservation = reservationRepository.findById(reservationId).get();
         assertThat(foundReservation.isApproved()).isTrue();
     }
 }
