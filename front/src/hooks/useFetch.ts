@@ -20,6 +20,7 @@ const useFetch = <T>(url: string): UseFetch<T> => {
         setData(data);
       } catch (error) {
         setIsError(true);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }

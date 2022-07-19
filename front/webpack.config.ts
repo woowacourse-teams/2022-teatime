@@ -68,7 +68,7 @@ const config: webpack.Configuration = {
   ],
   devServer: {
     historyApiFallback: true,
-    port: 3000,
+    port: 8080,
     open: true,
     hot: true,
     static: { directory: path.resolve(__dirname, 'public') },
