@@ -1,15 +1,18 @@
 package com.woowacourse.teatime.domain;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static com.woowacourse.teatime.fixture.DomainFixture.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.woowacourse.teatime.AlreadyReservedException;
-import com.woowacourse.teatime.NotFoundScheduleException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import com.woowacourse.teatime.exception.AlreadyReservedException;
+import com.woowacourse.teatime.exception.NotFoundScheduleException;
 
 public class SchedulesTest {
 
@@ -25,23 +28,19 @@ public class SchedulesTest {
     @Test
     @DisplayName("예약 불가능한 일정에 예약할 경우, 예외를 반환한다.")
     void reserve_exception_impossible() {
-        LocalDateTime now = LocalDateTime.now();
-        Coach coach = new Coach("제이슨");
+        Schedule schedule = new Schedule(COACH_BROWN, DATE_TIME);
+        Schedules schedules = new Schedules(List.of(schedule));
+        schedules.reserve(DATE_TIME);
 
-        Schedules schedules = new Schedules(List.of(new Schedule(coach, now)));
-        schedules.reserve(now);
-
-        assertThatThrownBy(() -> schedules.reserve(now))
+        assertThatThrownBy(() -> schedules.reserve(DATE_TIME))
                 .isInstanceOf(AlreadyReservedException.class);
     }
 
     @Test
     @DisplayName("존재하는 예약 가능한 일정에 예약할 경우, 예약을 한다.")
     void reserve() {
-        LocalDateTime now = LocalDateTime.now();
-        Coach coach = new Coach("제이슨");
-
-        Schedules schedules = new Schedules(List.of(new Schedule(coach, now)));
-        assertDoesNotThrow(() -> schedules.reserve(now));
+        Schedule schedule = new Schedule(COACH_BROWN, DATE_TIME);
+        Schedules schedules = new Schedules(List.of(schedule));
+        assertDoesNotThrow(() -> schedules.reserve(DATE_TIME));
     }
 }

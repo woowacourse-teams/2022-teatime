@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.woowacourse.teatime.NotFoundCoachException;
 import com.woowacourse.teatime.controller.dto.ScheduleRequest;
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.domain.Schedules;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.util.Date;

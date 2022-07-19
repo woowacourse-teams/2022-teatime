@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-@TestConstructor(autowireMode = AutowireMode.ALL)
 public class CoachServiceTest {
 
     @Autowired

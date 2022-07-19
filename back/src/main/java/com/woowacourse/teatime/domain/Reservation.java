@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +28,15 @@ public class Reservation {
     @JoinColumn(name = "crew_id")
     private Crew crew;
 
+    @Column(nullable = false)
+    private boolean isApproved = false;
+
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
         this.crew = crew;
+    }
+
+    public void approve() {
+        this.isApproved = true;
     }
 }
