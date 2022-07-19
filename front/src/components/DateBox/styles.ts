@@ -5,7 +5,7 @@ const TodayIndicator = styled.div`
   bottom: 5px;
   width: 5px;
   height: 5px;
-  background-color: #e6aca8;
+  background-color: ${({ theme }) => theme.colors.RED_300};
   border-radius: 5px;
 `;
 
@@ -25,16 +25,16 @@ const DateContainer = styled.div<{
   font-size: 20px;
   font-weight: bold;
   border-radius: 25px;
-  background-color: ${(props) => props.hasSchedule && '#cce6ba'};
-  color: ${(props) => !props.hasSchedule && '#C4C4C4'};
+  background-color: ${(props) => props.hasSchedule && props.theme.colors.GREEN_300};
+  color: ${(props) => !props.hasSchedule && props.theme.colors.GRAY_300};
   cursor: ${(props) => (props.hasSchedule || props.isCoach) && 'pointer'};
 
   ${(props) =>
     !props.isWeekend &&
     props.isSelected &&
     css`
-      background-color: #404338;
-      color: #fff;
+      background-color: ${({ theme }) => theme.colors.GREEN_900};
+      color: ${({ theme }) => theme.colors.WHITE};
     `}
 
   ${(props) =>
@@ -42,7 +42,7 @@ const DateContainer = styled.div<{
     props.isCoach &&
     props.hasDate &&
     css`
-      border: 1px solid #cce6ba;
+      border: 1px solid ${({ theme }) => theme.colors.GREEN_300};
     `}
 
   ${(props) =>

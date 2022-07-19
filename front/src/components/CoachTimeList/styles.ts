@@ -10,23 +10,23 @@ const TimeListContainer = styled.div`
   }
 `;
 
-const TimeBox = styled.div<{ disabled?: boolean; selected: boolean }>`
+const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50px;
   margin-bottom: 10px;
-  border: 1px solid #404338;
+  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
   border-radius: 4px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 
   ${(props) =>
-    props.disabled === false &&
+    props.isPossible === false &&
     css`
-      background-color: #e2e1e1;
-      color: #a0a0a0;
+      background-color: ${({ theme }) => theme.colors.GREEN_200};
+      color: ${({ theme }) => theme.colors.GREEN_500};
       cursor: default;
       text-decoration: line-through;
       pointer-events: none;
@@ -35,12 +35,12 @@ const TimeBox = styled.div<{ disabled?: boolean; selected: boolean }>`
   ${(props) =>
     props.selected &&
     css`
-      background-color: #404338;
-      color: #fff;
+      background-color: ${({ theme }) => theme.colors.GREEN_900};
+      color: ${({ theme }) => theme.colors.WHITE};
     `}
 
   &:hover {
-    border: 2px solid #404338;
+    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
   }
 `;
 
@@ -62,8 +62,8 @@ const ButtonContainer = styled.div`
 const CheckButton = styled.button``;
 
 const ConfirmButton = styled.button`
-  background-color: #0169ff;
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.BLUE_600};
+  color: ${({ theme }) => theme.colors.WHITE};
 `;
 
 export { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };

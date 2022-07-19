@@ -28,7 +28,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   width: 400px;
   border-radius: 12px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.WHITE};
   overflow: hidden;
 
   p {
@@ -51,7 +51,7 @@ const TitleWrapper = styled.div`
 
   h1 {
     font-size: 26px;
-    color: #3d5a80;
+    color: ${({ theme }) => theme.colors.BLUE_800};
   }
 `;
 
@@ -80,19 +80,19 @@ const ButtonWrapper = styled.div`
 const FirstButton = styled.button`
   width: 50%;
   height: 45px;
-  background-color: #e9e9e9;
+  background-color: ${({ theme }) => theme.colors.GRAY_200};
 
   &:hover {
-    background-color: #d3d3d3;
+    background-color: ${({ theme }) => theme.colors.GRAY_300};
   }
 `;
 
 const SecondButton = styled.button`
   width: 50%;
   height: 45px;
-  background-color: #cce6ba;
+  background-color: ${({ theme }) => theme.colors.GREEN_300};
   &:hover {
-    background-color: #b8e09b;
+    background-color: ${({ theme }) => theme.colors.GREEN_400};
   }
 `;
 

@@ -23,21 +23,21 @@ const TimeBox = styled.div<{ disabled?: boolean }>`
   align-items: center;
   height: 50px;
   margin-bottom: 10px;
-  border: 1px solid #404338;
+  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
   border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 
   &:hover {
-    border: 2px solid #404338;
+    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
   }
 
   ${(props) =>
     props.disabled &&
     css`
-      background-color: #e2e1e1;
-      color: #a0a0a0;
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
+      color: ${({ theme }) => theme.colors.GREEN_500};
       cursor: default;
       text-decoration: line-through;
       pointer-events: none;
@@ -57,7 +57,7 @@ const ReserveButtonWrapper = styled.div`
     width: 120px;
     height: 50px;
     background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
+    color: ${({ theme }) => theme.colors.WHITE};
     border-radius: 4px;
     font-size: 18px;
     font-weight: bold;
@@ -67,8 +67,8 @@ const ReserveButtonWrapper = styled.div`
   button {
     width: 120px;
     height: 50px;
-    background-color: #0169ff;
-    color: #fff;
+    background-color: ${({ theme }) => theme.colors.BLUE_600};
+    color: ${({ theme }) => theme.colors.WHITE};
     font-size: 17px;
     font-weight: bold;
     border: none;

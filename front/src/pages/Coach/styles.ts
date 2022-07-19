@@ -18,7 +18,6 @@ const Menu = styled.div`
     font-size: 24px;
     font-weight: bold;
     margin-right: 20px;
-    /* border-bottom: 2px solid #C3C9AD; */
     cursor: pointer;
   }
 

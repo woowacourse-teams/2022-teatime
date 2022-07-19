@@ -19,7 +19,6 @@ const DayOfWeekBox = styled.div`
   width: 40px;
   height: 40px;
   padding-top: 3px;
-  color: black;
   font-weight: bolder;
   font-size: 20px;
 `;

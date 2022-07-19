@@ -21,10 +21,9 @@ const HeaderContainer = styled.div`
 
 const LogoLink = styled(Link)`
   display: flex;
-  color: black;
+  color: ${({ theme }) => theme.colors.BLACK};
   align-items: center;
   flex-direction: row;
-  text-decoration: none;
   cursor: pointer;
 `;
 

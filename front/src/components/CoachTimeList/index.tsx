@@ -41,7 +41,7 @@ const CoachTimeList = () => {
           return (
             <React.Fragment key={schedule.id}>
               <TimeBox
-                disabled={schedule.isPossible}
+                isPossible={schedule.isPossible}
                 aria-disabled={schedule.isPossible}
                 onClick={() => handleClickTime(schedule.dateTime)}
                 selected={schedule.isSelected ? true : false}

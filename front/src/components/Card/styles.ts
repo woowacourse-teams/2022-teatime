@@ -18,7 +18,6 @@ const CardContainer = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: white;
   }
 
   img {
@@ -41,8 +40,8 @@ const CardContainer = styled.div`
   button {
     width: 67%;
     height: 35px;
-    background-color: #797d6b;
-    color: white;
+    background-color: ${({ theme }) => theme.colors.GREEN_700};
+    color: ${({ theme }) => theme.colors.WHITE};
     border: none;
     border-radius: 20px;
     font-size: 18px;
