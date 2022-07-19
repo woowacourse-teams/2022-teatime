@@ -11,4 +11,10 @@ const getMonthYearDetails = (initialDate: dayjs.Dayjs): MonthYear => {
   return { startDate, firstDOW, lastDate, month, year };
 };
 
-export { getMonthYearDetails };
+const getNewMonthYear = (prevData: MonthYear, increment: number): MonthYear => {
+  const newMonthYear = prevData.startDate.clone().add(increment, 'months');
+
+  return getMonthYearDetails(newMonthYear);
+};
+
+export { getMonthYearDetails, getNewMonthYear };

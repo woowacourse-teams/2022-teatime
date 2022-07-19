@@ -7,7 +7,7 @@ interface UseFetch<T> {
   isError: boolean;
 }
 
-const useFetch = <T>(url: string): UseFetch<T> => {
+const useFetch = <T, K>(url: string, dependency?: K): UseFetch<T> => {
   const [data, setData] = useState<null | T>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -26,7 +26,7 @@ const useFetch = <T>(url: string): UseFetch<T> => {
       }
     };
     requestData();
-  }, []);
+  }, [dependency]);
 
   return { data, isLoading, isError };
 };

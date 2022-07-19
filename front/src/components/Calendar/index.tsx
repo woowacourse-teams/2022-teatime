@@ -18,7 +18,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const { id } = useParams();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const dispatch = useContext(ScheduleDispatchContext);
-  const { monthYear, setMonthYear, monthSchedule } = useSchedule(id);
+  const { monthYear, updateMonth, monthSchedule } = useSchedule(id);
   const { firstDOW, lastDate, year, month } = monthYear;
 
   const today = dayjs().format('DD');
@@ -51,8 +51,8 @@ const Calendar = ({ isCoach }: CalendarProps) => {
           {year}년 {month}월
         </span>
         <div>
-          <img src={LeftArrow} alt="이전 버튼 아이콘" />
-          <img src={RightArrow} alt="다음 버튼 아이콘" />
+          <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => updateMonth(-1)} />
+          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => updateMonth(1)} />
         </div>
       </YearMonthContainer>
       <DateGrid>
