@@ -1,8 +1,7 @@
 package com.woowacourse.teatime.acceptance;
 
 import static com.woowacourse.teatime.fixture.DomainFixture.*;
-
-import java.time.LocalDateTime;
+import static com.woowacourse.teatime.fixture.DtoFixture.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,40 +10,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import com.woowacourse.teatime.controller.dto.CrewIdRequest;
-import com.woowacourse.teatime.domain.Coach;
-import com.woowacourse.teatime.domain.Crew;
-import com.woowacourse.teatime.domain.Reservation;
-import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.repository.CrewRepository;
-import com.woowacourse.teatime.repository.ReservationRepository;
-import com.woowacourse.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.service.CoachService;
+import com.woowacourse.teatime.service.CrewService;
+import com.woowacourse.teatime.service.ReservationService;
+import com.woowacourse.teatime.service.ScheduleService;
 
 import io.restassured.RestAssured;
 
 public class ReservationAcceptanceTest extends AcceptanceTest {
 
     @Autowired
-    private CoachRepository coachRepository;
+    private CoachService coachService;
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private ScheduleService scheduleService;
     @Autowired
-    private CrewRepository crewRepository;
+    private CrewService crewService;
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationService reservationService;
 
     @DisplayName("예약한다.")
     @Test
     void reserve() {
-        Coach coach = coachRepository.save(COACH_BROWN);
-        Schedule schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
-        Crew crew = crewRepository.save(CREW);
+        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
+        Long crewId = crewService.save();
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", coach.getId())
-                .pathParam("scheduleId", schedule.getId())
-                .body(new CrewIdRequest(crew.getId()))
+                .pathParam("id", coachId)
+                .pathParam("scheduleId", scheduleId)
+                .body(new CrewIdRequest(crewId))
                 .when().post("/api/coaches/{id}/schedules/{scheduleId}")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
@@ -53,15 +48,15 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("예약을 승인한다.")
     @Test
     void approve() {
-        Coach coach = coachRepository.save(COACH_BROWN);
-        Schedule schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
-        Crew crew = crewRepository.save(CREW);
-        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
+        Long crewId = crewService.save();
+        Long reservationId = reservationService.save(crewId, coachId, scheduleId);
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", coach.getId())
-                .pathParam("reservationId", reservation.getId())
+                .pathParam("id", coachId)
+                .pathParam("reservationId", reservationId)
                 .when().post("/api/coaches/{id}/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
