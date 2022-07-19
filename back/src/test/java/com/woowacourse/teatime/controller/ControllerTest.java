@@ -2,6 +2,7 @@ package com.woowacourse.teatime.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class ControllerTest {
 
     @MockBean
     protected ReservationService reservationService;
+
+    @MockBean
+    protected CoachService coachService;
 
     protected MockHttpServletRequestBuilder get(String url) {
         return MockMvcRequestBuilders.get(url)
