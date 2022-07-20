@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 const FadeIn = keyframes`
  from {
@@ -11,28 +11,37 @@ const FadeIn = keyframes`
 
 const TimeListContainer = styled.div`
   width: 250px;
-  margin-top: 90px;
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const TimeBox = styled.div`
+const TimeBox = styled.div<{ disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50px;
   margin-bottom: 10px;
-  border: 1px solid #404338;
-  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
+  border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 
   &:hover {
-    border: 2px solid #404338;
+    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
   }
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
+      color: ${({ theme }) => theme.colors.GREEN_500};
+      cursor: default;
+      text-decoration: line-through;
+      pointer-events: none;
+    `}
 `;
 
 const ReserveButtonWrapper = styled.div`
@@ -48,17 +57,18 @@ const ReserveButtonWrapper = styled.div`
     width: 120px;
     height: 50px;
     background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
+    color: ${({ theme }) => theme.colors.WHITE};
     border-radius: 4px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
   }
+
   button {
     width: 120px;
     height: 50px;
-    background-color: #0169ff;
-    color: #fff;
+    background-color: ${({ theme }) => theme.colors.BLUE_600};
+    color: ${({ theme }) => theme.colors.WHITE};
     font-size: 17px;
     font-weight: bold;
     border: none;

@@ -7,7 +7,7 @@ const HeaderContainer = styled.div`
   width: 100%;
   height: 50px;
   padding: 0 10%;
-  box-shadow: 0px 3px 4px #ececec;
+  box-shadow: 0px 3px 4px ${({ theme }) => theme.colors.GRAY_300};
 
   h1 {
     font-size: 18px;
@@ -21,10 +21,9 @@ const HeaderContainer = styled.div`
 
 const LogoLink = styled(Link)`
   display: flex;
-  color: black;
+  color: ${({ theme }) => theme.colors.BLACK};
   align-items: center;
   flex-direction: row;
-  text-decoration: none;
   cursor: pointer;
 `;
 

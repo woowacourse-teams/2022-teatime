@@ -7,6 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config: webpack.Configuration = {
   mode: isDevelopment ? 'development' : 'production',
+  devtool: isDevelopment ? 'inline-source-map' : 'hidden-source-map',
   entry: {
     app: './src/index.tsx',
   },
@@ -22,6 +23,7 @@ const config: webpack.Configuration = {
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@assets': path.resolve(__dirname, 'src/assets'),
       '@context': path.resolve(__dirname, 'src/context'),
+      '@api': path.resolve(__dirname, 'src/api'),
     },
   },
   output: {
@@ -67,7 +69,7 @@ const config: webpack.Configuration = {
   ],
   devServer: {
     historyApiFallback: true,
-    port: 3000,
+    port: 8080,
     open: true,
     hot: true,
     static: { directory: path.resolve(__dirname, 'public') },

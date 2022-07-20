@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import dayjs from 'dayjs';
 import { ScheduleStateContext } from '@context/ScheduleProvider';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
@@ -19,7 +18,7 @@ const TimeList = () => {
   return (
     <TimeListContainer>
       {schedules.map((schedule) => {
-        const time = dayjs(schedule.dateTime).format('H:mm');
+        const time = schedule.dateTime.slice(11, 16);
 
         return (
           <React.Fragment key={schedule.id}>
@@ -29,8 +28,13 @@ const TimeList = () => {
                 <button onClick={openModal}>예약하기</button>
               </ReserveButtonWrapper>
             </Conditional>
-            <Conditional condition={selectedTimeId !== schedule.id}>
+            <Conditional condition={selectedTimeId !== schedule.id && !!schedule.isPossible}>
               <TimeBox onClick={() => handleClickTime(schedule.id)}>{time}</TimeBox>
+            </Conditional>
+            <Conditional condition={selectedTimeId !== schedule.id && !schedule.isPossible}>
+              <TimeBox aria-disabled={false} disabled>
+                {time}
+              </TimeBox>
             </Conditional>
           </React.Fragment>
         );

@@ -1,21 +1,21 @@
-import TimeList from '@components/TimeList';
-import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
+import Calendar from '@components/Calendar';
 import Title from '@components/Title';
 import { CalendarContainer, ScheduleContainer } from '@styles/common';
+import CoachTimeList from '@components/CoachTimeList';
 
-const Reservation = () => {
+const Schedule = () => {
   return (
     <Frame>
       <ScheduleContainer>
-        <Title text="신청 날짜를 선택해주세요" />
+        <Title text="가능한 날짜를 선택해주세요" />
         <CalendarContainer>
-          <Calendar />
-          <TimeList />
+          <Calendar isCoach />
+          <CoachTimeList />
         </CalendarContainer>
       </ScheduleContainer>
     </Frame>
   );
 };
 
-export default Reservation;
+export default Schedule;
