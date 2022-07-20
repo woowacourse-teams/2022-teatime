@@ -3,8 +3,8 @@ package com.woowacourse.teatime.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.woowacourse.teatime.AlreadyReservedException;
-import com.woowacourse.teatime.InvalidYearException;
+import com.woowacourse.teatime.exception.AlreadyReservedException;
+import com.woowacourse.teatime.exception.InvalidYearException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

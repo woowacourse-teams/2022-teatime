@@ -1,4 +1,4 @@
-package com.woowacourse.teatime;
+package com.woowacourse.teatime.exception;
 
 public class NotFoundException extends RuntimeException {
 

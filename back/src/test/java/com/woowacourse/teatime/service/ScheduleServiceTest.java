@@ -1,12 +1,21 @@
 package com.woowacourse.teatime.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.woowacourse.teatime.controller.dto.ScheduleRequest;
+import com.woowacourse.teatime.controller.dto.ScheduleResponse;
+import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.domain.Coach;
+import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
+import com.woowacourse.teatime.repository.CoachRepository;
+import com.woowacourse.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.woowacourse.teatime.NotFoundCoachException;
-import com.woowacourse.teatime.controller.dto.ScheduleRequest;
-import com.woowacourse.teatime.controller.dto.ScheduleResponse;
-import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
-import com.woowacourse.teatime.domain.Coach;
-import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.repository.ScheduleRepository;
-import com.woowacourse.teatime.util.Date;
 
 @Transactional
 @SpringBootTest

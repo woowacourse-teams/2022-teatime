@@ -3,8 +3,8 @@ package com.woowacourse.teatime.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.woowacourse.teatime.AlreadyReservedException;
-import com.woowacourse.teatime.NotFoundScheduleException;
+import com.woowacourse.teatime.exception.AlreadyReservedException;
+import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

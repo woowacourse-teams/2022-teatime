@@ -40,14 +40,13 @@ public class ScheduleRepositoryTest {
     @DisplayName("해당 코치와, 년, 월에 해당하는 스케줄 전체 목록을 조회한다.")
     void findByCoachIdAndLocalDateTimeBetween() {
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime now1 = LocalDateTime.now();
-        LocalDateTime now2 = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now();
+        LocalDateTime dateTime1 = start.plusDays(1);
+        LocalDateTime dateTime2 = start.plusDays(2);
+        LocalDateTime end = start.plusDays(3);
 
-        Coach coach = new Coach("제이슨");
-        coachRepository.save(coach);
-        Schedule schedule1 = new Schedule(coach, now1);
-        Schedule schedule2 = new Schedule(coach, now2);
+        Coach coach = coachRepository.save(new Coach("제이슨"));
+        Schedule schedule1 = new Schedule(coach, dateTime1);
+        Schedule schedule2 = new Schedule(coach, dateTime2);
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
 
