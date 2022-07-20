@@ -33,6 +33,8 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured:4.4.0'
 
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.1"
+
+    implementation group: 'com.google.guava', name: 'guava', version: '12.0'
 }
 
 tasks.named('test') {
