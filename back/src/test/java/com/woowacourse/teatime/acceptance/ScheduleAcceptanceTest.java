@@ -45,7 +45,7 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         List<ScheduleResponse> result = response.jsonPath().getList(".", ScheduleResponse.class);
 
         assertAll(
-                () -> assertThat(result).hasSize(1),
+                () -> assertThat(result).hasSize(2),
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
         );
     }
@@ -66,7 +66,7 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         List<ScheduleResponse> result = findResponse.jsonPath().getList(".", ScheduleResponse.class);
         assertAll(
                 () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(result).hasSize(1)
+                () -> assertThat(result).hasSize(2)
         );
     }
 
