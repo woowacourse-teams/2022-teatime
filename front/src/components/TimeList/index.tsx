@@ -4,16 +4,33 @@ import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import CheckCircle from '@assets/check-circle.svg';
 import useModal from '@hooks/useModal';
+import api from '@api/index';
 import { TimeListContainer, TimeBox, ReserveButtonWrapper } from './styles';
 
 const TimeList = () => {
   const { schedules } = useContext(ScheduleStateContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleClickTime = (id: number) => {
     setSelectedTimeId(id);
   };
+
+  const handleClickReservationButton = async (scheduleId: number) => {
+    try {
+      setIsLoading(true);
+      await api.post(`/api/coaches/1/schedules/${scheduleId}`, { id: 1 });
+      openModal();
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isError) return <h1>error</h1>;
 
   return (
     <TimeListContainer>
@@ -25,7 +42,7 @@ const TimeList = () => {
             <Conditional condition={selectedTimeId === schedule.id}>
               <ReserveButtonWrapper>
                 <div>{time}</div>
-                <button onClick={openModal}>예약하기</button>
+                <button onClick={() => handleClickReservationButton(schedule.id)}>예약하기</button>
               </ReserveButtonWrapper>
             </Conditional>
             <Conditional condition={selectedTimeId !== schedule.id && !!schedule.isPossible}>

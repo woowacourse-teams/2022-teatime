@@ -14,8 +14,8 @@ const useFetch = <T, K>(url: string, dependency?: K): UseFetch<T> => {
 
   useEffect(() => {
     const requestData = async () => {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
         const { data } = await api.get(url);
         setData(data);
       } catch (error) {

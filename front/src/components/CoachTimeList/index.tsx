@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import api from '@api/index';
+import { ScheduleDispatchContext } from '@context/ScheduleProvider';
+import useCoachTimes from '@hooks/useCoachTimes';
 import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
 
 const CoachTimeList = () => {
-  const { schedules, date } = useContext(ScheduleStateContext);
-  const dispatch = useContext(ScheduleDispatchContext);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
+  const dispatch = useContext(ScheduleDispatchContext);
+  const { schedules, isLoading, isError, handleEnrollSchedules } = useCoachTimes();
 
   const handleClickTime = (dateTime: string) => {
     dispatch({ type: 'SELECT', dateTime });
@@ -17,22 +17,7 @@ const CoachTimeList = () => {
     setIsSelectedAll((prev) => !prev);
   };
 
-  const selectedTimes = schedules.reduce((newArray, { isSelected, dateTime }) => {
-    if (isSelected) {
-      newArray.push(dateTime);
-    }
-
-    return newArray;
-  }, [] as string[]);
-
-  const handleEnrollSchedules = async () => {
-    await api.put(`/api/coaches/1/schedules`, {
-      date,
-      schedules: selectedTimes,
-    });
-
-    alert('확정되었습니다.✅');
-  };
+  if (isError) return <h1>error</h1>;
 
   return (
     <div>
