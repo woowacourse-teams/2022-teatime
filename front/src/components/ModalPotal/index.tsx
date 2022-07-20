@@ -5,8 +5,8 @@ interface ModalPotalProps {
 }
 
 const ModalPotal = ({ children }: ModalPotalProps) => {
-  const el = document.getElementById('modal') as HTMLElement;
-  return reactDom.createPortal(children, el);
+  const element = document.getElementById('modal') as HTMLElement;
+  return reactDom.createPortal(children, element);
 };
 
 export default ModalPotal;

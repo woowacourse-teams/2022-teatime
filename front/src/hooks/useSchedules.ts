@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import dayjs from 'dayjs';
 import { DaySchedule, MonthYear, ScheduleMap } from '@typings/domain';
 import { getMonthYearDetails, getNewMonthYear } from '@utils/index';
-import dayjs from 'dayjs';
 import useFetch from './useFetch';
+import { CALENDAR_DATE_LENGTH } from '@constants/index';
 
 const useSchedules = (id?: string) => {
   const currentMonthYear = getMonthYearDetails(dayjs());
@@ -22,7 +23,12 @@ const useSchedules = (id?: string) => {
     setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
 
-  return { monthYear, updateMonth, monthSchedule };
+  const dateBoxLength =
+    monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
+      ? CALENDAR_DATE_LENGTH.MIN
+      : CALENDAR_DATE_LENGTH.MAX;
+
+  return { monthYear, updateMonth, monthSchedule, dateBoxLength };
 };
 
 export default useSchedules;

@@ -5,7 +5,7 @@ import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
 import useSchedule from '@hooks/useSchedules';
-import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
 import { Schedule } from '@typings/domain';
 import DateBox from '@components/DateBox';
@@ -20,14 +20,9 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const { id } = useParams();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const dispatch = useContext(ScheduleDispatchContext);
-  const { monthYear, updateMonth, monthSchedule } = useSchedule(id);
+  const { monthYear, updateMonth, monthSchedule, dateBoxLength } = useSchedule(id);
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
   const currentDate = dayjs();
-
-  const dateBoxLength =
-    firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
-      ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX;
 
   const handleClickDate = (daySchedule: Schedule[] = [], date: number, isWeekend: boolean) => {
     if (isWeekend) return;

@@ -1,7 +1,6 @@
 import { createContext, useReducer, Dispatch } from 'react';
 import { Schedule } from '@typings/domain';
 
-// 10시 ~ 5시30분
 const timeArray = [
   '10:00',
   '10:30',

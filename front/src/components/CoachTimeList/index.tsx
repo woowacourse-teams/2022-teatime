@@ -8,7 +8,7 @@ const CoachTimeList = () => {
   const dispatch = useContext(ScheduleDispatchContext);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
 
-  const handleClickTime = (dateTime: Date | string) => {
+  const handleClickTime = (dateTime: string) => {
     dispatch({ type: 'SELECT', dateTime });
   };
 
