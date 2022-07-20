@@ -33,9 +33,8 @@ const Menu = styled.div`
     border: none;
     border-radius: 8px;
     padding: 10px 20px;
-    /* margin-bottom: 20px; */
-    background-color: #c3c9ad;
-    color: #3b3b3b;
+    background-color: #797d6b;
+    color: white;
     cursor: pointer;
     :hover {
       transform: scale(1.1);
@@ -44,7 +43,7 @@ const Menu = styled.div`
 `;
 
 const Title = styled.h1`
-  margin: 20px 0 10px 0;
+  margin-top: 20px;
   font-size: 20px;
   font-weight: bold;
 `;
@@ -52,13 +51,16 @@ const Title = styled.h1`
 const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+
   > div {
     display: flex;
     justify-content: space-between;
-    width: 48%;
-    margin: 0 12px 12px 0;
+    width: 47%;
+    margin: 10px 0;
     padding: 14px;
-    background: linear-gradient(25deg, #f8d57e, #f7ba20);
+    background-color: #cce6ba;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
   }
 

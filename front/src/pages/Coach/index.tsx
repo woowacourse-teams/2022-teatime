@@ -14,10 +14,10 @@ const Coach = () => {
           <span>확정 일정</span>
           <span>대기 일정</span>
         </div>
-        <button onClick={handleClickCard}>➕ 일정 추가</button>
+        <button onClick={handleClickCard}>일정 추가</button>
       </Menu>
       <div>
-        <Title>7 / 15 금요일</Title>
+        <Title>7 / 25 월요일</Title>
         <Wrapper>
           <div>
             <span>🕒 11:00</span>
@@ -46,7 +46,7 @@ const Coach = () => {
         </Wrapper>
       </div>
       <div>
-        <Title>7 / 15 금요일</Title>
+        <Title>7 / 26 화요일</Title>
         <Wrapper>
           <div>
             <span>🕒 10:00</span>
@@ -67,7 +67,7 @@ const Coach = () => {
         </Wrapper>
       </div>
       <div>
-        <Title>7 / 15 금요일</Title>
+        <Title>7 / 27 수요일</Title>
         <Wrapper>
           <div>
             <span>🕒 15:00</span>

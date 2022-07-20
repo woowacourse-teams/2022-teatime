@@ -24,7 +24,7 @@ const TimeBox = styled.div<{ disabled?: boolean }>`
   height: 50px;
   margin-bottom: 10px;
   border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;

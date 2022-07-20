@@ -7,11 +7,14 @@ import { CardListContainer, Layout } from './styles';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { data: coaches } = useFetch<Coach[]>('/api/coaches');
+  const { data: coaches, isLoading, isError } = useFetch<Coach[], null>('/api/coaches');
 
   const handleClickCard = (id: number) => {
     navigate(`${ROUTES.RESERVATION}/${id}`);
   };
+
+  if (isError) return <h1>error</h1>;
+  if (isLoading) return <h1>로딩중...</h1>;
 
   return (
     <Layout>
