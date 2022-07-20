@@ -7,13 +7,22 @@ import java.time.YearMonth;
 
 public class Date {
     public static LocalDateTime findFirstDay(int year, int month) {
+        LocalDate today = LocalDate.now();
+        validateYearAndMonth(year, month, today);
         LocalDate startDate = LocalDate.of(year, month, 1);
+        if (month == today.getMonthValue()) {
+            startDate = LocalDate.now();
+        }
         return LocalDateTime.of(startDate, LocalTime.MIN);
     }
 
-    public static LocalDateTime findToday(int year, int month) {
-        LocalDate startDate = LocalDate.now();
-        return LocalDateTime.of(startDate, LocalTime.MIN);
+    private static void validateYearAndMonth(int year, int month, LocalDate today) {
+        if (year < today.getYear()) {
+            throw new IllegalArgumentException("지난 년도에 대한 일정은 조회할 수 없습니다.");
+        }
+        if (month < today.getMonthValue()) {
+            throw new IllegalArgumentException("지난 월에 대한 일정은 조회할 수 없습니다.");
+        }
     }
 
     public static LocalDateTime findLastDay(int year, int month) {

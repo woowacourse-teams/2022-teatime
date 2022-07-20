@@ -41,7 +41,7 @@ public class ScheduleService {
     public List<ScheduleResponse> find(Long coachId, ScheduleRequest request) {
         validateCoachId(coachId);
 
-        LocalDateTime start = Date.findToday(request.getYear(), request.getMonth());
+        LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findLastDay(request.getYear(), request.getMonth());
         Schedules schedules = getSchedules(coachId, start, end);
 
