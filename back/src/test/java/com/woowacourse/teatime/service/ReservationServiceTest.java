@@ -1,7 +1,17 @@
 package com.woowacourse.teatime.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.woowacourse.teatime.fixture.DomainFixture.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
@@ -14,56 +24,39 @@ import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
-import java.time.LocalDateTime;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-@TestConstructor(autowireMode = AutowireMode.ALL)
 class ReservationServiceTest {
 
     private Crew crew;
     private Coach coach;
     private Schedule schedule;
 
-    private final ReservationService reservationService;
-    private final ReservationRepository reservationRepository;
-    private final CrewRepository crewRepository;
-    private final CoachRepository coachRepository;
-    private final ScheduleRepository scheduleRepository;
-
-    public ReservationServiceTest(ReservationService reservationService,
-                                  ReservationRepository reservationRepository,
-                                  CrewRepository crewRepository,
-                                  CoachRepository coachRepository,
-                                  ScheduleRepository scheduleRepository) {
-        this.reservationService = reservationService;
-        this.reservationRepository = reservationRepository;
-        this.crewRepository = crewRepository;
-        this.coachRepository = coachRepository;
-        this.scheduleRepository = scheduleRepository;
-    }
+    @Autowired
+    private ReservationService reservationService;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private CrewRepository crewRepository;
+    @Autowired
+    private CoachRepository coachRepository;
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     @BeforeEach
     void setUp() {
-        crew = crewRepository.save(new Crew());
-        coach = coachRepository.save(new Coach("jason"));
-        schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
+        crew = crewRepository.save(CREW);
+        coach = coachRepository.save(COACH_BROWN);
+        schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
     }
 
     @DisplayName("예약을 한다.")
     @Test
     void reserve() {
-        Reservation reservation = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
+        Long reservationId = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
 
-        Optional<Reservation> actual = reservationRepository.findById(reservation.getId());
+        Optional<Reservation> actual = reservationRepository.findById(reservationId);
         assertTrue(actual.isPresent());
     }
 
@@ -97,5 +90,16 @@ class ReservationServiceTest {
 
         assertThatThrownBy(() -> reservationService.save(crew.getId(), coach.getId(), schedule.getId()))
                 .isInstanceOf(AlreadyReservedException.class);
+    }
+
+    @DisplayName("예약을 승인한다.")
+    @Test
+    void approveReservation() {
+        Long reservationId = reservationService.save(crew.getId(), coach.getId(), schedule.getId());
+
+        reservationService.approve(coach.getId(), reservationId);
+
+        Reservation foundReservation = reservationRepository.findById(reservationId).get();
+        assertThat(foundReservation.isApproved()).isTrue();
     }
 }

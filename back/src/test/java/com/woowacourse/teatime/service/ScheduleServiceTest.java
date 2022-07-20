@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
+import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -43,8 +45,8 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
     void find_past() {
-        Coach coach = coachRepository.save(new Coach("brown"));
-        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
+        Coach coach = coachRepository.save(COACH_BROWN);
+        scheduleRepository.save(new Schedule(coach, LocalDateTime.now().minusDays(1L)));
         List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
 
         assertThat(scheduleResponses).hasSize(0);
@@ -53,7 +55,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
     void find_future() {
-        Coach coach = coachRepository.save(new Coach("brown"));
+        Coach coach = coachRepository.save(COACH_BROWN);
         scheduleRepository.save(new Schedule(coach, LocalDateTime.of(LocalDate.now(), LocalTime.MAX)));
         List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
 
@@ -63,8 +65,8 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치 아이디가 존재하지 않는 다면 예외를 발생시킨다,")
     void find_NotExistedCoachException() {
-        Coach coach = coachRepository.save(new Coach("brown"));
-        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(2022, 7, 1, 0, 0)));
+        Coach coach = coachRepository.save(COACH_BROWN);
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
         Long notExistedId = schedule.getId() + 100L;
 
         assertThatThrownBy(() -> scheduleService.find(notExistedId, REQUEST))
@@ -74,7 +76,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     void update() {
-        Coach coach = coachRepository.save(new Coach("brown", "i am legend", "image"));
+        Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();
         ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date, List.of(Date.findFirstTime(date)));
         scheduleService.update(coach.getId(), updateRequest);

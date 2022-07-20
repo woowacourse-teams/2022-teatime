@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.acceptance;
 
+import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
+import static com.woowacourse.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -25,10 +27,8 @@ public class CoachAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치 목록을 조회한다.")
     @Test
     void findAll() {
-        CoachSaveRequest request1 = new CoachSaveRequest("brown", "i am legend", "image");
-        CoachSaveRequest request2 = new CoachSaveRequest("june", "i am legend", "image");
-        coachService.save(request1);
-        coachService.save(request2);
+        coachService.save(COACH_BROWN_SAVE_REQUEST);
+        coachService.save(COACH_JUNE_SAVE_REQUEST);
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/api/coaches")
@@ -41,5 +41,18 @@ public class CoachAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(result).hasSize(2),
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
         );
+    }
+
+    @DisplayName("코치를 생성한다.")
+    @Test
+    void save() {
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new CoachSaveRequest("brown", "I am a legend", "image"))
+                .when().post("/api/coaches")
+                .then().log().all()
+                .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 }
