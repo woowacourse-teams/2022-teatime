@@ -72,7 +72,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
             <DateBox
               key={index}
               date={date}
-              monthSchedule={monthSchedule?.[date]}
+              daySchedule={monthSchedule?.[date]}
               onClick={() => handleClickDate(monthSchedule?.[date], date, isWeekend)}
               selectedDay={selectedDay}
               today={`${year}-${month}-${String(date).padStart(2, '0')}`}

@@ -4,7 +4,7 @@ import { DateContainer, TodayIndicator } from './styles';
 
 interface DateBoxProps {
   date?: number;
-  monthSchedule?: Schedule[];
+  daySchedule?: Schedule[];
   onClick?: () => void;
   selectedDay?: number | null;
   today?: string;
@@ -14,19 +14,19 @@ interface DateBoxProps {
 
 const DateBox = ({
   date,
-  monthSchedule = [],
+  daySchedule = [],
   onClick,
   selectedDay,
   today,
   isCoach,
   isWeekend,
 }: DateBoxProps) => {
-  const isSelected = (monthSchedule.length > 0 || isCoach) && selectedDay === date;
+  const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
   const isToday = today === dayjs().format('YYYY-MM-DD');
 
   return (
     <DateContainer
-      hasSchedule={!!monthSchedule.length}
+      hasSchedule={!!daySchedule.length}
       hasDate={!!date}
       isSelected={!!isSelected}
       isCoach={isCoach}
