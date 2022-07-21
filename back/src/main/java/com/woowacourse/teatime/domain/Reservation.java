@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.domain;
 
+import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,9 @@ public class Reservation {
     }
 
     public void approve() {
+        if (this.isApproved()) {
+            throw new AlreadyApprovedException();
+        }
         this.isApproved = true;
     }
 }

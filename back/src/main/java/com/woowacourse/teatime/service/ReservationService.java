@@ -5,7 +5,6 @@ import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.NotExistedCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
@@ -43,14 +42,7 @@ public class ReservationService {
         validateReservation(reservationApproveRequest.getCoachId(), reservation);
 
         if (reservationApproveRequest.getIsApproved()) {
-            validateStatus(reservation);
             reservation.approve();
-        }
-    }
-
-    private void validateStatus(Reservation reservation) {
-        if (reservation.isApproved()) {
-            throw new AlreadyApprovedException();
         }
     }
 
