@@ -4,6 +4,7 @@ import useFetch from '@hooks/useFetch';
 import type { Coach } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import { CardListContainer, Layout } from './styles';
+import Loading from '@components/Loading/index';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Home = () => {
   };
 
   if (isError) return <h1>error</h1>;
-  if (isLoading) return <h1>로딩중...</h1>;
+  if (isLoading) return <Loading />;
 
   return (
     <Layout>
