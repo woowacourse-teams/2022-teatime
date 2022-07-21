@@ -1,7 +1,14 @@
 package com.woowacourse.teatime.controller.dto;
 
 import javax.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class CoachSaveRequest {
 
     @NotBlank
@@ -12,25 +19,4 @@ public class CoachSaveRequest {
 
     @NotBlank
     private String image;
-
-    private CoachSaveRequest() {
-    }
-
-    public CoachSaveRequest(String name, String description, String image) {
-        this.name = name;
-        this.description = description;
-        this.image = image;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getImage() {
-        return image;
-    }
 }

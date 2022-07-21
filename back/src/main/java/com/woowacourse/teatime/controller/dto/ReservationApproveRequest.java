@@ -2,7 +2,14 @@ package com.woowacourse.teatime.controller.dto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ReservationApproveRequest {
 
     @NotNull
@@ -11,20 +18,4 @@ public class ReservationApproveRequest {
 
     @NotNull
     private Boolean isApproved;
-
-    private ReservationApproveRequest() {
-    }
-
-    public ReservationApproveRequest(Long coachId, Boolean isApproved) {
-        this.coachId = coachId;
-        this.isApproved = isApproved;
-    }
-
-    public Long getCoachId() {
-        return coachId;
-    }
-
-    public Boolean getIsApproved() {
-        return isApproved;
-    }
 }

@@ -5,19 +5,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ScheduleResponse {
 
     private Integer day;
     private List<ScheduleDto> schedules;
-
-    private ScheduleResponse() {
-    }
-
-    private ScheduleResponse(Integer day, List<ScheduleDto> schedules) {
-        this.day = day;
-        this.schedules = schedules;
-    }
 
     public static List<ScheduleResponse> from(List<Schedule> schedules) {
         List<Integer> days = findDays(schedules);
@@ -48,13 +47,5 @@ public class ScheduleResponse {
                 .map(ScheduleDto::new)
                 .collect(Collectors.toList());
         return new ScheduleResponse(day, scheduleDtos);
-    }
-
-    public Integer getDay() {
-        return day;
-    }
-
-    public List<ScheduleDto> getSchedules() {
-        return schedules;
     }
 }

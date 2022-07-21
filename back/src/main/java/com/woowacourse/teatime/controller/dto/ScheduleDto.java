@@ -3,7 +3,12 @@ package com.woowacourse.teatime.controller.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Schedule;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ScheduleDto {
 
     private Long id;
@@ -13,24 +18,9 @@ public class ScheduleDto {
 
     private Boolean isPossible;
 
-    private ScheduleDto() {
-    }
-
     public ScheduleDto(Schedule schedule) {
         this.id = schedule.getId();
         this.dateTime = schedule.getLocalDateTime();
         this.isPossible = schedule.getIsPossible();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public Boolean getIsPossible() {
-        return isPossible;
     }
 }
