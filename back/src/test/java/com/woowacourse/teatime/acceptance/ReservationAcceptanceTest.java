@@ -1,21 +1,20 @@
 package com.woowacourse.teatime.acceptance;
 
-import static com.woowacourse.teatime.fixture.DomainFixture.*;
-import static com.woowacourse.teatime.fixture.DtoFixture.*;
+import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 
+import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.ReservationRequest;
+import com.woowacourse.teatime.service.CoachService;
+import com.woowacourse.teatime.service.CrewService;
+import com.woowacourse.teatime.service.ReservationService;
+import com.woowacourse.teatime.service.ScheduleService;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
-import com.woowacourse.teatime.controller.dto.CrewIdRequest;
-import com.woowacourse.teatime.service.CoachService;
-import com.woowacourse.teatime.service.CrewService;
-import com.woowacourse.teatime.service.ReservationService;
-import com.woowacourse.teatime.service.ScheduleService;
-
-import io.restassured.RestAssured;
 
 public class ReservationAcceptanceTest extends AcceptanceTest {
 
@@ -37,10 +36,8 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", coachId)
-                .pathParam("scheduleId", scheduleId)
-                .body(new CrewIdRequest(crewId))
-                .when().post("/api/coaches/{id}/schedules/{scheduleId}")
+                .body(new ReservationRequest(crewId, coachId, scheduleId))
+                .when().post("/api/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
     }
@@ -51,13 +48,14 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         Long scheduleId = scheduleService.save(coachId, DATE_TIME);
         Long crewId = crewService.save();
-        Long reservationId = reservationService.save(crewId, coachId, scheduleId);
+        ReservationRequest reservationRequest = new ReservationRequest(crewId, coachId, scheduleId);
+        Long reservationId = reservationService.save(reservationRequest);
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", coachId)
+                .body(new ReservationApproveRequest(coachId, true))
                 .pathParam("reservationId", reservationId)
-                .when().post("/api/coaches/{id}/reservations/{reservationId}")
+                .when().post("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }

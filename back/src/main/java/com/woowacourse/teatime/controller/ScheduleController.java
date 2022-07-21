@@ -19,22 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/coaches/{id}/schedules")
+@RequestMapping(path = "/api/coaches/{coachId}/schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> findSchedules(@PathVariable @NotNull Long id,
+    public ResponseEntity<List<ScheduleResponse>> findSchedules(@PathVariable @NotNull Long coachId,
                                                                 @Valid @ModelAttribute ScheduleRequest request) {
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(id, request);
+        List<ScheduleResponse> scheduleResponses = scheduleService.find(coachId, request);
         return ResponseEntity.ok(scheduleResponses);
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateSchedules(@PathVariable @NotNull Long id,
+    public ResponseEntity<Void> updateSchedules(@PathVariable @NotNull Long coachId,
                                                 @RequestBody ScheduleUpdateRequest request) {
-        scheduleService.update(id, request);
+        scheduleService.update(coachId, request);
         return ResponseEntity.ok().build();
     }
 }

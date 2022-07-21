@@ -1,9 +1,10 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.NotExistedCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
@@ -23,10 +24,11 @@ public class ReservationService {
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public Long save(Long crewId, Long coachId, Long scheduleId) {
-        Crew crew = crewRepository.findById(crewId)
+    public Long save(ReservationRequest reservationRequest) {
+        Crew crew = crewRepository.findById(reservationRequest.getCrewId())
                 .orElseThrow(NotExistedCrewException::new);
-        Schedule schedule = scheduleRepository.findByIdAndCoachId(scheduleId, coachId)
+        Schedule schedule = scheduleRepository.findByIdAndCoachId(
+                        reservationRequest.getScheduleId(), reservationRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -34,18 +36,13 @@ public class ReservationService {
         return reservation.getId();
     }
 
-    public void approve(Long coachId, Long reservationId) {
+    public void approve(Long reservationId, ReservationApproveRequest reservationApproveRequest) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        validateStatus(reservation);
-        validateReservation(coachId, reservation);
+        validateReservation(reservationApproveRequest.getCoachId(), reservation);
 
-        reservation.approve();
-    }
-
-    private void validateStatus(Reservation reservation) {
-        if (reservation.isApproved()) {
-            throw new AlreadyApprovedException();
+        if (reservationApproveRequest.getIsApproved()) {
+            reservation.approve();
         }
     }
 

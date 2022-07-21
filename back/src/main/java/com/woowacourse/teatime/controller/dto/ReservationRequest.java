@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.controller.dto;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -11,14 +10,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class ScheduleRequest {
-
-    @NotNull
-    @Min(2022)
-    private Integer year;
+public class ReservationRequest {
 
     @NotNull
     @Min(1)
-    @Max(12)
-    private Integer month;
+    private Long crewId;
+
+    @NotNull
+    @Min(1)
+    private Long coachId;
+
+    @NotNull
+    @Min(1)
+    private Long scheduleId;
 }
