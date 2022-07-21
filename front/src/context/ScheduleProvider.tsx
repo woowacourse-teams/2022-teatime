@@ -58,7 +58,6 @@ const reducer = (state: State, action: Action) => {
             isSelected: sameTimeSchedule.isPossible,
           };
         }
-
         return { id: index, dateTime: time, isSelected: false };
       });
 

@@ -1,11 +1,13 @@
 import { useContext, useState } from 'react';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import api from '@api/index';
 
 const useCoachTimes = () => {
   const { schedules, date } = useContext(ScheduleStateContext);
+  const dispatch = useContext(ScheduleDispatchContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isSelectedAll, setIsSelectedAll] = useState(false);
 
   const selectedTimes = schedules.reduce((newArray, { isSelected, dateTime }) => {
     if (isSelected) {
@@ -13,6 +15,15 @@ const useCoachTimes = () => {
     }
     return newArray;
   }, [] as string[]);
+
+  const handleClickTime = (dateTime: string) => {
+    dispatch({ type: 'SELECT', dateTime });
+  };
+
+  const handleSelectedAll = () => {
+    dispatch({ type: 'SELECT_ALL', isSelectedAll });
+    setIsSelectedAll((prev) => !prev);
+  };
 
   const handleEnrollSchedules = async () => {
     try {
@@ -29,7 +40,14 @@ const useCoachTimes = () => {
     }
   };
 
-  return { schedules, isLoading, isError, handleEnrollSchedules };
+  return {
+    schedules,
+    isLoading,
+    isError,
+    handleClickTime,
+    handleSelectedAll,
+    isSelectedAll,
+  };
 };
 
 export default useCoachTimes;

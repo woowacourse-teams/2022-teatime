@@ -1,21 +1,10 @@
-import React, { useContext, useState } from 'react';
-import { ScheduleDispatchContext } from '@context/ScheduleProvider';
+import React from 'react';
 import useCoachTimes from '@hooks/useCoachTimes';
 import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
 
 const CoachTimeList = () => {
-  const [isSelectedAll, setIsSelectedAll] = useState(false);
-  const dispatch = useContext(ScheduleDispatchContext);
-  const { schedules, isLoading, isError, handleEnrollSchedules } = useCoachTimes();
-
-  const handleClickTime = (dateTime: string) => {
-    dispatch({ type: 'SELECT', dateTime });
-  };
-
-  const handleSelectedAll = () => {
-    dispatch({ type: 'SELECT_ALL', isSelectedAll });
-    setIsSelectedAll((prev) => !prev);
-  };
+  const { schedules, isLoading, isError, handleClickTime, handleSelectedAll, isSelectedAll } =
+    useCoachTimes();
 
   if (isError) return <h1>error</h1>;
 
@@ -42,7 +31,7 @@ const CoachTimeList = () => {
           <CheckButton onClick={handleSelectedAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}
           </CheckButton>
-          <ConfirmButton onClick={handleEnrollSchedules}>확인</ConfirmButton>
+          <ConfirmButton>확인</ConfirmButton>
         </ButtonContainer>
       )}
     </div>
