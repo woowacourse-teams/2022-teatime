@@ -52,7 +52,7 @@ const config: webpack.Configuration = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|svg)$/i,
+        test: /\.(png|svg|gif)$/i,
         type: 'asset/resource',
       },
       {
