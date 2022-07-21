@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
@@ -23,10 +24,11 @@ public class ReservationService {
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public Long save(Long crewId, Long coachId, Long scheduleId) {
-        Crew crew = crewRepository.findById(crewId)
+    public Long save(ReservationRequest reservationRequest) {
+        Crew crew = crewRepository.findById(reservationRequest.getCrewId())
                 .orElseThrow(NotExistedCrewException::new);
-        Schedule schedule = scheduleRepository.findByIdAndCoachId(scheduleId, coachId)
+        Schedule schedule = scheduleRepository.findByIdAndCoachId(
+                        reservationRequest.getScheduleId(), reservationRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
