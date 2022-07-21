@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
@@ -107,8 +108,9 @@ class ReservationServiceTest {
     void approveReservation() {
         ReservationRequest reservationRequest = new ReservationRequest(crew.getId(), coach.getId(), schedule.getId());
         Long reservationId = reservationService.save(reservationRequest);
+        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), true);
 
-        reservationService.approve(coach.getId(), reservationId);
+        reservationService.approve(reservationId, reservationApproveRequest);
 
         Reservation foundReservation = reservationRepository.findById(reservationId).get();
         assertThat(foundReservation.isApproved()).isTrue();

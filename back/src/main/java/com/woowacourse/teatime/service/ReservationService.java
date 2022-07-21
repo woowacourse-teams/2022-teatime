@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
@@ -36,13 +37,15 @@ public class ReservationService {
         return reservation.getId();
     }
 
-    public void approve(Long coachId, Long reservationId) {
+    public void approve(Long reservationId, ReservationApproveRequest reservationApproveRequest) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        validateStatus(reservation);
-        validateReservation(coachId, reservation);
+        validateReservation(reservationApproveRequest.getCoachId(), reservation);
 
-        reservation.approve();
+        if (reservationApproveRequest.getIsApproved()) {
+            validateStatus(reservation);
+            reservation.approve();
+        }
     }
 
     private void validateStatus(Reservation reservation) {

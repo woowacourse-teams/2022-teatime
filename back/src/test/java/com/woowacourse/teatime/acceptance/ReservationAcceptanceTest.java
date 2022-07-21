@@ -3,6 +3,7 @@ package com.woowacourse.teatime.acceptance;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 
+import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.CrewService;
@@ -52,9 +53,9 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", coachId)
+                .body(new ReservationApproveRequest(coachId, true))
                 .pathParam("reservationId", reservationId)
-                .when().post("/api/coaches/{id}/reservations/{reservationId}")
+                .when().post("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }
