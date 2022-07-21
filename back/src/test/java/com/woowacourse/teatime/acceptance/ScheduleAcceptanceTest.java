@@ -1,28 +1,25 @@
 package com.woowacourse.teatime.acceptance;
 
-import static com.woowacourse.teatime.fixture.DtoFixture.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.ScheduleService;
 import com.woowacourse.teatime.util.Date;
-
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 public class ScheduleAcceptanceTest extends AcceptanceTest {
 
@@ -70,23 +67,23 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private ExtractableResponse<Response> 스케쥴_수정_요청됨(Long id, ScheduleUpdateRequest request) {
+    private ExtractableResponse<Response> 스케쥴_수정_요청됨(Long coachId, ScheduleUpdateRequest request) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", id)
+                .pathParam("coachId", coachId)
                 .body(request)
-                .when().put("/api/coaches/{id}/schedules")
+                .when().put("/api/coaches/{coachId}/schedules")
                 .then().log().all()
                 .extract();
     }
 
-    private ExtractableResponse<Response> 스케쥴_조회_요청됨(Long id, int year, int month) {
+    private ExtractableResponse<Response> 스케쥴_조회_요청됨(Long coachId, int year, int month) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", id)
+                .pathParam("coachId", coachId)
                 .queryParam("year", year)
                 .queryParam("month", month)
-                .when().get("/api/coaches/{id}/schedules")
+                .when().get("/api/coaches/{coachId}/schedules")
                 .then().log().all()
                 .extract();
     }
