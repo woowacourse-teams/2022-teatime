@@ -21,7 +21,11 @@ const TimeList = () => {
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
       setIsLoading(true);
-      await api.post(`/api/coaches/1/schedules/${scheduleId}`, { id: 1 });
+      // await api.post(`/api/reservations`, {
+      //   crewId: 2,
+      //   coachId: 3,
+      //   scheduleId,
+      // });
       openModal();
     } catch (error) {
       setIsError(true);
