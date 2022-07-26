@@ -3,6 +3,7 @@ package com.woowacourse.teatime.controller;
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.service.ReservationService;
+import com.woowacourse.teatime.service.SheetService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final SheetService sheetService;
 
     @PostMapping
     public ResponseEntity<Void> reserve(@Valid @RequestBody ReservationRequest reservationRequest) {
-        reservationService.save(reservationRequest);
+        Long reservationId = reservationService.save(reservationRequest);
+        sheetService.saveNewSheets(reservationRequest.getCoachId(), reservationId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
