@@ -100,7 +100,6 @@ const reducer = (state: State, action: Action) => {
       const selectedIndex = state.daySchedule.schedules.findIndex(
         (time: ScheduleType) => time.dateTime === action.dateTime
       );
-
       const newSchedules = [...state.daySchedule.schedules];
       newSchedules[selectedIndex].isSelected = !newSchedules[selectedIndex].isSelected;
 
@@ -112,7 +111,6 @@ const reducer = (state: State, action: Action) => {
         if (schedule.isPossible !== false) {
           schedule.isSelected = action.isSelectedAll ? false : true;
         }
-
         return schedule;
       });
 
