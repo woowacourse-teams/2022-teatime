@@ -25,8 +25,8 @@ const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean }>`
   ${(props) =>
     props.isPossible === false &&
     css`
-      background-color: ${({ theme }) => theme.colors.GREEN_200};
-      color: ${({ theme }) => theme.colors.GREEN_500};
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
+      color: ${({ theme }) => theme.colors.GRAY_500};
       cursor: default;
       text-decoration: line-through;
       pointer-events: none;

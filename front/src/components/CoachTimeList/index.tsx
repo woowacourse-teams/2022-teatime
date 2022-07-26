@@ -42,15 +42,17 @@ const CoachTimeList = () => {
     <div>
       <TimeListContainer>
         {daySchedule?.schedules.map((schedule) => {
+          const time = schedule.dateTime.slice(11, 16);
+
           return (
             <React.Fragment key={schedule.id}>
               <TimeBox
                 isPossible={schedule.isPossible}
                 aria-disabled={schedule.isPossible}
-                onClick={() => handleClickTime(schedule.dateTime)}
                 selected={schedule.isSelected ? true : false}
+                onClick={() => handleClickTime(schedule.dateTime)}
               >
-                {schedule.dateTime.slice(11, 16)}
+                {time}
               </TimeBox>
             </React.Fragment>
           );

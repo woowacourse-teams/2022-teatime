@@ -24,7 +24,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
-  const { monthSchedule } = useContext(ScheduleStateContext);
+  const { monthSchedule, daySchedule } = useContext(ScheduleStateContext);
   const dispatch = useContext(ScheduleDispatchContext);
 
   const dateBoxLength =
@@ -42,6 +42,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
+    console.log('daySchedule', daySchedule);
     if (isWeekend) return;
 
     dispatch({

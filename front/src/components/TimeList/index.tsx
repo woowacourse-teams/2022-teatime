@@ -50,11 +50,12 @@ const TimeList = () => {
                 <button onClick={() => handleClickReservationButton(schedule.id)}>예약하기</button>
               </ReserveButtonWrapper>
             </Conditional>
-            <Conditional condition={selectedTimeId !== schedule.id && !!schedule.isPossible}>
-              <TimeBox onClick={() => handleClickTime(schedule.id)}>{time}</TimeBox>
-            </Conditional>
-            <Conditional condition={selectedTimeId !== schedule.id && !schedule.isPossible}>
-              <TimeBox aria-disabled={false} disabled>
+            <Conditional condition={selectedTimeId !== schedule.id}>
+              <TimeBox
+                isPossible={schedule.isPossible}
+                aria-disabled={schedule.isPossible}
+                onClick={() => handleClickTime(schedule.id)}
+              >
                 {time}
               </TimeBox>
             </Conditional>

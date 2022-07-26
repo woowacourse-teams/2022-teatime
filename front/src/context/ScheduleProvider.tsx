@@ -105,7 +105,6 @@ const reducer = (state: State, action: Action) => {
 
       return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newSchedules } };
     }
-
     case 'SELECT_ALL_TIMES': {
       const newSchedules = state.daySchedule.schedules.map((schedule) => {
         if (schedule.isPossible !== false) {
