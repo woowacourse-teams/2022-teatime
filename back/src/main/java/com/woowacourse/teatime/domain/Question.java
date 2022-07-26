@@ -23,9 +23,15 @@ public class Question {
     @ManyToOne(fetch = FetchType.LAZY)
     private Coach coach;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Integer number;
 
     @Column(nullable = false)
     private String content;
+
+    public Question(Coach coach, Integer number, String content) {
+        this.coach = coach;
+        this.number = number;
+        this.content = content;
+    }
 }

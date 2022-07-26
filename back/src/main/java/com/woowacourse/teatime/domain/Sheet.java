@@ -24,7 +24,7 @@ public class Sheet {
     @OneToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Integer number;
 
     @Column(nullable = false)
@@ -32,4 +32,11 @@ public class Sheet {
 
     @Lob
     private String answerContent;
+
+    public Sheet(Reservation reservation, Integer number, String questionContent) {
+        this.reservation = reservation;
+        this.number = number;
+        this.questionContent = questionContent;
+        this.answerContent = null;
+    }
 }
