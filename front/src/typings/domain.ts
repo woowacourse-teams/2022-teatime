@@ -19,6 +19,7 @@ interface Schedule {
   id: number;
   dateTime: string;
   isPossible?: boolean;
+  isSelected?: boolean;
 }
 
 type DaySchedule = { day: number; schedules: Schedule[] };

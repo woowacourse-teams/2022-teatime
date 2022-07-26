@@ -1,28 +1,49 @@
 import React, { useContext, useState } from 'react';
-import { ScheduleDispatchContext } from '@context/ScheduleProvider';
-import useCoachTimes from '@hooks/useCoachTimes';
 import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
+import {
+  CoachScheduleDispatchContext,
+  CoachScheduleStateContext,
+} from '@context/CoachScheduleProvider';
+import api from '@api/index';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
-  const dispatch = useContext(ScheduleDispatchContext);
-  const { schedules, isLoading, isError, handleEnrollSchedules } = useCoachTimes();
+  const { daySchedule, date } = useContext(CoachScheduleStateContext);
+  const dispatch = useContext(CoachScheduleDispatchContext);
 
   const handleClickTime = (dateTime: string) => {
-    dispatch({ type: 'SELECT', dateTime });
+    dispatch({ type: 'SELECT_TIME', dateTime });
   };
 
   const handleSelectedAll = () => {
-    dispatch({ type: 'SELECT_ALL', isSelectedAll });
+    // dispatch({ type: 'SELECT_ALL', isSelectedAll });
     setIsSelectedAll((prev) => !prev);
   };
 
-  if (isError) return <h1>error</h1>;
+  const handleEnrollSchedules = async () => {
+    const selectedTimes = daySchedule?.schedules.reduce((newArray, { isSelected, dateTime }) => {
+      if (isSelected) {
+        newArray.push(dateTime);
+      }
+      return newArray;
+    }, [] as string[]);
+
+    try {
+      await api.put(`/api/coaches/1/schedules`, {
+        date,
+        schedules: selectedTimes,
+      });
+      dispatch({ type: 'UPDATE_TIMES', dateTimes: selectedTimes });
+      alert('확정되었습니다.✅');
+    } catch {
+      alert('스케쥴 등록 실패');
+    }
+  };
 
   return (
     <div>
       <TimeListContainer>
-        {schedules.map((schedule) => {
+        {daySchedule?.schedules.map((schedule) => {
           return (
             <React.Fragment key={schedule.id}>
               <TimeBox
@@ -37,7 +58,7 @@ const CoachTimeList = () => {
           );
         })}
       </TimeListContainer>
-      {schedules.length !== 0 && (
+      {daySchedule?.schedules.length !== 0 && (
         <ButtonContainer>
           <CheckButton onClick={handleSelectedAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}

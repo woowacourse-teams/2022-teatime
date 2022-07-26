@@ -1,44 +1,74 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
 import useSchedule from '@hooks/useSchedules';
-import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
-import { Schedule } from '@typings/domain';
+import { MonthYear, Schedule, ScheduleMap } from '@typings/domain';
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
+import {
+  CoachScheduleDispatchContext,
+  CoachScheduleStateContext,
+} from '@context/CoachScheduleProvider';
+import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
+import api from '@api/index';
 
 interface CalendarProps {
   isCoach?: boolean;
 }
 
 const Calendar = ({ isCoach }: CalendarProps) => {
-  const { id } = useParams();
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const dispatch = useContext(ScheduleDispatchContext);
-  const { monthYear, updateMonth, monthSchedule, dateBoxLength } = useSchedule(id);
-  const { firstDOW, lastDate, year, month, startDate } = monthYear;
+  const { id: coachId } = useParams();
   const currentDate = dayjs();
+  const currentMonthYear = getMonthYearDetails(dayjs());
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
+  const { firstDOW, lastDate, year, month, startDate } = monthYear;
+  const { monthSchedule } = useContext(CoachScheduleStateContext);
+  const dispatch = useContext(CoachScheduleDispatchContext);
 
-  const handleClickDate = (daySchedule: Schedule[] = [], date: number, isWeekend: boolean) => {
-    if (isWeekend) return;
-
-    setSelectedDay(date);
-    if (isCoach) {
-      dispatch({
-        type: 'SET_ALL_SCHEDULES',
-        data: daySchedule,
-        date: `${year}-${month}-${String(date).padStart(2, '0')}`,
-      });
-      return;
-    }
-
-    dispatch({ type: 'SET_SCHEDULES', data: daySchedule });
+  const updateMonth = (increment: number) => {
+    setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
+
+  const dateBoxLength =
+    monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
+      ? CALENDAR_DATE_LENGTH.MIN
+      : CALENDAR_DATE_LENGTH.MAX;
+
+  const monthScheduleMap = monthSchedule?.reduce((newObj, { day, schedules }) => {
+    newObj[day] = schedules;
+    return newObj;
+  }, {} as ScheduleMap);
+
+  const handleClickDate = (day: number, isWeekend: boolean) => {
+    if (isWeekend) return;
+    setSelectedDay(day);
+    dispatch({
+      type: 'CLICK_DATE',
+      day,
+      date: `${year}-${month}-${String(day).padStart(2, '0')}`,
+    });
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: coachSchedules } = await api.get(
+          `/api/coaches/${coachId}/schedules?year=${year}&month=${month}`
+        );
+
+        dispatch({ type: 'SET_MONTH_SCHEDULE', data: coachSchedules, lastDate, year, month });
+      } catch {
+        alert('스케쥴 get요청 실패');
+      }
+    })();
+  }, [monthYear]);
 
   return (
     <CalendarContainer>
@@ -72,8 +102,8 @@ const Calendar = ({ isCoach }: CalendarProps) => {
             <DateBox
               key={index}
               date={date}
-              monthSchedule={monthSchedule?.[date]}
-              onClick={() => handleClickDate(monthSchedule?.[date], date, isWeekend)}
+              daySchedule={monthScheduleMap[date]}
+              onClick={() => handleClickDate(date, isWeekend)}
               selectedDay={selectedDay}
               today={`${year}-${month}-${String(date).padStart(2, '0')}`}
               isCoach={isCoach}
