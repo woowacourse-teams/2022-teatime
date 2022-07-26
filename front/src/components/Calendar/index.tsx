@@ -65,7 +65,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
 
         dispatch({ type: 'SET_MONTH_SCHEDULE', data: coachSchedules, lastDate, year, month });
       } catch {
-        alert('스케쥴 get요청 실패');
+        alert('스케쥴 get 요청 실패');
       }
     })();
   }, [monthYear]);

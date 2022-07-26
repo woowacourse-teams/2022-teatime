@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
+import api from '@api/index';
 import {
   CoachScheduleDispatchContext,
   CoachScheduleStateContext,
 } from '@context/CoachScheduleProvider';
-import api from '@api/index';
+import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
@@ -21,7 +21,7 @@ const CoachTimeList = () => {
   };
 
   const handleEnrollSchedules = async () => {
-    const selectedTimes = daySchedule?.schedules.reduce((newArray, { isSelected, dateTime }) => {
+    const selectedTimes = daySchedule.schedules.reduce((newArray, { isSelected, dateTime }) => {
       if (isSelected) {
         newArray.push(dateTime);
       }

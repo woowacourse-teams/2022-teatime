@@ -23,12 +23,11 @@ const DateBox = ({
 }: DateBoxProps) => {
   const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
   const isToday = today === dayjs().format('YYYY-MM-DD');
-
-  const scheduleLength = daySchedule.filter((time) => time.isPossible === true).length;
+  const hasSchedule = daySchedule.filter((time) => time.isPossible === true).length > 0;
 
   return (
     <DateContainer
-      hasSchedule={!!scheduleLength}
+      hasSchedule={hasSchedule}
       hasDate={!!date}
       isSelected={!!isSelected}
       isCoach={isCoach}
