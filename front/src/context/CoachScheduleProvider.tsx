@@ -44,7 +44,7 @@ type Action =
     }
   | { type: 'CLICK_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
-  | { type: 'UPDATE_TIMES'; dateTimes: string[] };
+  | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] };
 
 type ScheduleDispatch = Dispatch<Action>;
 
@@ -106,7 +106,7 @@ const reducer = (state: State, action: Action) => {
 
       return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newSchedules } };
     }
-    case 'UPDATE_TIMES': {
+    case 'UPDATE_SCHEDULE': {
       const newMonthSchedule = state.monthSchedule.map((daySchedule) => {
         if (daySchedule.day === state.daySchedule.day) {
           const newDaySchedule = daySchedule.schedules.map((time) => {

@@ -4,10 +4,8 @@ import dayjs from 'dayjs';
 import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
-import useSchedule from '@hooks/useSchedules';
 import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import { ScheduleDispatchContext } from '@context/ScheduleProvider';
-import { MonthYear, Schedule, ScheduleMap } from '@typings/domain';
+import { MonthYear, ScheduleMap } from '@typings/domain';
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
@@ -32,10 +30,6 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const { monthSchedule } = useContext(CoachScheduleStateContext);
   const dispatch = useContext(CoachScheduleDispatchContext);
 
-  const updateMonth = (increment: number) => {
-    setMonthYear((prev) => getNewMonthYear(prev, increment));
-  };
-
   const dateBoxLength =
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
@@ -46,14 +40,19 @@ const Calendar = ({ isCoach }: CalendarProps) => {
     return newObj;
   }, {} as ScheduleMap);
 
+  const updateMonth = (increment: number) => {
+    setMonthYear((prev) => getNewMonthYear(prev, increment));
+  };
+
   const handleClickDate = (day: number, isWeekend: boolean) => {
     if (isWeekend) return;
-    setSelectedDay(day);
+
     dispatch({
       type: 'CLICK_DATE',
       day,
       date: `${year}-${month}-${String(day).padStart(2, '0')}`,
     });
+    setSelectedDay(day);
   };
 
   useEffect(() => {

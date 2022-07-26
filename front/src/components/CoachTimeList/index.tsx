@@ -33,7 +33,7 @@ const CoachTimeList = () => {
         date,
         schedules: selectedTimes,
       });
-      dispatch({ type: 'UPDATE_TIMES', dateTimes: selectedTimes });
+      dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
       alert('확정되었습니다.✅');
     } catch {
       alert('스케쥴 등록 실패');
