@@ -147,19 +147,19 @@ const initialState: State = {
   date: '',
 };
 
-export const CoachScheduleStateContext = createContext<State>(initialState);
-export const CoachScheduleDispatchContext = createContext<ScheduleDispatch>(() => null);
+export const ScheduleStateContext = createContext<State>(initialState);
+export const ScheduleDispatchContext = createContext<ScheduleDispatch>(() => null);
 
-const CoachScheduleProvider = ({ children }: { children: React.ReactNode }) => {
+const ScheduleProvider = ({ children }: { children: React.ReactNode }) => {
   const [scheduleData, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <CoachScheduleStateContext.Provider value={scheduleData}>
-      <CoachScheduleDispatchContext.Provider value={dispatch}>
+    <ScheduleStateContext.Provider value={scheduleData}>
+      <ScheduleDispatchContext.Provider value={dispatch}>
         {children}
-      </CoachScheduleDispatchContext.Provider>
-    </CoachScheduleStateContext.Provider>
+      </ScheduleDispatchContext.Provider>
+    </ScheduleStateContext.Provider>
   );
 };
 
-export default CoachScheduleProvider;
+export default ScheduleProvider;

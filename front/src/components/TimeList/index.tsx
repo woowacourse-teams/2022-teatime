@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
-import api from '@api/index';
-import { CoachScheduleStateContext } from '@context/CoachScheduleProvider';
+import { ScheduleStateContext } from '@context/ScheduleProvider';
 import CheckCircle from '@assets/check-circle.svg';
 import { TimeListContainer, TimeBox, ReserveButtonWrapper } from './styles';
 
 const TimeList = () => {
-  const { daySchedule } = useContext(CoachScheduleStateContext);
+  const { daySchedule } = useContext(ScheduleStateContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);

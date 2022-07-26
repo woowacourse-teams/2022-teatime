@@ -1,15 +1,13 @@
 import React, { useContext, useState } from 'react';
 import api from '@api/index';
-import {
-  CoachScheduleDispatchContext,
-  CoachScheduleStateContext,
-} from '@context/CoachScheduleProvider';
+import Conditional from '@components/Conditional';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
-  const { daySchedule, date } = useContext(CoachScheduleStateContext);
-  const dispatch = useContext(CoachScheduleDispatchContext);
+  const { daySchedule, date } = useContext(ScheduleStateContext);
+  const dispatch = useContext(ScheduleDispatchContext);
 
   const handleClickTime = (dateTime: string) => {
     dispatch({ type: 'SELECT_TIME', dateTime });
@@ -58,14 +56,15 @@ const CoachTimeList = () => {
           );
         })}
       </TimeListContainer>
-      {daySchedule?.schedules.length !== 0 && (
+
+      <Conditional condition={daySchedule?.schedules.length !== 0}>
         <ButtonContainer>
           <CheckButton onClick={handleSelectedAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}
           </CheckButton>
           <ConfirmButton onClick={handleEnrollSchedules}>확인</ConfirmButton>
         </ButtonContainer>
-      )}
+      </Conditional>
     </div>
   );
 };

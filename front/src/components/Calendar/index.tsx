@@ -9,10 +9,7 @@ import { MonthYear, ScheduleMap } from '@typings/domain';
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
-import {
-  CoachScheduleDispatchContext,
-  CoachScheduleStateContext,
-} from '@context/CoachScheduleProvider';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
 import api from '@api/index';
 
@@ -27,8 +24,8 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
-  const { monthSchedule } = useContext(CoachScheduleStateContext);
-  const dispatch = useContext(CoachScheduleDispatchContext);
+  const { monthSchedule } = useContext(ScheduleStateContext);
+  const dispatch = useContext(ScheduleDispatchContext);
 
   const dateBoxLength =
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN

@@ -6,11 +6,11 @@ import Schedule from '@pages/Schedule';
 import Coach from '@pages/Coach';
 import Header from '@components/Header';
 import { ROUTES } from './constants';
-import CoachScheduleProvider from '@context/CoachScheduleProvider';
+import ScheduleProvider from '@context/ScheduleProvider';
 
 const App = () => {
   return (
-    <CoachScheduleProvider>
+    <ScheduleProvider>
       <Header />
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
@@ -19,7 +19,7 @@ const App = () => {
         <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
         <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
       </Routes>
-    </CoachScheduleProvider>
+    </ScheduleProvider>
   );
 };
 
