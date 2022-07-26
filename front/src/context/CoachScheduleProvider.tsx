@@ -44,6 +44,7 @@ type Action =
     }
   | { type: 'CLICK_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
+  | { type: 'SELECT_ALL_TIMES'; isSelectedAll: boolean }
   | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] };
 
 type ScheduleDispatch = Dispatch<Action>;
@@ -61,9 +62,7 @@ const reducer = (state: State, action: Action) => {
       });
 
       const newMonthSchedule = initialMonthSchedule.map((daySchedule: DaySchedule) => {
-        const sameDaySchedule = action.data.find(
-          (schedule: DaySchedule) => schedule.day === daySchedule.day
-        );
+        const sameDaySchedule = action.data.find((schedule) => schedule.day === daySchedule.day);
 
         if (sameDaySchedule) {
           const newDaySchedule = daySchedule.schedules.map((time) => {
@@ -93,23 +92,36 @@ const reducer = (state: State, action: Action) => {
     case 'CLICK_DATE': {
       const selectedDaySchedule = state.monthSchedule.find(
         (daySchedule) => daySchedule.day === action.day
-      );
+      ) as DaySchedule;
 
       return { ...state, daySchedule: selectedDaySchedule, date: action.date };
     }
     case 'SELECT_TIME': {
       const selectedIndex = state.daySchedule.schedules.findIndex(
-        (time) => time.dateTime === action.dateTime
+        (time: ScheduleType) => time.dateTime === action.dateTime
       );
+
       const newSchedules = [...state.daySchedule.schedules];
       newSchedules[selectedIndex].isSelected = !newSchedules[selectedIndex].isSelected;
+
+      return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newSchedules } };
+    }
+
+    case 'SELECT_ALL_TIMES': {
+      const newSchedules = state.daySchedule.schedules.map((schedule) => {
+        if (schedule.isPossible !== false) {
+          schedule.isSelected = action.isSelectedAll ? false : true;
+        }
+
+        return schedule;
+      });
 
       return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newSchedules } };
     }
     case 'UPDATE_SCHEDULE': {
       const newMonthSchedule = state.monthSchedule.map((daySchedule) => {
         if (daySchedule.day === state.daySchedule.day) {
-          const newDaySchedule = daySchedule.schedules.map((time) => {
+          const newDaySchedule = daySchedule.schedules.map((time: ScheduleType) => {
             if (action.dateTimes.includes(time.dateTime)) {
               return { id: time.id, dateTime: time.dateTime, isPossible: true, isSelected: true };
             }

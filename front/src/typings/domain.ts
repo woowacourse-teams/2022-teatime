@@ -11,8 +11,8 @@ interface MonthYear {
   startDate: dayjs.Dayjs;
   firstDOW: number; // 0 === Sunday
   lastDate: number;
-  month: string; // MM
-  year: string; // YY
+  month: string;
+  year: string;
 }
 
 interface Schedule {

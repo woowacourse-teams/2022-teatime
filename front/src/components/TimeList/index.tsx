@@ -1,18 +1,20 @@
 import React, { useContext, useState } from 'react';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
-import CheckCircle from '@assets/check-circle.svg';
 import useModal from '@hooks/useModal';
 import api from '@api/index';
+import { CoachScheduleStateContext } from '@context/CoachScheduleProvider';
+import CheckCircle from '@assets/check-circle.svg';
 import { TimeListContainer, TimeBox, ReserveButtonWrapper } from './styles';
 
 const TimeList = () => {
-  const { schedules } = useContext(ScheduleStateContext);
+  const { daySchedule } = useContext(CoachScheduleStateContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
 
   const handleClickTime = (id: number) => {
     setSelectedTimeId(id);
@@ -38,7 +40,7 @@ const TimeList = () => {
 
   return (
     <TimeListContainer>
-      {schedules.map((schedule) => {
+      {coachSchedule.map((schedule) => {
         const time = schedule.dateTime.slice(11, 16);
 
         return (

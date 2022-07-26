@@ -16,7 +16,7 @@ const CoachTimeList = () => {
   };
 
   const handleSelectedAll = () => {
-    // dispatch({ type: 'SELECT_ALL', isSelectedAll });
+    dispatch({ type: 'SELECT_ALL_TIMES', isSelectedAll });
     setIsSelectedAll((prev) => !prev);
   };
 
