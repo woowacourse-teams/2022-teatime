@@ -35,10 +35,8 @@ class ScheduleServiceTest {
 
     @Autowired
     private ScheduleService scheduleService;
-
     @Autowired
     private CoachRepository coachRepository;
-
     @Autowired
     private ScheduleRepository scheduleRepository;
 
