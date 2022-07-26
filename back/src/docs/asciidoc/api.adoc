@@ -1,0 +1,16 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+= Coach API
+
+== Coach List
+=== request
+include::{snippets}/index/http-request.adoc[]
+=== response
+include::{snippets}/index/http-response.adoc[]

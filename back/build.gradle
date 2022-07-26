@@ -2,11 +2,24 @@ plugins {
     id 'org.springframework.boot' version '2.7.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.woowacourse'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into 'BOOT-INF/classes/static/docs'
+    }
+}
 
 configurations {
     compileOnly {
@@ -35,6 +48,23 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.1"
 
     implementation group: 'com.google.guava', name: 'guava', version: '12.0'
+
+    testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+}
+
+asciidoctor {
+    dependsOn test
+    inputs.dir snippetsDir
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
 }
 
 tasks.named('test') {
