@@ -1,17 +1,15 @@
 import { useNavigate } from 'react-router-dom';
-import { Layout, Menu } from './styles';
+import { Layout } from './styles';
 
 const Coach = () => {
   const navigate = useNavigate();
   const handleClickCard = () => {
-    navigate(`/schedule/1`);
+    navigate(`/schedule/41`);
   };
 
   return (
     <Layout>
-      <Menu>
-        <button onClick={handleClickCard}>일정 추가</button>
-      </Menu>
+      <button onClick={handleClickCard}>일정 추가</button>
     </Layout>
   );
 };

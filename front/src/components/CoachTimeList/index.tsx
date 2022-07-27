@@ -27,7 +27,7 @@ const CoachTimeList = () => {
     }, [] as string[]);
 
     try {
-      await api.put(`/api/coaches/1/schedules`, {
+      await api.put(`/api/coaches/41/schedules`, {
         date,
         schedules: selectedTimes,
       });
