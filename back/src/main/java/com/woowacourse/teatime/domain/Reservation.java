@@ -3,6 +3,8 @@ package com.woowacourse.teatime.domain;
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,18 +31,26 @@ public class Reservation {
     @JoinColumn(name = "crew_id")
     private Crew crew;
 
-    @Column(nullable = false)
-    private boolean isApproved = false;
+    @Column(name = "reservation_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
         this.crew = crew;
+        this.status = ReservationStatus.BEFORE_APPROVED;
     }
 
-    public void approve() {
-        if (this.isApproved()) {
+    public boolean isApproved(boolean isApprove) {
+        if (!ReservationStatus.isBeforeApproved(status)) {
             throw new AlreadyApprovedException();
         }
-        this.isApproved = true;
+
+        if (isApprove) {
+            status = ReservationStatus.APPROVED;
+            return true;
+        }
+        schedule.cancelReservation();
+        return false;
     }
 }

@@ -28,7 +28,7 @@ public class ReservationService {
         Crew crew = crewRepository.findById(reservationRequest.getCrewId())
                 .orElseThrow(NotExistedCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                        reservationRequest.getScheduleId(), reservationRequest.getCoachId())
+                reservationRequest.getScheduleId(), reservationRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -41,8 +41,9 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
         validateReservation(reservationApproveRequest.getCoachId(), reservation);
 
-        if (reservationApproveRequest.getIsApproved()) {
-            reservation.approve();
+        boolean isApproved = reservation.isApproved(reservationApproveRequest.getIsApproved());
+        if (!isApproved) {
+            reservationRepository.delete(reservation);
         }
     }
 
