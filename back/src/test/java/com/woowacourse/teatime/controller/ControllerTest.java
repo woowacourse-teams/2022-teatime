@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.ScheduleService;
+import com.woowacourse.teatime.service.SheetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,9 @@ public class ControllerTest {
 
     @MockBean
     protected ReservationService reservationService;
+
+    @MockBean
+    protected SheetService sheetService;
 
     @MockBean
     protected CoachService coachService;
