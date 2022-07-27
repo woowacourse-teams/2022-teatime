@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { Schedule } from '@typings/domain';
-import { DateContainer, TodayIndicator } from './styles';
+import * as S from './styles';
 
 interface DateBoxProps {
   date?: number;
-  monthSchedule?: Schedule[];
+  daySchedule?: Schedule[];
   onClick?: () => void;
   selectedDay?: number | null;
   today?: string;
@@ -14,19 +14,20 @@ interface DateBoxProps {
 
 const DateBox = ({
   date,
-  monthSchedule = [],
+  daySchedule = [],
   onClick,
   selectedDay,
   today,
   isCoach,
   isWeekend,
 }: DateBoxProps) => {
-  const isSelected = (monthSchedule.length > 0 || isCoach) && selectedDay === date;
+  const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
   const isToday = today === dayjs().format('YYYY-MM-DD');
+  const hasSchedule = daySchedule.filter((time) => time.isPossible === true).length > 0;
 
   return (
-    <DateContainer
-      hasSchedule={!!monthSchedule.length}
+    <S.DateContainer
+      hasSchedule={hasSchedule}
       hasDate={!!date}
       isSelected={!!isSelected}
       isCoach={isCoach}
@@ -34,8 +35,8 @@ const DateBox = ({
       onClick={onClick}
     >
       {date}
-      {isToday && <TodayIndicator />}
-    </DateContainer>
+      {isToday && <S.TodayIndicator />}
+    </S.DateContainer>
   );
 };
 

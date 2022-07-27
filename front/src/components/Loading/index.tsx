@@ -1,19 +1,12 @@
 import LoadingImage from '@assets/loading.gif';
-import styled from 'styled-components';
+import * as S from './styles';
 
 const Loading = () => {
   return (
-    <ImageContainer>
+    <S.ImageContainer>
       <img src={LoadingImage} alt="로딩 이미지" />
-    </ImageContainer>
+    </S.ImageContainer>
   );
 };
-
-const ImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 150px);
-`;
 
 export default Loading;

@@ -17,7 +17,7 @@ const TimeListContainer = styled.div`
   }
 `;
 
-const TimeBox = styled.div<{ disabled?: boolean }>`
+const TimeBox = styled.div<{ isPossible?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,10 +34,10 @@ const TimeBox = styled.div<{ disabled?: boolean }>`
   }
 
   ${(props) =>
-    props.disabled &&
+    props.isPossible === false &&
     css`
       background-color: ${({ theme }) => theme.colors.GRAY_200};
-      color: ${({ theme }) => theme.colors.GREEN_500};
+      color: ${({ theme }) => theme.colors.GRAY_500};
       cursor: default;
       text-decoration: line-through;
       pointer-events: none;
