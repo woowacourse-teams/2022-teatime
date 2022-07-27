@@ -41,8 +41,8 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
         validateReservation(reservationApproveRequest.getCoachId(), reservation);
 
-        boolean isApproved = reservation.isApproved(reservationApproveRequest.getIsApproved());
-        if (!isApproved) {
+        reservation.approve(reservationApproveRequest.getIsApproved());
+        if (!reservationApproveRequest.getIsApproved()) {
             reservationRepository.delete(reservation);
         }
     }

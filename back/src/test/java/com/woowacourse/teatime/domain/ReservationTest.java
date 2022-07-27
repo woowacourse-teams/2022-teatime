@@ -14,10 +14,11 @@ import org.junit.jupiter.api.Test;
 class ReservationTest {
 
     private Reservation reservation;
+    private Schedule schedule;
 
     @BeforeEach
     void setUp() {
-        Schedule schedule = new Schedule(COACH_BROWN, DATE_TIME);
+        schedule = new Schedule(COACH_BROWN, DATE_TIME);
         this.reservation = new Reservation(schedule, CREW);
     }
 
@@ -26,7 +27,9 @@ class ReservationTest {
     void approve() {
         boolean 승인을_한다 = true;
 
-        assertThat(reservation.isApproved(승인을_한다)).isTrue();
+        reservation.approve(승인을_한다);
+
+        assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.APPROVED);
     }
 
     @DisplayName("승인 전, 면담을 취소한다.")
@@ -34,16 +37,18 @@ class ReservationTest {
     void deny_approval() {
         boolean 승인을_거절한다 = false;
 
-        assertThat(reservation.isApproved(승인을_거절한다)).isFalse();
+        reservation.approve(승인을_거절한다);
+
+        assertThat(schedule.getIsPossible()).isTrue();
     }
 
     @DisplayName("승인이 되어 있는 상태에서 승인 요청을 하면 에러가 발생한다.")
     @Test
     void name() {
-        reservation.isApproved(true);
+        reservation.approve(true);
         boolean 승인을_한다 = true;
 
-        assertThatThrownBy(() -> reservation.isApproved(승인을_한다))
+        assertThatThrownBy(() -> reservation.approve(승인을_한다))
                 .isInstanceOf(AlreadyApprovedException.class);
     }
 }

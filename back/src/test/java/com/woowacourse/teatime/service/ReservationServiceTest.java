@@ -5,6 +5,7 @@ import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
@@ -126,6 +127,9 @@ class ReservationServiceTest {
 
         reservationService.approve(reservationId, reservationApproveRequest);
 
-        assertThat(reservationRepository.findById(reservationId)).isEmpty();
+        assertAll(
+                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(schedule.getIsPossible()).isTrue()
+        );
     }
 }
