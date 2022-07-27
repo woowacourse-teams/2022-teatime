@@ -5,7 +5,7 @@ import type { Coach } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import * as S from './styles';
 
-const Home = () => {
+const Crew = () => {
   const navigate = useNavigate();
   const { data: coaches, isLoading, isError } = useFetch<Coach[], null>('/api/coaches');
 
@@ -35,4 +35,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Crew;

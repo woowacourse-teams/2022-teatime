@@ -5,7 +5,7 @@ import * as S from './styles';
 const Header = () => {
   return (
     <S.HeaderContainer>
-      <S.LogoLink to={ROUTES.SELECT_USER}>
+      <S.LogoLink to={ROUTES.HOME}>
         <img src={LogoIcon} />
         <h1>티타임</h1>
       </S.LogoLink>

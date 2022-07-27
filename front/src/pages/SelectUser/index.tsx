@@ -8,7 +8,7 @@ const SelectUser = () => {
       <Link to={ROUTES.COACH}>
         <button>코치</button>
       </Link>
-      <Link to={ROUTES.HOME}>
+      <Link to={ROUTES.CREW}>
         <button>크루</button>
       </Link>
     </S.SelectUserContainer>
