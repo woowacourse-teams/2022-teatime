@@ -22,7 +22,7 @@ public class SheetService {
     private final QuestionRepository questionRepository;
     private final ReservationRepository reservationRepository;
 
-    public int saveNewSheets(Long coachId, Long reservationId) {
+    public int save(Long coachId, Long reservationId) {
         List<Question> questions = questionRepository.findByCoachId(coachId);
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);

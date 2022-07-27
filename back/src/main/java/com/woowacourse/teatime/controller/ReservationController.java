@@ -26,7 +26,7 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<Void> reserve(@Valid @RequestBody ReservationRequest reservationRequest) {
         Long reservationId = reservationService.save(reservationRequest);
-        sheetService.saveNewSheets(reservationRequest.getCoachId(), reservationId);
+        sheetService.save(reservationRequest.getCoachId(), reservationId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

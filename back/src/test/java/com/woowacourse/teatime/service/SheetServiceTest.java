@@ -62,7 +62,7 @@ class SheetServiceTest {
         questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
         questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
 
-        int savedSheetCount = sheetService.saveNewSheets(coach.getId(), reservation.getId());
+        int savedSheetCount = sheetService.save(coach.getId(), reservation.getId());
 
         assertThat(savedSheetCount).isEqualTo(3);
     }
