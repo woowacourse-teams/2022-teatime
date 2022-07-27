@@ -1,16 +1,6 @@
 import ModalPotal from '@components/ModalPotal';
 import CloseIcon from '@assets/close.svg';
-import {
-  Background,
-  ModalContainer,
-  FirstButton,
-  SecondButton,
-  CloseIconWrapper,
-  ButtonWrapper,
-  InnerContainer,
-  TitleWrapper,
-} from './styles';
-
+import * as S from './styles';
 interface ModalProps {
   icon: string;
   title: string;
@@ -36,24 +26,24 @@ const Modal = ({
 
   return (
     <ModalPotal>
-      <Background onClick={handleClickDimmer}>
-        <ModalContainer>
-          <InnerContainer>
-            <CloseIconWrapper>
+      <S.Background onClick={handleClickDimmer}>
+        <S.ModalContainer>
+          <S.InnerContainer>
+            <S.CloseIconWrapper>
               <img src={CloseIcon} alt="닫기 아이콘" onClick={closeModal} />
-            </CloseIconWrapper>
-            <TitleWrapper>
+            </S.CloseIconWrapper>
+            <S.TitleWrapper>
               <h1>{title}</h1>
               <img src={icon} alt={`${title} 아이콘`} />
-            </TitleWrapper>
+            </S.TitleWrapper>
             <p>{content}</p>
-          </InnerContainer>
-          <ButtonWrapper>
-            <FirstButton>{firstButtonName}</FirstButton>
-            <SecondButton>{secondButtonName}</SecondButton>
-          </ButtonWrapper>
-        </ModalContainer>
-      </Background>
+          </S.InnerContainer>
+          <S.ButtonWrapper>
+            <S.FirstButton>{firstButtonName}</S.FirstButton>
+            <S.SecondButton>{secondButtonName}</S.SecondButton>
+          </S.ButtonWrapper>
+        </S.ModalContainer>
+      </S.Background>
     </ModalPotal>
   );
 };

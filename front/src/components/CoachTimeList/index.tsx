@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import api from '@api/index';
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton } from './styles';
+import * as S from './styles';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
@@ -40,32 +40,32 @@ const CoachTimeList = () => {
 
   return (
     <div>
-      <TimeListContainer>
+      <S.TimeListContainer>
         {daySchedule?.schedules.map((schedule) => {
           const time = schedule.dateTime.slice(11, 16);
 
           return (
             <React.Fragment key={schedule.id}>
-              <TimeBox
+              <S.TimeBox
                 isPossible={schedule.isPossible}
                 aria-disabled={schedule.isPossible}
                 selected={schedule.isSelected ? true : false}
                 onClick={() => handleClickTime(schedule.dateTime)}
               >
                 {time}
-              </TimeBox>
+              </S.TimeBox>
             </React.Fragment>
           );
         })}
-      </TimeListContainer>
+      </S.TimeListContainer>
 
       <Conditional condition={daySchedule?.schedules.length !== 0}>
-        <ButtonContainer>
-          <CheckButton onClick={handleSelectedAll}>
+        <S.ButtonContainer>
+          <S.CheckButton onClick={handleSelectedAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}
-          </CheckButton>
-          <ConfirmButton onClick={handleEnrollSchedules}>확인</ConfirmButton>
-        </ButtonContainer>
+          </S.CheckButton>
+          <S.ConfirmButton onClick={handleEnrollSchedules}>확인</S.ConfirmButton>
+        </S.ButtonContainer>
       </Conditional>
     </div>
   );

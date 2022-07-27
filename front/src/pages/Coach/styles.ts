@@ -42,45 +42,4 @@ const Menu = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  margin-top: 20px;
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  > div {
-    display: flex;
-    justify-content: space-between;
-    width: 47%;
-    margin: 10px 0;
-    padding: 14px;
-    background-color: #cce6ba;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-    border-radius: 8px;
-  }
-
-  span {
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  button {
-    border: 1px solid #454545;
-    padding: 4px 8px;
-    margin-left: 8px;
-    border-radius: 12px;
-    background-color: transparent;
-    cursor: pointer;
-
-    :hover {
-      transform: scale(1.1);
-    }
-  }
-`;
-
-export { Layout, Menu, Title, Wrapper };
+export { Layout, Menu };

@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@constants/index';
-import { SelectUserContainer } from './styles';
+import * as S from './styles';
 
 const SelectUser = () => {
   return (
-    <SelectUserContainer>
+    <S.SelectUserContainer>
       <Link to={ROUTES.COACH}>
         <button>코치</button>
       </Link>
       <Link to={ROUTES.HOME}>
         <button>크루</button>
       </Link>
-    </SelectUserContainer>
+    </S.SelectUserContainer>
   );
 };
 

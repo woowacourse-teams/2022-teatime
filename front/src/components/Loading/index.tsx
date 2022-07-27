@@ -1,11 +1,11 @@
 import LoadingImage from '@assets/loading.gif';
-import { ImageContainer } from './styles';
+import * as S from './styles';
 
 const Loading = () => {
   return (
-    <ImageContainer>
+    <S.ImageContainer>
       <img src={LoadingImage} alt="로딩 이미지" />
-    </ImageContainer>
+    </S.ImageContainer>
   );
 };
 

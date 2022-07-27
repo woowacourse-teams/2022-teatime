@@ -1,15 +1,15 @@
 import LogoIcon from '@assets/logo.png';
 import { ROUTES } from '@constants/index';
-import { HeaderContainer, LogoLink } from './styles';
+import * as S from './styles';
 
 const Header = () => {
   return (
-    <HeaderContainer>
-      <LogoLink to={ROUTES.SELECT_USER}>
+    <S.HeaderContainer>
+      <S.LogoLink to={ROUTES.SELECT_USER}>
         <img src={LogoIcon} />
         <h1>티타임</h1>
-      </LogoLink>
-    </HeaderContainer>
+      </S.LogoLink>
+    </S.HeaderContainer>
   );
 };
 

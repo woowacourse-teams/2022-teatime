@@ -1,4 +1,4 @@
-import { TitleWrapper } from './styles';
+import * as S from './styles';
 
 interface TitleProps {
   text: string;
@@ -6,9 +6,9 @@ interface TitleProps {
 
 const Title = ({ text }: TitleProps) => {
   return (
-    <TitleWrapper>
+    <S.TitleWrapper>
       <h1>{text}</h1>
-    </TitleWrapper>
+    </S.TitleWrapper>
   );
 };
 

@@ -8,10 +8,10 @@ import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index
 import { MonthYear, ScheduleMap } from '@typings/domain';
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
-import { CalendarContainer, YearMonthContainer, DateGrid, DayOfWeekBox } from './styles';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
 import api from '@api/index';
+import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;
@@ -67,8 +67,8 @@ const Calendar = ({ isCoach }: CalendarProps) => {
   }, [monthYear]);
 
   return (
-    <CalendarContainer>
-      <YearMonthContainer>
+    <S.CalendarContainer>
+      <S.YearMonthContainer>
         <span>
           {year}년 {month}월
         </span>
@@ -81,10 +81,10 @@ const Calendar = ({ isCoach }: CalendarProps) => {
           </Conditional>
           <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => updateMonth(1)} />
         </div>
-      </YearMonthContainer>
-      <DateGrid>
+      </S.YearMonthContainer>
+      <S.DateGrid>
         {DAY_OF_WEEKS.map((day) => {
-          return <DayOfWeekBox key={day}>{day}</DayOfWeekBox>;
+          return <S.DayOfWeekBox key={day}>{day}</S.DayOfWeekBox>;
         })}
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW + 1;
@@ -107,8 +107,8 @@ const Calendar = ({ isCoach }: CalendarProps) => {
             />
           );
         })}
-      </DateGrid>
-    </CalendarContainer>
+      </S.DateGrid>
+    </S.CalendarContainer>
   );
 };
 

@@ -1,4 +1,4 @@
-import { ButtonWrapper, CardContainer, ImageWrapper } from './styles';
+import * as S from './styles';
 
 interface CardProps {
   image: string;
@@ -10,18 +10,18 @@ interface CardProps {
 
 const Card = ({ name, image, description, buttonName, onClick }: CardProps) => {
   return (
-    <CardContainer onClick={onClick}>
+    <S.CardContainer onClick={onClick}>
       <div>
-        <ImageWrapper>
+        <S.ImageWrapper>
           <img src={image} alt={`${name} 카드 이미지`} />
-        </ImageWrapper>
+        </S.ImageWrapper>
         <span>{name}</span>
         <p>{description}</p>
-        <ButtonWrapper>
+        <S.ButtonWrapper>
           <button>{buttonName}</button>
-        </ButtonWrapper>
+        </S.ButtonWrapper>
       </div>
-    </CardContainer>
+    </S.CardContainer>
   );
 };
 

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { Schedule } from '@typings/domain';
-import { DateContainer, TodayIndicator } from './styles';
+import * as S from './styles';
 
 interface DateBoxProps {
   date?: number;
@@ -26,7 +26,7 @@ const DateBox = ({
   const hasSchedule = daySchedule.filter((time) => time.isPossible === true).length > 0;
 
   return (
-    <DateContainer
+    <S.DateContainer
       hasSchedule={hasSchedule}
       hasDate={!!date}
       isSelected={!!isSelected}
@@ -35,8 +35,8 @@ const DateBox = ({
       onClick={onClick}
     >
       {date}
-      {isToday && <TodayIndicator />}
-    </DateContainer>
+      {isToday && <S.TodayIndicator />}
+    </S.DateContainer>
   );
 };
 

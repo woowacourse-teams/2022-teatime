@@ -3,7 +3,7 @@ import Card from '@components/Card';
 import useFetch from '@hooks/useFetch';
 import type { Coach } from '@typings/domain';
 import { ROUTES } from '@constants/index';
-import { CardListContainer, Layout } from './styles';
+import * as S from './styles';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ const Home = () => {
   if (isError) return <h1>error</h1>;
 
   return (
-    <Layout>
-      <CardListContainer>
+    <S.Layout>
+      <S.CardListContainer>
         {coaches?.map((coach) => {
           return (
             <Card
@@ -30,8 +30,8 @@ const Home = () => {
             />
           );
         })}
-      </CardListContainer>
-    </Layout>
+      </S.CardListContainer>
+    </S.Layout>
   );
 };
 
