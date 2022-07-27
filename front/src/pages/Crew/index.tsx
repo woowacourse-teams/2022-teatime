@@ -3,10 +3,9 @@ import Card from '@components/Card';
 import useFetch from '@hooks/useFetch';
 import type { Coach } from '@typings/domain';
 import { ROUTES } from '@constants/index';
-import { CardListContainer, Layout } from './styles';
-import Loading from '@components/Loading/index';
+import * as S from './styles';
 
-const Home = () => {
+const Crew = () => {
   const navigate = useNavigate();
   const { data: coaches, isLoading, isError } = useFetch<Coach[], null>('/api/coaches');
 
@@ -15,11 +14,10 @@ const Home = () => {
   };
 
   if (isError) return <h1>error</h1>;
-  if (isLoading) return <Loading />;
 
   return (
-    <Layout>
-      <CardListContainer>
+    <S.Layout>
+      <S.CardListContainer>
         {coaches?.map((coach) => {
           return (
             <Card
@@ -32,9 +30,9 @@ const Home = () => {
             />
           );
         })}
-      </CardListContainer>
-    </Layout>
+      </S.CardListContainer>
+    </S.Layout>
   );
 };
 
-export default Home;
+export default Crew;

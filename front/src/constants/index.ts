@@ -1,6 +1,6 @@
 const ROUTES = {
-  SELECT_USER: '/',
-  HOME: '/crew',
+  HOME: '/',
+  CREW: '/crew',
   COACH: '/coach',
   SCHEDULE: '/schedule',
   RESERVATION: '/reservation',

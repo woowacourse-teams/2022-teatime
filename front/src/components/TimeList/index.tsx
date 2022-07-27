@@ -1,18 +1,19 @@
 import React, { useContext, useState } from 'react';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
-import CheckCircle from '@assets/check-circle.svg';
 import useModal from '@hooks/useModal';
-import api from '@api/index';
-import { TimeListContainer, TimeBox, ReserveButtonWrapper } from './styles';
+import { ScheduleStateContext } from '@context/ScheduleProvider';
+import CheckCircle from '@assets/check-circle.svg';
+import * as S from './styles';
 
 const TimeList = () => {
-  const { schedules } = useContext(ScheduleStateContext);
+  const { daySchedule } = useContext(ScheduleStateContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
 
   const handleClickTime = (id: number) => {
     setSelectedTimeId(id);
@@ -37,25 +38,26 @@ const TimeList = () => {
   if (isError) return <h1>error</h1>;
 
   return (
-    <TimeListContainer>
-      {schedules.map((schedule) => {
+    <S.TimeListContainer>
+      {coachSchedule.map((schedule) => {
         const time = schedule.dateTime.slice(11, 16);
 
         return (
           <React.Fragment key={schedule.id}>
             <Conditional condition={selectedTimeId === schedule.id}>
-              <ReserveButtonWrapper>
+              <S.ReserveButtonWrapper>
                 <div>{time}</div>
                 <button onClick={() => handleClickReservationButton(schedule.id)}>예약하기</button>
-              </ReserveButtonWrapper>
+              </S.ReserveButtonWrapper>
             </Conditional>
-            <Conditional condition={selectedTimeId !== schedule.id && !!schedule.isPossible}>
-              <TimeBox onClick={() => handleClickTime(schedule.id)}>{time}</TimeBox>
-            </Conditional>
-            <Conditional condition={selectedTimeId !== schedule.id && !schedule.isPossible}>
-              <TimeBox aria-disabled={false} disabled>
+            <Conditional condition={selectedTimeId !== schedule.id}>
+              <S.TimeBox
+                isPossible={schedule.isPossible}
+                aria-disabled={schedule.isPossible}
+                onClick={() => handleClickTime(schedule.id)}
+              >
                 {time}
-              </TimeBox>
+              </S.TimeBox>
             </Conditional>
           </React.Fragment>
         );
@@ -70,7 +72,7 @@ const TimeList = () => {
           closeModal={closeModal}
         />
       )}
-    </TimeListContainer>
+    </S.TimeListContainer>
   );
 };
 
