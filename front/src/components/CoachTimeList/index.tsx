@@ -18,7 +18,7 @@ const CoachTimeList = () => {
     setIsSelectedAll((prev) => !prev);
   };
 
-  const handleEnrollSchedules = async () => {
+  const handleUpdateSchedules = async () => {
     const selectedTimes = daySchedule.schedules.reduce((newArray, { isSelected, dateTime }) => {
       if (isSelected) {
         newArray.push(dateTime);
@@ -64,7 +64,7 @@ const CoachTimeList = () => {
           <S.CheckButton onClick={handleSelectedAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}
           </S.CheckButton>
-          <S.ConfirmButton onClick={handleEnrollSchedules}>확인</S.ConfirmButton>
+          <S.ConfirmButton onClick={handleUpdateSchedules}>확인</S.ConfirmButton>
         </S.ButtonContainer>
       </Conditional>
     </div>
