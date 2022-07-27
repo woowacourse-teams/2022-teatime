@@ -68,7 +68,7 @@ public class Schedule {
         return this.coach.getId().equals(coachId);
     }
 
-    public void cancelReservation() {
+    public void init() {
         this.isPossible = true;
     }
 }

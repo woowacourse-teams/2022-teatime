@@ -48,6 +48,7 @@ public class Reservation {
         if (isApproved) {
             status = ReservationStatus.APPROVED;
         }
-        schedule.cancelReservation();
+        schedule.init();
     }
 }
+
