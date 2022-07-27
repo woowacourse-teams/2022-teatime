@@ -42,7 +42,7 @@ type Action =
       year: string;
       month: string;
     }
-  | { type: 'CLICK_DATE'; day: number; date: string }
+  | { type: 'SELECT_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
   | { type: 'SELECT_ALL_TIMES'; isSelectedAll: boolean }
   | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] };
@@ -89,7 +89,7 @@ const reducer = (state: State, action: Action) => {
 
       return { ...state, monthSchedule: newMonthSchedule };
     }
-    case 'CLICK_DATE': {
+    case 'SELECT_DATE': {
       const selectedDaySchedule = state.monthSchedule.find(
         (daySchedule) => daySchedule.day === action.day
       ) as DaySchedule;

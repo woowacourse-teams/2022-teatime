@@ -45,7 +45,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
     if (isWeekend) return;
 
     dispatch({
-      type: 'CLICK_DATE',
+      type: 'SELECT_DATE',
       day,
       date: `${year}-${month}-${String(day).padStart(2, '0')}`,
     });
