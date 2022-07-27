@@ -41,10 +41,19 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-processResources.dependsOn('copySecret')
+processResources.dependsOn('copySecret','copyTestSecret')
 
 task copySecret(type: Copy) {
     from '../config/application.yml'
     into 'src/main/resources'
 }
+
+task copyTestSecret(type: Copy) {
+    from '../config/application-test.yml'
+    into 'src/test/resources'
+    rename {
+        String fileName -> fileName.replace('application-test','application')
+    }
+}
+
 
