@@ -22,7 +22,7 @@ public class CoachController {
     private final CoachService coachService;
 
     @GetMapping
-    public ResponseEntity<List<CoachResponse>> findCoachList() {
+    public ResponseEntity<List<CoachResponse>> findCoaches() {
         List<CoachResponse> responses = coachService.findAll();
         return ResponseEntity.ok(responses);
     }
