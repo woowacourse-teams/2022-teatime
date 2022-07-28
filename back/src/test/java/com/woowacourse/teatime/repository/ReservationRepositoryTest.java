@@ -39,8 +39,8 @@ class ReservationRepositoryTest {
         schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
     }
 
-    @Test
     @DisplayName("크루에 해당하는 면담 목록을 조회한다.")
+    @Test
     void findByCrewId() {
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));

@@ -40,8 +40,8 @@ class ScheduleServiceTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    @Test
     @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
+    @Test
     void find_past() {
         Coach coach = coachRepository.save(COACH_BROWN);
         scheduleRepository.save(new Schedule(coach, LocalDateTime.now().minusDays(1L)));
@@ -50,8 +50,8 @@ class ScheduleServiceTest {
         assertThat(scheduleResponses).hasSize(0);
     }
 
-    @Test
     @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
+    @Test
     void find_future() {
         Coach coach = coachRepository.save(COACH_BROWN);
         scheduleRepository.save(new Schedule(coach, LocalDateTime.of(LocalDate.now(), LocalTime.MAX)));
@@ -60,8 +60,8 @@ class ScheduleServiceTest {
         assertThat(scheduleResponses).hasSize(1);
     }
 
-    @Test
     @DisplayName("코치 아이디가 존재하지 않는 다면 예외를 발생시킨다,")
+    @Test
     void find_NotExistedCoachException() {
         Coach coach = coachRepository.save(COACH_BROWN);
         Schedule schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
@@ -71,8 +71,8 @@ class ScheduleServiceTest {
                 .isInstanceOf(NotFoundCoachException.class);
     }
 
-    @Test
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
+    @Test
     void update() {
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();

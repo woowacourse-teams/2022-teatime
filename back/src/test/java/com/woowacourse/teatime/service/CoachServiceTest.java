@@ -18,8 +18,8 @@ public class CoachServiceTest {
     @Autowired
     CoachService coachService;
 
-    @Test
     @DisplayName("코치 목록을 조회한다.")
+    @Test
     void findAll() {
         CoachSaveRequest request1 = new CoachSaveRequest("brown", "i am legend", "image");
         CoachSaveRequest request2 = new CoachSaveRequest("june", "i am legend e", "image");
