@@ -5,7 +5,7 @@ import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.exception.NotExistedCrewException;
+import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.repository.CrewRepository;
@@ -26,9 +26,9 @@ public class ReservationService {
 
     public Long save(ReservationRequest reservationRequest) {
         Crew crew = crewRepository.findById(reservationRequest.getCrewId())
-                .orElseThrow(NotExistedCrewException::new);
+                .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                        reservationRequest.getScheduleId(), reservationRequest.getCoachId())
+                reservationRequest.getScheduleId(), reservationRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -41,8 +41,9 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
         validateReservation(reservationApproveRequest.getCoachId(), reservation);
 
-        if (reservationApproveRequest.getIsApproved()) {
-            reservation.approve();
+        reservation.confirm(reservationApproveRequest.getIsApproved());
+        if (!reservationApproveRequest.getIsApproved()) {
+            reservationRepository.delete(reservation);
         }
     }
 

@@ -5,6 +5,7 @@ import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
@@ -12,9 +13,10 @@ import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.AlreadyReservedException;
-import com.woowacourse.teatime.exception.NotExistedCrewException;
+import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
@@ -70,7 +72,7 @@ class ReservationServiceTest {
         ReservationRequest reservationRequest = new ReservationRequest(crew.getId() + 100L, coach.getId(),
                 schedule.getId());
         assertThatThrownBy(() -> reservationService.save(reservationRequest))
-                .isInstanceOf(NotExistedCrewException.class);
+                .isInstanceOf(NotFoundCrewException.class);
     }
 
     @DisplayName("예약을 할 때 스케줄 아이디가 존재하지 않는 아이디면 예외를 반환한다.")
@@ -103,7 +105,7 @@ class ReservationServiceTest {
                 .isInstanceOf(AlreadyReservedException.class);
     }
 
-    @DisplayName("예약을 승인한다.")
+    @DisplayName("면담 예약을 승인한다.")
     @Test
     void approveReservation() {
         ReservationRequest reservationRequest = new ReservationRequest(crew.getId(), coach.getId(), schedule.getId());
@@ -113,6 +115,21 @@ class ReservationServiceTest {
         reservationService.approve(reservationId, reservationApproveRequest);
 
         Reservation foundReservation = reservationRepository.findById(reservationId).get();
-        assertThat(foundReservation.isApproved()).isTrue();
+        assertThat(foundReservation.getStatus()).isEqualTo(ReservationStatus.APPROVED);
+    }
+
+    @DisplayName("승인 전, 면담 예약을 거절한다. -> 예약이 삭제된다.")
+    @Test
+    void approveReservation_deny() {
+        ReservationRequest reservationRequest = new ReservationRequest(crew.getId(), coach.getId(), schedule.getId());
+        Long reservationId = reservationService.save(reservationRequest);
+        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), false);
+
+        reservationService.approve(reservationId, reservationApproveRequest);
+
+        assertAll(
+                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(schedule.getIsPossible()).isTrue()
+        );
     }
 }

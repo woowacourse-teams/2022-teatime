@@ -3,6 +3,11 @@ package com.woowacourse.teatime.acceptance;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import com.woowacourse.teatime.controller.dto.ScheduleResponse;
 import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
@@ -68,21 +73,29 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> 스케쥴_수정_요청됨(Long coachId, ScheduleUpdateRequest request) {
-        return RestAssured.given().log().all()
+        return RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("coachId", coachId)
                 .body(request)
+                .filter(document("update-schedule", requestFields(
+                        fieldWithPath("date").description("날짜"),
+                        fieldWithPath("schedules").description("스케줄")
+                )))
                 .when().put("/api/coaches/{coachId}/schedules")
                 .then().log().all()
                 .extract();
     }
 
     private ExtractableResponse<Response> 스케쥴_조회_요청됨(Long coachId, int year, int month) {
-        return RestAssured.given().log().all()
+        return RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("coachId", coachId)
                 .queryParam("year", year)
                 .queryParam("month", month)
+                .filter(document("find-schedules", responseFields(
+                        subsectionWithPath("[].day").description("날짜"),
+                        subsectionWithPath("[].schedules").description("스케줄")
+                )))
                 .when().get("/api/coaches/{coachId}/schedules")
                 .then().log().all()
                 .extract();

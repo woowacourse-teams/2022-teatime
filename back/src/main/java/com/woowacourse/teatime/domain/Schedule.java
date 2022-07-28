@@ -14,8 +14,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Schedule {
 
@@ -67,4 +67,9 @@ public class Schedule {
     public boolean isSameCoach(Long coachId) {
         return this.coach.getId().equals(coachId);
     }
+
+    public void init() {
+        this.isPossible = true;
+    }
 }
+
