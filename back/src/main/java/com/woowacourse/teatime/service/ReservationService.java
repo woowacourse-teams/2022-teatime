@@ -2,6 +2,7 @@ package com.woowacourse.teatime.service;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
+import com.woowacourse.teatime.controller.dto.ReservationResponse;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
@@ -11,6 +12,7 @@ import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,7 @@ public class ReservationService {
         Crew crew = crewRepository.findById(reservationRequest.getCrewId())
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                reservationRequest.getScheduleId(), reservationRequest.getCoachId())
+                        reservationRequest.getScheduleId(), reservationRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -52,6 +54,17 @@ public class ReservationService {
         if (!schedule.isSameCoach(coachId)) {
             throw new NotFoundReservationException();
         }
+    }
+
+    public List<ReservationResponse> findByCrew(Long crewId) {
+        validateCrewId(crewId);
+        List<Reservation> reservations = reservationRepository.findByCrewId(crewId);
+        return ReservationResponse.from(reservations);
+    }
+
+    private void validateCrewId(Long crewId) {
+        crewRepository.findById(crewId)
+                .orElseThrow(NotFoundCrewException::new);
     }
 }
 

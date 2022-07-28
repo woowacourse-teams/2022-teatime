@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
+import com.woowacourse.teatime.controller.dto.ReservationResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
@@ -22,6 +23,7 @@ import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -131,5 +133,16 @@ class ReservationServiceTest {
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
+    }
+
+    @DisplayName("크루에 해당되는 면담 예약 목록을 조회한다.")
+    @Test
+    void findByCrew() {
+        ReservationRequest reservationRequest = new ReservationRequest(crew.getId(), coach.getId(), schedule.getId());
+        reservationService.save(reservationRequest);
+
+        List<ReservationResponse> reservations = reservationService.findByCrew(crew.getId());
+
+        assertThat(reservations).hasSize(1);
     }
 }
