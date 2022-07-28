@@ -9,17 +9,17 @@ import org.junit.jupiter.api.Test;
 
 class RoleTest {
 
-    @DisplayName("크루를 찾을 수 있다.")
+    @DisplayName("코치를 찾을 수 있다.")
     @Test
-    void search_crew() {
+    void search_coach() {
         String role = "COACH";
 
         assertThat(Role.search(role)).isEqualTo(Role.COACH);
     }
 
-    @DisplayName("코치를 찾을 수 있다.")
+    @DisplayName("크루를 찾을 수 있다.")
     @Test
-    void search_coach() {
+    void search_crew() {
         String role = "CREW";
 
         assertThat(Role.search(role)).isEqualTo(Role.CREW);
