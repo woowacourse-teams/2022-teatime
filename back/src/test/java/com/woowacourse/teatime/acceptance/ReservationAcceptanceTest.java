@@ -52,7 +52,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    @DisplayName("예약을 승인한다.")
+    @DisplayName("코치가 예약을 승인 및 거부한다.")
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void approve(boolean isApprove) {
