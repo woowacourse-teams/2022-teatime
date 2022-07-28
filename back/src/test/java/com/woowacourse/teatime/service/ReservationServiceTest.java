@@ -161,6 +161,19 @@ class ReservationServiceTest {
         );
     }
 
+    @DisplayName("크루가 승인되지 않은 예약을 취소 가능하다")
+    @Test
+    void cancel_승인되지_않은_상태의_예약을_취소() {
+        Long reservationId = 예약에_성공한다();
+
+        reservationService.cancel(reservationId, new ReservationCancelRequest(crew.getId(), "CREW"));
+
+        assertAll(
+                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(schedule.getIsPossible()).isTrue()
+        );
+    }
+
     @DisplayName("면담 예약을 취소할 때, 코치나 크루가 아니면 에러가 발생한다.")
     @ParameterizedTest
     @ValueSource(strings = {"DOCTOR", "FAKER", "ING"})
@@ -173,13 +186,13 @@ class ReservationServiceTest {
                 .isInstanceOf(NotFoundRoleException.class);
     }
 
-    @DisplayName("면담 예약을 취소할 때, 승인되지 않는 예약이면 에러가 발생한다.")
+    @DisplayName("코치가 면담 예약을 취소할 때, 승인되지 않은 예약이면 에러가 발생한다.")
     @Test
     void cancel_InvalidCancelException() {
         Long reservationId = 예약에_성공한다();
 
         assertThatThrownBy(
-                () -> reservationService.cancel(reservationId, new ReservationCancelRequest(coach.getId(), "CREW")))
+                () -> reservationService.cancel(reservationId, new ReservationCancelRequest(coach.getId(), "COACH")))
                 .isInstanceOf(InvalidCancelException.class);
     }
 

@@ -53,19 +53,36 @@ class ReservationTest {
                 .isInstanceOf(AlreadyApprovedException.class);
     }
 
-    @DisplayName("예약을 취소할 수 있다.")
+    @DisplayName("코치가 예약을 취소할 수 있다.")
     @Test
     void cancel_coach() {
         reservation.confirm(true);
-        reservation.cancel();
+        reservation.cancel(Role.COACH);
 
         assertThat(schedule.getIsPossible()).isTrue();
     }
 
-    @DisplayName("예약을 취소할 때, 상태가 승인상태가 아닌 경우 에러가 발생한다.")
+    @DisplayName("크루가 예약을 취소할 수 있다.")
+    @Test
+    void cancel_crew() {
+        reservation.confirm(true);
+        reservation.cancel(Role.CREW);
+
+        assertThat(schedule.getIsPossible()).isTrue();
+    }
+
+    @DisplayName("크루가 승인되지 않은 상태의 예약을 취소할 수 있다.")
+    @Test
+    void cancel_승인되지_않은_상태의_예약을_취소() {
+        reservation.cancel(Role.CREW);
+
+        assertThat(schedule.getIsPossible()).isTrue();
+    }
+
+    @DisplayName("코치가 예약을 취소할 때, 상태가 승인상태가 아닌 경우 에러가 발생한다.")
     @Test
     void cancel_InvalidCancelException() {
-        assertThatThrownBy(() -> reservation.cancel())
+        assertThatThrownBy(() -> reservation.cancel(Role.COACH))
                 .isInstanceOf(InvalidCancelException.class);
 
     }

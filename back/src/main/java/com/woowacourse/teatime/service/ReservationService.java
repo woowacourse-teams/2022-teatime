@@ -55,7 +55,7 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
 
         validateAuthorization(reservationCancelRequest, role, reservation);
-        reservation.cancel();
+        reservation.cancel(role);
         reservationRepository.delete(reservation);
     }
 

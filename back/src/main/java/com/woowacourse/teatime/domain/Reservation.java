@@ -53,11 +53,16 @@ public class Reservation {
         schedule.init();
     }
 
-    public void cancel() {
-        if (!ReservationStatus.isApproved(status)) {
-            throw new InvalidCancelException();
+    public void cancel(Role role) {
+        if (isCancelBeforeApprovedByCrew(role) || ReservationStatus.isApproved(status)) {
+            schedule.init();
+            return;
         }
-        schedule.init();
+        throw new InvalidCancelException();
+    }
+
+    private boolean isCancelBeforeApprovedByCrew(Role role) {
+        return Role.isCrew(role) && ReservationStatus.isBeforeApproved(status);
     }
 
     public boolean isSameCrew(Long crewId) {
