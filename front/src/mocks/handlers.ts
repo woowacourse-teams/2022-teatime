@@ -1,6 +1,10 @@
-import type { DaySchedule as DayScheduleResponse, Coach as CoachResponse } from '@typings/domain';
+import type {
+  DaySchedule as DayScheduleResponse,
+  Coach as CoachResponse,
+  Crew as CrewResponse,
+} from '@typings/domain';
 import { rest } from 'msw';
-import { coachList, scheduleList } from './data';
+import { coachList, crewList, scheduleList } from './data';
 
 const handlers = [
   rest.get<CoachResponse[]>('/api/coaches', (req, res, ctx) => {
@@ -17,6 +21,10 @@ const handlers = [
 
   rest.put('/api/coaches/:id/schedules', (req, res, ctx) => {
     return res(ctx.status(200));
+  }),
+
+  rest.get<CrewResponse[]>('/api/crews', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(crewList));
   }),
 ];
 

@@ -97,4 +97,39 @@ const scheduleList = [
   },
 ];
 
-export { coachList, scheduleList };
+const crewList = [
+  {
+    id: 1,
+    name: '아키',
+    image:
+      'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+    dateTime: '2022-08-10T14:00:00.000Z',
+    status: 'pending',
+  },
+  {
+    id: 2,
+    name: '마루',
+    image:
+      'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+    dateTime: '2022-08-11T15:00:00.000Z',
+    status: 'approve',
+  },
+  {
+    id: 3,
+    name: '호두',
+    image:
+      'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+    dateTime: '2022-08-12T11:00:00.000Z',
+    status: 'approve',
+  },
+  {
+    id: 4,
+    name: '호야',
+    image:
+      'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+    dateTime: '2022-08-13T20:00:00.000Z',
+    status: 'comment',
+  },
+];
+
+export { coachList, scheduleList, crewList };
