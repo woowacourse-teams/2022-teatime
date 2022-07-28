@@ -7,6 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config: webpack.Configuration = {
   mode: isDevelopment ? 'development' : 'production',
+  devtool: isDevelopment ? 'inline-source-map' : 'hidden-source-map',
   entry: {
     app: './src/index.tsx',
   },
@@ -16,11 +17,21 @@ const config: webpack.Configuration = {
       '@hooks': path.resolve(__dirname, 'src/hooks'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@pages': path.resolve(__dirname, 'src/pages'),
+      '@typings': path.resolve(__dirname, 'src/typings'),
+      '@constants': path.resolve(__dirname, 'src/constants'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@styles': path.resolve(__dirname, 'src/styles'),
+      '@assets': path.resolve(__dirname, 'src/assets'),
+      '@context': path.resolve(__dirname, 'src/context'),
+      '@api': path.resolve(__dirname, 'src/api'),
     },
   },
   output: {
+    publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
+    assetModuleFilename: 'images/[hash][ext][query]',
+    clean: true,
   },
   module: {
     rules: [
@@ -40,6 +51,14 @@ const config: webpack.Configuration = {
         test: /\.css?$/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(png|svg|gif)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
   plugins: [
@@ -50,7 +69,10 @@ const config: webpack.Configuration = {
   ],
   devServer: {
     historyApiFallback: true,
-    port: 3000,
+    port: 8080,
+    open: true,
+    hot: true,
+    static: { directory: path.resolve(__dirname, 'public') },
   },
 };
 
