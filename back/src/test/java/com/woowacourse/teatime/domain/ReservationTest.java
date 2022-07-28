@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
+import com.woowacourse.teatime.exception.InvalidCancelException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,5 +51,22 @@ class ReservationTest {
 
         assertThatThrownBy(() -> reservation.confirm(승인을_한다))
                 .isInstanceOf(AlreadyApprovedException.class);
+    }
+
+    @DisplayName("예약을 취소할 수 있다.")
+    @Test
+    void cancel_coach() {
+        reservation.confirm(true);
+        reservation.cancel();
+
+        assertThat(schedule.getIsPossible()).isTrue();
+    }
+
+    @DisplayName("예약을 취소할 때, 상태가 승인상태가 아닌 경우 에러가 발생한다.")
+    @Test
+    void cancel_InvalidCancelException() {
+        assertThatThrownBy(() -> reservation.cancel())
+                .isInstanceOf(InvalidCancelException.class);
+
     }
 }

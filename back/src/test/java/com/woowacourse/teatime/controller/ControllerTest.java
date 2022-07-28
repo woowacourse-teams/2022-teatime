@@ -50,4 +50,13 @@ public class ControllerTest {
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(body));
     }
+
+    protected MockHttpServletRequestBuilder delete(String url, Object body)
+            throws JsonProcessingException {
+        return MockMvcRequestBuilders.delete(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(body));
+    }
+
 }
