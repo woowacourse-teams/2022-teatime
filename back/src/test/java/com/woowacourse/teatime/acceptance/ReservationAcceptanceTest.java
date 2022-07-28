@@ -90,6 +90,10 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(document("reserve-cancel", requestFields(
+                        fieldWithPath("applicantId").description("취소 신청자 아이디"),
+                        fieldWithPath("role").description("신청자의 역할(코치, 크루)")
+                )))
                 .body(new ReservationCancelRequest(coachId, role))
                 .pathParam("reservationId", reservationId)
                 .when().delete("/api/reservations/{reservationId}")
