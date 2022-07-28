@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/coaches")
+@RequestMapping("/api/coaches")
 public class CoachController {
 
     private final CoachService coachService;
