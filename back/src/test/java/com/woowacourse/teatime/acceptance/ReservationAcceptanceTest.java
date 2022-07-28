@@ -15,6 +15,8 @@ import com.woowacourse.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,8 +53,9 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     }
 
     @DisplayName("예약을 승인한다.")
-    @Test
-    void approve() {
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void approve(boolean isApprove) {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         Long scheduleId = scheduleService.save(coachId, DATE_TIME);
         Long crewId = crewService.save();
@@ -66,6 +69,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
                         fieldWithPath("coachId").description("코치 아이디"),
                         fieldWithPath("isApproved").description("승인 여부")
                 )))
+                .body(new ReservationApproveRequest(coachId, isApprove))
                 .pathParam("reservationId", reservationId)
                 .when().post("/api/reservations/{reservationId}")
                 .then().log().all()
