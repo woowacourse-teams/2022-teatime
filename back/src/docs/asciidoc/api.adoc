@@ -1,0 +1,52 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+= 티타임 API 명세서
+
+== 코치 API
+
+=== 코치 저장
+==== request
+include::{snippets}/create-coach/http-request.adoc[]
+==== response
+include::{snippets}/create-coach/http-response.adoc[]
+
+=== 코치 목록 조회
+==== request
+include::{snippets}/find-all-coaches/http-request.adoc[]
+==== response
+include::{snippets}/find-all-coaches/http-response.adoc[]
+
+
+== 스케줄 API
+
+=== 스케줄 업데이트
+==== request
+include::{snippets}/update-schedule/http-request.adoc[]
+==== response
+include::{snippets}/update-schedule/http-response.adoc[]
+
+=== 스케줄 조회
+==== request
+include::{snippets}/find-schedules/http-request.adoc[]
+==== response
+include::{snippets}/find-schedules/http-response.adoc[]
+
+== 예약 API
+=== 예약하기
+==== request
+include::{snippets}/reserve/http-request.adoc[]
+==== response
+include::{snippets}/reserve/http-response.adoc[]
+
+=== 예약 승인하기
+==== request
+include::{snippets}/reserve-approve/http-request.adoc[]
+==== response
+include::{snippets}/reserve-approve/http-response.adoc[]
