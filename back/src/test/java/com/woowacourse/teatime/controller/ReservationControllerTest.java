@@ -3,9 +3,12 @@ package com.woowacourse.teatime.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ReservationControllerTest extends ControllerTest {
 
@@ -37,6 +40,24 @@ class ReservationControllerTest extends ControllerTest {
     @Test
     void reserveFailWrongCrewId() throws Exception {
         mockMvc.perform(post("/api/reservations", new ReservationRequest(null, 1L, 1L)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("예약 취소에 실패한다. -잘못된 신청자 아이디")
+    @ParameterizedTest
+    @ValueSource(longs = {0, -2, -100})
+    void cancelFailWrongApplicantId(Long applicantId) throws Exception {
+        mockMvc.perform(delete("/api/reservations/1", new ReservationCancelRequest(applicantId, "CREW")))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("예약 취소에 실패한다. -신청자 역할이 blank 인 경우")
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "", "   "})
+    void cancelFailWrongRole(String role) throws Exception {
+        mockMvc.perform(delete("/api/reservations/1", new ReservationCancelRequest(1L, role)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

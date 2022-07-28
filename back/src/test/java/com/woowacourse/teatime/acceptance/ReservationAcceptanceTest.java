@@ -7,12 +7,14 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.CrewService;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,13 +34,20 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @Autowired
     private ReservationService reservationService;
 
+    private Long coachId;
+    private Long scheduleId;
+    private Long crewId;
+
+    @BeforeEach
+    void setUp() {
+        coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        scheduleId = scheduleService.save(coachId, DATE_TIME);
+        crewId = crewService.save();
+    }
+
     @DisplayName("예약한다.")
     @Test
     void reserve() {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
-        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save();
-
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new ReservationRequest(crewId, coachId, scheduleId))
@@ -56,11 +65,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void approve(boolean isApprove) {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
-        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save();
-        ReservationRequest reservationRequest = new ReservationRequest(crewId, coachId, scheduleId);
-        Long reservationId = reservationService.save(reservationRequest);
+        Long reservationId = 예약에_성공한다();
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -74,5 +79,26 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
                 .when().post("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @DisplayName("코치 및 크루가 예약을 취소할 수 있다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"COACH", "CREW"})
+    void cancel_coach(String role) {
+        Long reservationId = 예약에_성공한다();
+        reservationService.approve(reservationId, new ReservationApproveRequest(coachId, true));
+
+        RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new ReservationCancelRequest(coachId, role))
+                .pathParam("reservationId", reservationId)
+                .when().delete("/api/reservations/{reservationId}")
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    private Long 예약에_성공한다() {
+        ReservationRequest reservationRequest = new ReservationRequest(crewId, coachId, scheduleId);
+        return reservationService.save(reservationRequest);
     }
 }

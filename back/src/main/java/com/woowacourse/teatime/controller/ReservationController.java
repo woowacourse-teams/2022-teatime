@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.controller;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.SheetService;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,5 +37,13 @@ public class ReservationController {
                                         @Valid @RequestBody ReservationApproveRequest reservationApproveRequest) {
         reservationService.approve(reservationId, reservationApproveRequest);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<Void> cancel(@PathVariable @NotNull Long reservationId,
+                                       @Valid @RequestBody ReservationCancelRequest reservationCancelRequest) {
+
+        reservationService.cancel(reservationId, reservationCancelRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
