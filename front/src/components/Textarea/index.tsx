@@ -7,10 +7,10 @@ interface TextareaProps {
 
 const Textarea = ({ id, label }: TextareaProps) => {
   return (
-    <div>
+    <S.TextareaContainer>
       <S.Label htmlFor={id}>{label}</S.Label>
       <S.Textarea id={id}></S.Textarea>
-    </div>
+    </S.TextareaContainer>
   );
 };
 
