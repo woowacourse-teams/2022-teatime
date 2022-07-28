@@ -55,17 +55,20 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
 
         reservation.cancel();
+        validateAuthorization(reservationCancelRequest, role, reservation);
+        reservationRepository.delete(reservation);
+    }
+
+    private void validateAuthorization(ReservationCancelRequest reservationCancelRequest, Role role,
+                                       Reservation reservation) {
         if (Role.isCoach(role)) {
             Long coachId = reservationCancelRequest.getApplicantId();
             validateIsSameCoach(coachId, reservation);
         }
-
         if (Role.isCrew(role)) {
             Long crewId = reservationCancelRequest.getApplicantId();
             validateIsSameCrew(crewId, reservation);
         }
-
-        reservationRepository.delete(reservation);
     }
 
     private void validateIsSameCrew(Long crewId, Reservation reservation) {
