@@ -41,12 +41,13 @@ public class Reservation {
         this.status = ReservationStatus.BEFORE_APPROVED;
     }
 
-    public void approve(boolean isApproved) {
+    public void confirm(boolean isApproved) {
         if (!ReservationStatus.isBeforeApproved(status)) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
             status = ReservationStatus.APPROVED;
+            return;
         }
         schedule.init();
     }

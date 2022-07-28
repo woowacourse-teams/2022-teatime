@@ -24,31 +24,31 @@ class ReservationTest {
 
     @DisplayName("면담을 승인한다.")
     @Test
-    void approve() {
+    void confirm_approve() {
         boolean 승인을_한다 = true;
 
-        reservation.approve(승인을_한다);
+        reservation.confirm(승인을_한다);
 
         assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.APPROVED);
     }
 
     @DisplayName("승인 전, 면담을 취소한다.")
     @Test
-    void deny_approval() {
+    void conform_denyApproval() {
         boolean 승인을_거절한다 = false;
 
-        reservation.approve(승인을_거절한다);
+        reservation.confirm(승인을_거절한다);
 
         assertThat(schedule.getIsPossible()).isTrue();
     }
 
     @DisplayName("승인이 되어 있는 상태에서 승인 요청을 하면 에러가 발생한다.")
     @Test
-    void name() {
-        reservation.approve(true);
+    void confirm_invalid() {
+        reservation.confirm(true);
         boolean 승인을_한다 = true;
 
-        assertThatThrownBy(() -> reservation.approve(승인을_한다))
+        assertThatThrownBy(() -> reservation.confirm(승인을_한다))
                 .isInstanceOf(AlreadyApprovedException.class);
     }
 }
