@@ -1,9 +1,11 @@
 package com.woowacourse.teatime.service;
 
 import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.ReservationRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.Role;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
@@ -39,7 +41,7 @@ public class ReservationService {
     public void approve(Long reservationId, ReservationApproveRequest reservationApproveRequest) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        validateReservation(reservationApproveRequest.getCoachId(), reservation);
+        validateIsSameCoach(reservationApproveRequest.getCoachId(), reservation);
 
         reservation.confirm(reservationApproveRequest.getIsApproved());
         if (!reservationApproveRequest.getIsApproved()) {
@@ -47,7 +49,32 @@ public class ReservationService {
         }
     }
 
-    private void validateReservation(Long coachId, Reservation reservation) {
+    public void cancel(Long reservationId, ReservationCancelRequest reservationCancelRequest) {
+        Role role = Role.search(reservationCancelRequest.getRole());
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+
+        reservation.cancel();
+        if (Role.isCoach(role)) {
+            Long coachId = reservationCancelRequest.getApplicantId();
+            validateIsSameCoach(coachId, reservation);
+        }
+
+        if (Role.isCrew(role)) {
+            Long crewId = reservationCancelRequest.getApplicantId();
+            validateIsSameCrew(crewId, reservation);
+        }
+
+        reservationRepository.delete(reservation);
+    }
+
+    private void validateIsSameCrew(Long crewId, Reservation reservation) {
+        if (!reservation.isSameCrew(crewId)) {
+            throw new NotFoundCrewException();
+        }
+    }
+
+    private void validateIsSameCoach(Long coachId, Reservation reservation) {
         Schedule schedule = reservation.getSchedule();
         if (!schedule.isSameCoach(coachId)) {
             throw new NotFoundReservationException();
