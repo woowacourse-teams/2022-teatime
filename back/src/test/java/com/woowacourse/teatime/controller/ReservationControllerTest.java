@@ -44,6 +44,15 @@ class ReservationControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @DisplayName("예약 취소에 성공한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"CREW", "COACH"})
+    void cancel(String role) throws Exception {
+        mockMvc.perform(delete("/api/reservations/1", new ReservationCancelRequest(1L, role)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
+
     @DisplayName("예약 취소에 실패한다. -잘못된 신청자 아이디")
     @ParameterizedTest
     @ValueSource(longs = {0, -2, -100})
