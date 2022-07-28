@@ -5,6 +5,7 @@ const TextareaContainer = styled.div`
 `;
 
 const Label = styled.label`
+  padding-left: 10px;
   font-weight: bold;
   color: ${({ theme }) => theme.colors.BLUE_800};
 `;
