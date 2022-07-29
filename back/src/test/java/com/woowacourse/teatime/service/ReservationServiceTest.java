@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
-import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewHistoryFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
@@ -148,7 +148,7 @@ class ReservationServiceTest {
                 schedule.getId());
         reservationService.save(reserveRequest);
 
-        List<CrewFindOwnReservationResponse> reservations = reservationService.findByCrew(crew.getId());
+        List<CrewHistoryFindResponse> reservations = reservationService.findByCrew(crew.getId());
 
         assertThat(reservations).hasSize(1);
     }

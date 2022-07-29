@@ -2,7 +2,7 @@ package com.woowacourse.teatime.service;
 
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
-import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewHistoryFindResponse;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
@@ -56,10 +56,10 @@ public class ReservationService {
         }
     }
 
-    public List<CrewFindOwnReservationResponse> findByCrew(Long crewId) {
+    public List<CrewHistoryFindResponse> findByCrew(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations = reservationRepository.findByCrewId(crewId);
-        return CrewFindOwnReservationResponse.from(reservations);
+        return CrewHistoryFindResponse.from(reservations);
     }
 
     private void validateCrewId(Long crewId) {
