@@ -6,8 +6,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
-import com.woowacourse.teatime.controller.dto.ReservationRequest;
+import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.CrewService;
 import com.woowacourse.teatime.service.ReservationService;
@@ -41,7 +41,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ReservationRequest(crewId, coachId, scheduleId))
+                .body(new ReservationReserveRequest(crewId, coachId, scheduleId))
                 .filter(document("reserve", requestFields(
                         fieldWithPath("crewId").description("크루 아이디"),
                         fieldWithPath("coachId").description("코치 아이디"),
@@ -59,18 +59,18 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         Long scheduleId = scheduleService.save(coachId, DATE_TIME);
         Long crewId = crewService.save();
-        ReservationRequest reservationRequest = new ReservationRequest(crewId, coachId, scheduleId);
-        Long reservationId = reservationService.save(reservationRequest);
+        ReservationReserveRequest request = new ReservationReserveRequest(crewId, coachId,
+                scheduleId);
+        Long reservationId = reservationService.save(request);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ReservationApproveRequest(coachId, true))
+                .pathParam("reservationId", reservationId)
+                .body(new ReservationApproveRequest(coachId, isApprove))
                 .filter(document("reserve-approve", requestFields(
                         fieldWithPath("coachId").description("코치 아이디"),
                         fieldWithPath("isApproved").description("승인 여부")
                 )))
-                .body(new ReservationApproveRequest(coachId, isApprove))
-                .pathParam("reservationId", reservationId)
                 .when().post("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());

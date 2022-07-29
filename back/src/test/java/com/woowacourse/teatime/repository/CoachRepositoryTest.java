@@ -14,16 +14,16 @@ public class CoachRepositoryTest {
     @Autowired
     private CoachRepository coaches;
 
-    @Test
     @DisplayName("전체 코치 목록을 조회한다.")
+    @Test
     void findAll_size3() {
         coaches.save(new Coach("제이슨"));
 
         assertThat(coaches.findAll().size()).isEqualTo(1);
     }
 
-    @Test
     @DisplayName("전체 코치 목록을 조회한다.")
+    @Test
     void findAll_size4() {
         coaches.save(new Coach("제이슨"));
         coaches.save(new Coach("브라운"));

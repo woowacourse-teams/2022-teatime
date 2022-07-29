@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.controller.dto;
+package com.woowacourse.teatime.controller.dto.response;
 
 import com.woowacourse.teatime.domain.Schedule;
 import java.time.LocalDateTime;
@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ScheduleResponse {
+public class ScheduleFindResponse {
 
     private Integer day;
     private List<ScheduleDto> schedules;
 
-    public static List<ScheduleResponse> from(List<Schedule> schedules) {
+    public static List<ScheduleFindResponse> from(List<Schedule> schedules) {
         List<Integer> days = findDays(schedules);
-        List<ScheduleResponse> scheduleResponses = new ArrayList<>();
+        List<ScheduleFindResponse> scheduleFindRespons = new ArrayList<>();
         for (Integer day : days) {
             List<Schedule> scheduleByDay = findByDay(day, schedules);
-            scheduleResponses.add(ScheduleResponse.of(day, scheduleByDay));
+            scheduleFindRespons.add(ScheduleFindResponse.of(day, scheduleByDay));
         }
-        return scheduleResponses;
+        return scheduleFindRespons;
     }
 
     private static List<Integer> findDays(List<Schedule> schedules) {
@@ -42,10 +42,10 @@ public class ScheduleResponse {
                 .collect(Collectors.toList());
     }
 
-    private static ScheduleResponse of(int day, List<Schedule> schedules) {
+    private static ScheduleFindResponse of(int day, List<Schedule> schedules) {
         List<ScheduleDto> scheduleDtos = schedules.stream()
                 .map(ScheduleDto::new)
                 .collect(Collectors.toList());
-        return new ScheduleResponse(day, scheduleDtos);
+        return new ScheduleFindResponse(day, scheduleDtos);
     }
 }

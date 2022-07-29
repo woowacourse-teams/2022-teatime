@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.controller.dto;
+package com.woowacourse.teatime.controller.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.controller.dto;
+package com.woowacourse.teatime.controller.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;

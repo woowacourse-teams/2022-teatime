@@ -1,12 +1,10 @@
 package com.woowacourse.teatime.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.repository.CrewRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional

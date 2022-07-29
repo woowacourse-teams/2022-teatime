@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.controller;
 
-import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
-import com.woowacourse.teatime.controller.dto.ReservationRequest;
+import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.SheetService;
 import javax.validation.Valid;
@@ -24,16 +24,16 @@ public class ReservationController {
     private final SheetService sheetService;
 
     @PostMapping
-    public ResponseEntity<Void> reserve(@Valid @RequestBody ReservationRequest reservationRequest) {
-        Long reservationId = reservationService.save(reservationRequest);
-        sheetService.save(reservationRequest.getCoachId(), reservationId);
+    public ResponseEntity<Void> reserve(@Valid @RequestBody ReservationReserveRequest request) {
+        Long reservationId = reservationService.save(request);
+        sheetService.save(request.getCoachId(), reservationId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/{reservationId}")
     public ResponseEntity<Void> approve(@PathVariable @NotNull Long reservationId,
-                                        @Valid @RequestBody ReservationApproveRequest reservationApproveRequest) {
-        reservationService.approve(reservationId, reservationApproveRequest);
+                                        @Valid @RequestBody ReservationApproveRequest request) {
+        reservationService.approve(reservationId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
