@@ -9,7 +9,7 @@ const theme = {
     GRAY_200: '#e2e1e1',
     GRAY_300: '#c4c4c4',
     GRAY_500: '#a0a0a0',
-    BLUE_600: '#0169ff',
+    BLUE_600: '#0085ff',
     BLUE_800: '#3d5a80;',
     RED_300: '#e6aca8',
     ORANGE_600: '#ffa500',

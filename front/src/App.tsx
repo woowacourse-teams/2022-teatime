@@ -11,6 +11,7 @@ import Coach from '@pages/Coach';
 import Header from '@components/Header';
 import ScheduleProvider from '@context/ScheduleProvider';
 import { ROUTES } from './constants';
+import InterviewForm from './pages/InterviewForm/index';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -26,6 +27,7 @@ const App = () => {
         <Route path={ROUTES.COACH} element={<Coach />} />
         <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
         <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
+        <Route path={`${ROUTES.FORM}/:id`} element={<InterviewForm />} />
       </Routes>
     </ScheduleProvider>
   );
