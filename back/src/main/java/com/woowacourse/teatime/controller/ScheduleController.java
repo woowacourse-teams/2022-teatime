@@ -1,8 +1,8 @@
 package com.woowacourse.teatime.controller;
 
-import com.woowacourse.teatime.controller.dto.ScheduleRequest;
-import com.woowacourse.teatime.controller.dto.ScheduleResponse;
-import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleFindRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
 import com.woowacourse.teatime.service.ScheduleService;
 import java.util.List;
 import javax.validation.Valid;
@@ -25,10 +25,10 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> findSchedules(@PathVariable @NotNull Long coachId,
-                                                                @Valid @ModelAttribute ScheduleRequest request) {
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(coachId, request);
-        return ResponseEntity.ok(scheduleResponses);
+    public ResponseEntity<List<ScheduleFindResponse>> findSchedules(@PathVariable @NotNull Long coachId,
+                                                                    @Valid @ModelAttribute ScheduleFindRequest request) {
+        List<ScheduleFindResponse> scheduleFindRespons = scheduleService.find(coachId, request);
+        return ResponseEntity.ok(scheduleFindRespons);
     }
 
     @PutMapping

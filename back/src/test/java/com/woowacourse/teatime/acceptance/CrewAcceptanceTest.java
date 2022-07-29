@@ -8,8 +8,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.controller.dto.ReservationRequest;
-import com.woowacourse.teatime.controller.dto.ReservationResponse;
+import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.CrewService;
 import com.woowacourse.teatime.service.ScheduleService;
@@ -54,7 +54,8 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
-        List<ReservationResponse> result = response.jsonPath().getList(".", ReservationResponse.class);
+        List<CrewFindOwnReservationResponse> result = response.jsonPath()
+                .getList(".", CrewFindOwnReservationResponse.class);
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
@@ -65,7 +66,7 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     private void 면담_예약_요청됨(Long coachId, Long scheduleId, Long crewId) {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ReservationRequest(crewId, coachId, scheduleId))
+                .body(new ReservationReserveRequest(crewId, coachId, scheduleId))
                 .when().post("/api/reservations")
                 .then().log().all();
     }

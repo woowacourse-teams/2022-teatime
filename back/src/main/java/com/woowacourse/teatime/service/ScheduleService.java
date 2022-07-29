@@ -1,8 +1,8 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.controller.dto.ScheduleRequest;
-import com.woowacourse.teatime.controller.dto.ScheduleResponse;
-import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleFindRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.NotFoundCoachException;
@@ -33,14 +33,14 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponse> find(Long coachId, ScheduleRequest request) {
+    public List<ScheduleFindResponse> find(Long coachId, ScheduleFindRequest request) {
         validateCoachId(coachId);
 
         LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findLastDay(request.getYear(), request.getMonth());
         List<Schedule> schedules
                 = scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);
-        return ScheduleResponse.from(schedules);
+        return ScheduleFindResponse.from(schedules);
     }
 
     private void validateCoachId(Long id) {

@@ -5,9 +5,9 @@ import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.woowacourse.teatime.controller.dto.ScheduleRequest;
-import com.woowacourse.teatime.controller.dto.ScheduleResponse;
-import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleFindRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.NotFoundCoachException;
@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @TestConstructor(autowireMode = AutowireMode.ALL)
 class ScheduleServiceTest {
 
-    private static final ScheduleRequest REQUEST = new ScheduleRequest(2022, 7);
+    private static final ScheduleFindRequest REQUEST = new ScheduleFindRequest(2022, 7);
 
     @Autowired
     private ScheduleService scheduleService;
@@ -45,9 +45,9 @@ class ScheduleServiceTest {
     void find_past() {
         Coach coach = coachRepository.save(COACH_BROWN);
         scheduleRepository.save(new Schedule(coach, LocalDateTime.now().minusDays(1L)));
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
 
-        assertThat(scheduleResponses).hasSize(0);
+        assertThat(responses).hasSize(0);
     }
 
     @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
@@ -55,9 +55,9 @@ class ScheduleServiceTest {
     void find_future() {
         Coach coach = coachRepository.save(COACH_BROWN);
         scheduleRepository.save(new Schedule(coach, LocalDateTime.of(LocalDate.now(), LocalTime.MAX)));
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), REQUEST);
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
 
-        assertThat(scheduleResponses).hasSize(1);
+        assertThat(responses).hasSize(1);
     }
 
     @DisplayName("코치 아이디가 존재하지 않는 다면 예외를 발생시킨다,")
@@ -79,8 +79,8 @@ class ScheduleServiceTest {
         ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date, List.of(Date.findFirstTime(date)));
         scheduleService.update(coach.getId(), updateRequest);
 
-        ScheduleRequest request = new ScheduleRequest(date.getYear(), date.getMonthValue());
-        List<ScheduleResponse> scheduleResponses = scheduleService.find(coach.getId(), request);
-        assertThat(scheduleResponses).hasSize(1);
+        ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
+        assertThat(responses).hasSize(1);
     }
 }

@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.controller.dto;
+package com.woowacourse.teatime.controller.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Coach;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReservationResponse {
+public class CrewFindOwnReservationResponse {
 
     private Long reservationId;
 
@@ -26,16 +26,16 @@ public class ReservationResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
 
-    public static List<ReservationResponse> from(List<Reservation> reservations) {
+    public static List<CrewFindOwnReservationResponse> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(ReservationResponse::from)
+                .map(CrewFindOwnReservationResponse::from)
                 .collect(Collectors.toList());
     }
 
-    private static ReservationResponse from(Reservation reservation) {
+    private static CrewFindOwnReservationResponse from(Reservation reservation) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
-        return new ReservationResponse(reservation.getId(), coach.getName(), coach.getImage(),
+        return new CrewFindOwnReservationResponse(reservation.getId(), coach.getName(), coach.getImage(),
                 schedule.getLocalDateTime());
     }
 }

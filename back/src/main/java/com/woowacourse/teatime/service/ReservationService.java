@@ -1,8 +1,8 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.controller.dto.ReservationApproveRequest;
-import com.woowacourse.teatime.controller.dto.ReservationRequest;
-import com.woowacourse.teatime.controller.dto.ReservationResponse;
+import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
@@ -26,11 +26,11 @@ public class ReservationService {
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public Long save(ReservationRequest reservationRequest) {
-        Crew crew = crewRepository.findById(reservationRequest.getCrewId())
+    public Long save(ReservationReserveRequest reservationReserveRequest) {
+        Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                        reservationRequest.getScheduleId(), reservationRequest.getCoachId())
+                        reservationReserveRequest.getScheduleId(), reservationReserveRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -56,10 +56,10 @@ public class ReservationService {
         }
     }
 
-    public List<ReservationResponse> findByCrew(Long crewId) {
+    public List<CrewFindOwnReservationResponse> findByCrew(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations = reservationRepository.findByCrewId(crewId);
-        return ReservationResponse.from(reservations);
+        return CrewFindOwnReservationResponse.from(reservations);
     }
 
     private void validateCrewId(Long crewId) {

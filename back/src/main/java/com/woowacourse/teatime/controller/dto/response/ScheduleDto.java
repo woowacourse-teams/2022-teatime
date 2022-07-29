@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.controller.dto;
+package com.woowacourse.teatime.controller.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Schedule;
