@@ -6,11 +6,11 @@ import * as S from './styles';
 
 interface BoardItemProps {
   dateTime: string;
-  name: string;
+  personName: string;
   buttonName: string;
 }
 
-const BoardItem = ({ dateTime, name, buttonName }: BoardItemProps) => {
+const BoardItem = ({ dateTime, personName, buttonName }: BoardItemProps) => {
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
@@ -38,7 +38,7 @@ const BoardItem = ({ dateTime, name, buttonName }: BoardItemProps) => {
               'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png'
             }
           />
-          <span>{name}</span>
+          <span>{personName}</span>
         </div>
         <button>{buttonName}</button>
       </S.BottomSection>

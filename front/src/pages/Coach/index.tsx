@@ -49,7 +49,14 @@ const Coach = () => {
             }}
           >
             {crews?.map((crew) => {
-              return <BoardItem key={crew.id} buttonName="승인하기" {...crew} />;
+              return (
+                <BoardItem
+                  key={crew.id}
+                  buttonName="승인하기"
+                  dateTime={crew.dateTime}
+                  personName={crew.name}
+                />
+              );
             })}
           </div>
         </S.Board>
