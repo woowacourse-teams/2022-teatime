@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.controller.dto.response.SheetResponse;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Sheet;
@@ -33,5 +34,12 @@ public class SheetService {
 
         List<Sheet> savedSheets = sheetRepository.saveAll(sheets);
         return savedSheets.size();
+    }
+
+    public SheetResponse findByReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        List<Sheet> sheets = sheetRepository.findByReservationId(reservationId);
+        return SheetResponse.from(reservation, sheets);
     }
 }

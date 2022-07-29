@@ -32,7 +32,7 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     @Autowired
     private CrewService crewService;
 
-    @DisplayName("크루의 면담 목록을 조회한다.")
+    @DisplayName("크루가 자신의 히스토리를 조회한다.")
     @Test
     void findOwnReservations() {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
@@ -54,8 +54,37 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
-        List<CrewFindOwnReservationResponse> result = response.jsonPath()
-                .getList(".", CrewFindOwnReservationResponse.class);
+        List<CrewFindOwnReservationResponse> result = response.jsonPath().getList(".", CrewFindOwnReservationResponse.class);
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(result).hasSize(1)
+        );
+    }
+
+    @DisplayName("코치가 크루의 히스토리를 조회한다.")
+    @Test
+    void findCrewReservations() {
+        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
+        Long crewId = crewService.save();
+
+        면담_예약_요청됨(coachId, scheduleId, crewId);
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("crewId", crewId)
+                .filter(document("find-crew-reservations", responseFields(
+                        fieldWithPath("[].reservationId").description("면담 아이디"),
+                        fieldWithPath("[].coachName").description("코치 이름"),
+                        fieldWithPath("[].coachImage").description("코치 이미지"),
+                        fieldWithPath("[].dateTime").description("날짜")
+                )))
+                .when().get("/api/crews/{crewId}/reservations")
+                .then().log().all()
+                .extract();
+
+        List<CrewFindOwnReservationResponse> result = response.jsonPath().getList(".", CrewFindOwnReservationResponse.class);
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
