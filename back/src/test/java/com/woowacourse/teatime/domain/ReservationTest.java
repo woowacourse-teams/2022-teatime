@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
-import com.woowacourse.teatime.exception.InvalidCancelException;
+import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,7 +83,7 @@ class ReservationTest {
     @Test
     void cancel_InvalidCancelException() {
         assertThatThrownBy(() -> reservation.cancel(Role.COACH))
-                .isInstanceOf(InvalidCancelException.class);
+                .isInstanceOf(UnCancellableReservationException.class);
 
     }
 }

@@ -18,7 +18,7 @@ import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.AlreadyReservedException;
-import com.woowacourse.teatime.exception.InvalidCancelException;
+import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundRoleException;
@@ -198,7 +198,7 @@ class ReservationServiceTest {
 
         assertThatThrownBy(
                 () -> reservationService.cancel(reservationId, new ReservationCancelRequest(coach.getId(), "COACH")))
-                .isInstanceOf(InvalidCancelException.class);
+                .isInstanceOf(UnCancellableReservationException.class);
     }
 
     @DisplayName("면담 예약을 취소할 때, 예약이 없다면 에러가 발생한다.")

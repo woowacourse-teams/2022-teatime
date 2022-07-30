@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.domain;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
-import com.woowacourse.teatime.exception.InvalidCancelException;
+import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -58,7 +58,7 @@ public class Reservation {
             schedule.init();
             return;
         }
-        throw new InvalidCancelException();
+        throw new UnCancellableReservationException();
     }
 
     private boolean isCancelBeforeApprovedByCrew(Role role) {
