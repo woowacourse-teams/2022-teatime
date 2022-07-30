@@ -1,12 +1,10 @@
 import dayjs from 'dayjs';
 
-type Status = 'pending' | 'approve' | 'comment';
-
 interface Crew {
   id: number;
   name: string;
   dateTime: string;
-  status: Status;
+  image: string;
 }
 interface Coach {
   id: number;
@@ -30,8 +28,14 @@ interface Schedule {
   isSelected?: boolean;
 }
 
+type Status = 'pending' | 'approved' | 'completed';
+
+type CrewList = { status: Status; crews: Crew[] };
+
+type CrewListMap = Record<Status, Crew[]>;
+
 type DaySchedule = { day: number; schedules: Schedule[] };
 
 type ScheduleMap = Record<number, Schedule[]>;
 
-export { Crew, Coach, MonthYear, Schedule, DaySchedule, ScheduleMap };
+export { Crew, Coach, MonthYear, Schedule, DaySchedule, ScheduleMap, CrewList, CrewListMap };
