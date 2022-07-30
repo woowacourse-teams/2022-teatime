@@ -11,6 +11,7 @@ const theme = {
     BLUE_600: '#0085ff',
     BLUE_800: '#3d5a80;',
     RED_300: '#e6aca8',
+    RED_600: '#eb0202',
     BLACK: '#000',
   },
 };
