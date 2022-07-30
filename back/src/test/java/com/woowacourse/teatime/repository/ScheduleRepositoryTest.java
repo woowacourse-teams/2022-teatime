@@ -23,8 +23,8 @@ public class ScheduleRepositoryTest {
     @Autowired
     private CoachRepository coachRepository;
 
-    @Test
     @DisplayName("스케줄 전체 목록을 조회한다.")
+    @Test
     void findAll() {
         LocalDateTime now = LocalDateTime.now();
         Coach coach = new Coach("제이슨");
@@ -36,8 +36,8 @@ public class ScheduleRepositoryTest {
         assertThat(schedules).hasSize(1);
     }
 
-    @Test
     @DisplayName("해당 코치와, 년, 월에 해당하는 스케줄 전체 목록을 조회한다.")
+    @Test
     void findByCoachIdAndLocalDateTimeBetween() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime dateTime1 = start.plusDays(1);
@@ -59,8 +59,8 @@ public class ScheduleRepositoryTest {
         );
     }
 
-    @Test
     @DisplayName("해당 코치와, 날짜에 해당하는 하루 스케줄을 모두 삭제한다.")
+    @Test
     void deleteAllByCoachIdAndLocalDateTimeBetween() {
         LocalDateTime july1_1 = LocalDateTime.of(2022, 7, 1, 1, 0, 0);
         LocalDateTime july2_1 = LocalDateTime.of(2022, 7, 2, 1, 0, 0);

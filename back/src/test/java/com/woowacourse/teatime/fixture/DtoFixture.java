@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.fixture;
 
-import com.woowacourse.teatime.controller.dto.CoachSaveRequest;
+import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
 
 public class DtoFixture {
 

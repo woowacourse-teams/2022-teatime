@@ -9,13 +9,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.controller.dto.CoachResponse;
-import com.woowacourse.teatime.controller.dto.CoachSaveRequest;
+import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
+import com.woowacourse.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.service.CoachService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,7 @@ public class CoachAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
-        List<CoachResponse> result = new ArrayList<>(response.jsonPath().getList(".", CoachResponse.class));
+        List<CoachFindResponse> result = response.jsonPath().getList(".", CoachFindResponse.class);
 
         assertAll(
                 () -> assertThat(result).hasSize(2),

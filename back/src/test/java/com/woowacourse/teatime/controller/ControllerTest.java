@@ -43,6 +43,14 @@ public class ControllerTest {
                 .characterEncoding("UTF-8");
     }
 
+    protected MockHttpServletRequestBuilder get(String url, Object body)
+            throws JsonProcessingException {
+        return MockMvcRequestBuilders.get(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(body));
+    }
+
     protected MockHttpServletRequestBuilder post(String url, Object body)
             throws JsonProcessingException {
         return MockMvcRequestBuilders.post(url)

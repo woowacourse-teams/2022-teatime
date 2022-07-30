@@ -5,7 +5,12 @@ import Title from '@components/Title';
 import Frame from '@components/Frame';
 import Textarea from '@components/Textarea';
 
+const isEmptyValue = (value: string) => {
+  return value.length === 0;
+};
+
 const InterviewForm = () => {
+  const [isSubmit, setIsSubmit] = useState(false);
   const [content, setContent] = useState([
     {
       questionNumber: 1,
@@ -29,6 +34,11 @@ const InterviewForm = () => {
     });
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmit(true);
+  };
+
   return (
     <Frame>
       <S.InfoContainer>
@@ -38,24 +48,30 @@ const InterviewForm = () => {
       </S.InfoContainer>
       <S.InterviewContainer>
         <Title text="면담 내용 작성" />
-        <form>
+        <form onSubmit={handleSubmit}>
           <Textarea
             id="0"
             label="이번 면담을 통해 논의하고 싶은 내용"
             value={content[0].answerContent}
             handleChangeContent={handleChangeContent(0)}
+            validation={isEmptyValue}
+            isSubmit={isSubmit}
           />
           <Textarea
             id="1"
             label="최근에 자신이 긍정적으로 보는 시도와 변화"
             value={content[1].answerContent}
             handleChangeContent={handleChangeContent(1)}
+            validation={isEmptyValue}
+            isSubmit={isSubmit}
           />
           <Textarea
             id="2"
             label="이번 면담을 통해 생기기를 원하는 변화"
             value={content[2].answerContent}
             handleChangeContent={handleChangeContent(2)}
+            validation={isEmptyValue}
+            isSubmit={isSubmit}
           />
           <S.ButtonContainer>
             <S.SaveButton>임시 저장</S.SaveButton>
