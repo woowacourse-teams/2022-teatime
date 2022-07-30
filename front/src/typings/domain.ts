@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
 
+type Status = 'pending' | 'approve' | 'comment';
+
+interface Crew {
+  id: number;
+  name: string;
+  dateTime: string;
+  status: Status;
+}
 interface Coach {
   id: number;
   name: string;
@@ -26,4 +34,4 @@ type DaySchedule = { day: number; schedules: Schedule[] };
 
 type ScheduleMap = Record<number, Schedule[]>;
 
-export { Coach, MonthYear, Schedule, DaySchedule, ScheduleMap };
+export { Crew, Coach, MonthYear, Schedule, DaySchedule, ScheduleMap };

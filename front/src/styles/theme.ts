@@ -1,6 +1,7 @@
 const theme = {
   colors: {
     WHITE: '#fff',
+    BLACK: '#000',
     GREEN_300: '#cce6ba',
     GREEN_400: '#b8e09b',
     GREEN_700: '#797d6b',
@@ -12,7 +13,7 @@ const theme = {
     BLUE_800: '#3d5a80;',
     RED_300: '#e6aca8',
     RED_600: '#eb0202',
-    BLACK: '#000',
+    ORANGE_600: '#ffa500',
   },
 };
 
