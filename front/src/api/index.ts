@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+export const BASE_URL = 'https://api.teatime.pe.kr';
+
 const api = axios.create({
-  baseURL: 'http://3.38.213.179:8080',
+  baseURL: BASE_URL,
 });
 
 export default api;

@@ -55,8 +55,8 @@ class SheetServiceTest {
         reservation = reservationRepository.save(new Reservation(schedule, crew));
     }
 
-    @Test
     @DisplayName("코치의 질문만큼의 시트를 만든 뒤 개수를 반환한다.")
+    @Test
     void saveNewSheets() {
         questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
         questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));

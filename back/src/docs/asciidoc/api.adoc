@@ -39,6 +39,7 @@ include::{snippets}/find-schedules/http-request.adoc[]
 include::{snippets}/find-schedules/http-response.adoc[]
 
 == 예약 API
+
 === 예약하기
 ==== request
 include::{snippets}/reserve/http-request.adoc[]
@@ -56,3 +57,11 @@ include::{snippets}/reserve-approve/http-response.adoc[]
 include::{snippets}/reserve-cancel/http-request.adoc[]
 ==== response
 include::{snippets}/reserve-cancel/http-response.adoc[]
+
+== 크루 API
+
+=== 히스토리 조회
+==== request
+include::{snippets}/find-own-reservations/http-request.adoc[]
+==== response
+include::{snippets}/find-own-reservations/http-response.adoc[]

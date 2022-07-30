@@ -5,7 +5,7 @@ const TitleWrapper = styled.div`
   padding-left: 10px;
 
   h1 {
-    font-size: 28px;
+    font-size: 24px;
   }
 `;
 

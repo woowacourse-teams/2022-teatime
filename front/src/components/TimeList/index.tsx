@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
@@ -12,6 +13,7 @@ const TimeList = () => {
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
   const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
 
@@ -33,6 +35,10 @@ const TimeList = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleClickWriteButton = () => {
+    navigate(`/form/41`);
   };
 
   if (isError) return <h1>error</h1>;
@@ -69,6 +75,7 @@ const TimeList = () => {
           content="면담 내용을 지금 작성 하시겠습니까?"
           firstButtonName="나중에"
           secondButtonName="작성하기"
+          onClick={handleClickWriteButton}
           closeModal={closeModal}
         />
       )}

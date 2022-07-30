@@ -3,7 +3,7 @@ package com.woowacourse.teatime.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.woowacourse.teatime.controller.dto.CoachSaveRequest;
+import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

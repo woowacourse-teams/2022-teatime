@@ -9,8 +9,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.controller.dto.ScheduleResponse;
-import com.woowacourse.teatime.controller.dto.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.ScheduleService;
 import com.woowacourse.teatime.util.Date;
@@ -44,7 +44,7 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         scheduleService.save(coachId, LocalDateTime.of(YEAR, MONTH, 31, 23, 59));
 
         ExtractableResponse<Response> response = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
-        List<ScheduleResponse> result = response.jsonPath().getList(".", ScheduleResponse.class);
+        List<ScheduleFindResponse> result = response.jsonPath().getList(".", ScheduleFindResponse.class);
 
         assertAll(
                 () -> assertThat(result).hasSize(2),
@@ -65,7 +65,7 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> updateResponse = 스케쥴_수정_요청됨(coachId, request);
 
         ExtractableResponse<Response> findResponse = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
-        List<ScheduleResponse> result = findResponse.jsonPath().getList(".", ScheduleResponse.class);
+        List<ScheduleFindResponse> result = findResponse.jsonPath().getList(".", ScheduleFindResponse.class);
         assertAll(
                 () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(result).hasSize(2)
