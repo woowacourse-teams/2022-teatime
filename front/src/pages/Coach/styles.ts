@@ -7,15 +7,36 @@ const Layout = styled.div`
   margin: 50px auto;
 `;
 
-const Board = styled.div`
+const BoardListHeader = styled.div`
+  height: 50px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 330px;
-  height: calc(100vh - 200px);
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 15px;
+  justify-content: flex-end;
+  height: 50px;
 `;
 
-export { Layout, Board };
+const AddScheduleButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 120px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.BLUE_600};
+  color: ${({ theme }) => theme.colors.WHITE};
+  font-size: 16px;
+  font-weight: bold;
+
+  img {
+    margin-right: 5px;
+  }
+`;
+
+const BoardListContainer = styled.div`
+  height: calc(100vh - 200px);
+  display: flex;
+  justify-content: space-between;
+`;
+
+export { Layout, BoardListHeader, AddScheduleButton, BoardListContainer };

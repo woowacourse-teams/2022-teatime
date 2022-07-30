@@ -5,10 +5,10 @@ const BoardContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 330px;
-  height: calc(100vh - 200px);
+  height: 100%;
   padding: 15px;
   background-color: #f5f5f5;
-  border-radius: 15px;
+  border-radius: 10px;
 `;
 
 const TitleContainer = styled.div`
