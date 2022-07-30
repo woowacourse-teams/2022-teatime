@@ -4,6 +4,20 @@ const InfoContainer = styled.div`
   width: 30%;
   margin-right: 50px;
   border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
+  color: ${({ theme }) => theme.colors.GRAY_800};
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+  }
+
+  p {
+    line-height: 30px;
+    font-size: 18px;
+    font-weight: bold;
+  }
 `;
 
 const InterviewContainer = styled.div`
