@@ -1,4 +1,4 @@
-import ModalPortal from '../..//ModalPortal';
+import ModalPortal from '../../ModalPortal';
 import CloseIcon from '@assets/close.svg';
 import * as S from './styles';
 
