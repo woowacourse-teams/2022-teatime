@@ -18,11 +18,11 @@ import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.AlreadyReservedException;
-import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
+import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
@@ -215,7 +215,8 @@ class ReservationServiceTest {
     }
 
     private Long 예약에_성공한다() {
-        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(), schedule.getId());
+        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+                schedule.getId());
         return reservationService.save(reservationRequest);
     }
 

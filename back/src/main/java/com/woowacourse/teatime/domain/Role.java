@@ -19,6 +19,14 @@ public enum Role {
         return COACH.equals(role);
     }
 
+    public boolean isCoach() {
+        return this == COACH;
+    }
+
+    public boolean isCrew() {
+        return this == CREW;
+    }
+
     public static boolean isCrew(Role role) {
         return CREW.equals(role);
     }

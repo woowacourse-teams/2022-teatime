@@ -62,7 +62,7 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCrew(Role role) {
-        return Role.isCrew(role) && ReservationStatus.isBeforeApproved(status);
+        return role.isCrew() && ReservationStatus.isBeforeApproved(status);
     }
 
     public boolean isSameCrew(Long crewId) {

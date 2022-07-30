@@ -32,7 +32,7 @@ public class ReservationService {
         Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                        reservationReserveRequest.getScheduleId(), reservationReserveRequest.getCoachId())
+                reservationReserveRequest.getScheduleId(), reservationReserveRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -63,11 +63,12 @@ public class ReservationService {
 
     private void validateAuthorization(ReservationCancelRequest reservationCancelRequest, Role role,
                                        Reservation reservation) {
-        if (Role.isCoach(role)) {
+        if (role.isCoach()) {
             Long coachId = reservationCancelRequest.getApplicantId();
             validateIsSameCoach(coachId, reservation);
         }
-        if (Role.isCrew(role)) {
+
+        if (role.isCrew()) {
             Long crewId = reservationCancelRequest.getApplicantId();
             validateIsSameCrew(crewId, reservation);
         }
