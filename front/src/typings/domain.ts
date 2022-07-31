@@ -28,11 +28,9 @@ interface Schedule {
   isSelected?: boolean;
 }
 
-type Status = 'pending' | 'approved' | 'completed';
+type CrewList = { status: string; crews: Crew[] };
 
-type CrewList = { status: Status; crews: Crew[] };
-
-type CrewListMap = Record<Status, Crew[]>;
+type CrewListMap = Record<string, Crew[]>;
 
 type DaySchedule = { day: number; schedules: Schedule[] };
 

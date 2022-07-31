@@ -83,9 +83,9 @@ const Calendar = ({ isCoach }: CalendarProps) => {
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
-        {DAY_OF_WEEKS.map((day) => {
-          return <S.DayOfWeekBox key={day}>{day}</S.DayOfWeekBox>;
-        })}
+        {DAY_OF_WEEKS.map((day) => (
+          <S.DayOfWeekBox key={day}>{day}</S.DayOfWeekBox>
+        ))}
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW + 1;
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;

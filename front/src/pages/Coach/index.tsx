@@ -1,44 +1,98 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BoardItem from '@components/BoardItem';
+
+import api from '@api/index';
 import Board from '@components/Board';
-import useFetch from '@hooks/useFetch';
-import type { Crew } from '@typings/domain';
+import BoardItem from '@components/BoardItem';
+import Conditional from '@components/Conditional';
+import type { CrewList, CrewListMap } from '@typings/domain';
 import PlusIcon from '@assets/plus.svg';
 import * as S from './styles';
 
+interface BoardItemValue {
+  title: string;
+  buttonName: string;
+  handler: () => void;
+}
+
+interface BoardItem {
+  [key: string]: BoardItemValue;
+}
+
 const Coach = () => {
   const navigate = useNavigate();
-  const { data: crews } = useFetch<Crew[], null>('/api/crews');
+  const [crews, setCrews] = useState<CrewListMap>({
+    pending: [],
+    approved: [],
+    completed: [],
+  });
 
-  const handleClickCard = () => {
-    navigate(`/schedule/41`);
+  const handleApprove = () => {
+    console.log('승인되었습니다!');
   };
+
+  const boardItem: BoardItem = {
+    pending: {
+      title: '대기중인 일정',
+      buttonName: '승인하기',
+      handler: handleApprove,
+    },
+    approved: {
+      title: '확정된 일정',
+      buttonName: '내용보기',
+      handler: () => console.log('내용보기'),
+    },
+    completed: {
+      title: '완료된 일정',
+      buttonName: '이력작성',
+      handler: () => console.log('이력작성'),
+    },
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: crewList } = await api.get('/api/crews');
+        const crewListMap = crewList?.reduce((newObj: CrewListMap, { status, crews }: CrewList) => {
+          newObj[status] = crews;
+          return newObj;
+        }, {});
+
+        setCrews(crewListMap);
+      } catch (error) {
+        alert('크루 목록 get 에러');
+        console.log(error);
+      }
+    })();
+  }, []);
 
   return (
     <S.Layout>
       <S.BoardListHeader>
-        <S.AddScheduleButton onClick={handleClickCard}>
+        <S.AddScheduleButton onClick={() => navigate(`/schedule/41`)}>
           <img src={PlusIcon} alt="추가 아이콘" />
           <span>일정 추가</span>
         </S.AddScheduleButton>
       </S.BoardListHeader>
       <S.BoardListContainer>
-        <Board boardTitle="대기중인 일정">
-          {crews?.map((crew) => (
-            <BoardItem
-              key={crew.id}
-              dateTime={crew.dateTime}
-              personName={crew.name}
-              buttonName="승인하기"
-            />
-          ))}
-        </Board>
-        <Board boardTitle="확정된 일정">
-          <></>
-        </Board>
-        <Board boardTitle="완료된 일정">
-          <></>
-        </Board>
+        {Object.keys(crews).map((status) => {
+          const { title, buttonName, handler } = boardItem[status];
+
+          return (
+            <Board key={status} title={title}>
+              {crews[status].map((crew) => (
+                <BoardItem
+                  key={crew.id}
+                  dateTime={crew.dateTime}
+                  image={crew.image}
+                  personName={crew.name}
+                  buttonName={buttonName}
+                  onClick={handler}
+                />
+              ))}
+            </Board>
+          );
+        })}
       </S.BoardListContainer>
     </S.Layout>
   );

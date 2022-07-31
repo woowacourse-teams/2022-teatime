@@ -2,15 +2,15 @@ import * as S from './styles';
 
 interface BoardProps {
   children: React.ReactNode;
-  boardTitle: string;
+  title: string;
 }
 
-const Board = ({ children, boardTitle }: BoardProps) => {
+const Board = ({ children, title }: BoardProps) => {
   return (
     <S.BoardContainer>
       <S.TitleContainer>
         <div />
-        <span>{boardTitle}</span>
+        <span>{title}</span>
       </S.TitleContainer>
       <S.ScrollContainer>{children}</S.ScrollContainer>
     </S.BoardContainer>

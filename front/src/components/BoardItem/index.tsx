@@ -6,11 +6,13 @@ import * as S from './styles';
 
 interface BoardItemProps {
   dateTime: string;
+  image: string;
   personName: string;
   buttonName: string;
+  onClick: () => void;
 }
 
-const BoardItem = ({ dateTime, personName, buttonName }: BoardItemProps) => {
+const BoardItem = ({ dateTime, image, personName, buttonName, onClick }: BoardItemProps) => {
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
@@ -33,14 +35,10 @@ const BoardItem = ({ dateTime, personName, buttonName }: BoardItemProps) => {
       </S.TopSection>
       <S.BottomSection>
         <div>
-          <S.ProfileImage
-            src={
-              'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png'
-            }
-          />
+          <S.ProfileImage src={image} />
           <span>{personName}</span>
         </div>
-        <button>{buttonName}</button>
+        <button onClick={onClick}>{buttonName}</button>
       </S.BottomSection>
     </S.BoardItemContainer>
   );
