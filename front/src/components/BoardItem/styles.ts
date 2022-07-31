@@ -81,6 +81,7 @@ const BottomSection = styled.div<{ color: string }>`
 
     &:hover {
       opacity: 0.6;
+      transition: ease-in-out 0.2s;
     }
   }
 `;
