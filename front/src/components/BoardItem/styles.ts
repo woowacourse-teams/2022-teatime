@@ -78,6 +78,10 @@ const BottomSection = styled.div<{ color: string }>`
     background-color: ${(props) => props.color};
     font-weight: bold;
     cursor: pointer;
+
+    &:hover {
+      opacity: 0.6;
+    }
   }
 `;
 
