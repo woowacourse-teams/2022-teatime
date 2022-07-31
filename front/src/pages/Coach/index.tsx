@@ -4,17 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import api from '@api/index';
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
-import Conditional from '@components/Conditional';
 import type { CrewList, CrewListMap } from '@typings/domain';
 import PlusIcon from '@assets/plus.svg';
-import * as S from './styles';
 import theme from '@styles/theme';
+import * as S from './styles';
 
 interface BoardItemValue {
   title: string;
   buttonName: string;
   color: string;
-  handleClickButton: () => void;
+  handleClickButton: (index: number, id: number) => void;
 }
 
 interface BoardItem {
@@ -29,8 +28,29 @@ const Coach = () => {
     completed: [],
   });
 
-  const handleApprove = () => {
-    console.log('승인되었습니다!');
+  const handleApprove = async (index: number, reservationId: number) => {
+    try {
+      await api.post(`/api/reservations/${reservationId}`, {
+        coachId: 41,
+        isApproved: true,
+      });
+
+      setCrews((allBoards) => {
+        const copyPendingBoard = [...allBoards.pending];
+        const currentItem = copyPendingBoard[index];
+        const copyApprovedBoard = [...allBoards.approved];
+        copyPendingBoard.splice(index, 1);
+        copyApprovedBoard.splice(index, 0, currentItem);
+
+        return {
+          ...allBoards,
+          pending: copyPendingBoard,
+          approved: copyApprovedBoard,
+        };
+      });
+    } catch {
+      alert('승인 에러');
+    }
   };
 
   const boardItem: BoardItem = {
@@ -85,7 +105,7 @@ const Coach = () => {
 
           return (
             <Board key={status} title={title} color={color}>
-              {crews[status].map((crew) => (
+              {crews[status].map((crew, index) => (
                 <BoardItem
                   key={crew.id}
                   dateTime={crew.dateTime}
@@ -93,7 +113,7 @@ const Coach = () => {
                   personName={crew.name}
                   buttonName={buttonName}
                   color={color}
-                  onClick={handleClickButton}
+                  onClick={() => handleClickButton(index, crew.id)}
                 />
               ))}
             </Board>
