@@ -29,30 +29,28 @@ public class ControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> notFoundExceptionHandler(NotFoundException e) {
+        log.info(e.getMessage(), e);
         return ResponseEntity.status(NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<ErrorResponse> unAuthorizedExceptionHandler(UnAuthorizedException e) {
+        log.info(e.getMessage(), e);
         return ResponseEntity.status(UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleUnhandledException(RuntimeException e) {
-        log.error(e.getMessage(), e);
-        return ResponseEntity.status(REQUEST_TIMEOUT).body(new ErrorResponse("Unhandled Exception"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequest(BindingResult bindingResult) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         FieldError mainError = fieldErrors.get(0);
+        log.info(mainError.getDefaultMessage());
 
         return ResponseEntity.badRequest().body(new ErrorResponse(mainError.getDefaultMessage()));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPathVariable(MethodArgumentTypeMismatchException e) {
+        log.info(e.getMessage(), e);
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
     }
 
@@ -61,6 +59,13 @@ public class ControllerAdvice {
             ConstraintViolationException.class,
     })
     public ResponseEntity<ErrorResponse> handleInvalidRequest(RuntimeException e) {
+        log.info(e.getMessage(), e);
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleUnhandledException(RuntimeException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.status(REQUEST_TIMEOUT).body(new ErrorResponse("Unhandled Exception"));
     }
 }
