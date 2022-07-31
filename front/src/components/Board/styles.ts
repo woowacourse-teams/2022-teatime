@@ -35,8 +35,11 @@ const TitleContainer = styled.div<{ color: string }>`
 const ScrollContainer = styled.div`
   width: 100%;
   height: 100%;
-  overflow: scroll;
   padding: 0 10px;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export { BoardContainer, TitleContainer, ScrollContainer };
