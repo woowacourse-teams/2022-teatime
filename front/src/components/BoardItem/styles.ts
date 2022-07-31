@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-const BoardItemContainer = styled.div`
+const BoardItemContainer = styled.div<{ color: string }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 160px;
   margin: 10px 0px;
   padding: 15px;
-  border-left: 10px solid ${({ theme }) => theme.colors.ORANGE_600};
+  border-left: 10px solid ${(props) => props.color};
   background-color: ${({ theme }) => theme.colors.WHITE};
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -58,7 +58,7 @@ const ProfileImage = styled.img`
   margin-right: 10px;
 `;
 
-const BottomSection = styled.div`
+const BottomSection = styled.div<{ color: string }>`
   flex: 1;
   display: flex;
   justify-content: space-between;
@@ -75,7 +75,7 @@ const BottomSection = styled.div`
     border: none;
     border-radius: 15px;
     color: #fff;
-    background-color: ${({ theme }) => theme.colors.ORANGE_600};
+    background-color: ${(props) => props.color};
     font-weight: bold;
     cursor: pointer;
   }

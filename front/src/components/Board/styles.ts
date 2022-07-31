@@ -7,22 +7,22 @@ const BoardContainer = styled.div`
   width: 330px;
   height: 100%;
   padding: 15px;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.colors.GRAY_100};
   border-radius: 10px;
 `;
 
-const TitleContainer = styled.div`
+const TitleContainer = styled.div<{ color: string }>`
   display: flex;
   align-items: center;
   width: 100%;
-  border-bottom: 3px solid #ffa500;
+  border-bottom: 3px solid ${(props) => props.color};
   padding-bottom: 15px;
   margin-bottom: 15px;
 
   div {
     width: 8px;
     height: 8px;
-    background-color: #ffa500;
+    background-color: ${(props) => props.color};
     border-radius: 5px;
     margin-right: 10px;
   }

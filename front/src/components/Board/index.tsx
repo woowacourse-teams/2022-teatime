@@ -3,12 +3,13 @@ import * as S from './styles';
 interface BoardProps {
   children: React.ReactNode;
   title: string;
+  color: string;
 }
 
-const Board = ({ children, title }: BoardProps) => {
+const Board = ({ children, title, color }: BoardProps) => {
   return (
     <S.BoardContainer>
-      <S.TitleContainer>
+      <S.TitleContainer color={color}>
         <div />
         <span>{title}</span>
       </S.TitleContainer>

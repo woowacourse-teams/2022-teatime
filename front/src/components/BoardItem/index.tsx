@@ -9,15 +9,16 @@ interface BoardItemProps {
   image: string;
   personName: string;
   buttonName: string;
+  color: string;
   onClick: () => void;
 }
 
-const BoardItem = ({ dateTime, image, personName, buttonName, onClick }: BoardItemProps) => {
+const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: BoardItemProps) => {
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
   return (
-    <S.BoardItemContainer>
+    <S.BoardItemContainer color={color}>
       <S.TopSection>
         <S.DateContainer>
           <div>
@@ -33,7 +34,7 @@ const BoardItem = ({ dateTime, image, personName, buttonName, onClick }: BoardIt
           <img src={CloseIcon} alt="닫기 아이콘" />
         </S.CloseIconWrapper>
       </S.TopSection>
-      <S.BottomSection>
+      <S.BottomSection color={color}>
         <div>
           <S.ProfileImage src={image} />
           <span>{personName}</span>
