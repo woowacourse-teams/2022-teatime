@@ -28,8 +28,10 @@ import org.springframework.http.MediaType;
 
 public class ScheduleAcceptanceTest extends AcceptanceTest {
 
-    private static final int YEAR = 2022;
-    private static final int MONTH = 7;
+    private static final LocalDate NOW = LocalDate.now();
+    private static final boolean IS_LAST_DAY_OF_MONTH = NOW.isEqual(NOW.withDayOfMonth(NOW.lengthOfMonth()));
+    private static final int YEAR = NOW.getYear();
+    private static final int MONTH = NOW.getMonthValue();
 
     @Autowired
     private CoachService coachService;
@@ -46,10 +48,19 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
         List<ScheduleFindResponse> result = response.jsonPath().getList(".", ScheduleFindResponse.class);
 
-        assertAll(
-                () -> assertThat(result).hasSize(2),
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
-        );
+        if (IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(result).hasSize(1),
+                    () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+            );
+        }
+
+        if (!IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(result).hasSize(2),
+                    () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+            );
+        }
     }
 
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
@@ -66,10 +77,20 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
 
         ExtractableResponse<Response> findResponse = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
         List<ScheduleFindResponse> result = findResponse.jsonPath().getList(".", ScheduleFindResponse.class);
-        assertAll(
-                () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(result).hasSize(2)
-        );
+
+        if (IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                    () -> assertThat(result).hasSize(1)
+            );
+        }
+
+        if (!IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                    () -> assertThat(result).hasSize(2)
+            );
+        }
     }
 
     private ExtractableResponse<Response> 스케쥴_수정_요청됨(Long coachId, ScheduleUpdateRequest request) {
