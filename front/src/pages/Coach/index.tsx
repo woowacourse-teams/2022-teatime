@@ -104,7 +104,7 @@ const Coach = () => {
           const { title, buttonName, color, handleClickButton } = boardItem[status];
 
           return (
-            <Board key={status} title={title} color={color}>
+            <Board key={status} title={title} color={color} length={crews[status].length}>
               {crews[status].map((crew, index) => (
                 <BoardItem
                   key={crew.id}

@@ -11,15 +11,18 @@ const BoardContainer = styled.div`
   border-radius: 10px;
 `;
 
+const TitleCircle = styled.div``;
+
 const TitleContainer = styled.div<{ color: string }>`
   display: flex;
   align-items: center;
   width: 100%;
+  height: 50px;
   border-bottom: 3px solid ${(props) => props.color};
   padding-bottom: 15px;
   margin-bottom: 15px;
 
-  div {
+  ${TitleCircle} {
     width: 8px;
     height: 8px;
     background-color: ${(props) => props.color};
@@ -29,6 +32,18 @@ const TitleContainer = styled.div<{ color: string }>`
 
   span {
     font-weight: bold;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: ${({ theme }) => theme.colors.GRAY_200};
+    color: ${({ theme }) => theme.colors.GRAY_600};
   }
 `;
 
@@ -42,4 +57,4 @@ const ScrollContainer = styled.div`
   }
 `;
 
-export { BoardContainer, TitleContainer, ScrollContainer };
+export { BoardContainer, TitleContainer, TitleCircle, ScrollContainer };
