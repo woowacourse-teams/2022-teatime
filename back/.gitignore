@@ -34,5 +34,6 @@ out/
 
 *.properties
 applcation.properties
+applcation.yml
 *.sql
 *.yml
