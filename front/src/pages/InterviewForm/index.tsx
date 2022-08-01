@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import * as S from './styles';
 
-import Title from '@components/Title';
+import api from '@api/index';
 import Frame from '@components/Frame';
 import Textarea from '@components/Textarea';
-
-const isEmptyValue = (value: string) => {
-  return value.length === 0;
-};
+import Title from '@components/Title';
+import { ScheduleStateContext } from '@context/ScheduleProvider';
 
 const InterviewForm = () => {
+  const { coach, date, time } = useContext(ScheduleStateContext);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [content, setContent] = useState([
+  const [contents, setContents] = useState([
     {
       questionNumber: 1,
       answerContent: '',
@@ -27,14 +26,14 @@ const InterviewForm = () => {
   ]);
 
   const handleChangeContent = (index: number) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent((prevContent) => {
+    setContents((prevContent) => {
       const newContent = [...prevContent];
       newContent[index].answerContent = e.target.value;
       return newContent;
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsSubmit(true);
   };
@@ -42,40 +41,45 @@ const InterviewForm = () => {
   return (
     <Frame>
       <S.InfoContainer>
-        <p>포코</p>
-        <p>🗓 07월 28일</p>
+        {/* <img src={coach.image} alt="코치 프로필 이미지" />
+        <h3>{coach.name}</h3>
+        <p>{date}</p>
+        <p>{time}</p> */}
+        <img
+          src="https://user-images.githubusercontent.com/48676844/177775689-096b53fd-a9f2-44e6-9daf-73e4e0b9a603.png"
+          alt="코치 프로필 이미지"
+        />
+        <h3>포비</h3>
+        <p>🗓 7월 28일</p>
         <p>🕖 11 : 00</p>
       </S.InfoContainer>
       <S.InterviewContainer>
         <Title text="면담 내용 작성" />
-        <form onSubmit={handleSubmit}>
+        <form>
           <Textarea
             id="0"
             label="이번 면담을 통해 논의하고 싶은 내용"
-            value={content[0].answerContent}
+            value={contents[0].answerContent}
             handleChangeContent={handleChangeContent(0)}
-            validation={isEmptyValue}
             isSubmit={isSubmit}
           />
           <Textarea
             id="1"
             label="최근에 자신이 긍정적으로 보는 시도와 변화"
-            value={content[1].answerContent}
+            value={contents[1].answerContent}
             handleChangeContent={handleChangeContent(1)}
-            validation={isEmptyValue}
             isSubmit={isSubmit}
           />
           <Textarea
             id="2"
             label="이번 면담을 통해 생기기를 원하는 변화"
-            value={content[2].answerContent}
+            value={contents[2].answerContent}
             handleChangeContent={handleChangeContent(2)}
-            validation={isEmptyValue}
             isSubmit={isSubmit}
           />
           <S.ButtonContainer>
-            <S.SaveButton>임시 저장</S.SaveButton>
-            <S.SubmitButton>제출하기</S.SubmitButton>
+            <S.SaveButton onClick={handleSubmit}>임시 저장</S.SaveButton>
+            <S.SubmitButton onClick={handleSubmit}>제출하기</S.SubmitButton>
           </S.ButtonContainer>
         </form>
       </S.InterviewContainer>
