@@ -65,7 +65,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnhandledException(RuntimeException e) {
-        log.warn(e.getMessage(), e);
+        log.warn("예상하지 못한 에러가 발생하였습니다.", e.getMessage(), e);
         return ResponseEntity.status(REQUEST_TIMEOUT).body(new ErrorResponse("Unhandled Exception"));
     }
 }
