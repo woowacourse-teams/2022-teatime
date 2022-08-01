@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
@@ -46,7 +48,7 @@ const TimeList = () => {
   return (
     <S.TimeListContainer>
       {coachSchedule.map((schedule) => {
-        const time = schedule.dateTime.slice(11, 16);
+        const time = dayjs.tz(schedule.dateTime).format('HH:mm');
 
         return (
           <React.Fragment key={schedule.id}>
