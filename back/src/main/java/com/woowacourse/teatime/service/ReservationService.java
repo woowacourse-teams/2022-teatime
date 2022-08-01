@@ -14,9 +14,11 @@ import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Role;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
+import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
@@ -34,6 +36,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
+    private final CoachRepository coachRepository;
 
     public Long save(ReservationReserveRequest reservationReserveRequest) {
         Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
@@ -106,9 +109,15 @@ public class ReservationService {
     }
 
     public CoachReservationsResponse findByCoachId(Long coachId) {
+        validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndScheduleLocalDateTimeBetween(
                 coachId, Date.startOfToday(), Date.endOfOneMonthLaterDate());
         return classifyReservationsAndReturnDto(reservations);
+    }
+
+    private void validateCoachId(Long coachId) {
+        coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
     }
 
     private CoachReservationsResponse classifyReservationsAndReturnDto(List<Reservation> reservations) {

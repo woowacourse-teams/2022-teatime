@@ -253,9 +253,9 @@ class ReservationServiceTest {
         CoachReservationsResponse coachReservationResponse = reservationService.findByCoachId(coach.getId());
 
         assertAll(
-                () -> assertThat(coachReservationResponse.getPending()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getBeforeApproved()).hasSize(1),
                 () -> assertThat(coachReservationResponse.getApproved()).hasSize(1),
-                () -> assertThat(coachReservationResponse.getCompleted()).hasSize(0)
+                () -> assertThat(coachReservationResponse.getInProgress()).hasSize(0)
         );
     }
 }
