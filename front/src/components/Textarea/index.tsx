@@ -2,7 +2,7 @@ import * as S from './styles';
 
 interface TextareaProps {
   id: string;
-  label: string;
+  label?: string;
   value: string;
   handleChangeContent: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   isSubmit: boolean;

@@ -29,15 +29,12 @@ const getAllTime = (date: string) => {
 };
 
 type State = {
-  coach: { name: string; image: string };
   monthSchedule: DaySchedule[];
   daySchedule: DaySchedule;
   date: string;
-  time: string;
 };
 
 type Action =
-  | { type: 'SELECT_COACH'; name: string; image: string }
   | {
       type: 'SET_MONTH_SCHEDULE';
       data: DaySchedule[];
@@ -48,16 +45,12 @@ type Action =
   | { type: 'SELECT_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
   | { type: 'SELECT_ALL_TIMES'; isSelectedAll: boolean }
-  | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] }
-  | { type: 'RESERVATION_TIME'; time: string };
+  | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] };
 
 type ScheduleDispatch = Dispatch<Action>;
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'SELECT_COACH': {
-      return { ...state, coach: { name: action.name, image: action.image } };
-    }
     case 'SET_MONTH_SCHEDULE': {
       const initialMonthSchedule = Array.from({ length: action.lastDate }, (_, index) => {
         return {
@@ -140,20 +133,15 @@ const reducer = (state: State, action: Action) => {
 
       return { ...state, monthSchedule: newMonthSchedule };
     }
-    case 'RESERVATION_TIME': {
-      return { ...state, time: action.time };
-    }
     default:
       return state;
   }
 };
 
 const initialState: State = {
-  coach: { name: '', image: '' },
   monthSchedule: [],
   daySchedule: { day: 0, schedules: [] },
   date: '',
-  time: '',
 };
 
 export const ScheduleStateContext = createContext<State>(initialState);
