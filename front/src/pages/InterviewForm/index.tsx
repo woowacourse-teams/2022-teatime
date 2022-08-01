@@ -35,7 +35,19 @@ const InterviewForm = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsSubmit(true);
+
+    if (e.currentTarget.innerText === '제출하기') {
+      const checkValidation = contents.some((content) => !content.answerContent);
+      setIsSubmit(true);
+      if (checkValidation) return;
+    }
+
+    try {
+      await api.put(`/api/crews/me/reservations/1`, contents);
+      alert('제출 되었습니다✅');
+    } catch (error) {
+      alert('제출 실패🚫');
+    }
   };
 
   return (
