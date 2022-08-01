@@ -34,6 +34,4 @@ type CrewListMap = Record<string, Crew[]>;
 
 type DaySchedule = { day: number; schedules: Schedule[] };
 
-type ScheduleMap = Record<number, Schedule[]>;
-
-export { Crew, Coach, MonthYear, Schedule, DaySchedule, ScheduleMap, CrewList, CrewListMap };
+export { Crew, Coach, MonthYear, Schedule, DaySchedule, CrewList, CrewListMap };
