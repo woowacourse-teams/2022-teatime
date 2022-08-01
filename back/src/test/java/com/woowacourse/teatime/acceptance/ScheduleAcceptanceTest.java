@@ -71,9 +71,8 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
 
-        LocalDate date = LocalDate.of(YEAR, MONTH, 31);
-        LocalDateTime localDateTime = LocalDateTime.of(YEAR, MONTH, 31, 23, 59);
-        ScheduleUpdateRequest request = new ScheduleUpdateRequest(date, List.of(localDateTime));
+        LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
+        ScheduleUpdateRequest request = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of(localDateTime));
 
         ExtractableResponse<Response> updateResponse = 스케쥴_수정_요청됨(coachId, request);
 
