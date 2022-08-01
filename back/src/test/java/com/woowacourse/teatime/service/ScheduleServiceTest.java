@@ -57,7 +57,7 @@ class ScheduleServiceTest {
     @Test
     void find_future() {
         Coach coach = coachRepository.save(COACH_BROWN);
-        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59))));
+        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(NOW, LocalTime.of(23, 59))));
         List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
 
         assertThat(responses).hasSize(1);
