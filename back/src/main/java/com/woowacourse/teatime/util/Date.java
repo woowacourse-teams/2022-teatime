@@ -38,4 +38,12 @@ public class Date {
     public static LocalDateTime findLastTime(LocalDate date) {
         return LocalDateTime.of(date, LocalTime.MAX);
     }
+
+    public static LocalDateTime startOfToday() {
+        return LocalDate.now().atStartOfDay();
+    }
+
+    public static LocalDateTime endOfOneMonthLaterDate() {
+        return findLastTime(LocalDate.now().plusMonths(1));
+    }
 }

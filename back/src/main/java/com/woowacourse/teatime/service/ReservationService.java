@@ -1,11 +1,17 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Role;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
@@ -14,6 +20,7 @@ import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +39,7 @@ public class ReservationService {
         Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                reservationReserveRequest.getScheduleId(), reservationReserveRequest.getCoachId())
+                        reservationReserveRequest.getScheduleId(), reservationReserveRequest.getCoachId())
                 .orElseThrow(NotFoundScheduleException::new);
 
         schedule.reserve();
@@ -96,6 +103,19 @@ public class ReservationService {
     private void validateCrewId(Long crewId) {
         crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
+    }
+
+    public CoachReservationsResponse findByCoachId(Long coachId) {
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndScheduleLocalDateTimeBetween(
+                coachId, Date.startOfToday(), Date.endOfOneMonthLaterDate());
+        return classifyReservationsAndReturnDto(reservations);
+    }
+
+    private CoachReservationsResponse classifyReservationsAndReturnDto(List<Reservation> reservations) {
+        return CoachReservationsResponse.of(
+                ReservationStatus.classifyReservations(BEFORE_APPROVED, reservations),
+                ReservationStatus.classifyReservations(APPROVED, reservations),
+                ReservationStatus.classifyReservations(IN_PROGRESS, reservations));
     }
 }
 

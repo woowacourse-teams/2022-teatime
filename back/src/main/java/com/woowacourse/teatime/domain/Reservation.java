@@ -2,6 +2,7 @@ package com.woowacourse.teatime.domain;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -67,6 +68,14 @@ public class Reservation {
 
     public boolean isSameCrew(Long crewId) {
         return crew.getId().equals(crewId);
+    }
+
+    public boolean isSameStatus(ReservationStatus status) {
+        return this.status.equals(status);
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return schedule.getLocalDateTime();
     }
 }
 

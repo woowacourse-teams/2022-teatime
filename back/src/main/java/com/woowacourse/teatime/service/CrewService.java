@@ -14,7 +14,7 @@ public class CrewService {
     private final CrewRepository crewRepository;
 
     public Long save() {
-        Crew crew = crewRepository.save(new Crew());
+        Crew crew = crewRepository.save(new Crew("name", "image"));
         return crew.getId();
     }
 }
