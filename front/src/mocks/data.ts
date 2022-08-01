@@ -97,4 +97,27 @@ const scheduleList = [
   },
 ];
 
-export { coachList, scheduleList };
+const interviewInfo = {
+  dateTime: '2022-07-01T01:00:00.000Z',
+  coachName: '포코',
+  coachImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
+  sheets: [
+    {
+      questionNumber: 1,
+      questionContent: '이번 면담을 통해 논의하고 싶은 내용',
+      answerContent: '야호입니다.',
+    },
+    {
+      questionNumber: 2,
+      questionContent: '최근에 자신이 긍정적으로 보는 시도와 변화',
+      answerContent: '',
+    },
+    {
+      questionNumber: 3,
+      questionContent: '이번 면담을 통해 생기기를 원하는 변화',
+      answerContent: '',
+    },
+  ],
+};
+
+export { coachList, scheduleList, interviewInfo };
