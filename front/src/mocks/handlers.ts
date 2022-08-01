@@ -27,6 +27,10 @@ const handlers = [
   rest.get<CrewResponse[]>(`${BASE_URL}/api/crews`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(crewList));
   }),
+
+  rest.post(`${BASE_URL}/api/reservations/:reservationId`, (req, res, ctx) => {
+    return res(ctx.status(201));
+  }),
 ];
 
 export default handlers;

@@ -31,6 +31,11 @@ const AddScheduleButton = styled.button`
   img {
     margin-right: 5px;
   }
+
+  &:hover {
+    opacity: 0.8;
+    transition: ease-in-out 0.2s;
+  }
 `;
 
 const BoardListContainer = styled.div`
