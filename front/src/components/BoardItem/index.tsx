@@ -6,16 +6,19 @@ import * as S from './styles';
 
 interface BoardItemProps {
   dateTime: string;
+  image: string;
   personName: string;
   buttonName: string;
+  color: string;
+  onClick: () => void;
 }
 
-const BoardItem = ({ dateTime, personName, buttonName }: BoardItemProps) => {
+const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: BoardItemProps) => {
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
   return (
-    <S.BoardItemContainer>
+    <S.BoardItemContainer color={color}>
       <S.TopSection>
         <S.DateContainer>
           <div>
@@ -31,16 +34,12 @@ const BoardItem = ({ dateTime, personName, buttonName }: BoardItemProps) => {
           <img src={CloseIcon} alt="닫기 아이콘" />
         </S.CloseIconWrapper>
       </S.TopSection>
-      <S.BottomSection>
+      <S.BottomSection color={color}>
         <div>
-          <S.ProfileImage
-            src={
-              'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png'
-            }
-          />
+          <S.ProfileImage src={image} />
           <span>{personName}</span>
         </div>
-        <button>{buttonName}</button>
+        <button onClick={onClick}>{buttonName}</button>
       </S.BottomSection>
     </S.BoardItemContainer>
   );
