@@ -31,7 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 @TestConstructor(autowireMode = AutowireMode.ALL)
 class ScheduleServiceTest {
 
-    private static final ScheduleFindRequest REQUEST = new ScheduleFindRequest(2022, 7);
+    private static final LocalDate NOW = LocalDate.now();
+    private static final int YEAR = NOW.getYear();
+    private static final int MONTH = NOW.getMonthValue();
+    private static final ScheduleFindRequest REQUEST = new ScheduleFindRequest(YEAR, MONTH);
 
     @Autowired
     private ScheduleService scheduleService;
