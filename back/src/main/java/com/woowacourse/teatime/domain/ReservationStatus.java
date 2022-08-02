@@ -17,12 +17,12 @@ public enum ReservationStatus {
         this.comparator = comparator;
     }
 
-    public static boolean isBeforeApproved(ReservationStatus status) {
-        return status.equals(BEFORE_APPROVED);
+    public boolean isBeforeApproved() {
+        return this.equals(BEFORE_APPROVED);
     }
 
-    public static boolean isApproved(ReservationStatus status) {
-        return status.equals(APPROVED);
+    public boolean isInProgress() {
+        return this.equals(IN_PROGRESS);
     }
 
     public static List<Reservation> classifyReservations(ReservationStatus status, List<Reservation> reservations) {

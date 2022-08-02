@@ -216,17 +216,6 @@ class ReservationServiceTest {
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
-    private Long 예약에_성공한다() {
-        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        return reservationService.save(reservationRequest);
-    }
-
-    private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
-        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), isApproved);
-        reservationService.approve(reservationId, reservationApproveRequest);
-    }
-
     @DisplayName("크루에 해당되는 면담 예약 목록을 조회한다.")
     @Test
     void findByCrew() {
@@ -258,5 +247,16 @@ class ReservationServiceTest {
                 () -> assertThat(coachReservationResponse.getApproved()).hasSize(1),
                 () -> assertThat(coachReservationResponse.getInProgress()).hasSize(0)
         );
+    }
+
+    private Long 예약에_성공한다() {
+        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+                schedule.getId());
+        return reservationService.save(reservationRequest);
+    }
+
+    private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
+        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), isApproved);
+        reservationService.approve(reservationId, reservationApproveRequest);
     }
 }

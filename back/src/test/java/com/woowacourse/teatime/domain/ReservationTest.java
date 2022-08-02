@@ -86,4 +86,23 @@ class ReservationTest {
                 .isInstanceOf(UnCancellableReservationException.class);
 
     }
+
+    @DisplayName("코치가 진행 중인 면담을 취소할 수 있다.")
+    @Test
+    void cancel_코치가_진행_중인_면담을_취소() {
+        Reservation 진행중인_면담 = new Reservation(schedule, CREW, ReservationStatus.IN_PROGRESS);
+
+        진행중인_면담.cancel(Role.COACH);
+
+        assertThat(schedule.getIsPossible()).isTrue();
+    }
+
+    @DisplayName("크루가 진행 중인 면담을 취소할 수 없다.")
+    @Test
+    void cancel_크루가_진행_중인_면담을_취소() {
+        Reservation 진행중인_면담 = new Reservation(schedule, CREW, ReservationStatus.IN_PROGRESS);
+
+        assertThatThrownBy(() -> 진행중인_면담.cancel(Role.CREW))
+                .isInstanceOf(UnCancellableReservationException.class);
+    }
 }
