@@ -16,7 +16,7 @@ class DateTest {
     void findFirstDay_invalidYear() {
         LocalDate past = LocalDate.now().minusYears(1L);
         assertThatThrownBy(() -> Date.findFirstDay(past.getYear(), past.getMonthValue()))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NoSuchMethodException.class);
     }
 
     @DisplayName("지난 월을 입력하면 예외를 반환한다.")
