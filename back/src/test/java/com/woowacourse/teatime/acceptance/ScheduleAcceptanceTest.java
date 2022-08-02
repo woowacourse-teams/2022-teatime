@@ -19,6 +19,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,11 @@ import org.springframework.http.MediaType;
 
 public class ScheduleAcceptanceTest extends AcceptanceTest {
 
-    private static final int YEAR = 2022;
-    private static final int MONTH = 7;
+    private static final LocalDate NOW = LocalDate.now();
+    private static final LocalDate LAST_DATE_OF_MONTH = NOW.withDayOfMonth(NOW.lengthOfMonth());
+    private static final boolean IS_LAST_DAY_OF_MONTH = NOW.isEqual(LAST_DATE_OF_MONTH);
+    private static final int YEAR = NOW.getYear();
+    private static final int MONTH = NOW.getMonthValue();
 
     @Autowired
     private CoachService coachService;
@@ -41,15 +45,24 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
     void findByCoachIdAndDate() {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
-        scheduleService.save(coachId, LocalDateTime.of(YEAR, MONTH, 31, 23, 59));
+        scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
         ExtractableResponse<Response> response = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
         List<ScheduleFindResponse> result = response.jsonPath().getList(".", ScheduleFindResponse.class);
 
-        assertAll(
-                () -> assertThat(result).hasSize(2),
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
-        );
+        if (IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(result).hasSize(1),
+                    () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+            );
+        }
+
+        if (!IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(result).hasSize(2),
+                    () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+            );
+        }
     }
 
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
@@ -58,18 +71,27 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
 
-        LocalDate date = LocalDate.of(YEAR, MONTH, 31);
-        LocalDateTime localDateTime = LocalDateTime.of(YEAR, MONTH, 31, 23, 59);
-        ScheduleUpdateRequest request = new ScheduleUpdateRequest(date, List.of(localDateTime));
+        LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
+        ScheduleUpdateRequest request = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of(localDateTime));
 
         ExtractableResponse<Response> updateResponse = 스케쥴_수정_요청됨(coachId, request);
 
         ExtractableResponse<Response> findResponse = 스케쥴_조회_요청됨(coachId, YEAR, MONTH);
         List<ScheduleFindResponse> result = findResponse.jsonPath().getList(".", ScheduleFindResponse.class);
-        assertAll(
-                () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(result).hasSize(2)
-        );
+
+        if (IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                    () -> assertThat(result).hasSize(1)
+            );
+        }
+
+        if (!IS_LAST_DAY_OF_MONTH) {
+            assertAll(
+                    () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                    () -> assertThat(result).hasSize(2)
+            );
+        }
     }
 
     private ExtractableResponse<Response> 스케쥴_수정_요청됨(Long coachId, ScheduleUpdateRequest request) {

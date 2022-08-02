@@ -5,7 +5,7 @@ import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
 import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import { MonthYear, ScheduleMap } from '@typings/domain';
+import { MonthYear } from '@typings/domain';
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
@@ -31,11 +31,6 @@ const Calendar = ({ isCoach }: CalendarProps) => {
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
       : CALENDAR_DATE_LENGTH.MAX;
-
-  const monthScheduleMap = monthSchedule?.reduce((newObj, { day, schedules }) => {
-    newObj[day] = schedules;
-    return newObj;
-  }, {} as ScheduleMap);
 
   const updateMonth = (increment: number) => {
     setMonthYear((prev) => getNewMonthYear(prev, increment));
@@ -83,9 +78,9 @@ const Calendar = ({ isCoach }: CalendarProps) => {
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
-        {DAY_OF_WEEKS.map((day) => {
-          return <S.DayOfWeekBox key={day}>{day}</S.DayOfWeekBox>;
-        })}
+        {DAY_OF_WEEKS.map((day) => (
+          <S.DayOfWeekBox key={day}>{day}</S.DayOfWeekBox>
+        ))}
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW + 1;
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;
@@ -98,7 +93,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
             <DateBox
               key={index}
               date={date}
-              daySchedule={monthScheduleMap[date]}
+              daySchedule={monthSchedule[date - 1]?.schedules}
               onClick={() => handleClickDate(date, isWeekend)}
               selectedDay={selectedDay}
               today={`${year}-${month}-${String(date).padStart(2, '0')}`}

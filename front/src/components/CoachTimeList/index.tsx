@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import dayjs from 'dayjs';
 import api from '@api/index';
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
@@ -42,7 +43,7 @@ const CoachTimeList = () => {
     <div>
       <S.TimeListContainer>
         {daySchedule?.schedules.map((schedule) => {
-          const time = schedule.dateTime.slice(11, 16);
+          const time = dayjs.tz(schedule.dateTime).format('HH:mm');
 
           return (
             <React.Fragment key={schedule.id}>

@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.domain;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
+import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -50,6 +51,22 @@ public class Reservation {
             return;
         }
         schedule.init();
+    }
+
+    public void cancel(Role role) {
+        if (isCancelBeforeApprovedByCrew(role) || ReservationStatus.isApproved(status)) {
+            schedule.init();
+            return;
+        }
+        throw new UnCancellableReservationException();
+    }
+
+    private boolean isCancelBeforeApprovedByCrew(Role role) {
+        return role.isCrew() && ReservationStatus.isBeforeApproved(status);
+    }
+
+    public boolean isSameCrew(Long crewId) {
+        return crew.getId().equals(crewId);
     }
 }
 
