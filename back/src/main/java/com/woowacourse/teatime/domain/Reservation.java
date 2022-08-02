@@ -42,6 +42,12 @@ public class Reservation {
         this.status = ReservationStatus.BEFORE_APPROVED;
     }
 
+    public Reservation(Schedule schedule, Crew crew, ReservationStatus status) {
+        this.schedule = schedule;
+        this.crew = crew;
+        this.status = status;
+    }
+
     public void confirm(boolean isApproved) {
         if (!status.isBeforeApproved()) {
             throw new AlreadyApprovedException();
@@ -54,15 +60,18 @@ public class Reservation {
     }
 
     public void cancel(Role role) {
-        if (isCancelBeforeApprovedByCrew(role) || status.isApproved()) {
-            schedule.init();
-            return;
+        if (isCancelBeforeApprovedByCoach(role) || isCancelInProgressByCrew(role)) {
+            throw new UnCancellableReservationException();
         }
-        throw new UnCancellableReservationException();
+        schedule.init();
     }
 
-    private boolean isCancelBeforeApprovedByCrew(Role role) {
-        return role.isCrew() && status.isBeforeApproved();
+    private boolean isCancelBeforeApprovedByCoach(Role role) {
+        return role.isCoach() && status.isBeforeApproved();
+    }
+
+    private boolean isCancelInProgressByCrew(Role role) {
+        return status.isInProgress() && role.equals(Role.CREW);
     }
 
     public boolean isSameCrew(Long crewId) {

@@ -9,7 +9,7 @@ public enum ReservationStatus {
         return this.equals(BEFORE_APPROVED);
     }
 
-    public boolean isApproved() {
-        return this.equals(APPROVED);
+    public boolean isInProgress() {
+        return this.equals(IN_PROGRESS);
     }
 }
