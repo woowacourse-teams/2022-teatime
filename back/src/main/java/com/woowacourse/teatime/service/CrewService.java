@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.controller.dto.request.CrewSaveRequest;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.repository.CrewRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ public class CrewService {
 
     private final CrewRepository crewRepository;
 
-    public Long save() {
-        Crew crew = crewRepository.save(new Crew("name", "image"));
-        return crew.getId();
+    public Long save(CrewSaveRequest crewSaveRequest) {
+        Crew crew = new Crew(crewSaveRequest.getName(), crewSaveRequest.getImage());
+        return crewRepository.save(crew).getId();
     }
 }

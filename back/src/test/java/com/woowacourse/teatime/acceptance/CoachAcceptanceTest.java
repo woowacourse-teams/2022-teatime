@@ -2,6 +2,7 @@ package com.woowacourse.teatime.acceptance;
 
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
+import static com.woowacourse.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -12,6 +13,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
 import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
+import com.woowacourse.teatime.controller.dto.request.CrewSaveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindResponse;
@@ -92,7 +94,7 @@ public class CoachAcceptanceTest extends AcceptanceTest {
         Long scheduleId2 = scheduleService.save(coachId, LocalDateTime.now().plusDays(1));
         Long scheduleId3 = scheduleService.save(coachId, LocalDateTime.now().plusDays(2));
         Long scheduleId4 = scheduleService.save(coachId, LocalDateTime.now().plusDays(3));
-        Long crewId = crewService.save();
+        Long crewId = crewService.save(CREW_SAVE_REQUEST);
         reservationService.save(new ReservationReserveRequest(crewId, coachId, scheduleId3));
         reservationService.save(new ReservationReserveRequest(crewId, coachId, scheduleId));
         Long reservationId = reservationService.save(new ReservationReserveRequest(crewId, coachId, scheduleId4));

@@ -2,6 +2,7 @@ package com.woowacourse.teatime.acceptance;
 
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
+import static com.woowacourse.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -42,7 +43,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     void setUp() {
         coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         scheduleId = scheduleService.save(coachId, DATE_TIME);
-        crewId = crewService.save();
+        crewId = crewService.save(CREW_SAVE_REQUEST);
     }
 
     @DisplayName("예약한다.")
@@ -50,7 +51,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     void reserve() {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save();
+        Long crewId = crewService.save(CREW_SAVE_REQUEST);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
