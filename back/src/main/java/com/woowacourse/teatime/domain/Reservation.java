@@ -43,7 +43,7 @@ public class Reservation {
     }
 
     public void confirm(boolean isApproved) {
-        if (!ReservationStatus.isBeforeApproved(status)) {
+        if (!status.isBeforeApproved()) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
@@ -54,7 +54,7 @@ public class Reservation {
     }
 
     public void cancel(Role role) {
-        if (isCancelBeforeApprovedByCrew(role) || ReservationStatus.isApproved(status)) {
+        if (isCancelBeforeApprovedByCrew(role) || status.isApproved()) {
             schedule.init();
             return;
         }
@@ -62,7 +62,7 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCrew(Role role) {
-        return role.isCrew() && ReservationStatus.isBeforeApproved(status);
+        return role.isCrew() && status.isBeforeApproved();
     }
 
     public boolean isSameCrew(Long crewId) {
