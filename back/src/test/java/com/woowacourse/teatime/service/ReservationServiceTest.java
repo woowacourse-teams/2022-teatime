@@ -244,6 +244,7 @@ class ReservationServiceTest {
     void findByCoach() {
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
         Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(2)));
+
         Reservation reservation = new Reservation(schedule1, crew);
         reservationRepository.save(reservation);
         reservationRepository.save(new Reservation(schedule2, crew));
