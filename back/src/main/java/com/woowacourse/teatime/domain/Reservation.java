@@ -87,19 +87,18 @@ public class Reservation {
         return this.status.isSameStatus(status);
     }
 
-    public LocalDateTime getScheduleDateTime() {
-        return schedule.getLocalDateTime();
-    }
-
-    public void update() {
-        if (isNeedToUpdateStatus()) {
+    public void updateStatusWhenHaveToChangeToInProgress() {
+        if (isSameStatus(APPROVED) && isTimePassed()) {
             status = IN_PROGRESS;
         }
     }
 
-    private boolean isNeedToUpdateStatus() {
-        return isSameStatus(APPROVED)
-                && LocalDateTime.now().isAfter(getScheduleDateTime());
+    private boolean isTimePassed() {
+        return LocalDateTime.now().isAfter(getScheduleDateTime());
+    }
+
+    public LocalDateTime getScheduleDateTime() {
+        return schedule.getLocalDateTime();
     }
 }
 

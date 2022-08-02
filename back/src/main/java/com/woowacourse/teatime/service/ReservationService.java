@@ -13,7 +13,6 @@ import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationRes
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.ReservationStatus;
-import com.woowacourse.teatime.domain.Reservations;
 import com.woowacourse.teatime.domain.Role;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.NotFoundCoachException;
@@ -112,8 +111,14 @@ public class ReservationService {
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(coachId, DONE);
-        new Reservations(reservations).updateStatus();
+        updateStatus(reservations);
         return classifyReservationsAndReturnDto(reservations);
+    }
+
+    private void updateStatus(List<Reservation> reservations) {
+        for (Reservation reservation : reservations) {
+            reservation.updateStatusWhenHaveToChangeToInProgress();
+        }
     }
 
     private void validateCoachId(Long coachId) {
