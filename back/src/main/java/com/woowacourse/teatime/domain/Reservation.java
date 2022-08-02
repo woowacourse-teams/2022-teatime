@@ -54,7 +54,7 @@ public class Reservation {
     }
 
     public void confirm(boolean isApproved) {
-        if (!status.isSameStatus(BEFORE_APPROVED)) {
+        if (!isSameStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
@@ -76,7 +76,7 @@ public class Reservation {
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
-        return status.isSameStatus(IN_PROGRESS) && role.isCrew();
+        return isSameStatus(IN_PROGRESS) && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {
