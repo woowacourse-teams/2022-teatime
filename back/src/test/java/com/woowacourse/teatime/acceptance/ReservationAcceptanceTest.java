@@ -13,7 +13,6 @@ import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.CrewService;
-import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -36,8 +35,6 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     private ScheduleService scheduleService;
     @Autowired
     private CrewService crewService;
-    @Autowired
-    private ReservationService reservationService;
 
     private Long coachId;
     private Long scheduleId;
@@ -53,10 +50,6 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("예약한다.")
     @Test
     void reserve() {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
-        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save(CREW_SAVE_REQUEST);
-
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new ReservationReserveRequest(crewId, coachId, scheduleId))
@@ -74,11 +67,14 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void approve(boolean isApprove) {
-        Long reservationId = 예약에_성공한다();
+        예약을_한다();
+        ExtractableResponse<Response> response1 = 코치의_면담_목록을_조회한다();
+        List<Long> reservationIds_beforeApproved
+                = response1.jsonPath().getList("beforeApproved.reservationId", Long.class);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("reservationId", reservationId)
+                .pathParam("reservationId", reservationIds_beforeApproved.get(0))
                 .body(new ReservationApproveRequest(coachId, isApprove))
                 .filter(document("reserve-approve", requestFields(
                         fieldWithPath("coachId").description("코치 아이디"),
@@ -93,12 +89,15 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @ParameterizedTest
     @ValueSource(strings = {"COACH", "CREW"})
     void cancel(String role) {
-        Long reservationId = 예약에_성공한다();
-        reservationService.approve(reservationId, new ReservationApproveRequest(coachId, true));
+        예약을_한다();
+        ExtractableResponse<Response> response1 = 코치의_면담_목록을_조회한다();
+        List<Long> reservationIds_beforeApproved
+                = response1.jsonPath().getList("beforeApproved.reservationId", Long.class);
+        승인을_한다(reservationIds_beforeApproved.get(0));
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("reservationId", reservationId)
+                .pathParam("reservationId", reservationIds_beforeApproved.get(0))
                 .body(new ReservationCancelRequest(coachId, role))
                 .filter(document("reserve-cancel", requestFields(
                         fieldWithPath("applicantId").description("취소 신청자 아이디"),
@@ -128,11 +127,6 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
                 .when().put("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
-    }
-
-    private Long 예약에_성공한다() {
-        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crewId, coachId, scheduleId);
-        return reservationService.save(reservationRequest);
     }
 
     private void 예약을_한다() {
