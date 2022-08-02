@@ -87,7 +87,7 @@ public class Reservation {
         return this.status.isSameStatus(status);
     }
 
-    public void updateStatusWhenHaveToChangeToInProgress() {
+    public void updateStatusToInProgress() {
         if (isSameStatus(APPROVED) && isTimePassed()) {
             status = IN_PROGRESS;
         }

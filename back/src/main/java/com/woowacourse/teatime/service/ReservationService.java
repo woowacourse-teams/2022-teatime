@@ -117,7 +117,7 @@ public class ReservationService {
 
     private void updateStatus(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
-            reservation.updateStatusWhenHaveToChangeToInProgress();
+            reservation.updateStatusToInProgress();
         }
     }
 
