@@ -1,6 +1,8 @@
 package com.woowacourse.teatime.domain;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
@@ -74,7 +76,7 @@ public class Reservation {
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
-        return status.isInProgress() && role.isCrew();
+        return status.isSameStatus(IN_PROGRESS) && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {

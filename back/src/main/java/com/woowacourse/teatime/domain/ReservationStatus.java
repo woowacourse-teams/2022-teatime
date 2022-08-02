@@ -1,5 +1,10 @@
 package com.woowacourse.teatime.domain;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 public enum ReservationStatus {
     BEFORE_APPROVED(() -> Comparator.comparing(Reservation::getId)),
     APPROVED(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
