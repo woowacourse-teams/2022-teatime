@@ -216,17 +216,6 @@ class ReservationServiceTest {
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
-    private Long 예약에_성공한다() {
-        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        return reservationService.save(reservationRequest);
-    }
-
-    private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
-        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), isApproved);
-        reservationService.approve(reservationId, reservationApproveRequest);
-    }
-
     @DisplayName("크루에 해당되는 면담 예약 목록을 조회한다.")
     @Test
     void findByCrew() {
@@ -244,18 +233,19 @@ class ReservationServiceTest {
     void findByCoach() {
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
         Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(2)));
+
         Reservation reservation = new Reservation(schedule1, crew);
         reservationRepository.save(reservation);
         reservationRepository.save(new Reservation(schedule2, crew));
 
         reservation.confirm(true);
 
-        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
+        CoachReservationsResponse coachReservationResponse = reservationService.findByCoachId(coach.getId());
 
         assertAll(
-                () -> assertThat(response.getBeforeApproved()).hasSize(1),
-                () -> assertThat(response.getApproved()).hasSize(1),
-                () -> assertThat(response.getInProgress()).hasSize(0)
+                () -> assertThat(coachReservationResponse.getBeforeApproved()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getApproved()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getInProgress()).hasSize(0)
         );
     }
 
@@ -278,5 +268,16 @@ class ReservationServiceTest {
                 () -> assertThat(response.getApproved()).hasSize(1),
                 () -> assertThat(response.getInProgress()).hasSize(1)
         );
+    }
+
+    private Long 예약에_성공한다() {
+        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+                schedule.getId());
+        return reservationService.save(reservationRequest);
+    }
+
+    private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
+        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), isApproved);
+        reservationService.approve(reservationId, reservationApproveRequest);
     }
 }

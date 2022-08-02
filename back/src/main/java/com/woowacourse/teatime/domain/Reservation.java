@@ -1,8 +1,6 @@
 package com.woowacourse.teatime.domain;
 
-import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
-import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
@@ -47,6 +45,12 @@ public class Reservation {
         this.status = BEFORE_APPROVED;
     }
 
+    public Reservation(Schedule schedule, Crew crew, ReservationStatus status) {
+        this.schedule = schedule;
+        this.crew = crew;
+        this.status = status;
+    }
+
     public void confirm(boolean isApproved) {
         if (!status.isSameStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
@@ -59,15 +63,18 @@ public class Reservation {
     }
 
     public void cancel(Role role) {
-        if (isCancelBeforeApprovedByCrew(role) || status.isSameStatus(APPROVED)) {
-            schedule.init();
-            return;
+        if (isCancelBeforeApprovedByCoach(role) || isCancelInProgressByCrew(role)) {
+            throw new UnCancellableReservationException();
         }
-        throw new UnCancellableReservationException();
+        schedule.init();
     }
 
-    private boolean isCancelBeforeApprovedByCrew(Role role) {
-        return role.isCrew() && status.isSameStatus(BEFORE_APPROVED);
+    private boolean isCancelBeforeApprovedByCoach(Role role) {
+        return role.isCoach() && status.isSameStatus(BEFORE_APPROVED);
+    }
+
+    private boolean isCancelInProgressByCrew(Role role) {
+        return status.isInProgress() && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {

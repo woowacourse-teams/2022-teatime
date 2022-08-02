@@ -1,9 +1,6 @@
 package com.woowacourse.teatime.service;
 
-import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
-import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
-import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
