@@ -2,6 +2,7 @@ package com.woowacourse.teatime.service;
 
 import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
@@ -22,7 +23,6 @@ import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
-import com.woowacourse.teatime.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -110,8 +110,7 @@ public class ReservationService {
 
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndScheduleLocalDateTimeBetween(
-                coachId, Date.startOfToday(), Date.endOfOneMonthLaterDate());
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(coachId, DONE);
         return classifyReservationsAndReturnDto(reservations);
     }
 

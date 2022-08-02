@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 public enum ReservationStatus {
     BEFORE_APPROVED(() -> Comparator.comparing(Reservation::getId)),
     APPROVED(() -> Comparator.comparing(Reservation::getLocalDateTime)),
-    IN_PROGRESS(() -> Comparator.comparing(Reservation::getLocalDateTime));
+    IN_PROGRESS(() -> Comparator.comparing(Reservation::getLocalDateTime)),
+    DONE(() -> Comparator.comparing(Reservation::getLocalDateTime));
 
     private final Supplier<Comparator<Reservation>> comparator;
 

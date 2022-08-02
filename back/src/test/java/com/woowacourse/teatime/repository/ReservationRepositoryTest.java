@@ -9,8 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Schedule;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,18 +55,17 @@ class ReservationRepositoryTest {
 
     @DisplayName("코치의 한 달 면담 목록을 조회한다.")
     @Test
-    void findByCoachIdOneMonth() {
+    void findByCoachIdExceptDone() {
         Coach newCoach = coachRepository.save(COACH_JASON);
         Schedule newCoachSchedule = scheduleRepository.save(new Schedule(newCoach, DATE_TIME));
-        Schedule lastSchedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().minusMonths(2)));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.plusDays(1)));
 
         reservationRepository.save(new Reservation(schedule, crew));
-        reservationRepository.save(new Reservation(schedule, crew));
+        reservationRepository.save(new Reservation(schedule2, crew));
         reservationRepository.save(new Reservation(newCoachSchedule, crew));
-        reservationRepository.save(new Reservation(lastSchedule, crew));
 
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndScheduleLocalDateTimeBetween(
-                coach.getId(), LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(
+                coach.getId(), ReservationStatus.DONE);
 
         assertThat(reservations).hasSize(2);
     }

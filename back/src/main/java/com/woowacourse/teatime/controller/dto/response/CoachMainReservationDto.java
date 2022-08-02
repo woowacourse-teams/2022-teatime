@@ -13,15 +13,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CoachMainReservationDto {
 
+    private Long reservationId;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
+
+    private Long crewId;
 
     private String crewName;
 
     private String crewImage;
 
     public static CoachMainReservationDto from(Reservation reservation) {
-        return new CoachMainReservationDto(reservation.getLocalDateTime(),
-                reservation.getCrew().getName(), reservation.getCrew().getImage());
+        return new CoachMainReservationDto(
+                reservation.getId(),
+                reservation.getLocalDateTime(),
+                reservation.getCrew().getId(),
+                reservation.getCrew().getName(),
+                reservation.getCrew().getImage()
+        );
     }
 }
