@@ -111,11 +111,11 @@ public class ReservationService {
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(coachId, DONE);
-        updateStatus(reservations);
+        updateStatusToInProgress(reservations);
         return classifyReservationsAndReturnDto(reservations);
     }
 
-    private void updateStatus(List<Reservation> reservations) {
+    private void updateStatusToInProgress(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
             reservation.updateStatusToInProgress();
         }
@@ -131,6 +131,12 @@ public class ReservationService {
                 ReservationStatus.classifyReservations(BEFORE_APPROVED, reservations),
                 ReservationStatus.classifyReservations(APPROVED, reservations),
                 ReservationStatus.classifyReservations(IN_PROGRESS, reservations));
+    }
+
+    public void updateStatusToDone(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        reservation.updateStatusToDone();
     }
 }
 
