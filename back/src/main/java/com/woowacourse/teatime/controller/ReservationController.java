@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,5 +45,11 @@ public class ReservationController {
                                        @Valid @RequestBody ReservationCancelRequest reservationCancelRequest) {
         reservationService.cancel(reservationId, reservationCancelRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{reservationId}")
+    public ResponseEntity<Void> finish(@PathVariable @NotNull Long reservationId) {
+        reservationService.updateStatusToDone(reservationId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
