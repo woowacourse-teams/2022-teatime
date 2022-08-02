@@ -71,7 +71,7 @@ public class Reservation {
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
-        return status.isInProgress() && role.equals(Role.CREW);
+        return status.isInProgress() && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {
