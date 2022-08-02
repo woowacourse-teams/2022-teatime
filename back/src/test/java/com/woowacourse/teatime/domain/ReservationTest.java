@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.domain;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
@@ -9,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.exception.UnableToDoneReservationException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -126,7 +128,7 @@ class ReservationTest {
 
     @DisplayName("예약 시간이 되어도 승인되지 않은 면담은 진행중인 상태로 업데이트 되지 않는다.")
     @Test
-    void updateStatusToInProgress_unApprovedReservation() {
+    void updateStatusToInProgress_unapprovedReservation() {
         Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
 
@@ -145,5 +147,52 @@ class ReservationTest {
         reservation.updateStatusToInProgress();
 
         assertThat(reservation.isSameStatus(IN_PROGRESS)).isFalse();
+    }
+
+    @DisplayName("진행중인 면담을 종료하면 완료된 상태로 업데이트 된다.")
+    @Test
+    void updateStatusToDone() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+        reservation.updateStatusToInProgress();
+
+        reservation.updateStatusToDone();
+
+        assertThat(reservation.isSameStatus(DONE)).isTrue();
+    }
+
+    @DisplayName("승인되지 않은 면담을 종료하면 예외가 발생한다.")
+    @Test
+    void updateStatusToDone_unableToDoneException_unapproved() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+
+        assertThatThrownBy(reservation::updateStatusToDone)
+                .isInstanceOf(UnableToDoneReservationException.class);
+    }
+
+    @DisplayName("승인되었지만 진행중이지 않은 면담을 종료하면 예외가 발생한다.")
+    @Test
+    void updateStatusToDone_unableToDoneException_approved() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+
+        assertThatThrownBy(reservation::updateStatusToDone)
+                .isInstanceOf(UnableToDoneReservationException.class);
+    }
+
+    @DisplayName("이미 종료된 면담을 종료하면 예외가 발생한다.")
+    @Test
+    void updateStatusToDone_unableToDoneException_done() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+        reservation.updateStatusToInProgress();
+        reservation.updateStatusToDone();
+
+        assertThatThrownBy(reservation::updateStatusToDone)
+                .isInstanceOf(UnableToDoneReservationException.class);
     }
 }

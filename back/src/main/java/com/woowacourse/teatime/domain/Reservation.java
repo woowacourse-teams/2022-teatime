@@ -2,10 +2,12 @@ package com.woowacourse.teatime.domain;
 
 import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.exception.UnableToDoneReservationException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -89,6 +91,13 @@ public class Reservation {
 
     private boolean isTimePassed() {
         return LocalDateTime.now().isAfter(getScheduleDateTime());
+    }
+
+    public void updateStatusToDone() {
+        if (!isSameStatus(IN_PROGRESS)) {
+            throw new UnableToDoneReservationException();
+        }
+        status = DONE;
     }
 
     public LocalDateTime getScheduleDateTime() {
