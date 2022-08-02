@@ -85,7 +85,7 @@ public class CoachAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
-    @DisplayName("코치의 한 달 면담 목록을 불러온다.")
+    @DisplayName("코치의 면담 목록을 불러온다.")
     @Test
     void findReservations() {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);

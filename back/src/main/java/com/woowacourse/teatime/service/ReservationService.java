@@ -111,7 +111,14 @@ public class ReservationService {
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(coachId, DONE);
+        updateStatus(reservations);
         return classifyReservationsAndReturnDto(reservations);
+    }
+
+    private void updateStatus(List<Reservation> reservations) {
+        for (Reservation reservation : reservations) {
+            reservation.updateStatusWhenHaveToChangeToInProgress();
+        }
     }
 
     private void validateCoachId(Long coachId) {
