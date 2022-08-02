@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.domain;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
@@ -109,5 +110,40 @@ class ReservationTest {
 
         assertThatThrownBy(() -> reservation.cancel(Role.CREW))
                 .isInstanceOf(UnCancellableReservationException.class);
+    }
+
+    @DisplayName("예약 시간이 되면 승인된 면담이 진행중인 상태로 업데이트 된다.")
+    @Test
+    void updateStatusToInProgress() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+
+        reservation.updateStatusToInProgress();
+
+        assertThat(reservation.isSameStatus(IN_PROGRESS)).isTrue();
+    }
+
+    @DisplayName("예약 시간이 되어도 승인되지 않은 면담은 진행중인 상태로 업데이트 되지 않는다.")
+    @Test
+    void updateStatusToInProgress_unApprovedReservation() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+
+        reservation.updateStatusToInProgress();
+
+        assertThat(reservation.isSameStatus(IN_PROGRESS)).isFalse();
+    }
+
+    @DisplayName("승인된 면담이 아직 시간이 안됐으면 진행중인 상태로 업데이트 되지 않는다.")
+    @Test
+    void updateStatusToInProgress_noTimeYet() {
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now().plusDays(1L));
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+
+        reservation.updateStatusToInProgress();
+
+        assertThat(reservation.isSameStatus(IN_PROGRESS)).isFalse();
     }
 }
