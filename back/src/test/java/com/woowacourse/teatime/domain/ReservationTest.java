@@ -73,7 +73,7 @@ class ReservationTest {
 
     @DisplayName("크루가 승인되지 않은 상태의 예약을 취소할 수 있다.")
     @Test
-    void cancel_승인되지_않은_상태의_예약을_취소() {
+    void cancel_notApprovedReservation() {
         reservation.cancel(Role.CREW);
 
         assertThat(schedule.getIsPossible()).isTrue();
@@ -81,7 +81,7 @@ class ReservationTest {
 
     @DisplayName("코치가 예약을 취소할 때, 상태가 승인상태가 아닌 경우 에러가 발생한다.")
     @Test
-    void cancel_InvalidCancelException() {
+    void cancel_invalidCancelException() {
         assertThatThrownBy(() -> reservation.cancel(Role.COACH))
                 .isInstanceOf(UnCancellableReservationException.class);
 
@@ -89,7 +89,7 @@ class ReservationTest {
 
     @DisplayName("코치가 진행 중인 면담을 취소할 수 있다.")
     @Test
-    void cancel_코치가_진행_중인_면담을_취소() {
+    void cancel_byCoach_inProgressReservation() {
         Reservation 진행중인_면담 = new Reservation(schedule, CREW, ReservationStatus.IN_PROGRESS);
 
         진행중인_면담.cancel(Role.COACH);
@@ -99,7 +99,7 @@ class ReservationTest {
 
     @DisplayName("크루가 진행 중인 면담을 취소할 수 없다.")
     @Test
-    void cancel_크루가_진행_중인_면담을_취소() {
+    void cancel_byCrew_inProgressReservation() {
         Reservation 진행중인_면담 = new Reservation(schedule, CREW, ReservationStatus.IN_PROGRESS);
 
         assertThatThrownBy(() -> 진행중인_면담.cancel(Role.CREW))
