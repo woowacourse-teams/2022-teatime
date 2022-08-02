@@ -13,8 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowedOrigins(
                         "http://localhost:8080",
-                        "https://3.34.43.168:8080",
-                        "http://3.34.43.168:8080"
+                        "https://teatime.pe.kr",
+                        "http://teatime.pe.kr"
                 )
                 .allowedMethods("*");
     }

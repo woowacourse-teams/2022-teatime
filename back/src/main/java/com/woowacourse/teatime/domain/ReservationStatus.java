@@ -8,4 +8,8 @@ public enum ReservationStatus {
     public static boolean isBeforeApproved(ReservationStatus status) {
         return status.equals(BEFORE_APPROVED);
     }
+
+    public static boolean isApproved(ReservationStatus status) {
+        return status.equals(APPROVED);
+    }
 }
