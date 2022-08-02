@@ -1,5 +1,9 @@
 package com.woowacourse.teatime.domain;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import java.time.LocalDateTime;
@@ -40,22 +44,22 @@ public class Reservation {
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
         this.crew = crew;
-        this.status = ReservationStatus.BEFORE_APPROVED;
+        this.status = BEFORE_APPROVED;
     }
 
     public void confirm(boolean isApproved) {
-        if (!ReservationStatus.isBeforeApproved(status)) {
+        if (!status.isSameStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
-            status = ReservationStatus.APPROVED;
+            status = APPROVED;
             return;
         }
         schedule.init();
     }
 
     public void cancel(Role role) {
-        if (isCancelBeforeApprovedByCrew(role) || ReservationStatus.isApproved(status)) {
+        if (isCancelBeforeApprovedByCrew(role) || status.isSameStatus(APPROVED)) {
             schedule.init();
             return;
         }
@@ -63,7 +67,7 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCrew(Role role) {
-        return role.isCrew() && ReservationStatus.isBeforeApproved(status);
+        return role.isCrew() && status.isSameStatus(BEFORE_APPROVED);
     }
 
     public boolean isSameCrew(Long crewId) {
@@ -71,11 +75,22 @@ public class Reservation {
     }
 
     public boolean isSameStatus(ReservationStatus status) {
-        return this.status.equals(status);
+        return this.status.isSameStatus(status);
     }
 
-    public LocalDateTime getLocalDateTime() {
+    public LocalDateTime getScheduleDateTime() {
         return schedule.getLocalDateTime();
+    }
+
+    public void update() {
+        if (isNeedToUpdateStatus()) {
+            status = IN_PROGRESS;
+        }
+    }
+
+    private boolean isNeedToUpdateStatus() {
+        return isSameStatus(APPROVED)
+                && LocalDateTime.now().isAfter(getScheduleDateTime());
     }
 }
 

@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 public enum ReservationStatus {
     BEFORE_APPROVED(() -> Comparator.comparing(Reservation::getId)),
-    APPROVED(() -> Comparator.comparing(Reservation::getLocalDateTime)),
-    IN_PROGRESS(() -> Comparator.comparing(Reservation::getLocalDateTime)),
-    DONE(() -> Comparator.comparing(Reservation::getLocalDateTime));
+    APPROVED(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
+    IN_PROGRESS(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
+    DONE(() -> Comparator.comparing(Reservation::getScheduleDateTime));
 
     private final Supplier<Comparator<Reservation>> comparator;
 
@@ -17,12 +17,8 @@ public enum ReservationStatus {
         this.comparator = comparator;
     }
 
-    public static boolean isBeforeApproved(ReservationStatus status) {
-        return status.equals(BEFORE_APPROVED);
-    }
-
-    public static boolean isApproved(ReservationStatus status) {
-        return status.equals(APPROVED);
+    public boolean isSameStatus(ReservationStatus status) {
+        return this.equals(status);
     }
 
     public static List<Reservation> classifyReservations(ReservationStatus status, List<Reservation> reservations) {

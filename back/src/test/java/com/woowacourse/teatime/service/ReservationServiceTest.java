@@ -239,7 +239,7 @@ class ReservationServiceTest {
         assertThat(reservations).hasSize(1);
     }
 
-    @DisplayName("코치에 해당되는 한 달 면담 목록을 조회한다.")
+    @DisplayName("코치에 해당되는 면담 목록을 조회한다.")
     @Test
     void findByCoach() {
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
@@ -250,12 +250,33 @@ class ReservationServiceTest {
 
         reservation.confirm(true);
 
-        CoachReservationsResponse coachReservationResponse = reservationService.findByCoachId(coach.getId());
+        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
 
         assertAll(
-                () -> assertThat(coachReservationResponse.getBeforeApproved()).hasSize(1),
-                () -> assertThat(coachReservationResponse.getApproved()).hasSize(1),
-                () -> assertThat(coachReservationResponse.getInProgress()).hasSize(0)
+                () -> assertThat(response.getBeforeApproved()).hasSize(1),
+                () -> assertThat(response.getApproved()).hasSize(1),
+                () -> assertThat(response.getInProgress()).hasSize(0)
+        );
+    }
+
+    @DisplayName("코치에 해당되는 면담 목록을 조회할 때 승인된 일정은 면담이 시작되면 진행중으로 바뀐다.")
+    @Test
+    void findByCoachStatusUpdate() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
+        Reservation reservation = new Reservation(schedule, crew);
+        Reservation reservation2 = new Reservation(schedule2, crew);
+        reservationRepository.save(reservation);
+        reservationRepository.save(reservation2);
+        reservation.confirm(true);
+        reservation2.confirm(true);
+
+        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
+
+        assertAll(
+                () -> assertThat(response.getBeforeApproved()).hasSize(0),
+                () -> assertThat(response.getApproved()).hasSize(1),
+                () -> assertThat(response.getInProgress()).hasSize(1)
         );
     }
 }

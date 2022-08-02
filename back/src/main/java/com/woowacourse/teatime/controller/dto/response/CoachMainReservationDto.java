@@ -27,7 +27,7 @@ public class CoachMainReservationDto {
     public static CoachMainReservationDto from(Reservation reservation) {
         return new CoachMainReservationDto(
                 reservation.getId(),
-                reservation.getLocalDateTime(),
+                reservation.getScheduleDateTime(),
                 reservation.getCrew().getId(),
                 reservation.getCrew().getName(),
                 reservation.getCrew().getImage()
