@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+
 import api from '@api/index';
 
 interface UseFetch<T> {

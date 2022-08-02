@@ -1,4 +1,5 @@
 import { createContext, useReducer, Dispatch } from 'react';
+
 import type { DaySchedule, Schedule as ScheduleType } from '@typings/domain';
 
 const timeArray = [

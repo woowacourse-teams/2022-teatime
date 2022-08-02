@@ -1,17 +1,19 @@
 import { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import * as S from './styles';
 import dayjs from 'dayjs';
+
+import DateBox from '@components/DateBox';
+import Conditional from '@components/Conditional';
+import api from '@api/index';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
+import { MonthYear } from '@typings/domain';
+
 import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
-import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import { MonthYear } from '@typings/domain';
-import DateBox from '@components/DateBox';
-import Conditional from '@components/Conditional';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
-import api from '@api/index';
-import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;
