@@ -11,10 +11,12 @@ const FadeIn = keyframes`
 
 const TimeListContainer = styled.div`
   width: 250px;
+  margin-left: 60px;
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
   }
+  animation: ${FadeIn} 0.8s;
 `;
 
 const TimeBox = styled.div<{ isPossible?: boolean }>`

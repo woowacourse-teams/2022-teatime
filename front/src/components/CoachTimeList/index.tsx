@@ -41,8 +41,8 @@ const CoachTimeList = () => {
   };
 
   return (
-    <div>
-      <S.TimeListContainer>
+    <S.TimeListContainer>
+      <S.ScrollContainer>
         {daySchedule?.schedules.map((schedule) => {
           const time = dayjs.tz(schedule.dateTime).format('HH:mm');
 
@@ -59,7 +59,7 @@ const CoachTimeList = () => {
             </React.Fragment>
           );
         })}
-      </S.TimeListContainer>
+      </S.ScrollContainer>
 
       <Conditional condition={daySchedule?.schedules.length !== 0}>
         <S.ButtonContainer>
@@ -69,7 +69,7 @@ const CoachTimeList = () => {
           <S.ConfirmButton onClick={handleUpdateSchedules}>확인</S.ConfirmButton>
         </S.ButtonContainer>
       </Conditional>
-    </div>
+    </S.TimeListContainer>
   );
 };
 
