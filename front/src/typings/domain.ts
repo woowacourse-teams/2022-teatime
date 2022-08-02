@@ -28,10 +28,19 @@ interface Schedule {
   isSelected?: boolean;
 }
 
+interface InterviewInfo {
+  dateTime: string;
+  coachName: string;
+  coachImage: string;
+  sheets: Sheets[];
+}
+
+type Sheets = { questionNumber: number; questionContent: string; answerContent: string };
+
+type DaySchedule = { day: number; schedules: Schedule[] };
+
 type CrewList = { status: string; crews: Crew[] };
 
 type CrewListMap = Record<string, Crew[]>;
 
-type DaySchedule = { day: number; schedules: Schedule[] };
-
-export { Crew, Coach, MonthYear, Schedule, DaySchedule, CrewList, CrewListMap };
+export { Crew, Coach, MonthYear, Schedule, DaySchedule, InterviewInfo, CrewList, CrewListMap };
