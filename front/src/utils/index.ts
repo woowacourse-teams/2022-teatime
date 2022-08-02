@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+
 import { MonthYear } from '@typings/domain';
 
 const getMonthYearDetails = (initialDate: dayjs.Dayjs): MonthYear => {

@@ -1,6 +1,8 @@
-import ModalPortal from '../../ModalPortal';
-import CloseIcon from '@assets/close.svg';
 import * as S from './styles';
+
+import ModalPortal from '../../ModalPortal';
+
+import CloseIcon from '@assets/close.svg';
 
 interface ModalProps {
   icon: string;
