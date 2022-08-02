@@ -2,7 +2,6 @@ package com.woowacourse.teatime.controller.dto.response;
 
 import com.woowacourse.teatime.domain.Reservation;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,15 +18,10 @@ public class CoachReservationsResponse {
 
     public static CoachReservationsResponse of(List<Reservation> beforeApproved, List<Reservation> approved,
                                                List<Reservation> inProgress) {
-        List<CoachMainReservationDto> beforeApprovedDtos = getCoachMainReservationDtos(beforeApproved);
-        List<CoachMainReservationDto> approvedDtos = getCoachMainReservationDtos(approved);
-        List<CoachMainReservationDto> inProgressDtos = getCoachMainReservationDtos(inProgress);
-        return new CoachReservationsResponse(beforeApprovedDtos, approvedDtos, inProgressDtos);
-    }
+        List<CoachMainReservationDto> beforeApprovedDtos = CoachMainReservationDto.from(beforeApproved);
+        List<CoachMainReservationDto> approvedDtos = CoachMainReservationDto.from(approved);
+        List<CoachMainReservationDto> inProgressDtos = CoachMainReservationDto.from(inProgress);
 
-    private static List<CoachMainReservationDto> getCoachMainReservationDtos(List<Reservation> reservations) {
-        return reservations.stream()
-                .map(CoachMainReservationDto::from)
-                .collect(Collectors.toList());
+        return new CoachReservationsResponse(beforeApprovedDtos, approvedDtos, inProgressDtos);
     }
 }
