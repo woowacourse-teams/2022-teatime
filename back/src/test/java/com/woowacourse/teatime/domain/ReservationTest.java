@@ -8,11 +8,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ReservationTest {
+
+    private static final boolean 승인을_한다 = true;
+    private static final boolean 승인을_거절한다 = false;
 
     private Reservation reservation;
     private Schedule schedule;
@@ -26,8 +30,6 @@ class ReservationTest {
     @DisplayName("면담을 승인한다.")
     @Test
     void confirm_approve() {
-        boolean 승인을_한다 = true;
-
         reservation.confirm(승인을_한다);
 
         assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.APPROVED);
@@ -36,8 +38,6 @@ class ReservationTest {
     @DisplayName("승인 전, 면담을 취소한다.")
     @Test
     void conform_denyApproval() {
-        boolean 승인을_거절한다 = false;
-
         reservation.confirm(승인을_거절한다);
 
         assertThat(schedule.getIsPossible()).isTrue();
@@ -46,8 +46,7 @@ class ReservationTest {
     @DisplayName("승인이 되어 있는 상태에서 승인 요청을 하면 에러가 발생한다.")
     @Test
     void confirm_invalid() {
-        reservation.confirm(true);
-        boolean 승인을_한다 = true;
+        reservation.confirm(승인을_한다);
 
         assertThatThrownBy(() -> reservation.confirm(승인을_한다))
                 .isInstanceOf(AlreadyApprovedException.class);
@@ -56,7 +55,7 @@ class ReservationTest {
     @DisplayName("코치가 예약을 취소할 수 있다.")
     @Test
     void cancel_coach() {
-        reservation.confirm(true);
+        reservation.confirm(승인을_한다);
         reservation.cancel(Role.COACH);
 
         assertThat(schedule.getIsPossible()).isTrue();
@@ -65,7 +64,7 @@ class ReservationTest {
     @DisplayName("크루가 예약을 취소할 수 있다.")
     @Test
     void cancel_crew() {
-        reservation.confirm(true);
+        reservation.confirm(승인을_한다);
         reservation.cancel(Role.CREW);
 
         assertThat(schedule.getIsPossible()).isTrue();
@@ -90,9 +89,12 @@ class ReservationTest {
     @DisplayName("코치가 진행 중인 면담을 취소할 수 있다.")
     @Test
     void cancel_byCoach_inProgressReservation() {
-        Reservation 진행중인_면담 = new Reservation(schedule, CREW, ReservationStatus.IN_PROGRESS);
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+        reservation.updateStatusToInProgress();
 
-        진행중인_면담.cancel(Role.COACH);
+        reservation.cancel(Role.COACH);
 
         assertThat(schedule.getIsPossible()).isTrue();
     }
@@ -100,9 +102,12 @@ class ReservationTest {
     @DisplayName("크루가 진행 중인 면담을 취소할 수 없다.")
     @Test
     void cancel_byCrew_inProgressReservation() {
-        Reservation 진행중인_면담 = new Reservation(schedule, CREW, ReservationStatus.IN_PROGRESS);
+        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.confirm(승인을_한다);
+        reservation.updateStatusToInProgress();
 
-        assertThatThrownBy(() -> 진행중인_면담.cancel(Role.CREW))
+        assertThatThrownBy(() -> reservation.cancel(Role.CREW))
                 .isInstanceOf(UnCancellableReservationException.class);
     }
 }

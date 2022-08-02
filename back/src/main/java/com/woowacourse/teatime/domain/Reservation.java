@@ -47,12 +47,6 @@ public class Reservation {
         this.status = BEFORE_APPROVED;
     }
 
-    public Reservation(Schedule schedule, Crew crew, ReservationStatus status) {
-        this.schedule = schedule;
-        this.crew = crew;
-        this.status = status;
-    }
-
     public void confirm(boolean isApproved) {
         if (!isSameStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
