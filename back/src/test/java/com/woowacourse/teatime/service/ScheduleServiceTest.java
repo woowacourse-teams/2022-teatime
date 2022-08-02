@@ -31,7 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 @TestConstructor(autowireMode = AutowireMode.ALL)
 class ScheduleServiceTest {
 
-    private static final ScheduleFindRequest REQUEST = new ScheduleFindRequest(2022, 7);
+    private static final LocalDate NOW = LocalDate.now();
+    private static final int YEAR = NOW.getYear();
+    private static final int MONTH = NOW.getMonthValue();
+    private static final ScheduleFindRequest REQUEST = new ScheduleFindRequest(YEAR, MONTH);
 
     @Autowired
     private ScheduleService scheduleService;
@@ -54,7 +57,7 @@ class ScheduleServiceTest {
     @Test
     void find_future() {
         Coach coach = coachRepository.save(COACH_BROWN);
-        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(LocalDate.now(), LocalTime.MAX)));
+        scheduleRepository.save(new Schedule(coach, LocalDateTime.of(NOW, LocalTime.of(23, 59))));
         List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
 
         assertThat(responses).hasSize(1);
