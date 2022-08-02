@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import * as S from './styles';
-
 import api from '@api/index';
 import Frame from '@components/Frame';
 import Textarea from '@components/Textarea';
 import Title from '@components/Title';
 import useFetch from '@hooks/useFetch';
-import { InterviewInfo } from '@typings/domain';
+import { ReservationInfo } from '@typings/domain';
+import dayjs from 'dayjs';
+import ScheduleIcon from '@assets/schedule.svg';
+import ClockIcon from '@assets/clock.svg';
 
-const InterviewForm = () => {
-  const { data: interviewInfo } = useFetch<InterviewInfo, null>('/api/crews/me/reservations/1');
+const AddSheet = () => {
+  const { data: reservationInfo } = useFetch<ReservationInfo, null>('/api/crews/me/reservations/1');
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState([
     {
@@ -52,39 +54,45 @@ const InterviewForm = () => {
   };
 
   useEffect(() => {
-    if (interviewInfo) {
-      setContents(interviewInfo.sheets);
+    if (reservationInfo) {
+      setContents(reservationInfo.sheets);
     }
-  }, [interviewInfo]);
+  }, [reservationInfo]);
 
   return (
     <Frame>
       <S.InfoContainer>
-        <img src={interviewInfo?.coachImage} alt="코치 프로필 이미지" />
-        <h3>{interviewInfo?.coachName}</h3>
-        <p>{interviewInfo?.dateTime}</p>
-        <p>{interviewInfo?.dateTime}</p>
+        <img src={reservationInfo?.coachImage} alt="코치 프로필 이미지" />
+        <p>{reservationInfo?.coachName}</p>
+        <S.DateWrapper>
+          <img src={ScheduleIcon} alt="일정 아이콘" />
+          <span>{dayjs.tz(reservationInfo?.dateTime).format(' MM월 DD일')}</span>
+        </S.DateWrapper>
+        <S.DateWrapper>
+          <img src={ClockIcon} alt="시계 아이콘" />
+          <span>{dayjs.tz(reservationInfo?.dateTime).format(' HH:mm')}</span>
+        </S.DateWrapper>
       </S.InfoContainer>
       <S.InterviewContainer>
         <Title text="면담 내용 작성" />
         <form>
           <Textarea
             id="0"
-            label={interviewInfo?.sheets[0].questionContent}
+            label={reservationInfo?.sheets[0].questionContent}
             value={contents[0].answerContent}
             handleChangeContent={handleChangeContent(0)}
             isSubmit={isSubmit}
           />
           <Textarea
             id="1"
-            label={interviewInfo?.sheets[1].questionContent}
+            label={reservationInfo?.sheets[1].questionContent}
             value={contents[1].answerContent}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
           />
           <Textarea
             id="2"
-            label={interviewInfo?.sheets[2].questionContent}
+            label={reservationInfo?.sheets[2].questionContent}
             value={contents[2].answerContent}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
@@ -99,4 +107,4 @@ const InterviewForm = () => {
   );
 };
 
-export default InterviewForm;
+export default AddSheet;

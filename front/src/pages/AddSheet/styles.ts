@@ -4,19 +4,30 @@ const InfoContainer = styled.div`
   width: 30%;
   margin-right: 50px;
   border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
-  color: ${({ theme }) => theme.colors.GRAY_800};
+  font-weight: bold;
 
-  img {
+  > img {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 8px;
     margin-bottom: 6px;
   }
 
-  p {
-    line-height: 30px;
+  > p {
+    font-size: 20px;
+  }
+`;
+
+const DateWrapper = styled.div`
+  margin-top: 8px;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+  span {
     font-size: 18px;
-    font-weight: bold;
+    color: ${({ theme }) => theme.colors.GRAY_800};
   }
 `;
 
@@ -54,4 +65,11 @@ const SubmitButton = styled.button`
   border: none;
 `;
 
-export { InfoContainer, InterviewContainer, ButtonContainer, SaveButton, SubmitButton };
+export {
+  InfoContainer,
+  InterviewContainer,
+  DateWrapper,
+  ButtonContainer,
+  SaveButton,
+  SubmitButton,
+};
