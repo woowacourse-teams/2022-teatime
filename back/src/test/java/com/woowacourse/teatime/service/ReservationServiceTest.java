@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
@@ -27,6 +28,7 @@ import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -224,6 +226,27 @@ class ReservationServiceTest {
         List<CrewFindOwnReservationResponse> reservations = reservationService.findByCrew(crew.getId());
 
         assertThat(reservations).hasSize(1);
+    }
+
+    @DisplayName("코치에 해당되는 한 달 면담 목록을 조회한다.")
+    @Test
+    void findByCoach() {
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(2)));
+
+        Reservation reservation = new Reservation(schedule1, crew);
+        reservationRepository.save(reservation);
+        reservationRepository.save(new Reservation(schedule2, crew));
+
+        reservation.confirm(true);
+
+        CoachReservationsResponse coachReservationResponse = reservationService.findByCoachId(coach.getId());
+
+        assertAll(
+                () -> assertThat(coachReservationResponse.getBeforeApproved()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getApproved()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getInProgress()).hasSize(0)
+        );
     }
 
     private Long 예약에_성공한다() {

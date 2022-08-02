@@ -23,6 +23,11 @@ include::{snippets}/find-all-coaches/http-request.adoc[]
 ==== response
 include::{snippets}/find-all-coaches/http-response.adoc[]
 
+=== 코치 면담 목록 조회
+==== request
+include::{snippets}/find-coach-reservations/http-request.adoc[]
+==== response
+include::{snippets}/find-coach-reservations/http-response.adoc[]
 
 == 스케줄 API
 
