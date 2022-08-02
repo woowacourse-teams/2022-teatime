@@ -35,6 +35,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
       : CALENDAR_DATE_LENGTH.MAX;
 
   const handleUpdateMonth = (increment: number) => {
+    setSelectedDay(null);
     setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
 
