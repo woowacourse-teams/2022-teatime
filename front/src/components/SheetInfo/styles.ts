@@ -31,7 +31,7 @@ const DateWrapper = styled.div`
   }
 `;
 
-const InterviewContainer = styled.div`
+const SheetContainer = styled.div`
   width: 100%;
   overflow: scroll;
   ::-webkit-scrollbar {
@@ -53,23 +53,16 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const SaveButton = styled.button`
+const FirstButton = styled.button`
   background-color: ${({ theme }) => theme.colors.WHITE};
   border: 1px solid ${({ theme }) => theme.colors.BLUE_600};
   color: ${({ theme }) => theme.colors.BLUE_600};
 `;
 
-const SubmitButton = styled.button`
+const SecondButton = styled.button`
   background-color: ${({ theme }) => theme.colors.BLUE_600};
   color: ${({ theme }) => theme.colors.WHITE};
   border: none;
 `;
 
-export {
-  InfoContainer,
-  InterviewContainer,
-  DateWrapper,
-  ButtonContainer,
-  SaveButton,
-  SubmitButton,
-};
+export { InfoContainer, DateWrapper, SheetContainer, ButtonContainer, FirstButton, SecondButton };
