@@ -34,7 +34,7 @@ const Calendar = ({ isCoach }: CalendarProps) => {
       ? CALENDAR_DATE_LENGTH.MIN
       : CALENDAR_DATE_LENGTH.MAX;
 
-  const updateMonth = (increment: number) => {
+  const handleUpdateMonth = (increment: number) => {
     setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
 
@@ -74,9 +74,9 @@ const Calendar = ({ isCoach }: CalendarProps) => {
             <img src={LeftArrowDisabled} alt="이전 버튼 비활성화 아이콘" />
           </Conditional>
           <Conditional condition={startDate >= currentDate}>
-            <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => updateMonth(-1)} />
+            <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => handleUpdateMonth(-1)} />
           </Conditional>
-          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => updateMonth(1)} />
+          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => handleUpdateMonth(1)} />
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
