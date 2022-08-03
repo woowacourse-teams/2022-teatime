@@ -160,7 +160,6 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-
     private void 완료를_한다(Long reservationId) {
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
