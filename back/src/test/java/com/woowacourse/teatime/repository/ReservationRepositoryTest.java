@@ -49,7 +49,8 @@ class ReservationRepositoryTest {
         reservationRepository.save(new Reservation(schedule, crew));
 
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndStatus(crew.getId(), ReservationStatus.BEFORE_APPROVED);
+                reservationRepository.findByCrewIdAndStatusOrderByScheduleLocalDateTimeDesc(crew.getId(),
+                        ReservationStatus.BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
     }
