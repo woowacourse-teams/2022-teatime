@@ -50,6 +50,13 @@ const DateContainer = styled.div<{
     css`
       cursor: default;
     `}
+
+  ${(props) =>
+    !props.hasSchedule &&
+    !props.isCoach &&
+    css`
+      pointer-events: none;
+    `}
 `;
 
 export { DateContainer, TodayIndicator };

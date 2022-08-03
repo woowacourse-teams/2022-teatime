@@ -17,11 +17,11 @@ import RightArrow from '@assets/right-arrow.svg';
 
 interface CalendarProps {
   isCoach?: boolean;
-  onClickDate: any;
-  onChangeMonth: any;
+  openTimeList: () => void;
+  closeTimeList: () => void;
 }
 
-const Calendar = ({ isCoach, onClickDate, onChangeMonth }: CalendarProps) => {
+const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
   const { id: coachId } = useParams();
   const currentDate = dayjs();
   const currentMonthYear = getMonthYearDetails(dayjs());
@@ -37,20 +37,20 @@ const Calendar = ({ isCoach, onClickDate, onChangeMonth }: CalendarProps) => {
       : CALENDAR_DATE_LENGTH.MAX;
 
   const handleUpdateMonth = (increment: number) => {
-    onChangeMonth();
+    closeTimeList();
     setSelectedDay(null);
     setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
     if (isWeekend) return;
-    onClickDate();
 
     dispatch({
       type: 'SELECT_DATE',
       day,
       date: `${year}-${month}-${String(day).padStart(2, '0')}`,
     });
+    openTimeList();
     setSelectedDay(day);
   };
 
