@@ -8,7 +8,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
-import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.service.CoachService;
@@ -151,7 +150,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 코치의_면담_목록을_조회한다() {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new CoachReservationsRequest(coachId))
+                .header("coachId", coachId)
                 .when().get("/api/coaches/me/reservations")
                 .then().log().all()
                 .extract();

@@ -11,7 +11,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
 import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
@@ -108,7 +107,7 @@ public class CoachAcceptanceTest extends AcceptanceTest {
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new CoachReservationsRequest(coachId))
+                .header("coachId", coachId)
                 .filter(document("find-coach-reservations", responseFields(
                         subsectionWithPath("beforeApproved").description("승인 전"),
                         subsectionWithPath("approved").description("승인 후"),

@@ -3,9 +3,7 @@ package com.woowacourse.teatime.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
 import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
-import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,7 +49,7 @@ class CoachControllerTest extends ControllerTest {
     @DisplayName("코치의 면담 현황 목록 조회에 성공한다.")
     @Test
     void findReservations() throws Exception {
-        mockMvc.perform(get("/api/coaches/me/reservations", new CoachReservationsRequest(1L)))
+        mockMvc.perform(get("/api/coaches/me/reservations").header("coachId", 1L))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -59,7 +57,7 @@ class CoachControllerTest extends ControllerTest {
     @DisplayName("코치의 면담 현황 목록 조회에 실패한다. - 잘못된 코치 아이디")
     @Test
     void findReservationsFailWrongCoachId() throws Exception {
-        mockMvc.perform(get("/api/coaches/me/reservations", new CoachReservationsRequest(0L)))
+        mockMvc.perform(get("/api/coaches/me/reservations").header("coachId", "a"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
