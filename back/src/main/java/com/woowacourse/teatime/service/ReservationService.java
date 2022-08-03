@@ -100,7 +100,7 @@ public class ReservationService {
 
     public List<CrewFindOwnHistoryResponse> findOwnHistoryByCrew(Long crewId) {
         validateCrewId(crewId);
-        List<Reservation> reservations = reservationRepository.findByCrewId(crewId);
+        List<Reservation> reservations = reservationRepository.findByCrewIdOrderByScheduleLocalDateTimeDesc(crewId);
         return CrewFindOwnHistoryResponse.from(reservations);
     }
 
@@ -142,7 +142,8 @@ public class ReservationService {
 
     public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
         validateCrewId(crewId);
-        List<Reservation> reservations = reservationRepository.findByCrewIdAndStatus(crewId, DONE);
+        List<Reservation> reservations =
+                reservationRepository.findByCrewIdAndStatusOrderByScheduleLocalDateTimeDesc(crewId, DONE);
         return CoachFindCrewHistoryResponse.from(reservations);
     }
 }
