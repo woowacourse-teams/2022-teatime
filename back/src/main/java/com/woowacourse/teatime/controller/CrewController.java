@@ -2,7 +2,7 @@ package com.woowacourse.teatime.controller;
 
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
-import com.woowacourse.teatime.controller.dto.response.SheetResponse;
+import com.woowacourse.teatime.controller.dto.response.SheetFindResponse;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.SheetService;
 import java.util.List;
@@ -36,8 +36,8 @@ public class CrewController {
     }
 
     @GetMapping("/me/reservations/{reservationId}")
-    public ResponseEntity<SheetResponse> findOwnSheets(@PathVariable @NotNull Long reservationId) {
-        SheetResponse response = sheetService.findByReservation(reservationId);
+    public ResponseEntity<SheetFindResponse> findOwnSheets(@PathVariable @NotNull Long reservationId) {
+        SheetFindResponse response = sheetService.findByReservation(reservationId);
         return ResponseEntity.ok(response);
     }
 }

@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.teatime.controller.dto.response.SheetDto;
-import com.woowacourse.teatime.controller.dto.response.SheetResponse;
+import com.woowacourse.teatime.controller.dto.response.SheetFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Question;
@@ -80,7 +80,7 @@ class SheetServiceTest {
         questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
         int expected = sheetService.save(coach.getId(), reservation.getId());
 
-        SheetResponse response = sheetService.findByReservation(reservation.getId());
+        SheetFindResponse response = sheetService.findByReservation(reservation.getId());
         List<SheetDto> sheets = response.getSheets();
 
         assertThat(sheets).hasSize(expected);
