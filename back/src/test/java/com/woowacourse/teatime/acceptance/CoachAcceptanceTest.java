@@ -106,7 +106,7 @@ public class CoachAcceptanceTest extends AcceptanceTest {
         reservationService.approve(reservationId, new ReservationApproveRequest(coachId, true));
         reservationService.approve(reservationId2, new ReservationApproveRequest(coachId, true));
 
-        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+        RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new CoachReservationsRequest(coachId))
                 .filter(document("find-coach-reservations", responseFields(
@@ -116,8 +116,6 @@ public class CoachAcceptanceTest extends AcceptanceTest {
                 )))
                 .when().get("/api/coaches/me/reservations")
                 .then().log().all()
-                .extract();
-
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+                .statusCode(HttpStatus.OK.value());
     }
 }

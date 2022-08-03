@@ -63,6 +63,12 @@ include::{snippets}/reserve-cancel/http-request.adoc[]
 ==== response
 include::{snippets}/reserve-cancel/http-response.adoc[]
 
+=== 예약 완료하기
+==== request
+include::{snippets}/reserve-finish/http-request.adoc[]
+==== response
+include::{snippets}/reserve-finish/http-response.adoc[]
+
 == 크루 API
 
 === 히스토리 조회

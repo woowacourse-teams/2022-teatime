@@ -280,4 +280,22 @@ class ReservationServiceTest {
         ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), isApproved);
         reservationService.approve(reservationId, reservationApproveRequest);
     }
+
+    @DisplayName("진행중인 면담을 완료하면 완료된 상태로 바뀐다.")
+    @Test
+    void updateStatusToDone() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(true);
+        reservationService.findByCoachId(coach.getId());
+
+        reservationService.updateStatusToDone(reservation.getId());
+        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
+
+        assertAll(
+                () -> assertThat(response.getBeforeApproved()).hasSize(0),
+                () -> assertThat(response.getApproved()).hasSize(0),
+                () -> assertThat(response.getInProgress()).hasSize(0)
+        );
+    }
 }

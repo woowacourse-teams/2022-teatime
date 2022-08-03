@@ -2,10 +2,12 @@ package com.woowacourse.teatime.domain;
 
 import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.exception.UnableToDoneReservationException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,14 +49,8 @@ public class Reservation {
         this.status = BEFORE_APPROVED;
     }
 
-    public Reservation(Schedule schedule, Crew crew, ReservationStatus status) {
-        this.schedule = schedule;
-        this.crew = crew;
-        this.status = status;
-    }
-
     public void confirm(boolean isApproved) {
-        if (!status.isSameStatus(BEFORE_APPROVED)) {
+        if (!isSameStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
@@ -76,7 +72,7 @@ public class Reservation {
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
-        return status.isSameStatus(IN_PROGRESS) && role.isCrew();
+        return isSameStatus(IN_PROGRESS) && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {
@@ -87,7 +83,7 @@ public class Reservation {
         return this.status.isSameStatus(status);
     }
 
-    public void updateStatusWhenHaveToChangeToInProgress() {
+    public void updateStatusToInProgress() {
         if (isSameStatus(APPROVED) && isTimePassed()) {
             status = IN_PROGRESS;
         }
@@ -95,6 +91,13 @@ public class Reservation {
 
     private boolean isTimePassed() {
         return LocalDateTime.now().isAfter(getScheduleDateTime());
+    }
+
+    public void updateStatusToDone() {
+        if (!isSameStatus(IN_PROGRESS)) {
+            throw new UnableToDoneReservationException();
+        }
+        status = DONE;
     }
 
     public LocalDateTime getScheduleDateTime() {
