@@ -9,6 +9,7 @@ import useModal from '@hooks/useModal';
 import { ScheduleStateContext } from '@context/ScheduleProvider';
 
 import CheckCircle from '@assets/check-circle.svg';
+import api from '@api/index';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);
@@ -27,11 +28,11 @@ const TimeList = () => {
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
       setIsLoading(true);
-      // await api.post(`/api/reservations`, {
-      //   crewId: 2,
-      //   coachId: 3,
-      //   scheduleId,
-      // });
+      await api.post(`/api/reservations`, {
+        crewId: 17,
+        coachId: 41,
+        scheduleId,
+      });
       openModal();
     } catch (error) {
       setIsError(true);
