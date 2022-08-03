@@ -11,8 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
-import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
@@ -170,7 +171,7 @@ class ReservationServiceTest {
 
     @DisplayName("크루가 승인되지 않은 예약을 취소 가능하다")
     @Test
-    void cancel_승인되지_않은_상태의_예약을_취소() {
+    void cancel_unapprovedReservation() {
         Long reservationId = 예약에_성공한다();
 
         reservationService.cancel(reservationId, new ReservationCancelRequest(crew.getId(), "CREW"));
@@ -216,16 +217,44 @@ class ReservationServiceTest {
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
-    @DisplayName("크루에 해당되는 면담 예약 목록을 조회한다.")
+    @DisplayName("크루가 자신에 해당되는 면담 예약 목록을 조회한다.")
     @Test
-    void findByCrew() {
+    void findOwnHistoryByCrew() {
         ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
                 schedule.getId());
         reservationService.save(reserveRequest);
 
-        List<CrewFindOwnReservationResponse> reservations = reservationService.findByCrew(crew.getId());
+        List<CrewFindOwnHistoryResponse> reservations = reservationService.findOwnHistoryByCrew(crew.getId());
 
         assertThat(reservations).hasSize(1);
+    }
+
+    @DisplayName("코치가 크루의 히스토리를 조회한다.")
+    @Test
+    void findCrewHistoryByCoach() {
+        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+                schedule.getId());
+        Long reservationId = reservationService.save(reserveRequest);
+        reservationService.approve(reservationId, new ReservationApproveRequest(coach.getId(), true));
+        reservationService.findByCoachId(coach.getId());
+        reservationService.updateStatusToDone(reservationId);
+
+        List<CoachFindCrewHistoryResponse> reservations = reservationService.findCrewHistoryByCoach(crew.getId());
+
+        assertThat(reservations).hasSize(1);
+    }
+
+    @DisplayName("코치가 크루의 히스토리를 조회한다. -종료된 면담이 아닌 경우 조회되지 않는다.")
+    @Test
+    void findCrewHistoryByCoach_noDoneReservation() {
+        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+                schedule.getId());
+        Long reservationId = reservationService.save(reserveRequest);
+        reservationService.approve(reservationId, new ReservationApproveRequest(coach.getId(), true));
+
+        List<CoachFindCrewHistoryResponse> reservations = reservationService.findCrewHistoryByCoach(crew.getId());
+
+        assertThat(reservations).hasSize(0);
     }
 
     @DisplayName("코치에 해당되는 면담 목록을 조회한다.")

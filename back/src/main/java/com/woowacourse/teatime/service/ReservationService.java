@@ -8,8 +8,9 @@ import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
-import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.ReservationStatus;
@@ -97,10 +98,10 @@ public class ReservationService {
         }
     }
 
-    public List<CrewFindOwnReservationResponse> findByCrew(Long crewId) {
+    public List<CrewFindOwnHistoryResponse> findOwnHistoryByCrew(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations = reservationRepository.findByCrewId(crewId);
-        return CrewFindOwnReservationResponse.from(reservations);
+        return CrewFindOwnHistoryResponse.from(reservations);
     }
 
     private void validateCrewId(Long crewId) {
@@ -137,6 +138,12 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         reservation.updateStatusToDone();
+    }
+
+    public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
+        validateCrewId(crewId);
+        List<Reservation> reservations = reservationRepository.findByCrewIdAndStatus(crewId, DONE);
+        return CoachFindCrewHistoryResponse.from(reservations);
     }
 }
 

@@ -41,14 +41,15 @@ class ReservationRepositoryTest {
         schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
     }
 
-    @DisplayName("크루에 해당하는 면담 목록을 조회한다.")
+    @DisplayName("크루에 해당하는 면담 목록을 조회한다. - 면담 상태 : BEFORE_APPROVED")
     @Test
     void findByCrewId() {
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));
 
-        List<Reservation> reservations = reservationRepository.findByCrewId(crew.getId());
+        List<Reservation> reservations =
+                reservationRepository.findByCrewIdAndStatus(crew.getId(), ReservationStatus.BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
     }
