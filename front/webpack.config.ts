@@ -64,7 +64,7 @@ const config: webpack.Configuration = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      favicon: 'public/favicon.ico',
+      favicon: 'src/assets/logo.png',
     }),
   ],
   devServer: {

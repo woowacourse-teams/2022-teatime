@@ -3,6 +3,7 @@ package com.woowacourse.teatime.controller.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Schedule;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CrewFindOwnReservationResponse {
+public class CrewFindOwnHistoryResponse {
 
     private Long reservationId;
 
@@ -26,16 +27,18 @@ public class CrewFindOwnReservationResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
 
-    public static List<CrewFindOwnReservationResponse> from(List<Reservation> reservations) {
+    private ReservationStatus status;
+
+    public static List<CrewFindOwnHistoryResponse> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(CrewFindOwnReservationResponse::from)
+                .map(CrewFindOwnHistoryResponse::from)
                 .collect(Collectors.toList());
     }
 
-    private static CrewFindOwnReservationResponse from(Reservation reservation) {
+    private static CrewFindOwnHistoryResponse from(Reservation reservation) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
-        return new CrewFindOwnReservationResponse(reservation.getId(), coach.getName(), coach.getImage(),
-                schedule.getLocalDateTime());
+        return new CrewFindOwnHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
+                schedule.getLocalDateTime(), reservation.getStatus());
     }
 }

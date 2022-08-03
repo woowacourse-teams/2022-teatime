@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { ROUTES } from '@constants/index';
 import * as S from './styles';
+
+import { ROUTES } from '@constants/index';
 
 const SelectUser = () => {
   return (

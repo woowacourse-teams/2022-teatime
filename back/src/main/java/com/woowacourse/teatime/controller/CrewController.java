@@ -1,7 +1,8 @@
 package com.woowacourse.teatime.controller;
 
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.SheetResponse;
-import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.SheetService;
 import java.util.List;
@@ -23,14 +24,14 @@ public class CrewController {
     private final SheetService sheetService;
 
     @GetMapping("/me/reservations")
-    public ResponseEntity<List<CrewFindOwnReservationResponse>> findOwnReservations(@RequestBody @NotNull Long crewId) {
-        List<CrewFindOwnReservationResponse> responses = reservationService.findByCrew(crewId);
+    public ResponseEntity<List<CrewFindOwnHistoryResponse>> findOwnReservations(@RequestBody @NotNull Long crewId) {
+        List<CrewFindOwnHistoryResponse> responses = reservationService.findOwnHistoryByCrew(crewId);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{crewId}/reservations")
-    public ResponseEntity<List<CrewFindOwnReservationResponse>> findCrewReservations(@PathVariable @NotNull Long crewId) {
-        List<CrewFindOwnReservationResponse> responses = reservationService.findByCrew(crewId);
+    public ResponseEntity<List<CoachFindCrewHistoryResponse>> findCrewReservations(@PathVariable @NotNull Long crewId) {
+        List<CoachFindCrewHistoryResponse> responses = reservationService.findCrewHistoryByCoach(crewId);
         return ResponseEntity.ok(responses);
     }
 
