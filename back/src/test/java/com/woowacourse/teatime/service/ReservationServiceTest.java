@@ -171,7 +171,7 @@ class ReservationServiceTest {
 
     @DisplayName("크루가 승인되지 않은 예약을 취소 가능하다")
     @Test
-    void cancel_승인되지_않은_상태의_예약을_취소() {
+    void cancel_unapprovedReservation() {
         Long reservationId = 예약에_성공한다();
 
         reservationService.cancel(reservationId, new ReservationCancelRequest(crew.getId(), "CREW"));
