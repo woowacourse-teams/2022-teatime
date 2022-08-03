@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import * as S from './styles';
+import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleStateContext } from '@context/ScheduleProvider';
+
 import CheckCircle from '@assets/check-circle.svg';
-import * as S from './styles';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);

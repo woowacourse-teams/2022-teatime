@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewHistoryFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
@@ -27,6 +28,7 @@ import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -214,6 +216,60 @@ class ReservationServiceTest {
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
+    @DisplayName("크루에 해당되는 면담 예약 목록을 조회한다.")
+    @Test
+    void findByCrew() {
+        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+                schedule.getId());
+        reservationService.save(reserveRequest);
+
+        List<CrewHistoryFindResponse> reservations = reservationService.findByCrew(crew.getId());
+
+        assertThat(reservations).hasSize(1);
+    }
+
+    @DisplayName("코치에 해당되는 면담 목록을 조회한다.")
+    @Test
+    void findByCoach() {
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(2)));
+
+        Reservation reservation = new Reservation(schedule1, crew);
+        reservationRepository.save(reservation);
+        reservationRepository.save(new Reservation(schedule2, crew));
+
+        reservation.confirm(true);
+
+        CoachReservationsResponse coachReservationResponse = reservationService.findByCoachId(coach.getId());
+
+        assertAll(
+                () -> assertThat(coachReservationResponse.getBeforeApproved()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getApproved()).hasSize(1),
+                () -> assertThat(coachReservationResponse.getInProgress()).hasSize(0)
+        );
+    }
+
+    @DisplayName("코치에 해당되는 면담 목록을 조회할 때 승인된 일정은 면담이 시작되면 진행중으로 바뀐다.")
+    @Test
+    void findByCoachStatusUpdate() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
+        Reservation reservation = new Reservation(schedule, crew);
+        Reservation reservation2 = new Reservation(schedule2, crew);
+        reservationRepository.save(reservation);
+        reservationRepository.save(reservation2);
+        reservation.confirm(true);
+        reservation2.confirm(true);
+
+        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
+
+        assertAll(
+                () -> assertThat(response.getBeforeApproved()).hasSize(0),
+                () -> assertThat(response.getApproved()).hasSize(1),
+                () -> assertThat(response.getInProgress()).hasSize(1)
+        );
+    }
+
     private Long 예약에_성공한다() {
         ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
                 schedule.getId());
@@ -225,15 +281,21 @@ class ReservationServiceTest {
         reservationService.approve(reservationId, reservationApproveRequest);
     }
 
-    @DisplayName("크루에 해당되는 면담 예약 목록을 조회한다.")
+    @DisplayName("진행중인 면담을 완료하면 완료된 상태로 바뀐다.")
     @Test
-    void findByCrew() {
-        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        reservationService.save(reserveRequest);
+    void updateStatusToDone() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(true);
+        reservationService.findByCoachId(coach.getId());
 
-        List<CrewHistoryFindResponse> reservations = reservationService.findByCrew(crew.getId());
+        reservationService.updateStatusToDone(reservation.getId());
+        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
 
-        assertThat(reservations).hasSize(1);
+        assertAll(
+                () -> assertThat(response.getBeforeApproved()).hasSize(0),
+                () -> assertThat(response.getApproved()).hasSize(0),
+                () -> assertThat(response.getInProgress()).hasSize(0)
+        );
     }
 }

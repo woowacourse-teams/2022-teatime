@@ -1,8 +1,9 @@
+import * as S from './styles';
 import dayjs from 'dayjs';
+
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';
-import * as S from './styles';
 
 interface BoardItemProps {
   dateTime: string;

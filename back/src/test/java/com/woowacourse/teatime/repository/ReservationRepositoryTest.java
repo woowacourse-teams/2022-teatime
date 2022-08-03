@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.repository;
 
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
+import static com.woowacourse.teatime.fixture.DomainFixture.COACH_JASON;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,5 +52,22 @@ class ReservationRepositoryTest {
                 reservationRepository.findByCrewIdAndStatus(crew.getId(), ReservationStatus.BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
+    }
+
+    @DisplayName("코치의 한 달 면담 목록을 조회한다.")
+    @Test
+    void findByCoachIdExceptDone() {
+        Coach newCoach = coachRepository.save(COACH_JASON);
+        Schedule newCoachSchedule = scheduleRepository.save(new Schedule(newCoach, DATE_TIME));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.plusDays(1)));
+
+        reservationRepository.save(new Reservation(schedule, crew));
+        reservationRepository.save(new Reservation(schedule2, crew));
+        reservationRepository.save(new Reservation(newCoachSchedule, crew));
+
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(
+                coach.getId(), ReservationStatus.DONE);
+
+        assertThat(reservations).hasSize(2);
     }
 }

@@ -1,11 +1,12 @@
 import { rest } from 'msw';
+
+import { BASE_URL } from '@api/index';
 import type {
   DaySchedule as DayScheduleResponse,
   Coach as CoachResponse,
   Crew as CrewResponse,
   InterviewInfo as InterviewInfoResponse,
 } from '@typings/domain';
-import { BASE_URL } from '@api/index';
 import { coachList, crewList, scheduleList, interviewInfo } from './data';
 
 const handlers = [

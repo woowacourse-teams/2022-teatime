@@ -2,6 +2,7 @@ package com.woowacourse.teatime.acceptance;
 
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
+import static com.woowacourse.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -37,7 +38,7 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     void findOwnReservations() {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save();
+        Long crewId = crewService.save(CREW_SAVE_REQUEST);
 
         면담_예약_요청됨(coachId, scheduleId, crewId);
 
