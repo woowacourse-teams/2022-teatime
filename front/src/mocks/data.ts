@@ -105,7 +105,7 @@ const interviewInfo = {
     {
       questionNumber: 1,
       questionContent: '이번 면담을 통해 논의하고 싶은 내용',
-      answerContent: '야호입니다.',
+      answerContent: '',
     },
     {
       questionNumber: 2,

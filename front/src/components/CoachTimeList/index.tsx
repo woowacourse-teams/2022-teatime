@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
+import * as S from './styles';
 import dayjs from 'dayjs';
-import api from '@api/index';
+
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import * as S from './styles';
+import api from '@api/index';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
@@ -40,8 +41,8 @@ const CoachTimeList = () => {
   };
 
   return (
-    <div>
-      <S.TimeListContainer>
+    <S.TimeListContainer>
+      <S.ScrollContainer>
         {daySchedule?.schedules.map((schedule) => {
           const time = dayjs.tz(schedule.dateTime).format('HH:mm');
 
@@ -58,7 +59,7 @@ const CoachTimeList = () => {
             </React.Fragment>
           );
         })}
-      </S.TimeListContainer>
+      </S.ScrollContainer>
 
       <Conditional condition={daySchedule?.schedules.length !== 0}>
         <S.ButtonContainer>
@@ -68,7 +69,7 @@ const CoachTimeList = () => {
           <S.ConfirmButton onClick={handleUpdateSchedules}>확인</S.ConfirmButton>
         </S.ButtonContainer>
       </Conditional>
-    </div>
+    </S.TimeListContainer>
   );
 };
 

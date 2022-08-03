@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,6 +68,22 @@ class ReservationControllerTest extends ControllerTest {
     @ValueSource(strings = {" ", "", "   "})
     void cancelFailWrongRole(String role) throws Exception {
         mockMvc.perform(delete("/api/reservations/1", new ReservationCancelRequest(1L, role)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("진행중인 일정을 완료된 상태로 변경한다.")
+    @Test
+    void updateStatusToDone() throws Exception{
+        mockMvc.perform(put("/api/reservations/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("진행중인 일정을 완료된 상태로 변경하는데 실패한다. -잘못된 면담 아이디")
+    @Test
+    void updateStatusToDone_wrongReservationId() throws Exception{
+        mockMvc.perform(put("/api/reservations/a"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

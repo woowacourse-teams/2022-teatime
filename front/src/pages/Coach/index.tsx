@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import api from '@api/index';
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
-import type { CrewList, CrewListMap } from '@typings/domain';
-import PlusIcon from '@assets/plus.svg';
+import api from '@api/index';
 import theme from '@styles/theme';
+import type { CrewList, CrewListMap } from '@typings/domain';
+
+import PlusIcon from '@assets/plus.svg';
 import * as S from './styles';
 
 interface BoardItemValue {

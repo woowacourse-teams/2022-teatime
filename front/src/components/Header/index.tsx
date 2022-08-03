@@ -1,6 +1,8 @@
-import LogoIcon from '@assets/logo.svg';
-import { ROUTES } from '@constants/index';
 import * as S from './styles';
+
+import { ROUTES } from '@constants/index';
+
+import LogoIcon from '@assets/logo.svg';
 
 const Header = () => {
   return (

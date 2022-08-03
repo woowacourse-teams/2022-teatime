@@ -1,13 +1,15 @@
 import React, { useContext, useState } from 'react';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import * as S from './styles';
+import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleStateContext } from '@context/ScheduleProvider';
+
 import CheckCircle from '@assets/check-circle.svg';
-import * as S from './styles';
+import api from '@api/index';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);
@@ -26,11 +28,11 @@ const TimeList = () => {
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
       setIsLoading(true);
-      // await api.post(`/api/reservations`, {
-      //   crewId: 2,
-      //   coachId: 3,
-      //   scheduleId,
-      // });
+      await api.post(`/api/reservations`, {
+        crewId: 17,
+        coachId: 41,
+        scheduleId,
+      });
       openModal();
     } catch (error) {
       setIsError(true);

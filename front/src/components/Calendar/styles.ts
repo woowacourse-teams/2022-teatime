@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 60px;
 `;
 
 const DateGrid = styled.div`

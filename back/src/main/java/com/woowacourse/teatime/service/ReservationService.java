@@ -1,16 +1,26 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
+import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
-import com.woowacourse.teatime.controller.dto.response.CrewFindOwnReservationResponse;
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
+import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Role;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
+import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
@@ -27,6 +37,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
+    private final CoachRepository coachRepository;
 
     public Long save(ReservationReserveRequest reservationReserveRequest) {
         Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
@@ -87,15 +98,52 @@ public class ReservationService {
         }
     }
 
-    public List<CrewFindOwnReservationResponse> findByCrew(Long crewId) {
+    public List<CrewFindOwnHistoryResponse> findOwnHistoryByCrew(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations = reservationRepository.findByCrewId(crewId);
-        return CrewFindOwnReservationResponse.from(reservations);
+        return CrewFindOwnHistoryResponse.from(reservations);
     }
 
     private void validateCrewId(Long crewId) {
         crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
+    }
+
+    public CoachReservationsResponse findByCoachId(Long coachId) {
+        validateCoachId(coachId);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(coachId, DONE);
+        updateStatusToInProgress(reservations);
+        return classifyReservationsAndReturnDto(reservations);
+    }
+
+    private void updateStatusToInProgress(List<Reservation> reservations) {
+        for (Reservation reservation : reservations) {
+            reservation.updateStatusToInProgress();
+        }
+    }
+
+    private void validateCoachId(Long coachId) {
+        coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+    }
+
+    private CoachReservationsResponse classifyReservationsAndReturnDto(List<Reservation> reservations) {
+        return CoachReservationsResponse.of(
+                ReservationStatus.classifyReservations(BEFORE_APPROVED, reservations),
+                ReservationStatus.classifyReservations(APPROVED, reservations),
+                ReservationStatus.classifyReservations(IN_PROGRESS, reservations));
+    }
+
+    public void updateStatusToDone(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        reservation.updateStatusToDone();
+    }
+
+    public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
+        validateCrewId(crewId);
+        List<Reservation> reservations = reservationRepository.findByCrewIdAndStatus(crewId, DONE);
+        return CoachFindCrewHistoryResponse.from(reservations);
     }
 }
 

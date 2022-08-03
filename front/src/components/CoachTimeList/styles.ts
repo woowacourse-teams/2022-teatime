@@ -1,6 +1,20 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+const FadeIn = keyframes`
+ from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const TimeListContainer = styled.div`
+  margin-left: 60px;
+  animation: ${FadeIn} 0.8s;
+`;
+
+const ScrollContainer = styled.div`
   width: 250px;
   height: 370px;
   overflow: scroll;
@@ -66,4 +80,4 @@ const ConfirmButton = styled.button`
   color: ${({ theme }) => theme.colors.WHITE};
 `;
 
-export { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };
+export { TimeListContainer, ScrollContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };
