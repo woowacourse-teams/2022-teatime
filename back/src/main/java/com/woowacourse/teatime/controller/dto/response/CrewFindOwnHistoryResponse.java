@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CrewHistoryFindResponse {
+public class CrewFindOwnHistoryResponse {
 
     private Long reservationId;
 
@@ -26,16 +26,16 @@ public class CrewHistoryFindResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
 
-    public static List<CrewHistoryFindResponse> from(List<Reservation> reservations) {
+    public static List<CrewFindOwnHistoryResponse> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(CrewHistoryFindResponse::from)
+                .map(CrewFindOwnHistoryResponse::from)
                 .collect(Collectors.toList());
     }
 
-    private static CrewHistoryFindResponse from(Reservation reservation) {
+    private static CrewFindOwnHistoryResponse from(Reservation reservation) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
-        return new CrewHistoryFindResponse(reservation.getId(), coach.getName(), coach.getImage(),
+        return new CrewFindOwnHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
                 schedule.getLocalDateTime());
     }
 }

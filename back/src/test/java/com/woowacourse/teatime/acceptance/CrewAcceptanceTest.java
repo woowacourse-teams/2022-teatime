@@ -9,8 +9,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
+import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
-import com.woowacourse.teatime.controller.dto.response.CrewHistoryFindResponse;
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.CrewService;
 import com.woowacourse.teatime.service.ScheduleService;
@@ -55,8 +58,8 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
-        List<CrewHistoryFindResponse> result = response.jsonPath()
-                .getList(".", CrewHistoryFindResponse.class);
+        List<CrewFindOwnHistoryResponse> result = response.jsonPath()
+                .getList(".", CrewFindOwnHistoryResponse.class);
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
@@ -69,9 +72,15 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     void findCrewReservations() {
         Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
         Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save();
+        Long crewId = crewService.save(CREW_SAVE_REQUEST);
 
         면담_예약_요청됨(coachId, scheduleId, crewId);
+        ExtractableResponse<Response> coachReservationFindResponse = 코치의_면담_목록을_조회한다(coachId);
+        List<Long> reservationIds_beforeApproved
+                = coachReservationFindResponse.jsonPath().getList("beforeApproved.reservationId", Long.class);
+        승인을_한다(coachId, reservationIds_beforeApproved.get(0));
+        코치의_면담_목록을_조회한다(coachId);
+        완료를_한다(reservationIds_beforeApproved.get(0));
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -86,12 +95,22 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
-        List<CrewHistoryFindResponse> result = response.jsonPath().getList(".", CrewHistoryFindResponse.class);
+        List<CoachFindCrewHistoryResponse> result = response.jsonPath()
+                .getList(".", CoachFindCrewHistoryResponse.class);
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(result).hasSize(1)
         );
+    }
+
+    private void 완료를_한다(Long reservationId) {
+        RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .when().put("/api/reservations/{reservationId}")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
     }
 
     private void 면담_예약_요청됨(Long coachId, Long scheduleId, Long crewId) {
@@ -100,5 +119,24 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 .body(new ReservationReserveRequest(crewId, coachId, scheduleId))
                 .when().post("/api/reservations")
                 .then().log().all();
+    }
+
+    private ExtractableResponse<Response> 승인을_한다(Long coachId, Long reservationId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .body(new ReservationApproveRequest(coachId, true))
+                .when().post("/api/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 코치의_면담_목록을_조회한다(Long coachId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new CoachReservationsRequest(coachId))
+                .when().get("/api/coaches/me/reservations")
+                .then().log().all()
+                .extract();
     }
 }
