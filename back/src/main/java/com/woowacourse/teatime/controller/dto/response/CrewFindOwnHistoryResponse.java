@@ -3,6 +3,7 @@ package com.woowacourse.teatime.controller.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Reservation;
+import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Schedule;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +27,8 @@ public class CrewFindOwnHistoryResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
 
+    private ReservationStatus status;
+
     public static List<CrewFindOwnHistoryResponse> from(List<Reservation> reservations) {
         return reservations.stream()
                 .map(CrewFindOwnHistoryResponse::from)
@@ -36,6 +39,6 @@ public class CrewFindOwnHistoryResponse {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
         return new CrewFindOwnHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
-                schedule.getLocalDateTime());
+                schedule.getLocalDateTime(), reservation.getStatus());
     }
 }

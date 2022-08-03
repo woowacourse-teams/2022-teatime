@@ -52,7 +52,8 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                         fieldWithPath("[].reservationId").description("면담 아이디"),
                         fieldWithPath("[].coachName").description("코치 이름"),
                         fieldWithPath("[].coachImage").description("코치 이미지"),
-                        fieldWithPath("[].dateTime").description("날짜")
+                        fieldWithPath("[].dateTime").description("날짜"),
+                        fieldWithPath("[].status").description("상태")
                 )))
                 .when().get("/api/crews/me/reservations")
                 .then().log().all()
