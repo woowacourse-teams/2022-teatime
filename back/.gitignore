@@ -35,3 +35,7 @@ out/
 *.properties
 *.sql
 *.yml
+
+### Log ###
+logs/
+was-logs/
