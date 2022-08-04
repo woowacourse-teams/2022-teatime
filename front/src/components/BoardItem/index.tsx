@@ -11,10 +11,19 @@ interface BoardItemProps {
   personName: string;
   buttonName: string;
   color: string;
-  onClick: () => void;
+  onClickMenu: () => void;
+  onClickCancel: () => void;
 }
 
-const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: BoardItemProps) => {
+const BoardItem = ({
+  dateTime,
+  image,
+  personName,
+  buttonName,
+  color,
+  onClickMenu,
+  onClickCancel,
+}: BoardItemProps) => {
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
@@ -32,7 +41,7 @@ const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: 
           </div>
         </S.DateContainer>
         <S.CloseIconWrapper>
-          <img src={CloseIcon} alt="닫기 아이콘" />
+          <img src={CloseIcon} alt="취소 아이콘" onClick={onClickCancel} />
         </S.CloseIconWrapper>
       </S.TopSection>
       <S.BottomSection color={color}>
@@ -40,7 +49,7 @@ const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: 
           <S.ProfileImage src={image} />
           <span>{personName}</span>
         </div>
-        <button onClick={onClick}>{buttonName}</button>
+        <button onClick={onClickMenu}>{buttonName}</button>
       </S.BottomSection>
     </S.BoardItemContainer>
   );
