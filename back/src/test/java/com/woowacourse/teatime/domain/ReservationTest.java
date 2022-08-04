@@ -2,6 +2,7 @@ package com.woowacourse.teatime.domain;
 
 import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
@@ -11,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.exception.UnableToDoneReservationException;
+import com.woowacourse.teatime.exception.UnableToSubmitSheetException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,7 +96,7 @@ class ReservationTest {
     void cancel_byCoach_inProgressReservation() {
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
-        reservation.updateStatusToInProgress();
+        reservation.updateReservationStatusToInProgress();
 
         reservation.cancel(Role.COACH);
 
@@ -106,7 +108,7 @@ class ReservationTest {
     void cancel_byCrew_inProgressReservation() {
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
-        reservation.updateStatusToInProgress();
+        reservation.updateReservationStatusToInProgress();
 
         assertThatThrownBy(() -> reservation.cancel(Role.CREW))
                 .isInstanceOf(UnCancellableReservationException.class);
@@ -114,77 +116,97 @@ class ReservationTest {
 
     @DisplayName("예약 시간이 되면 승인된 면담이 진행중인 상태로 업데이트 된다.")
     @Test
-    void updateStatusToInProgress() {
+    void updateReservationStatusToInProgress() {
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
 
-        reservation.updateStatusToInProgress();
+        reservation.updateReservationStatusToInProgress();
 
-        assertThat(reservation.isSameStatus(IN_PROGRESS)).isTrue();
+        assertThat(reservation.isReservationStatus(IN_PROGRESS)).isTrue();
     }
 
     @DisplayName("예약 시간이 되어도 승인되지 않은 면담은 진행중인 상태로 업데이트 되지 않는다.")
     @Test
-    void updateStatusToInProgress_unapprovedReservation() {
+    void updateReservationStatusToInProgress_unapprovedReservation() {
         Reservation reservation = new Reservation(schedule, CREW);
 
-        reservation.updateStatusToInProgress();
+        reservation.updateReservationStatusToInProgress();
 
-        assertThat(reservation.isSameStatus(IN_PROGRESS)).isFalse();
+        assertThat(reservation.isReservationStatus(IN_PROGRESS)).isFalse();
     }
 
     @DisplayName("승인된 면담이 아직 시간이 안됐으면 진행중인 상태로 업데이트 되지 않는다.")
     @Test
-    void updateStatusToInProgress_noTimeYet() {
+    void updateReservationStatusToInProgress_noTimeYet() {
         Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now().plusDays(1L));
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
 
-        reservation.updateStatusToInProgress();
+        reservation.updateReservationStatusToInProgress();
 
-        assertThat(reservation.isSameStatus(IN_PROGRESS)).isFalse();
+        assertThat(reservation.isReservationStatus(IN_PROGRESS)).isFalse();
     }
 
     @DisplayName("진행중인 면담을 종료하면 완료된 상태로 업데이트 된다.")
     @Test
-    void updateStatusToDone() {
+    void updateReservationStatusToDone() {
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
-        reservation.updateStatusToInProgress();
+        reservation.updateReservationStatusToInProgress();
 
-        reservation.updateStatusToDone();
+        reservation.updateReservationStatusToDone();
 
-        assertThat(reservation.isSameStatus(DONE)).isTrue();
+        assertThat(reservation.isReservationStatus(DONE)).isTrue();
     }
 
     @DisplayName("승인되지 않은 면담을 종료하면 예외가 발생한다.")
     @Test
-    void updateStatusToDone_unableToDoneException_unapproved() {
+    void updateReservationStatusToDone_unableToDoneException_unapproved() {
         Reservation reservation = new Reservation(schedule, CREW);
 
-        assertThatThrownBy(reservation::updateStatusToDone)
+        assertThatThrownBy(reservation::updateReservationStatusToDone)
                 .isInstanceOf(UnableToDoneReservationException.class);
     }
 
     @DisplayName("승인되었지만 진행중이지 않은 면담을 종료하면 예외가 발생한다.")
     @Test
-    void updateStatusToDone_unableToDoneException_approved() {
+    void updateReservationStatusToDone_unableToDoneException_approved() {
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
 
-        assertThatThrownBy(reservation::updateStatusToDone)
+        assertThatThrownBy(reservation::updateReservationStatusToDone)
                 .isInstanceOf(UnableToDoneReservationException.class);
     }
 
     @DisplayName("이미 종료된 면담을 종료하면 예외가 발생한다.")
     @Test
-    void updateStatusToDone_unableToDoneException_done() {
+    void updateReservationStatusToDone_unableToDoneException_done() {
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
-        reservation.updateStatusToInProgress();
-        reservation.updateStatusToDone();
+        reservation.updateReservationStatusToInProgress();
+        reservation.updateReservationStatusToDone();
 
-        assertThatThrownBy(reservation::updateStatusToDone)
+        assertThatThrownBy(reservation::updateReservationStatusToDone)
                 .isInstanceOf(UnableToDoneReservationException.class);
+    }
+
+    @DisplayName("이미 제출된 면담 시트를 제출하면 예외를 반환한다.")
+    @Test
+    void updateSheetStatusToSubmitted_alreadySubmitted() {
+        Reservation reservation = new Reservation(schedule, CREW);
+        reservation.updateSheetStatusToSubmitted();
+
+        assertThatThrownBy(reservation::updateSheetStatusToSubmitted)
+                .isInstanceOf(UnableToSubmitSheetException.class);
+    }
+
+    @DisplayName("면담 시트를 제출된 상태로 변경한다.")
+    @Test
+    void updateSheetStatusToSubmitted() {
+        Reservation reservation = new Reservation(schedule, CREW);
+
+        reservation.updateSheetStatusToSubmitted();
+
+        assertThat(reservation.getSheetStatus()).isEqualTo(SUBMITTED);
     }
 }

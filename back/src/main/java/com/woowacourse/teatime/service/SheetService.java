@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.domain.Question;
@@ -58,5 +59,24 @@ public class SheetService {
     private void validateCrew(Long crewId) {
         crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
+    }
+
+    public void updateAnswer(Long reservationId, List<SheetAnswerUpdateDto> sheetDtos) {
+        validateReservation(reservationId);
+        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        for (Sheet sheet : sheets) {
+            modifyAnswer(sheetDtos, sheet);
+        }
+    }
+
+    private void validateReservation(Long reservationId) {
+        reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+    }
+
+    private void modifyAnswer(List<SheetAnswerUpdateDto> sheetDtos, Sheet sheet) {
+        for (SheetAnswerUpdateDto sheetDto : sheetDtos) {
+            sheet.modifyAnswer(sheetDto.getQuestionNumber(), sheetDto.getAnswerContent());
+        }
     }
 }
