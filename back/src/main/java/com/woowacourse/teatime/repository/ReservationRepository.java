@@ -12,7 +12,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByCrewIdOrderByScheduleLocalDateTimeDesc(Long crewId);
 
-    List<Reservation> findByScheduleCoachIdAndStatusNot(Long coachId, ReservationStatus status);
+    List<Reservation> findByScheduleCoachIdAndReservationStatusNot(Long coachId, ReservationStatus status);
 
-    List<Reservation> findByCrewIdAndStatusOrderByScheduleLocalDateTimeDesc(Long crewId, ReservationStatus status);
+    List<Reservation> findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(Long crewId,
+                                                                                       ReservationStatus status);
 }

@@ -6,13 +6,15 @@ import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.SheetDto;
-import com.woowacourse.teatime.controller.dto.response.SheetFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
@@ -72,23 +74,23 @@ class SheetServiceTest {
         assertThat(savedSheetCount).isEqualTo(3);
     }
 
-    @DisplayName("면담에 해당되는 시트들을 반환한다.")
+    @DisplayName("크루가 자신의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
     @Test
-    void findByReservation() {
+    void findOwnSheetByCrew() {
         questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
         questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
         questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
         int expected = sheetService.save(coach.getId(), reservation.getId());
 
-        SheetFindResponse response = sheetService.findByReservation(reservation.getId());
+        CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(reservation.getId());
         List<SheetDto> sheets = response.getSheets();
 
         assertThat(sheets).hasSize(expected);
     }
 
-    @DisplayName("존재하지 않는 면담 아이디로 조회하면 예외를 반환한다.")
+    @DisplayName("크루가 자신의 면담 시트 조회 - 존재하지 않는 면담 아이디로 조회하면 예외를 반환한다.")
     @Test
-    void findByReservation_notFoundReservation() {
+    void findOwnSheetByCrew_notFoundReservation() {
         questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
         questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
         questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
@@ -96,7 +98,50 @@ class SheetServiceTest {
 
         long 존재하지_않는_아이디 = reservation.getId() + 100L;
 
-        assertThatThrownBy(() -> sheetService.findByReservation(존재하지_않는_아이디))
+        assertThatThrownBy(() -> sheetService.findOwnSheetByCrew(존재하지_않는_아이디))
+                .isInstanceOf(NotFoundReservationException.class);
+    }
+
+    @DisplayName("코치가 크루의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
+    @Test
+    void findCrewSheetByCoach() {
+        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
+        questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
+        questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
+        int expected = sheetService.save(coach.getId(), reservation.getId());
+
+        CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(),
+                reservation.getId());
+        List<SheetDto> sheets = response.getSheets();
+
+        assertThat(sheets).hasSize(expected);
+    }
+
+    @DisplayName("코치가 크루의 면담 시트 조회 - 존재하지 않는 크루 아이디로 조회하면 예외를 반환한다.")
+    @Test
+    void findCrewSheetByCoach_notFoundCrew() {
+        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
+        questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
+        questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
+        sheetService.save(coach.getId(), reservation.getId());
+
+        long 존재하지_않는_아이디 = crew.getId() + 100L;
+
+        assertThatThrownBy(() -> sheetService.findCrewSheetByCoach(존재하지_않는_아이디, reservation.getId()))
+                .isInstanceOf(NotFoundCrewException.class);
+    }
+
+    @DisplayName("코치가 크루의 면담 시트 조회 - 존재하지 않는 면담 아이디로 조회하면 예외를 반환한다.")
+    @Test
+    void findCrewSheetByCoach_notFoundReservation() {
+        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
+        questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
+        questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
+        sheetService.save(coach.getId(), reservation.getId());
+
+        long 존재하지_않는_아이디 = reservation.getId() + 100L;
+
+        assertThatThrownBy(() -> sheetService.findCrewSheetByCoach(crew.getId(), 존재하지_않는_아이디))
                 .isInstanceOf(NotFoundReservationException.class);
     }
 }

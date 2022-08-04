@@ -4,6 +4,7 @@ import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
@@ -39,14 +40,19 @@ public class Reservation {
     @JoinColumn(name = "crew_id")
     private Crew crew;
 
-    @Column(name = "reservation_status", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ReservationStatus status;
+    private ReservationStatus reservationStatus;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SheetStatus sheetStatus;
 
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
         this.crew = crew;
-        this.status = BEFORE_APPROVED;
+        this.reservationStatus = BEFORE_APPROVED;
+        this.sheetStatus = WRITING;
     }
 
     public void confirm(boolean isApproved) {
@@ -54,7 +60,7 @@ public class Reservation {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
-            status = APPROVED;
+            reservationStatus = APPROVED;
             return;
         }
         schedule.init();
@@ -68,7 +74,7 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCoach(Role role) {
-        return role.isCoach() && status.isSameStatus(BEFORE_APPROVED);
+        return role.isCoach() && reservationStatus.isSameStatus(BEFORE_APPROVED);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
@@ -80,12 +86,12 @@ public class Reservation {
     }
 
     public boolean isSameStatus(ReservationStatus status) {
-        return this.status.isSameStatus(status);
+        return this.reservationStatus.isSameStatus(status);
     }
 
     public void updateStatusToInProgress() {
         if (isSameStatus(APPROVED) && isTimePassed()) {
-            status = IN_PROGRESS;
+            reservationStatus = IN_PROGRESS;
         }
     }
 
@@ -97,7 +103,7 @@ public class Reservation {
         if (!isSameStatus(IN_PROGRESS)) {
             throw new UnableToDoneReservationException();
         }
-        status = DONE;
+        reservationStatus = DONE;
     }
 
     public LocalDateTime getScheduleDateTime() {
