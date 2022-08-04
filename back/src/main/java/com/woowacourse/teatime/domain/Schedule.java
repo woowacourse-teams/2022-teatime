@@ -3,6 +3,7 @@ package com.woowacourse.teatime.domain;
 import com.woowacourse.teatime.exception.AlreadyReservedException;
 import com.woowacourse.teatime.exception.InvalidYearException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -66,6 +67,24 @@ public class Schedule {
 
     public void init() {
         this.isPossible = true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Schedule)) {
+            return false;
+        }
+        Schedule schedule = (Schedule) o;
+        return Objects.equals(getCoach(), schedule.getCoach()) && Objects.equals(getLocalDateTime(),
+                schedule.getLocalDateTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCoach(), getLocalDateTime());
     }
 }
 
