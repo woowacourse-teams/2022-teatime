@@ -10,6 +10,7 @@ import Schedule from '@pages/Schedule';
 import Coach from '@pages/Coach';
 import NotFound from '@pages/NotFound';
 import AddSheet from '@pages/AddSheet';
+import ViewSheet from '@pages/ViewSheet';
 import Header from '@components/Header';
 import ScheduleProvider from '@context/ScheduleProvider';
 import { ROUTES } from './constants';
@@ -29,6 +30,7 @@ const App = () => {
         <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
         <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
         <Route path={`${ROUTES.FORM}/:id`} element={<AddSheet />} />
+        <Route path={`${ROUTES.VIEW_SHEET}/:id`} element={<ViewSheet />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </ScheduleProvider>
