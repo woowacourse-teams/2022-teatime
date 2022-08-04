@@ -6,16 +6,16 @@ import dayjs from 'dayjs';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 
 import CheckCircle from '@assets/check-circle.svg';
 import api from '@api/index';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);
+  const dispatch = useContext(ScheduleDispatchContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
@@ -27,17 +27,17 @@ const TimeList = () => {
 
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
-      setIsLoading(true);
       await api.post(`/api/reservations`, {
         crewId: 17,
         coachId: 41,
         scheduleId,
       });
+
+      dispatch({ type: 'RESERVATE_TIME', scheduleId });
+      setSelectedTimeId(null);
       openModal();
     } catch (error) {
       setIsError(true);
-    } finally {
-      setIsLoading(false);
     }
   };
 
