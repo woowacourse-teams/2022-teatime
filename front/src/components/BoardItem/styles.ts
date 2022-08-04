@@ -55,6 +55,7 @@ const CloseIconWrapper = styled.div`
 const ProfileImage = styled.img`
   width: 25px;
   height: 25px;
+  border-radius: 15px;
   margin-right: 10px;
 `;
 

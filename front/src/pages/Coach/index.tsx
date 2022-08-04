@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import api from '@api/index';
 import theme from '@styles/theme';
-import type { CrewList, CrewListMap } from '@typings/domain';
+import type { CrewListMap } from '@typings/domain';
 
 import PlusIcon from '@assets/plus.svg';
 import * as S from './styles';
@@ -22,11 +22,12 @@ interface BoardItem {
 }
 
 const Coach = () => {
+  const { id: coachId } = useParams();
   const navigate = useNavigate();
   const [crews, setCrews] = useState<CrewListMap>({
-    pending: [],
+    beforeApproved: [],
     approved: [],
-    completed: [],
+    inProgress: [],
   });
 
   const handleApprove = async (index: number, reservationId: number) => {
@@ -37,25 +38,26 @@ const Coach = () => {
       });
 
       setCrews((allBoards) => {
-        const copyPendingBoard = [...allBoards.pending];
-        const currentItem = copyPendingBoard[index];
+        const copyBeforeApprovedBoard = [...allBoards.beforeApproved];
+        const currentItem = copyBeforeApprovedBoard[index];
         const copyApprovedBoard = [...allBoards.approved];
-        copyPendingBoard.splice(index, 1);
+        copyBeforeApprovedBoard.splice(index, 1);
         copyApprovedBoard.splice(index, 0, currentItem);
 
         return {
           ...allBoards,
-          pending: copyPendingBoard,
+          beforeApproved: copyBeforeApprovedBoard,
           approved: copyApprovedBoard,
         };
       });
-    } catch {
+    } catch (error) {
       alert('승인 에러');
+      console.log(error);
     }
   };
 
   const boardItem: BoardItem = {
-    pending: {
+    beforeApproved: {
       title: '대기중인 일정',
       buttonName: '승인하기',
       color: theme.colors.ORANGE_600,
@@ -67,7 +69,7 @@ const Coach = () => {
       color: theme.colors.PURPLE_300,
       handleClickButton: () => console.log('내용보기'),
     },
-    completed: {
+    inProgress: {
       title: '완료된 일정',
       buttonName: '이력작성',
       color: theme.colors.GREEN_700,
@@ -78,13 +80,12 @@ const Coach = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: crewList } = await api.get('/api/crews');
-        const crewListMap = crewList?.reduce((newObj: CrewListMap, { status, crews }: CrewList) => {
-          newObj[status] = crews;
-          return newObj;
-        }, {});
+        const { data: crewListMap } = await api.get('/api/coaches/me/reservations', {
+          headers: { coachId: String(coachId) },
+        });
 
         setCrews(crewListMap);
+        console.log('crewListMap', crewListMap);
       } catch (error) {
         alert('크루 목록 get 에러');
         console.log(error);
@@ -108,13 +109,13 @@ const Coach = () => {
             <Board key={status} title={title} color={color} length={crews[status].length}>
               {crews[status].map((crew, index) => (
                 <BoardItem
-                  key={crew.id}
+                  key={crew.reservationId}
                   dateTime={crew.dateTime}
-                  image={crew.image}
-                  personName={crew.name}
+                  image={crew.crewImage}
+                  personName={crew.crewName}
                   buttonName={buttonName}
                   color={color}
-                  onClick={() => handleClickButton(index, crew.id)}
+                  onClick={() => handleClickButton(index, crew.reservationId)}
                 />
               ))}
             </Board>
