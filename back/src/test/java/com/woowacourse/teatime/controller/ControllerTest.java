@@ -67,4 +67,12 @@ public class ControllerTest {
                 .content(objectMapper.writeValueAsString(body));
     }
 
+    protected MockHttpServletRequestBuilder update(String url, Object body)
+            throws JsonProcessingException {
+        return MockMvcRequestBuilders.put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(body));
+    }
+
 }
