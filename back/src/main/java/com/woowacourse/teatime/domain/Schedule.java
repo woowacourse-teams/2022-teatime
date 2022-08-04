@@ -45,10 +45,6 @@ public class Schedule {
         }
     }
 
-    public boolean isSame(LocalDateTime localDateTime) {
-        return this.localDateTime.equals(localDateTime);
-    }
-
     public void reserve() {
         if (!this.isPossible) {
             throw new AlreadyReservedException();
