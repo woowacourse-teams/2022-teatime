@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,5 +38,11 @@ public class Sheet {
         this.number = number;
         this.questionContent = questionContent;
         this.answerContent = null;
+    }
+
+    public void modifyAnswer(int number, String content) {
+        if (this.number == number) {
+            this.answerContent = content;
+        }
     }
 }
