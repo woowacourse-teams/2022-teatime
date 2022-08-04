@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
+import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
@@ -8,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateDto;
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.SheetDto;
@@ -16,6 +19,7 @@ import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.exception.CannotSubmitBlankException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.repository.CoachRepository;
@@ -27,6 +31,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
@@ -131,16 +137,17 @@ class SheetServiceTest {
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
-    @DisplayName("면담 시트의 답변을 수정한다.")
+    @DisplayName("면담 시트의 답변을 임시저장한다.")
     @Test
-    void modifyAnswer() {
+    void modifyAnswer_write() {
         sheetService.save(coach.getId(), reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
                 new SheetAnswerUpdateDto(2, "물고기 자리"),
                 new SheetAnswerUpdateDto(1, "B형"),
                 new SheetAnswerUpdateDto(3, "entp"));
-        sheetService.updateAnswer(reservation.getId(), updateDtos);
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
+        sheetService.updateAnswer(reservation.getId(), request);
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();
@@ -149,6 +156,57 @@ class SheetServiceTest {
                 () -> assertThat(sheets.get(1).getAnswerContent()).isEqualTo("물고기 자리"),
                 () -> assertThat(sheets.get(2).getAnswerContent()).isEqualTo("entp")
         );
+    }
 
+    @DisplayName("면담 시트의 답변을 제출한다.")
+    @Test
+    void modifyAnswer_submit() {
+        sheetService.save(coach.getId(), reservation.getId());
+
+        List<SheetAnswerUpdateDto> updateDtos = List.of(
+                new SheetAnswerUpdateDto(2, "물고기 자리"),
+                new SheetAnswerUpdateDto(1, "B형"),
+                new SheetAnswerUpdateDto(3, "entp"));
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
+        sheetService.updateAnswer(reservation.getId(), request);
+
+        CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
+        List<SheetDto> sheets = response.getSheets();
+        assertAll(
+                () -> assertThat(sheets.get(0).getAnswerContent()).isEqualTo("B형"),
+                () -> assertThat(sheets.get(1).getAnswerContent()).isEqualTo("물고기 자리"),
+                () -> assertThat(sheets.get(2).getAnswerContent()).isEqualTo("entp")
+        );
+    }
+
+    @DisplayName("면담 시트의 답변 제출에 실패한다. - 공백을 포함하는 답변이 있는 경우")
+    @ParameterizedTest
+    @ValueSource(strings = {"", " "})
+    void modifyAnswer_submit_blankException(String answer) {
+        sheetService.save(coach.getId(), reservation.getId());
+
+        List<SheetAnswerUpdateDto> updateDtos = List.of(
+                new SheetAnswerUpdateDto(2, answer),
+                new SheetAnswerUpdateDto(1, "B형"),
+                new SheetAnswerUpdateDto(3, "entp"));
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
+
+        assertThatThrownBy(() -> sheetService.updateAnswer(reservation.getId(), request))
+                .isInstanceOf(CannotSubmitBlankException.class);
+    }
+
+    @DisplayName("면담 시트의 답변 제출에 실패한다. - 공백을 포함하는 답변이 있는 경우")
+    @Test
+    void modifyAnswer_submit_nullException() {
+        sheetService.save(coach.getId(), reservation.getId());
+
+        List<SheetAnswerUpdateDto> updateDtos = List.of(
+                new SheetAnswerUpdateDto(2, null),
+                new SheetAnswerUpdateDto(1, "B형"),
+                new SheetAnswerUpdateDto(3, "entp"));
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
+
+        assertThatThrownBy(() -> sheetService.updateAnswer(reservation.getId(), request))
+                .isInstanceOf(CannotSubmitBlankException.class);
     }
 }

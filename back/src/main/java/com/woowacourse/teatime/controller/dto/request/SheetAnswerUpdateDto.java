@@ -15,6 +15,5 @@ public class SheetAnswerUpdateDto {
     @NotNull
     private Integer questionNumber;
 
-    @NotNull
     private String answerContent;
 }

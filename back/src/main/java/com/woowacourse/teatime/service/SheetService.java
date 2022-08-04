@@ -1,11 +1,16 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
+
 import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateDto;
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Sheet;
+import com.woowacourse.teatime.domain.SheetStatus;
+import com.woowacourse.teatime.exception.CannotSubmitBlankException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.repository.CrewRepository;
@@ -61,11 +66,26 @@ public class SheetService {
                 .orElseThrow(NotFoundCrewException::new);
     }
 
-    public void updateAnswer(Long reservationId, List<SheetAnswerUpdateDto> sheetDtos) {
+    public void updateAnswer(Long reservationId, SheetAnswerUpdateRequest request) {
         validateReservation(reservationId);
+        SheetStatus status = request.getStatus();
+        List<SheetAnswerUpdateDto> sheetDtos = request.getSheets();
+        if (SUBMITTED.equals(status)) {
+            validateAnswer(sheetDtos);
+        }
+
         List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
         for (Sheet sheet : sheets) {
             modifyAnswer(sheetDtos, sheet);
+        }
+    }
+
+    private void validateAnswer(List<SheetAnswerUpdateDto> sheetDtos) {
+        for (SheetAnswerUpdateDto sheetDto : sheetDtos) {
+            String answerContent = sheetDto.getAnswerContent();
+            if (answerContent == null || answerContent.isBlank()) {
+                throw new CannotSubmitBlankException();
+            }
         }
     }
 
