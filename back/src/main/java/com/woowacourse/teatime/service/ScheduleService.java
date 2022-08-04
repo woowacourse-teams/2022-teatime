@@ -66,10 +66,14 @@ public class ScheduleService {
                 .findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);
 
         boolean isImpossibleToDelete = oldSchedules.stream()
-                .anyMatch(schedule -> !(newSchedules.contains(schedule) || schedule.isPossible()));
+                .anyMatch(schedule -> isReserved(newSchedules, schedule));
         if (isImpossibleToDelete) {
             throw new UnableToUpdateSchedule();
         }
+    }
+
+    private boolean isReserved(List<Schedule> newSchedules, Schedule schedule) {
+        return !(newSchedules.contains(schedule) || schedule.isPossible());
     }
 
     private void saveAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
