@@ -2,7 +2,9 @@ package com.woowacourse.teatime.controller;
 
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
+import com.woowacourse.teatime.controller.dto.response.SheetFindResponse;
 import com.woowacourse.teatime.service.ReservationService;
+import com.woowacourse.teatime.service.SheetService;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CrewController {
 
     private final ReservationService reservationService;
+    private final SheetService sheetService;
 
     @GetMapping("/me/reservations")
     public ResponseEntity<List<CrewFindOwnHistoryResponse>> findOwnReservations(@RequestBody @NotNull Long crewId) {
@@ -30,5 +33,11 @@ public class CrewController {
     public ResponseEntity<List<CoachFindCrewHistoryResponse>> findCrewReservations(@PathVariable @NotNull Long crewId) {
         List<CoachFindCrewHistoryResponse> responses = reservationService.findCrewHistoryByCoach(crewId);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/me/reservations/{reservationId}")
+    public ResponseEntity<SheetFindResponse> findOwnSheets(@PathVariable @NotNull Long reservationId) {
+        SheetFindResponse response = sheetService.findByReservation(reservationId);
+        return ResponseEntity.ok(response);
     }
 }

@@ -13,13 +13,18 @@ import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
-import com.woowacourse.teatime.service.CoachService;
+import com.woowacourse.teatime.controller.dto.response.SheetDto;
+import com.woowacourse.teatime.domain.Coach;
+import com.woowacourse.teatime.domain.Question;
+import com.woowacourse.teatime.repository.CoachRepository;
+import com.woowacourse.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.service.CrewService;
 import com.woowacourse.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +34,30 @@ import org.springframework.http.MediaType;
 public class CrewAcceptanceTest extends AcceptanceTest {
 
     @Autowired
-    private CoachService coachService;
+    private CoachRepository coachRepository;
     @Autowired
     private ScheduleService scheduleService;
     @Autowired
     private CrewService crewService;
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    private Coach coach;
+    private Long scheduleId;
+    private Long crewId;
+
+    @BeforeEach
+    void setUp() {
+        코치를_저장한다();
+        coach = coachRepository.findAll().get(0);
+        scheduleId = scheduleService.save(coach.getId(), DATE_TIME);
+        crewId = crewService.save(CREW_SAVE_REQUEST);
+    }
 
     @DisplayName("크루가 자신의 히스토리를 조회한다.")
     @Test
     void findOwnReservations() {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
-        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save(CREW_SAVE_REQUEST);
-
-        면담_예약_요청됨(coachId, scheduleId, crewId);
+        면담_예약_요청됨(coach.getId(), scheduleId, crewId);
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -70,16 +85,12 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치가 크루의 히스토리를 조회한다.")
     @Test
     void findCrewReservations() {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
-        Long scheduleId = scheduleService.save(coachId, DATE_TIME);
-        Long crewId = crewService.save(CREW_SAVE_REQUEST);
-
-        면담_예약_요청됨(coachId, scheduleId, crewId);
-        ExtractableResponse<Response> coachReservationFindResponse = 코치의_면담_목록을_조회한다(coachId);
+        면담_예약_요청됨(coach.getId(), scheduleId, crewId);
+        ExtractableResponse<Response> coachReservationFindResponse = 코치의_면담_목록을_조회한다(coach.getId());
         List<Long> reservationIds_beforeApproved
                 = coachReservationFindResponse.jsonPath().getList("beforeApproved.reservationId", Long.class);
-        승인을_한다(coachId, reservationIds_beforeApproved.get(0));
-        코치의_면담_목록을_조회한다(coachId);
+        승인을_한다(coach.getId(), reservationIds_beforeApproved.get(0));
+        코치의_면담_목록을_조회한다(coach.getId());
         완료를_한다(reservationIds_beforeApproved.get(0));
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
@@ -102,6 +113,50 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(result).hasSize(1)
         );
+    }
+
+    @DisplayName("크루가 자신의 면담 시트 하나를 조회한다.")
+    @Test
+    void findOwnSheet() {
+        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
+        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
+        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        면담_예약_요청됨(coach.getId(), scheduleId, crewId);
+        ExtractableResponse<Response> coachReservationFindResponse = 코치의_면담_목록을_조회한다(coach.getId());
+        List<Long> reservationIds_beforeApproved
+                = coachReservationFindResponse.jsonPath().getList("beforeApproved.reservationId", Long.class);
+        승인을_한다(coach.getId(), reservationIds_beforeApproved.get(0));
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationIds_beforeApproved.get(0))
+                .filter(document("find-own-sheets", responseFields(
+                        fieldWithPath("dateTime").description("날짜"),
+                        fieldWithPath("coachName").description("코치 이름"),
+                        fieldWithPath("coachImage").description("코치 이미지"),
+                        fieldWithPath("sheets[].questionNumber").description("질문 번호"),
+                        fieldWithPath("sheets[].questionContent").description("질문 내용"),
+                        fieldWithPath("sheets[].answerContent").description("답변 내용")
+                )))
+                .when().get("/api/crews/me/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+
+        List<SheetDto> result = response.jsonPath().getList("sheets.", SheetDto.class);
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(result).hasSize(3)
+        );
+    }
+
+    private ExtractableResponse<Response> 코치를_저장한다() {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(COACH_BROWN_SAVE_REQUEST)
+                .when().post("/api/coaches")
+                .then().log().all()
+                .extract();
     }
 
     private void 완료를_한다(Long reservationId) {
