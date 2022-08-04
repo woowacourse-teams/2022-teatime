@@ -49,7 +49,7 @@ class ReservationRepositoryTest {
         reservationRepository.save(new Reservation(schedule, crew));
 
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndStatusOrderByScheduleLocalDateTimeDesc(crew.getId(),
+                reservationRepository.findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(crew.getId(),
                         ReservationStatus.BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
@@ -66,7 +66,7 @@ class ReservationRepositoryTest {
         reservationRepository.save(new Reservation(schedule2, crew));
         reservationRepository.save(new Reservation(newCoachSchedule, crew));
 
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(
                 coach.getId(), ReservationStatus.DONE);
 
         assertThat(reservations).hasSize(2);

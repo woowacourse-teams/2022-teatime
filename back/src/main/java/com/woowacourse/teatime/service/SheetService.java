@@ -1,10 +1,13 @@
 package com.woowacourse.teatime.service;
 
-import com.woowacourse.teatime.controller.dto.response.SheetFindResponse;
+import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
+import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Sheet;
+import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
+import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.repository.SheetRepository;
@@ -22,6 +25,7 @@ public class SheetService {
     private final SheetRepository sheetRepository;
     private final QuestionRepository questionRepository;
     private final ReservationRepository reservationRepository;
+    private final CrewRepository crewRepository;
 
     public int save(Long coachId, Long reservationId) {
         List<Question> questions = questionRepository.findByCoachId(coachId);
@@ -36,10 +40,23 @@ public class SheetService {
         return savedSheets.size();
     }
 
-    public SheetFindResponse findByReservation(Long reservationId) {
+    public CrewFindOwnSheetResponse findOwnSheetByCrew(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
-        return SheetFindResponse.of(reservation, sheets);
+        return CrewFindOwnSheetResponse.of(reservation, sheets);
+    }
+
+    public CoachFindCrewSheetResponse findCrewSheetByCoach(Long crewId, Long reservationId) {
+        validateCrew(crewId);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        return CoachFindCrewSheetResponse.of(reservation, sheets);
+    }
+
+    private void validateCrew(Long crewId) {
+        crewRepository.findById(crewId)
+                .orElseThrow(NotFoundCrewException::new);
     }
 }

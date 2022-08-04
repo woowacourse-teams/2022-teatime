@@ -55,4 +55,28 @@ class CrewControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @DisplayName("크루가 자신의 면담 중 하나의 시트 목록 조회에 성공한다.")
+    @Test
+    void findCrewSheets() throws Exception {
+        mockMvc.perform(get("/api/crews/me/reservations/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("크루가 자신의 면담 중 하나의 시트 목록 조회에 실패한다. - 잘못된 면담 아이디")
+    @Test
+    void findCrewSheets_notFoundReservationId() throws Exception {
+        mockMvc.perform(get("/api/crews/1/reservations/a"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("크루가 자신의 면담 중 하나의 시트 목록 조회에 실패한다. - 잘못된 크루 아이디")
+    @Test
+    void findCrewSheets_notFoundCrewId() throws Exception {
+        mockMvc.perform(get("/api/crews/a/reservations/1"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }

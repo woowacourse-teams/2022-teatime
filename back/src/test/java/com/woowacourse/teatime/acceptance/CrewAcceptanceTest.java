@@ -5,6 +5,7 @@ import static com.woowacourse.teatime.acceptance.CoachAcceptanceTest.코치의_�
 import static com.woowacourse.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
 import static com.woowacourse.teatime.acceptance.ReservationAcceptanceTest.예약을_완료한다;
 import static com.woowacourse.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
+import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
@@ -146,6 +147,43 @@ public class CrewAcceptanceTest extends AcceptanceTest {
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(result).hasSize(3)
+        );
+    }
+
+    @DisplayName("코치가 크루의 면담 시트 하나를 조회한다.")
+    @Test
+    void findCrewSheets() {
+        Coach coach = coachRepository.findById(coachId).get();
+        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
+        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
+        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
+        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("crewId", crewId)
+                .pathParam("reservationId", reservationId)
+                .filter(document("find-crew-sheets", responseFields(
+                        fieldWithPath("dateTime").description("날짜"),
+                        fieldWithPath("coachName").description("코치 이름"),
+                        fieldWithPath("coachImage").description("코치 이미지"),
+                        fieldWithPath("status").description("시트 상태"),
+                        fieldWithPath("sheets[].questionNumber").description("질문 번호"),
+                        fieldWithPath("sheets[].questionContent").description("질문 내용"),
+                        fieldWithPath("sheets[].answerContent").description("답변 내용")
+                )))
+                .when().get("/api/crews/{crewId}/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+
+        String sheetStatus = response.jsonPath().getObject("status", String.class);
+        List<SheetDto> sheets = response.jsonPath().getList("sheets.", SheetDto.class);
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(sheetStatus).isEqualTo(WRITING.name()),
+                () -> assertThat(sheets).hasSize(3)
         );
     }
 }
