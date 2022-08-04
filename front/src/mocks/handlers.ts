@@ -29,7 +29,6 @@ const handlers = [
   }),
 
   rest.get<CrewListMap[]>(`${BASE_URL}/api/coaches/me/reservations`, (req, res, ctx) => {
-    console.log('req', req.headers);
     return res(ctx.status(200), ctx.json(crewList));
   }),
 
