@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
@@ -25,6 +26,7 @@ import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.exception.UnableToSubmitSheetException;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
@@ -237,7 +239,7 @@ class ReservationServiceTest {
         Long reservationId = reservationService.save(reserveRequest);
         reservationService.approve(reservationId, new ReservationApproveRequest(coach.getId(), true));
         reservationService.findByCoachId(coach.getId());
-        reservationService.updateStatusToDone(reservationId);
+        reservationService.updateReservationStatusToDone(reservationId);
 
         List<CoachFindCrewHistoryResponse> reservations = reservationService.findCrewHistoryByCoach(crew.getId());
 
@@ -312,13 +314,13 @@ class ReservationServiceTest {
 
     @DisplayName("진행중인 면담을 완료하면 완료된 상태로 바뀐다.")
     @Test
-    void updateStatusToDone() {
+    void updateReservationStatusToDone() {
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         reservation.confirm(true);
         reservationService.findByCoachId(coach.getId());
 
-        reservationService.updateStatusToDone(reservation.getId());
+        reservationService.updateReservationStatusToDone(reservation.getId());
         CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
 
         assertAll(
@@ -326,5 +328,32 @@ class ReservationServiceTest {
                 () -> assertThat(response.getApproved()).hasSize(0),
                 () -> assertThat(response.getInProgress()).hasSize(0)
         );
+    }
+
+    @DisplayName("면담 시트를 제출된 상태로 변경한다.")
+    @Test
+    void updateSheetStatusToSubmitted() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(true);
+        reservationService.findByCoachId(coach.getId());
+
+        reservationService.updateSheetStatusToSubmitted(reservation.getId());
+
+        assertThat(reservation.getSheetStatus()).isEqualTo(SUBMITTED);
+    }
+
+    @DisplayName("이미 제출된 면담 시트를 제출하면 예외를 반환한다.")
+    @Test
+    void updateSheetStatusToSubmitted_alreadySubmitted() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(true);
+        reservationService.findByCoachId(coach.getId());
+
+        reservationService.updateSheetStatusToSubmitted(reservation.getId());
+
+        assertThatThrownBy(() -> reservationService.updateSheetStatusToSubmitted(reservation.getId()))
+                .isInstanceOf(UnableToSubmitSheetException.class);
     }
 }

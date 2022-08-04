@@ -4,11 +4,13 @@ import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.exception.UnableToDoneReservationException;
+import com.woowacourse.teatime.exception.UnableToSubmitSheetException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +58,7 @@ public class Reservation {
     }
 
     public void confirm(boolean isApproved) {
-        if (!isSameStatus(BEFORE_APPROVED)) {
+        if (!isReservationStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
@@ -74,19 +76,19 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCoach(Role role) {
-        return role.isCoach() && isSameStatus(BEFORE_APPROVED);
+        return role.isCoach() && isReservationStatus(BEFORE_APPROVED);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
-        return isSameStatus(IN_PROGRESS) && role.isCrew();
+        return isReservationStatus(IN_PROGRESS) && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {
         return crew.getId().equals(crewId);
     }
 
-    public void updateStatusToInProgress() {
-        if (isSameStatus(APPROVED) && isTimePassed()) {
+    public void updateReservationStatusToInProgress() {
+        if (isReservationStatus(APPROVED) && isTimePassed()) {
             reservationStatus = IN_PROGRESS;
         }
     }
@@ -95,15 +97,22 @@ public class Reservation {
         return LocalDateTime.now().isAfter(getScheduleDateTime());
     }
 
-    public void updateStatusToDone() {
-        if (!isSameStatus(IN_PROGRESS)) {
+    public void updateReservationStatusToDone() {
+        if (!isReservationStatus(IN_PROGRESS)) {
             throw new UnableToDoneReservationException();
         }
         reservationStatus = DONE;
     }
 
-    public boolean isSameStatus(ReservationStatus status) {
+    public boolean isReservationStatus(ReservationStatus status) {
         return this.reservationStatus.equals(status);
+    }
+
+    public void updateSheetStatusToSubmitted() {
+        if (sheetStatus.equals(SUBMITTED)) {
+            throw new UnableToSubmitSheetException();
+        }
+        sheetStatus = SUBMITTED;
     }
 
     public LocalDateTime getScheduleDateTime() {

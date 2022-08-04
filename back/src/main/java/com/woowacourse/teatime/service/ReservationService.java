@@ -112,13 +112,13 @@ public class ReservationService {
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId, DONE);
-        updateStatusToInProgress(reservations);
+        updateReservationStatusToInProgress(reservations);
         return classifyReservationsAndReturnDto(reservations);
     }
 
-    private void updateStatusToInProgress(List<Reservation> reservations) {
+    private void updateReservationStatusToInProgress(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
-            reservation.updateStatusToInProgress();
+            reservation.updateReservationStatusToInProgress();
         }
     }
 
@@ -134,10 +134,10 @@ public class ReservationService {
                 ReservationStatus.classifyReservations(IN_PROGRESS, reservations));
     }
 
-    public void updateStatusToDone(Long reservationId) {
+    public void updateReservationStatusToDone(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        reservation.updateStatusToDone();
+        reservation.updateReservationStatusToDone();
     }
 
     public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
@@ -145,6 +145,12 @@ public class ReservationService {
         List<Reservation> reservations =
                 reservationRepository.findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(crewId, DONE);
         return CoachFindCrewHistoryResponse.from(reservations);
+    }
+
+    public void updateSheetStatusToSubmitted(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        reservation.updateSheetStatusToSubmitted();
     }
 }
 

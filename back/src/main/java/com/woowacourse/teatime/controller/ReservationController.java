@@ -56,7 +56,7 @@ public class ReservationController {
 
     @PutMapping("/{reservationId}")
     public ResponseEntity<Void> finish(@PathVariable @NotNull Long reservationId) {
-        reservationService.updateStatusToDone(reservationId);
+        reservationService.updateReservationStatusToDone(reservationId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
