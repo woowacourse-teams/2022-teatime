@@ -33,7 +33,7 @@ const Coach = () => {
   const handleApprove = async (index: number, reservationId: number) => {
     try {
       await api.post(`/api/reservations/${reservationId}`, {
-        coachId: 41,
+        coachId,
         isApproved: true,
       });
 
@@ -52,6 +52,32 @@ const Coach = () => {
       });
     } catch (error) {
       alert('승인 에러');
+      console.log(error);
+    }
+  };
+
+  const handleCancelButton = async (status: string, index: number, reservationId: number) => {
+    if (!confirm('예약을 취소하시겠습니까?')) return;
+
+    try {
+      await api.delete(`/api/reservations/${reservationId}`, {
+        headers: {
+          applicantId: Number(coachId),
+          role: 'COACH',
+        },
+      });
+
+      setCrews((allBoards) => {
+        const copyBeforeStatusBoard = [...allBoards[status]];
+        copyBeforeStatusBoard.splice(index, 1);
+
+        return {
+          ...allBoards,
+          [status]: copyBeforeStatusBoard,
+        };
+      });
+    } catch (error) {
+      alert('취소 에러');
       console.log(error);
     }
   };
@@ -81,7 +107,7 @@ const Coach = () => {
     (async () => {
       try {
         const { data: crewListMap } = await api.get('/api/coaches/me/reservations', {
-          headers: { coachId: String(coachId) },
+          headers: { coachId: Number(coachId) },
         });
 
         setCrews(crewListMap);
@@ -114,7 +140,8 @@ const Coach = () => {
                   personName={crew.crewName}
                   buttonName={buttonName}
                   color={color}
-                  onClick={() => handleClickButton(index, crew.reservationId)}
+                  onClickMenu={() => handleClickButton(index, crew.reservationId)}
+                  onClickCancel={() => handleCancelButton(status, index, crew.reservationId)}
                 />
               ))}
             </Board>
