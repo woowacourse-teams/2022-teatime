@@ -114,8 +114,6 @@ const Coach = () => {
           headers: { coachId: Number(coachId) },
         });
 
-        console.log('crewListMap', crewListMap);
-
         setCrews(crewListMap);
       } catch (error) {
         alert('크루 목록 get 에러');
