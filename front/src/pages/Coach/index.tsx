@@ -9,6 +9,7 @@ import type { CrewListMap } from '@typings/domain';
 
 import PlusIcon from '@assets/plus.svg';
 import * as S from './styles';
+import dayjs from 'dayjs';
 
 interface BoardItemValue {
   title: string;
@@ -42,7 +43,10 @@ const Coach = () => {
         const currentItem = copyBeforeApprovedBoard[index];
         const copyApprovedBoard = [...allBoards.approved];
         copyBeforeApprovedBoard.splice(index, 1);
-        copyApprovedBoard.splice(index, 0, currentItem);
+        copyApprovedBoard.push(currentItem);
+        copyApprovedBoard.sort(
+          (a, b) => Number(dayjs.tz(a.dateTime)) - Number(dayjs.tz(b.dateTime))
+        );
 
         return {
           ...allBoards,
