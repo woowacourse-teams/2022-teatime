@@ -4,8 +4,8 @@ import { BASE_URL } from '@api/index';
 import type {
   DaySchedule as DayScheduleResponse,
   Coach as CoachResponse,
-  Crew as CrewResponse,
   InterviewInfo as InterviewInfoResponse,
+  CrewListMap,
 } from '@typings/domain';
 import { coachList, crewList, scheduleList, interviewInfo } from './data';
 
@@ -28,7 +28,7 @@ const handlers = [
     return res(ctx.status(200));
   }),
 
-  rest.get<CrewResponse[]>(`${BASE_URL}/api/crews`, (req, res, ctx) => {
+  rest.get<CrewListMap[]>(`${BASE_URL}/api/coaches/me/reservations`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(crewList));
   }),
 

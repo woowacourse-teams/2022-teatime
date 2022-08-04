@@ -24,7 +24,7 @@ const App = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<SelectUser />} />
         <Route path={ROUTES.CREW} element={<Crew />} />
-        <Route path={ROUTES.COACH} element={<Coach />} />
+        <Route path={`${ROUTES.COACH}/:id`} element={<Coach />} />
         <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
         <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
         <Route path={`${ROUTES.FORM}/:id`} element={<AddSheet />} />
