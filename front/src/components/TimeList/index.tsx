@@ -6,16 +6,17 @@ import dayjs from 'dayjs';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import { ROUTES } from '@constants/index';
 
 import CheckCircle from '@assets/check-circle.svg';
 import api from '@api/index';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);
+  const dispatch = useContext(ScheduleDispatchContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
@@ -27,17 +28,17 @@ const TimeList = () => {
 
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
-      setIsLoading(true);
       await api.post(`/api/reservations`, {
         crewId: 17,
         coachId: 41,
         scheduleId,
       });
+
+      dispatch({ type: 'RESERVATE_TIME', scheduleId });
+      setSelectedTimeId(null);
       openModal();
     } catch (error) {
       setIsError(true);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -79,7 +80,8 @@ const TimeList = () => {
           content="면담 내용을 지금 작성 하시겠습니까?"
           firstButtonName="나중에"
           secondButtonName="작성하기"
-          onClick={handleClickWriteButton}
+          onClickFirstButton={() => navigate(ROUTES.CREW)}
+          onClickSecondButton={handleClickWriteButton}
           closeModal={closeModal}
         />
       )}
