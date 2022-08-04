@@ -6,6 +6,7 @@ import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Schedule;
 import com.woowacourse.teatime.exception.NotFoundCoachException;
+import com.woowacourse.teatime.exception.UnableToUpdateSchedule;
 import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.util.Date;
@@ -34,7 +35,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public List<ScheduleFindResponse> find(Long coachId, ScheduleFindRequest request) {
-        validateCoachId(coachId);
+        findCoach(coachId);
 
         LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findLastDay(request.getYear(), request.getMonth());
@@ -43,29 +44,44 @@ public class ScheduleService {
         return ScheduleFindResponse.from(schedules);
     }
 
-    private void validateCoachId(Long id) {
-        if (!coachRepository.existsById(id)) {
-            throw new NotFoundCoachException();
-        }
-    }
-
-    public void update(Long coachId, ScheduleUpdateRequest request) {
+    public boolean update(Long coachId, ScheduleUpdateRequest request) {
         deleteAllByCoachAndDate(coachId, request);
         saveAllByCoachAndDate(coachId, request);
+        return true;
     }
 
     private void deleteAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
         LocalDate date = request.getDate();
         LocalDateTime start = Date.findFirstTime(date);
         LocalDateTime end = Date.findLastTime(date);
+        validateIsPossibleToDelete(coachId, request, start, end);
+
         scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coachId, start, end);
     }
 
+    private void validateIsPossibleToDelete(Long coachId, ScheduleUpdateRequest request, LocalDateTime start,
+                                            LocalDateTime end) {
+        Coach coach = findCoach(coachId);
+        List<Schedule> newSchedules = toSchedules(request, coach);
+        List<Schedule> oldSchedules = scheduleRepository
+                .findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);
+
+        boolean isImpossibleToDelete = oldSchedules.stream()
+                .anyMatch(schedule -> !(newSchedules.contains(schedule) || schedule.isPossible()));
+        if (isImpossibleToDelete) {
+            throw new UnableToUpdateSchedule();
+        }
+    }
+
     private void saveAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
-        Coach coach = coachRepository.findById(coachId)
-                .orElseThrow(NotFoundCoachException::new);
+        Coach coach = findCoach(coachId);
         List<Schedule> schedules = toSchedules(request, coach);
         scheduleRepository.saveAll(schedules);
+    }
+
+    private Coach findCoach(Long id) {
+        return coachRepository.findById(id)
+                .orElseThrow(NotFoundCoachException::new);
     }
 
     private List<Schedule> toSchedules(ScheduleUpdateRequest request, Coach coach) {
@@ -73,5 +89,4 @@ public class ScheduleService {
                 .map(schedule -> new Schedule(coach, schedule))
                 .collect(Collectors.toList());
     }
-
 }
