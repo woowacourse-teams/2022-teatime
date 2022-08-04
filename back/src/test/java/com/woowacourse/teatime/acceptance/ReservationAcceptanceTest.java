@@ -9,8 +9,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
-import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.service.CrewService;
@@ -37,6 +35,31 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     private Long coachId;
     private Long scheduleId;
     private Long crewId;
+
+    public static Long 예약을_한다(Object object) {
+        ExtractableResponse<Response> response = post("/api/reservations", object);
+
+        return Long.parseLong(response.header("Location").split("/")[5]);
+    }
+
+    public static void 예약을_승인한다(Long reservationId, Object object) {
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .body(object)
+                .when().post("/api/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+    }
+
+    public static void 예약을_완료한다(Long reservationId) {
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .when().put("/api/reservations/{reservationId}")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
 
     @BeforeEach
     void setUp() {
@@ -91,11 +114,9 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
-                .body(new ReservationCancelRequest(coachId, role))
-                .filter(document("reserve-cancel", requestFields(
-                        fieldWithPath("applicantId").description("취소 신청자 아이디"),
-                        fieldWithPath("role").description("신청자의 역할(코치, 크루)")
-                )))
+                .header("applicantId", coachId)
+                .header("role", role)
+                .filter(document("reserve-cancel"))
                 .when().delete("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.NO_CONTENT.value());
@@ -112,31 +133,6 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
                 .filter(document("reserve-finish"))
-                .when().put("/api/reservations/{reservationId}")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value());
-    }
-
-    public static Long 예약을_한다(Object object) {
-        ExtractableResponse<Response> response = post("/api/reservations", object);
-
-        return Long.parseLong(response.header("Location").split("/")[5]);
-    }
-
-    public static void 예약을_승인한다(Long reservationId, Object object) {
-        RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("reservationId", reservationId)
-                .body(object)
-                .when().post("/api/reservations/{reservationId}")
-                .then().log().all()
-                .extract();
-    }
-
-    public static void 예약을_완료한다(Long reservationId) {
-        RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("reservationId", reservationId)
                 .when().put("/api/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
