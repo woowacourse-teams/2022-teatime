@@ -59,9 +59,9 @@ public class AcceptanceTest {
         }
     }
 
-    protected ExtractableResponse<Response> post(String uri, Object object) {
+    protected static ExtractableResponse<Response> post(String uri, Object body) {
         return RestAssured.given().log().all()
-                .body(toJson(object))
+                .body(body)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .post(uri)
@@ -69,7 +69,7 @@ public class AcceptanceTest {
                 .extract();
     }
 
-    protected ExtractableResponse<Response> get(String uri) {
+    protected static ExtractableResponse<Response> get(String uri) {
         return RestAssured.given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
