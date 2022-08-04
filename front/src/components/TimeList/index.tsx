@@ -17,6 +17,7 @@ const TimeList = () => {
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [reservationId, setReservationId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
@@ -28,11 +29,13 @@ const TimeList = () => {
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
       setIsLoading(true);
-      await api.post(`/api/reservations`, {
+      const data = await api.post(`/api/reservations`, {
         crewId: 17,
         coachId: 41,
         scheduleId,
       });
+      console.log('data-headers', data.headers);
+      setReservationId(1);
       openModal();
     } catch (error) {
       setIsError(true);
@@ -42,7 +45,7 @@ const TimeList = () => {
   };
 
   const handleClickWriteButton = () => {
-    navigate(`/form/41`);
+    navigate(`/form/${reservationId}`);
   };
 
   if (isError) return <h1>error</h1>;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import * as S from './styles';
+import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import Textarea from '@components/Textarea';
@@ -10,6 +10,7 @@ import { ReservationInfo } from '@typings/domain';
 
 import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
+import * as S from './styles';
 
 interface SheetInfoProps {
   title: string;
@@ -18,7 +19,10 @@ interface SheetInfoProps {
 }
 
 const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
-  const { data: reservationInfo } = useFetch<ReservationInfo, null>('/api/crews/me/reservations/1');
+  const { id: reservationId } = useParams();
+  const { data: reservationInfo } = useFetch<ReservationInfo, null>(
+    `/api/crews/me/reservations/${reservationId}`
+  );
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState([
     {
@@ -46,13 +50,16 @@ const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    let status = 'WRITING';
+
     if (e.currentTarget.innerText === '제출하기') {
       const checkValidation = contents.some((content) => !content.answerContent);
       setIsSubmit(true);
+      status = 'SUBMITTED';
       if (checkValidation) return;
     }
     try {
-      await api.put(`/api/crews/me/reservations/1`, contents);
+      await api.put(`/api/crews/me/reservations/${reservationId}`, { status, sheets: contents });
       alert('제출 되었습니다✅');
     } catch (error) {
       alert('제출 실패🚫');

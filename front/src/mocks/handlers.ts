@@ -5,7 +5,7 @@ import type {
   DaySchedule as DayScheduleResponse,
   Coach as CoachResponse,
   Crew as CrewResponse,
-  InterviewInfo as InterviewInfoResponse,
+  ReservationInfo as ReservationInfoInfoResponse,
 } from '@typings/domain';
 import { coachList, crewList, scheduleList, interviewInfo } from './data';
 
@@ -16,9 +16,12 @@ const handlers = [
   rest.get<DayScheduleResponse[]>(`${BASE_URL}/api/coaches/:id/schedules`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(scheduleList));
   }),
-  rest.get<InterviewInfoResponse>(`${BASE_URL}/api/crews/me/reservations/1`, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(interviewInfo));
-  }),
+  rest.get<ReservationInfoInfoResponse>(
+    `${BASE_URL}/api/crews/me/reservations/1`,
+    (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json(interviewInfo));
+    }
+  ),
 
   rest.post(`${BASE_URL}/api/coaches/:id/schedules/:scheduleId`, (req, res, ctx) => {
     return res(ctx.status(200));
