@@ -44,10 +44,9 @@ public class ScheduleService {
         return ScheduleFindResponse.from(schedules);
     }
 
-    public boolean update(Long coachId, ScheduleUpdateRequest request) {
+    public void update(Long coachId, ScheduleUpdateRequest request) {
         deleteAllByCoachAndDate(coachId, request);
         saveAllByCoachAndDate(coachId, request);
-        return true;
     }
 
     private void deleteAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
