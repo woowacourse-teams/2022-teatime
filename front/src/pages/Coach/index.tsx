@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { DragEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
@@ -9,7 +10,6 @@ import type { CrewListMap } from '@typings/domain';
 
 import PlusIcon from '@assets/plus.svg';
 import * as S from './styles';
-import dayjs from 'dayjs';
 
 interface BoardItemValue {
   title: string;
@@ -135,6 +135,53 @@ const Coach = () => {
     },
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
+    e.dataTransfer?.setData('itemId', String(id));
+    e.dataTransfer?.setData(
+      'listId',
+      (e.target as any)?.parentElement.parentElement.dataset.status
+    );
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    const itemId = Number(e.dataTransfer?.getData('itemId'));
+    const from = e.dataTransfer?.getData('listId');
+    const to = (e.target as any).closest('[data-status]')?.dataset.status;
+
+    if (from === to) return;
+    if (to === 'beforeApproved' || from === 'inProgress') return;
+    if (to === 'inProgress' && from === 'beforeApproved') return;
+    if (to === 'inProgress' && dayjs.tz(crews[from][itemId].dateTime) > dayjs()) {
+      alert('아직 옮길 수 없어요.');
+      return;
+    }
+
+    try {
+      await api.post(`/api/reservations/${crews[from][itemId].reservationId}`, {
+        coachId,
+        isApproved: true,
+      });
+
+      setCrews((allBoards) => {
+        const copyFromBoard = [...allBoards[from]];
+        const currentItem = copyFromBoard[itemId];
+        const copyToBoard = [...allBoards[to]];
+        copyFromBoard.splice(itemId, 1);
+        copyToBoard.push(currentItem);
+        copyToBoard.sort((a, b) => Number(dayjs.tz(a.dateTime)) - Number(dayjs.tz(b.dateTime)));
+
+        return {
+          ...allBoards,
+          [from]: copyFromBoard,
+          [to]: copyToBoard,
+        };
+      });
+    } catch (error) {
+      alert('승인 에러');
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -164,7 +211,14 @@ const Coach = () => {
             boardItem[status];
 
           return (
-            <Board key={status} title={title} color={color} length={crews[status].length}>
+            <Board
+              status={status}
+              key={status}
+              title={title}
+              color={color}
+              length={crews[status].length}
+              onDrop={handleDrop}
+            >
               {crews[status].map((crew, index) => (
                 <BoardItem
                   key={crew.reservationId}
@@ -175,6 +229,7 @@ const Coach = () => {
                   color={color}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
+                  onDragStart={(e: DragEvent<HTMLDivElement>) => handleDragStart(e, index)}
                 />
               ))}
             </Board>

@@ -1,9 +1,9 @@
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';
+import * as S from './styles';
 
 interface BoardItemProps {
   dateTime: string;
@@ -13,6 +13,7 @@ interface BoardItemProps {
   color: string;
   onClickMenu: () => void;
   onClickCancel: () => void;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
 const BoardItem = ({
@@ -23,12 +24,13 @@ const BoardItem = ({
   color,
   onClickMenu,
   onClickCancel,
+  onDragStart,
 }: BoardItemProps) => {
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
   return (
-    <S.BoardItemContainer color={color}>
+    <S.BoardItemContainer color={color} draggable onDragStart={onDragStart}>
       <S.TopSection>
         <S.DateContainer>
           <div>
