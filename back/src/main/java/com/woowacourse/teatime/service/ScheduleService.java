@@ -65,15 +65,15 @@ public class ScheduleService {
         List<Schedule> oldSchedules = scheduleRepository
                 .findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);
 
-        boolean isImpossibleToDelete = oldSchedules.stream()
-                .anyMatch(schedule -> isReserved(newSchedules, schedule));
-        if (isImpossibleToDelete) {
-            throw new UnableToUpdateSchedule();
+        for (Schedule schedule : oldSchedules) {
+            ValidateIsReserved(newSchedules, schedule);
         }
     }
 
-    private boolean isReserved(List<Schedule> newSchedules, Schedule schedule) {
-        return !(newSchedules.contains(schedule) || schedule.isPossible());
+    private void ValidateIsReserved(List<Schedule> newSchedules, Schedule schedule) {
+        if (!(newSchedules.contains(schedule) || schedule.isPossible())) {
+            throw new UnableToUpdateSchedule();
+        }
     }
 
     private void saveAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
