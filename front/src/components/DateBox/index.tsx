@@ -1,7 +1,7 @@
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import { Schedule } from '@typings/domain';
+import * as S from './styles';
 
 interface DateBoxProps {
   date?: number;

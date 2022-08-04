@@ -1,6 +1,5 @@
-import * as S from './styles';
-
 import ModalPortal from '../../ModalPortal';
+import * as S from './styles';
 
 import CloseIcon from '@assets/close.svg';
 

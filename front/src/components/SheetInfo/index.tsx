@@ -7,10 +7,10 @@ import Title from '@components/Title';
 import useFetch from '@hooks/useFetch';
 import api from '@api/index';
 import { ReservationInfo } from '@typings/domain';
+import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
-import * as S from './styles';
 
 interface SheetInfoProps {
   title: string;

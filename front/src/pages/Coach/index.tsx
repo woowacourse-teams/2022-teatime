@@ -6,9 +6,9 @@ import BoardItem from '@components/BoardItem';
 import api from '@api/index';
 import theme from '@styles/theme';
 import type { CrewList, CrewListMap } from '@typings/domain';
+import * as S from './styles';
 
 import PlusIcon from '@assets/plus.svg';
-import * as S from './styles';
 
 interface BoardItemValue {
   title: string;

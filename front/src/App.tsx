@@ -8,10 +8,10 @@ import Reservation from '@pages/Reservation';
 import SelectUser from '@pages/SelectUser';
 import Schedule from '@pages/Schedule';
 import Coach from '@pages/Coach';
+import AddSheet from '@pages/AddSheet/index';
 import Header from '@components/Header';
 import ScheduleProvider from '@context/ScheduleProvider';
 import { ROUTES } from './constants';
-import AddSheet from './pages/AddSheet/index';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

@@ -1,5 +1,6 @@
-import * as S from './styles';
 import dayjs from 'dayjs';
+
+import * as S from './styles';
 
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
