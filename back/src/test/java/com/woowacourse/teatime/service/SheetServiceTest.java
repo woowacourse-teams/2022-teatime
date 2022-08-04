@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateDto;
-import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.SheetDto;
@@ -17,7 +16,6 @@ import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
-import com.woowacourse.teatime.domain.SheetStatus;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.repository.CoachRepository;
@@ -142,8 +140,7 @@ class SheetServiceTest {
                 new SheetAnswerUpdateDto(2, "물고기 자리"),
                 new SheetAnswerUpdateDto(1, "B형"),
                 new SheetAnswerUpdateDto(3, "entp"));
-        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SheetStatus.WRITING, updateDtos);
-        sheetService.updateAnswer(reservation.getId(), request);
+        sheetService.updateAnswer(reservation.getId(), updateDtos);
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();

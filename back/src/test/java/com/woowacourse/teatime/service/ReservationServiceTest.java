@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.service;
 
 import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
+import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
@@ -213,9 +214,7 @@ class ReservationServiceTest {
         Long 말도_안되는_아이디 = reservationId + 100L;
 
         assertThatThrownBy(
-                () -> {
-                    reservationService.cancel(말도_안되는_아이디, new ReservationCancelRequest(coach.getId(), "CREW"));
-                })
+                () -> reservationService.cancel(말도_안되는_아이디, new ReservationCancelRequest(coach.getId(), "CREW")))
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
@@ -330,30 +329,37 @@ class ReservationServiceTest {
         );
     }
 
-    @DisplayName("면담 시트를 제출된 상태로 변경한다.")
+    @DisplayName("면담 시트를 임시저장하면 작성중 상태로 유지된다.")
     @Test
-    void updateSheetStatusToSubmitted() {
+    void updateSheetStatus_toWriting() {
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        reservation.confirm(true);
-        reservationService.findByCoachId(coach.getId());
 
-        reservationService.updateSheetStatusToSubmitted(reservation.getId());
+        reservationService.updateSheetStatusToSubmitted(reservation.getId(), WRITING);
+
+        assertThat(reservation.getSheetStatus()).isEqualTo(WRITING);
+    }
+
+    @DisplayName("면담 시트를 제출된 상태로 변경한다.")
+    @Test
+    void updateSheetStatus_toSubmitted() {
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+
+        reservationService.updateSheetStatusToSubmitted(reservation.getId(), SUBMITTED);
 
         assertThat(reservation.getSheetStatus()).isEqualTo(SUBMITTED);
     }
 
     @DisplayName("이미 제출된 면담 시트를 제출하면 예외를 반환한다.")
     @Test
-    void updateSheetStatusToSubmitted_alreadySubmitted() {
+    void updateSheetStatus_toSubmitted_alreadySubmitted() {
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        reservation.confirm(true);
-        reservationService.findByCoachId(coach.getId());
 
-        reservationService.updateSheetStatusToSubmitted(reservation.getId());
+        reservationService.updateSheetStatusToSubmitted(reservation.getId(), SUBMITTED);
 
-        assertThatThrownBy(() -> reservationService.updateSheetStatusToSubmitted(reservation.getId()))
+        assertThatThrownBy(() -> reservationService.updateSheetStatusToSubmitted(reservation.getId(), SUBMITTED))
                 .isInstanceOf(UnableToSubmitSheetException.class);
     }
 }

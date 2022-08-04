@@ -4,6 +4,7 @@ import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
 
 import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
@@ -16,6 +17,7 @@ import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.domain.Role;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.domain.SheetStatus;
 import com.woowacourse.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
@@ -111,7 +113,8 @@ public class ReservationService {
 
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId, DONE);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId,
+                DONE);
         updateReservationStatusToInProgress(reservations);
         return classifyReservationsAndReturnDto(reservations);
     }
@@ -147,10 +150,12 @@ public class ReservationService {
         return CoachFindCrewHistoryResponse.from(reservations);
     }
 
-    public void updateSheetStatusToSubmitted(Long reservationId) {
+    public void updateSheetStatusToSubmitted(Long reservationId, SheetStatus status) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        reservation.updateSheetStatusToSubmitted();
+        if (SUBMITTED.equals(status)) {
+            reservation.updateSheetStatusToSubmitted();
+        }
     }
 }
 

@@ -190,7 +190,7 @@ class ReservationTest {
                 .isInstanceOf(UnableToDoneReservationException.class);
     }
 
-    @DisplayName("면담 시트를 제출된 상태로 변경한다.")
+    @DisplayName("이미 제출된 면담 시트를 제출하면 예외를 반환한다.")
     @Test
     void updateSheetStatusToSubmitted_alreadySubmitted() {
         Reservation reservation = new Reservation(schedule, CREW);
@@ -200,7 +200,7 @@ class ReservationTest {
                 .isInstanceOf(UnableToSubmitSheetException.class);
     }
 
-    @DisplayName("이미 제출된 면담 시트를 제출하면 예외를 반환한다.")
+    @DisplayName("면담 시트를 제출된 상태로 변경한다.")
     @Test
     void updateSheetStatusToSubmitted() {
         Reservation reservation = new Reservation(schedule, CREW);

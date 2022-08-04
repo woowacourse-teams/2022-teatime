@@ -5,6 +5,7 @@ import static com.woowacourse.teatime.acceptance.CoachAcceptanceTest.코치의_�
 import static com.woowacourse.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
 import static com.woowacourse.teatime.acceptance.ReservationAcceptanceTest.예약을_완료한다;
 import static com.woowacourse.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
@@ -17,6 +18,8 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateDto;
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.SheetDto;
@@ -30,6 +33,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -186,5 +190,98 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(sheetStatus).isEqualTo(WRITING.name()),
                 () -> assertThat(sheets).hasSize(3)
         );
+    }
+
+    @DisplayName("크루가 자신의 면담 시트 답변을 임시저장한다.")
+    @Test
+    void updateAnswer_notSubmit() {
+        Coach coach = coachRepository.findById(coachId).get();
+        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
+        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
+        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
+        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
+
+        List<SheetAnswerUpdateDto> updateDtos = List.of(
+                new SheetAnswerUpdateDto(2, "물고기 자리"),
+                new SheetAnswerUpdateDto(1, "야호"),
+                new SheetAnswerUpdateDto(3, "entp"));
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .body(request)
+                .filter(document("update-sheet-answer"))
+                .when().put("/api/crews/me/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+
+        ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_조회한다(reservationId);
+        String sheetStatus = findOwnSheetResponse.jsonPath().getObject("status", String.class);
+        List<SheetDto> sheetDtos = findOwnSheetResponse.jsonPath().getList("sheets.", SheetDto.class);
+        List<String> answers = sheetDtos.stream()
+                .map(SheetDto::getAnswerContent)
+                .collect(Collectors.toList());
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(sheetStatus).isEqualTo(WRITING.name()),
+                () -> assertThat(answers).hasSize(3),
+                () -> assertThat(answers.get(0)).isEqualTo("야호"),
+                () -> assertThat(answers.get(1)).isEqualTo("물고기 자리"),
+                () -> assertThat(answers.get(2)).isEqualTo("entp")
+        );
+    }
+
+    @DisplayName("크루가 자신의 면담 시트 답변을 임시저장한다.")
+    @Test
+    void updateAnswer_submit() {
+        Coach coach = coachRepository.findById(coachId).get();
+        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
+        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
+        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
+        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
+
+        List<SheetAnswerUpdateDto> updateDtos = List.of(
+                new SheetAnswerUpdateDto(2, "물고기 자리"),
+                new SheetAnswerUpdateDto(1, "야호"),
+                new SheetAnswerUpdateDto(3, "entp"));
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .body(request)
+                .filter(document("update-sheet-answer"))
+                .when().put("/api/crews/me/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+
+        ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_조회한다(reservationId);
+        String sheetStatus = findOwnSheetResponse.jsonPath().getObject("status", String.class);
+        List<SheetDto> sheetDtos = findOwnSheetResponse.jsonPath().getList("sheets.", SheetDto.class);
+        List<String> answers = sheetDtos.stream()
+                .map(SheetDto::getAnswerContent)
+                .collect(Collectors.toList());
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(sheetStatus).isEqualTo(SUBMITTED.name()),
+                () -> assertThat(answers).hasSize(3),
+                () -> assertThat(answers.get(0)).isEqualTo("야호"),
+                () -> assertThat(answers.get(1)).isEqualTo("물고기 자리"),
+                () -> assertThat(answers.get(2)).isEqualTo("entp")
+        );
+    }
+
+    private static ExtractableResponse<Response> 크루가_자신의_면담시트를_조회한다(Long reservationId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .when().get("/api/crews/me/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
     }
 }
