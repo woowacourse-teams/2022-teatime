@@ -34,7 +34,7 @@ const DateContainer = styled.div`
   }
 
   span {
-    color: #6d798e;
+    color: ${({ theme }) => theme.colors.GRAY_800};
     font-weight: 600;
     font-size: 18px;
     letter-spacing: 1px;

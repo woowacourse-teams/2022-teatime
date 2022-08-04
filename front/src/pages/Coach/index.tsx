@@ -85,7 +85,6 @@ const Coach = () => {
         });
 
         setCrews(crewListMap);
-        console.log('crewListMap', crewListMap);
       } catch (error) {
         alert('크루 목록 get 에러');
         console.log(error);
