@@ -45,7 +45,7 @@ public class CoachController {
 
     @GetMapping("/me/reservations")
     public ResponseEntity<CoachReservationsResponse> findCoachReservations(
-            @Valid @RequestHeader("coachId") Long coachId) {
+            @RequestHeader("coachId") Long coachId) {
         CoachReservationsResponse response = reservationService.findByCoachId(coachId);
         return ResponseEntity.ok(response);
     }

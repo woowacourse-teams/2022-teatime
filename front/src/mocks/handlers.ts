@@ -35,6 +35,10 @@ const handlers = [
   rest.post(`${BASE_URL}/api/reservations/:reservationId`, (req, res, ctx) => {
     return res(ctx.status(201));
   }),
+
+  rest.delete(`${BASE_URL}/api/reservations/:reservationId`, (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
 
 export default handlers;
