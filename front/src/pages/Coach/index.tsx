@@ -70,7 +70,7 @@ const Coach = () => {
       handleClickButton: () => console.log('내용보기'),
     },
     inProgress: {
-      title: '완료된 일정',
+      title: '진행중인 일정',
       buttonName: '이력작성',
       color: theme.colors.GREEN_700,
       handleClickButton: () => console.log('이력작성'),
