@@ -53,13 +53,13 @@ public class ScheduleService {
         LocalDate date = request.getDate();
         LocalDateTime start = Date.findFirstTime(date);
         LocalDateTime end = Date.findLastTime(date);
-        validateIsPossibleToDelete(coachId, request, start, end);
+        validateDeletable(coachId, request, start, end);
 
         scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coachId, start, end);
     }
 
-    private void validateIsPossibleToDelete(Long coachId, ScheduleUpdateRequest request, LocalDateTime start,
-                                            LocalDateTime end) {
+    private void validateDeletable(Long coachId, ScheduleUpdateRequest request, LocalDateTime start,
+                                   LocalDateTime end) {
         Coach coach = findCoach(coachId);
         List<Schedule> newSchedules = toSchedules(request, coach);
         List<Schedule> oldSchedules = scheduleRepository
