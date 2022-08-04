@@ -92,7 +92,6 @@ class ReservationTest {
     @DisplayName("코치가 진행 중인 면담을 취소할 수 있다.")
     @Test
     void cancel_byCoach_inProgressReservation() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
         reservation.updateStatusToInProgress();
@@ -105,7 +104,6 @@ class ReservationTest {
     @DisplayName("크루가 진행 중인 면담을 취소할 수 없다.")
     @Test
     void cancel_byCrew_inProgressReservation() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
         reservation.updateStatusToInProgress();
@@ -117,7 +115,6 @@ class ReservationTest {
     @DisplayName("예약 시간이 되면 승인된 면담이 진행중인 상태로 업데이트 된다.")
     @Test
     void updateStatusToInProgress() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
 
@@ -129,7 +126,6 @@ class ReservationTest {
     @DisplayName("예약 시간이 되어도 승인되지 않은 면담은 진행중인 상태로 업데이트 되지 않는다.")
     @Test
     void updateStatusToInProgress_unapprovedReservation() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
 
         reservation.updateStatusToInProgress();
@@ -152,7 +148,6 @@ class ReservationTest {
     @DisplayName("진행중인 면담을 종료하면 완료된 상태로 업데이트 된다.")
     @Test
     void updateStatusToDone() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
         reservation.updateStatusToInProgress();
@@ -165,7 +160,6 @@ class ReservationTest {
     @DisplayName("승인되지 않은 면담을 종료하면 예외가 발생한다.")
     @Test
     void updateStatusToDone_unableToDoneException_unapproved() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
 
         assertThatThrownBy(reservation::updateStatusToDone)
@@ -175,7 +169,6 @@ class ReservationTest {
     @DisplayName("승인되었지만 진행중이지 않은 면담을 종료하면 예외가 발생한다.")
     @Test
     void updateStatusToDone_unableToDoneException_approved() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
 
@@ -186,7 +179,6 @@ class ReservationTest {
     @DisplayName("이미 종료된 면담을 종료하면 예외가 발생한다.")
     @Test
     void updateStatusToDone_unableToDoneException_done() {
-        Schedule schedule = new Schedule(COACH_BROWN, LocalDateTime.now());
         Reservation reservation = new Reservation(schedule, CREW);
         reservation.confirm(승인을_한다);
         reservation.updateStatusToInProgress();

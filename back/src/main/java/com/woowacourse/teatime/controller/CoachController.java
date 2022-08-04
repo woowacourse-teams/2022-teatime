@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.controller;
 
-import com.woowacourse.teatime.controller.dto.request.CoachReservationsRequest;
 import com.woowacourse.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.controller.dto.response.CoachReservationsResponse;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,8 +39,8 @@ public class CoachController {
 
     @GetMapping("/me/reservations")
     public ResponseEntity<CoachReservationsResponse> findCoachReservations(
-            @Valid @RequestBody CoachReservationsRequest coachReservationsRequest) {
-        CoachReservationsResponse response = reservationService.findByCoachId(coachReservationsRequest.getCoachId());
+            @Valid @RequestHeader("coachId") Long coachId) {
+        CoachReservationsResponse response = reservationService.findByCoachId(coachId);
         return ResponseEntity.ok(response);
     }
 }
