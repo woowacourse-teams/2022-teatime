@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -13,12 +13,13 @@ import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
 
 interface SheetInfoProps {
+  coach?: boolean;
   title: string;
   firstButton: string;
   secondButton: string;
 }
 
-const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
+const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) => {
   const { id: reservationId } = useParams();
   const { data: reservationInfo } = useFetch<ReservationInfo, null>(
     `/api/crews/me/reservations/${reservationId}`
@@ -66,6 +67,12 @@ const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
     }
   };
 
+  useEffect(() => {
+    if (reservationInfo) {
+      setContents(reservationInfo.sheets);
+    }
+  });
+
   return (
     <>
       <S.InfoContainer>
@@ -89,6 +96,7 @@ const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
             value={contents[0].answerContent}
             handleChangeContent={handleChangeContent(0)}
             isSubmit={isSubmit}
+            coach={coach}
           />
           <Textarea
             id="1"
@@ -96,6 +104,7 @@ const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
             value={contents[1].answerContent}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
+            coach={coach}
           />
           <Textarea
             id="2"
@@ -103,6 +112,7 @@ const SheetInfo = ({ title, firstButton, secondButton }: SheetInfoProps) => {
             value={contents[2].answerContent}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
+            coach={coach}
           />
           <S.ButtonContainer>
             <S.FirstButton onClick={handleSubmit}>{firstButton}</S.FirstButton>

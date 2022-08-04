@@ -1,8 +1,15 @@
 package com.woowacourse.teatime.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
+import com.woowacourse.teatime.exception.UnableToUpdateSchedule;
+import com.woowacourse.teatime.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -38,5 +45,19 @@ class ScheduleControllerTest extends ControllerTest {
         mockMvc.perform(get("/api/coaches/1/schedules?year=2022&month=13"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("코치 스케줄 수정에 실패한다 - 스케줄이 예약되어 있는 상태이다")
+    @Test
+    void updateCoachScheduleFailReservedSchedule() throws Exception {
+        willThrow(UnableToUpdateSchedule.class).given(scheduleService)
+                .update(any(Long.class), any(ScheduleUpdateRequest.class));
+
+        LocalDate date = LocalDate.now();
+        mockMvc.perform(
+                update("/api/coaches/1/schedules", new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date)))))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
     }
 }

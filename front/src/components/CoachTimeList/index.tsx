@@ -35,8 +35,9 @@ const CoachTimeList = () => {
       });
       dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
       alert('확정되었습니다.✅');
-    } catch {
+    } catch (error) {
       alert('스케쥴 등록 실패');
+      console.log(error);
     }
   };
 

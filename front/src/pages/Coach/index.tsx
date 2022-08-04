@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import api from '@api/index';
 import theme from '@styles/theme';
-import type { CrewList, CrewListMap } from '@typings/domain';
+import type { CrewListMap } from '@typings/domain';
 import * as S from './styles';
 
 import PlusIcon from '@assets/plus.svg';
@@ -22,40 +22,68 @@ interface BoardItem {
 }
 
 const Coach = () => {
+  const { id: coachId } = useParams();
   const navigate = useNavigate();
   const [crews, setCrews] = useState<CrewListMap>({
-    pending: [],
+    beforeApproved: [],
     approved: [],
-    completed: [],
+    inProgress: [],
   });
 
   const handleApprove = async (index: number, reservationId: number) => {
     try {
       await api.post(`/api/reservations/${reservationId}`, {
-        coachId: 41,
+        coachId,
         isApproved: true,
       });
 
       setCrews((allBoards) => {
-        const copyPendingBoard = [...allBoards.pending];
-        const currentItem = copyPendingBoard[index];
+        const copyBeforeApprovedBoard = [...allBoards.beforeApproved];
+        const currentItem = copyBeforeApprovedBoard[index];
         const copyApprovedBoard = [...allBoards.approved];
-        copyPendingBoard.splice(index, 1);
+        copyBeforeApprovedBoard.splice(index, 1);
         copyApprovedBoard.splice(index, 0, currentItem);
 
         return {
           ...allBoards,
-          pending: copyPendingBoard,
+          beforeApproved: copyBeforeApprovedBoard,
           approved: copyApprovedBoard,
         };
       });
-    } catch {
+    } catch (error) {
       alert('승인 에러');
+      console.log(error);
+    }
+  };
+
+  const handleCancelButton = async (status: string, index: number, reservationId: number) => {
+    if (!confirm('예약을 취소하시겠습니까?')) return;
+
+    try {
+      await api.delete(`/api/reservations/${reservationId}`, {
+        headers: {
+          applicantId: Number(coachId),
+          role: 'COACH',
+        },
+      });
+
+      setCrews((allBoards) => {
+        const copyBeforeStatusBoard = [...allBoards[status]];
+        copyBeforeStatusBoard.splice(index, 1);
+
+        return {
+          ...allBoards,
+          [status]: copyBeforeStatusBoard,
+        };
+      });
+    } catch (error) {
+      alert('취소 에러');
+      console.log(error);
     }
   };
 
   const boardItem: BoardItem = {
-    pending: {
+    beforeApproved: {
       title: '대기중인 일정',
       buttonName: '승인하기',
       color: theme.colors.ORANGE_600,
@@ -67,8 +95,8 @@ const Coach = () => {
       color: theme.colors.PURPLE_300,
       handleClickButton: () => console.log('내용보기'),
     },
-    completed: {
-      title: '완료된 일정',
+    inProgress: {
+      title: '진행중인 일정',
       buttonName: '이력작성',
       color: theme.colors.GREEN_700,
       handleClickButton: () => console.log('이력작성'),
@@ -78,11 +106,9 @@ const Coach = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: crewList } = await api.get('/api/crews');
-        const crewListMap = crewList?.reduce((newObj: CrewListMap, { status, crews }: CrewList) => {
-          newObj[status] = crews;
-          return newObj;
-        }, {});
+        const { data: crewListMap } = await api.get('/api/coaches/me/reservations', {
+          headers: { coachId: Number(coachId) },
+        });
 
         setCrews(crewListMap);
       } catch (error) {
@@ -108,13 +134,14 @@ const Coach = () => {
             <Board key={status} title={title} color={color} length={crews[status].length}>
               {crews[status].map((crew, index) => (
                 <BoardItem
-                  key={crew.id}
+                  key={crew.reservationId}
                   dateTime={crew.dateTime}
-                  image={crew.image}
-                  personName={crew.name}
+                  image={crew.crewImage}
+                  personName={crew.crewName}
                   buttonName={buttonName}
                   color={color}
-                  onClick={() => handleClickButton(index, crew.id)}
+                  onClickMenu={() => handleClickButton(index, crew.reservationId)}
+                  onClickCancel={() => handleCancelButton(status, index, crew.reservationId)}
                 />
               ))}
             </Board>

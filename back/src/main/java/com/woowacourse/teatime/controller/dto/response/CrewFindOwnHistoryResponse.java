@@ -39,6 +39,6 @@ public class CrewFindOwnHistoryResponse {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
         return new CrewFindOwnHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
-                schedule.getLocalDateTime(), reservation.getStatus());
+                schedule.getLocalDateTime(), reservation.getReservationStatus());
     }
 }

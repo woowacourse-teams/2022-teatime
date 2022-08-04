@@ -46,7 +46,8 @@ type Action =
   | { type: 'SELECT_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
   | { type: 'SELECT_ALL_TIMES'; isSelectedAll: boolean }
-  | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] };
+  | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] }
+  | { type: 'RESERVATE_TIME'; scheduleId: number };
 
 type ScheduleDispatch = Dispatch<Action>;
 
@@ -133,6 +134,16 @@ const reducer = (state: State, action: Action) => {
       });
 
       return { ...state, monthSchedule: newMonthSchedule };
+    }
+    case 'RESERVATE_TIME': {
+      const newDaySchedule = state.daySchedule.schedules.map((time) => {
+        if (time.id === action.scheduleId) {
+          return { id: action.scheduleId, dateTime: time.dateTime, isPossible: false };
+        }
+        return time;
+      });
+
+      return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newDaySchedule } };
     }
     default:
       return state;

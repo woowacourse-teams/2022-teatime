@@ -5,7 +5,6 @@ import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
 import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
 
-import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
@@ -62,26 +61,25 @@ public class ReservationService {
         }
     }
 
-    public void cancel(Long reservationId, ReservationCancelRequest reservationCancelRequest) {
-        Role role = Role.search(reservationCancelRequest.getRole());
+    public void cancel(Long reservationId, Long applicantId, String role) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
 
-        validateAuthorization(reservationCancelRequest, role, reservation);
-        reservation.cancel(role);
+        validateAuthorization(applicantId, Role.search(role), reservation);
+        reservation.cancel(Role.search(role));
         reservationRepository.delete(reservation);
     }
 
-    private void validateAuthorization(ReservationCancelRequest reservationCancelRequest, Role role,
+    private void validateAuthorization(Long applicantId, Role role,
                                        Reservation reservation) {
         if (role.isCoach()) {
-            Long coachId = reservationCancelRequest.getApplicantId();
-            validateIsSameCoach(coachId, reservation);
+            validateCoachId(applicantId);
+            validateIsSameCoach(applicantId, reservation);
         }
 
         if (role.isCrew()) {
-            Long crewId = reservationCancelRequest.getApplicantId();
-            validateIsSameCrew(crewId, reservation);
+            validateCrewId(applicantId);
+            validateIsSameCrew(applicantId, reservation);
         }
     }
 
@@ -111,7 +109,8 @@ public class ReservationService {
 
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndStatusNot(coachId, DONE);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId,
+                DONE);
         updateStatusToInProgress(reservations);
         return classifyReservationsAndReturnDto(reservations);
     }
@@ -143,7 +142,7 @@ public class ReservationService {
     public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndStatusOrderByScheduleLocalDateTimeDesc(crewId, DONE);
+                reservationRepository.findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(crewId, DONE);
         return CoachFindCrewHistoryResponse.from(reservations);
     }
 }
