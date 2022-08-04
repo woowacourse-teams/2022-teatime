@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.woowacourse.teatime.controller.dto.ReservationCancelRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
@@ -147,7 +146,7 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
         예약_승인을_확정한다(reservationId, true);
 
-        reservationService.cancel(reservationId, new ReservationCancelRequest(coach.getId(), "COACH"));
+        reservationService.cancel(reservationId, coach.getId(), "COACH");
 
         assertAll(
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
@@ -161,7 +160,7 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
         예약_승인을_확정한다(reservationId, true);
 
-        reservationService.cancel(reservationId, new ReservationCancelRequest(crew.getId(), "CREW"));
+        reservationService.cancel(reservationId, crew.getId(), "CREW");
 
         assertAll(
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
@@ -174,7 +173,7 @@ class ReservationServiceTest {
     void cancel_unapprovedReservation() {
         Long reservationId = 예약에_성공한다();
 
-        reservationService.cancel(reservationId, new ReservationCancelRequest(crew.getId(), "CREW"));
+        reservationService.cancel(reservationId, crew.getId(), "CREW");
 
         assertAll(
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
@@ -190,7 +189,7 @@ class ReservationServiceTest {
         예약_승인을_확정한다(reservationId, true);
 
         assertThatThrownBy(
-                () -> reservationService.cancel(reservationId, new ReservationCancelRequest(coach.getId(), role)))
+                () -> reservationService.cancel(reservationId, coach.getId(), role))
                 .isInstanceOf(NotFoundRoleException.class);
     }
 
@@ -200,7 +199,7 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
 
         assertThatThrownBy(
-                () -> reservationService.cancel(reservationId, new ReservationCancelRequest(coach.getId(), "COACH")))
+                () -> reservationService.cancel(reservationId, coach.getId(), "COACH"))
                 .isInstanceOf(UnCancellableReservationException.class);
     }
 
@@ -212,7 +211,7 @@ class ReservationServiceTest {
 
         assertThatThrownBy(
                 () -> {
-                    reservationService.cancel(말도_안되는_아이디, new ReservationCancelRequest(coach.getId(), "CREW"));
+                    reservationService.cancel(말도_안되는_아이디, coach.getId(), "CREW");
                 })
                 .isInstanceOf(NotFoundReservationException.class);
     }
