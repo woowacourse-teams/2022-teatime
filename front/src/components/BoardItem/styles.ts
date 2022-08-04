@@ -34,7 +34,7 @@ const DateContainer = styled.div`
   }
 
   span {
-    color: #6d798e;
+    color: ${({ theme }) => theme.colors.GRAY_800};
     font-weight: 600;
     font-size: 18px;
     letter-spacing: 1px;
@@ -55,6 +55,7 @@ const CloseIconWrapper = styled.div`
 const ProfileImage = styled.img`
   width: 25px;
   height: 25px;
+  border-radius: 15px;
   margin-right: 10px;
 `;
 

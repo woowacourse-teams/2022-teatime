@@ -120,78 +120,77 @@ const interviewInfo = {
   ],
 };
 
-const crewList = [
-  {
-    status: 'pending',
-    crews: [
-      {
-        id: 1,
-        name: '아키',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-20T14:00:00.000Z',
-      },
-      {
-        id: 2,
-        name: '마루',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-21T15:00:00.000Z',
-      },
-      {
-        id: 3,
-        name: '호두',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-22T11:00:00.000Z',
-      },
-    ],
-  },
-  {
-    status: 'approved',
-    crews: [
-      {
-        id: 4,
-        name: '야호',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-19T20:00:00.000Z',
-      },
-      {
-        id: 5,
-        name: '호야',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-19T21:00:00.000Z',
-      },
-      {
-        id: 6,
-        name: '잉',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-19T22:00:00.000Z',
-      },
-    ],
-  },
-  {
-    status: 'completed',
-    crews: [
-      {
-        id: 7,
-        name: '안',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-17T20:00:00.000Z',
-      },
-      {
-        id: 8,
-        name: '코이',
-        image:
-          'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
-        dateTime: '2022-08-17T21:00:00.000Z',
-      },
-    ],
-  },
-];
+const crewList = {
+  beforeApproved: [
+    {
+      crewId: 1,
+      crewName: '아키',
+      reservationId: 17,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-20T14:00:00.000Z',
+    },
+    {
+      crewId: 2,
+      crewName: '마루',
+      reservationId: 18,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-21T15:00:00.000Z',
+    },
+    {
+      crewId: 3,
+      crewName: '호두',
+      reservationId: 19,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-22T11:00:00.000Z',
+    },
+  ],
+  approved: [
+    {
+      crewId: 4,
+      crewName: '야호',
+      reservationId: 20,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-19T20:00:00.000Z',
+    },
+    {
+      crewId: 5,
+      crewName: '호야',
+      reservationId: 21,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-19T21:00:00.000Z',
+    },
+    {
+      crewId: 6,
+      crewName: '잉',
+      reservationId: 22,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-19T22:00:00.000Z',
+    },
+  ],
+  inProgress: [
+    {
+      crewId: 7,
+      crewName: '안',
+      reservationId: 123,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-17T20:00:00.000Z',
+    },
+    {
+      crewId: 8,
+      crewName: '코이',
+      reservationId: 222,
+      crewImage:
+        'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
+      dateTime: '2022-08-17T21:00:00.000Z',
+    },
+  ],
+};
 
 export { coachList, scheduleList, interviewInfo, crewList };

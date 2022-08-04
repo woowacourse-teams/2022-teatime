@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 
 interface Crew {
-  id: number;
-  name: string;
+  reservationId: number;
+  crewId: number;
+  crewName: string;
+  crewImage: string;
   dateTime: string;
-  image: string;
 }
 interface Coach {
   id: number;
@@ -39,18 +40,6 @@ type Sheets = { questionNumber: number; questionContent: string; answerContent: 
 
 type DaySchedule = { day: number; schedules: Schedule[] };
 
-type CrewList = { status: string; crews: Crew[] };
-
 type CrewListMap = Record<string, Crew[]>;
 
-export {
-  Crew,
-  Coach,
-  MonthYear,
-  Schedule,
-  DaySchedule,
-  ReservationInfo,
-  CrewList,
-  CrewListMap,
-  Sheets,
-};
+export { Crew, Coach, MonthYear, Schedule, DaySchedule, ReservationInfo, CrewListMap, Sheets };
