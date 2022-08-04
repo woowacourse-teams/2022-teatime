@@ -27,7 +27,7 @@ const App = () => {
         <Route path={ROUTES.COACH} element={<Coach />} />
         <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
         <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
-        <Route path={`${ROUTES.FORM}/:id`} element={<AddSheet />} />
+        <Route path={`${ROUTES.ADD_SHEET}/:id`} element={<AddSheet />} />
       </Routes>
     </ScheduleProvider>
   );

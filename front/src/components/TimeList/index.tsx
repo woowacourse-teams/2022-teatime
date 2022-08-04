@@ -7,6 +7,7 @@ import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleStateContext } from '@context/ScheduleProvider';
+import { ROUTES } from '@constants/index';
 
 import CheckCircle from '@assets/check-circle.svg';
 import api from '@api/index';
@@ -45,7 +46,7 @@ const TimeList = () => {
   };
 
   const handleClickWriteButton = () => {
-    navigate(`/form/${reservationId}`);
+    navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
   };
 
   if (isError) return <h1>error</h1>;
