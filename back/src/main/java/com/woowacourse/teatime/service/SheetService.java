@@ -1,12 +1,18 @@
 package com.woowacourse.teatime.service;
 
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
+
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateDto;
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.domain.Question;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Sheet;
+import com.woowacourse.teatime.domain.SheetStatus;
 import com.woowacourse.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.exception.NotFoundReservationException;
+import com.woowacourse.teatime.exception.UnModifiableSheetException;
 import com.woowacourse.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.repository.ReservationRepository;
@@ -58,5 +64,29 @@ public class SheetService {
     private void validateCrew(Long crewId) {
         crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
+    }
+
+    public void updateAnswer(Long reservationId, SheetAnswerUpdateRequest request) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        validateStatus(reservation.getSheetStatus());
+
+        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        List<SheetAnswerUpdateDto> sheetDtos = request.getSheets();
+        for (Sheet sheet : sheets) {
+            modifyAnswer(sheetDtos, sheet);
+        }
+    }
+
+    private void validateStatus(SheetStatus status) {
+        if (SUBMITTED.equals(status)) {
+            throw new UnModifiableSheetException();
+        }
+    }
+
+    private void modifyAnswer(List<SheetAnswerUpdateDto> sheetDtos, Sheet sheet) {
+        for (SheetAnswerUpdateDto sheetDto : sheetDtos) {
+            sheet.modifyAnswer(sheetDto.getQuestionNumber(), sheetDto.getAnswerContent());
+        }
     }
 }
