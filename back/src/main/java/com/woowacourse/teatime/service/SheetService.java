@@ -39,7 +39,7 @@ public class SheetService {
     public SheetFindResponse findByReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        List<Sheet> sheets = sheetRepository.findByReservationId(reservationId);
-        return SheetFindResponse.from(reservation, sheets);
+        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        return SheetFindResponse.of(reservation, sheets);
     }
 }

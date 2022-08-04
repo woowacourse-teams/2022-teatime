@@ -15,15 +15,15 @@ public class SheetDto {
     private String questionContent;
     private String answerContent;
 
-    public static List<SheetDto> of(List<Sheet> sheets) {
-        return sheets.stream()
-                .map(SheetDto::new)
-                .collect(Collectors.toList());
-    }
-
     private SheetDto(Sheet sheet) {
         this.questionNumber = sheet.getNumber();
         this.questionContent = sheet.getQuestionContent();
         this.answerContent = sheet.getAnswerContent();
+    }
+
+    public static List<SheetDto> from(List<Sheet> sheets) {
+        return sheets.stream()
+                .map(SheetDto::new)
+                .collect(Collectors.toList());
     }
 }

@@ -21,10 +21,10 @@ public class SheetFindResponse {
     private String coachImage;
     private List<SheetDto> sheets;
 
-    public static SheetFindResponse from(Reservation reservation, List<Sheet> sheets) {
+    public static SheetFindResponse of(Reservation reservation, List<Sheet> sheets) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
-        List<SheetDto> sheetDtos = SheetDto.of(sheets);
+        List<SheetDto> sheetDtos = SheetDto.from(sheets);
         return new SheetFindResponse(schedule.getLocalDateTime(), coach.getName(), coach.getImage(), sheetDtos);
     }
 }
