@@ -35,7 +35,7 @@ class ReservationTest {
     void confirm_approve() {
         reservation.confirm(승인을_한다);
 
-        assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.APPROVED);
+        assertThat(reservation.getReservationStatus()).isEqualTo(ReservationStatus.APPROVED);
     }
 
     @DisplayName("승인 전, 면담을 취소한다.")

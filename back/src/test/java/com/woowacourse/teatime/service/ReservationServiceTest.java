@@ -125,7 +125,7 @@ class ReservationServiceTest {
         예약_승인을_확정한다(reservationId, true);
 
         Reservation foundReservation = reservationRepository.findById(reservationId).get();
-        assertThat(foundReservation.getStatus()).isEqualTo(ReservationStatus.APPROVED);
+        assertThat(foundReservation.getReservationStatus()).isEqualTo(ReservationStatus.APPROVED);
     }
 
     @DisplayName("승인 전, 면담 예약을 거절한다. -> 예약이 삭제된다.")
