@@ -15,7 +15,8 @@ interface BoardItemValue {
   title: string;
   buttonName: string;
   color: string;
-  handleClickButton: (index: number, id: number) => void;
+  handleClickMenuButton: (index: number, id: number) => void;
+  handleClickCancelButton: (status: string, index: number, id: number) => void;
 }
 
 interface BoardItem {
@@ -60,7 +61,31 @@ const Coach = () => {
     }
   };
 
-  const handleCancelButton = async (status: string, index: number, reservationId: number) => {
+  const handleReject = async (status: string, index: number, reservationId: number) => {
+    if (!confirm('예약을 거절하시겠습니까?')) return;
+
+    try {
+      await api.post(`/api/reservations/${reservationId}`, {
+        coachId,
+        isApproved: false,
+      });
+
+      setCrews((allBoards) => {
+        const copyBeforeStatusBoard = [...allBoards[status]];
+        copyBeforeStatusBoard.splice(index, 1);
+
+        return {
+          ...allBoards,
+          [status]: copyBeforeStatusBoard,
+        };
+      });
+    } catch (error) {
+      alert('거절 기능 에러');
+      console.log(error);
+    }
+  };
+
+  const handleCancel = async (status: string, index: number, reservationId: number) => {
     if (!confirm('예약을 취소하시겠습니까?')) return;
 
     try {
@@ -91,19 +116,22 @@ const Coach = () => {
       title: '대기중인 일정',
       buttonName: '승인하기',
       color: theme.colors.ORANGE_600,
-      handleClickButton: handleApprove,
+      handleClickMenuButton: handleApprove,
+      handleClickCancelButton: handleReject,
     },
     approved: {
       title: '확정된 일정',
       buttonName: '내용보기',
       color: theme.colors.PURPLE_300,
-      handleClickButton: () => console.log('내용보기'),
+      handleClickMenuButton: () => console.log('내용보기'),
+      handleClickCancelButton: handleCancel,
     },
     inProgress: {
       title: '진행중인 일정',
       buttonName: '이력작성',
       color: theme.colors.GREEN_700,
-      handleClickButton: () => console.log('이력작성'),
+      handleClickMenuButton: () => console.log('이력작성'),
+      handleClickCancelButton: handleCancel,
     },
   };
 
@@ -132,7 +160,8 @@ const Coach = () => {
       </S.BoardListHeader>
       <S.BoardListContainer>
         {Object.keys(crews).map((status) => {
-          const { title, buttonName, color, handleClickButton } = boardItem[status];
+          const { title, buttonName, color, handleClickMenuButton, handleClickCancelButton } =
+            boardItem[status];
 
           return (
             <Board key={status} title={title} color={color} length={crews[status].length}>
@@ -144,8 +173,8 @@ const Coach = () => {
                   personName={crew.crewName}
                   buttonName={buttonName}
                   color={color}
-                  onClickMenu={() => handleClickButton(index, crew.reservationId)}
-                  onClickCancel={() => handleCancelButton(status, index, crew.reservationId)}
+                  onClickMenu={() => handleClickMenuButton(index, crew.reservationId)}
+                  onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
                 />
               ))}
             </Board>
