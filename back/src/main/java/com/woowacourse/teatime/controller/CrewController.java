@@ -55,7 +55,7 @@ public class CrewController {
     @PutMapping("/me/reservations/{reservationId}")
     public ResponseEntity<Void> updateSheetAnswer(@PathVariable @NotNull Long reservationId,
                                                   @Valid @RequestBody SheetAnswerUpdateRequest request) {
-        sheetService.updateAnswer(reservationId, request.getSheets());
+        sheetService.updateAnswer(reservationId, request);
         reservationService.updateSheetStatusToSubmitted(reservationId, request.getStatus());
         return ResponseEntity.ok().build();
     }

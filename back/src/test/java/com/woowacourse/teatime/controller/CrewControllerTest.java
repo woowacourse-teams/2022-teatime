@@ -119,13 +119,4 @@ class CrewControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
-
-    @DisplayName("크루가 자신의 면담 시트를 수정에 실패한다 - 답변이 null인 경우")
-    @Test
-    void updateAnswer_answerContentNull() throws Exception {
-        mockMvc.perform(put("/api/crews/me/reservations/a",
-                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(1, null)))))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
 }
