@@ -134,6 +134,7 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                         fieldWithPath("dateTime").description("날짜"),
                         fieldWithPath("coachName").description("코치 이름"),
                         fieldWithPath("coachImage").description("코치 이미지"),
+                        fieldWithPath("status").description("시트 상태"),
                         fieldWithPath("sheets[].questionNumber").description("질문 번호"),
                         fieldWithPath("sheets[].questionContent").description("질문 내용"),
                         fieldWithPath("sheets[].answerContent").description("답변 내용")
