@@ -74,7 +74,7 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCoach(Role role) {
-        return role.isCoach() && reservationStatus.isSameStatus(BEFORE_APPROVED);
+        return role.isCoach() && isSameStatus(BEFORE_APPROVED);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
@@ -83,10 +83,6 @@ public class Reservation {
 
     public boolean isSameCrew(Long crewId) {
         return crew.getId().equals(crewId);
-    }
-
-    public boolean isSameStatus(ReservationStatus status) {
-        return this.reservationStatus.isSameStatus(status);
     }
 
     public void updateStatusToInProgress() {
@@ -104,6 +100,10 @@ public class Reservation {
             throw new UnableToDoneReservationException();
         }
         reservationStatus = DONE;
+    }
+
+    public boolean isSameStatus(ReservationStatus status) {
+        return this.reservationStatus.equals(status);
     }
 
     public LocalDateTime getScheduleDateTime() {
