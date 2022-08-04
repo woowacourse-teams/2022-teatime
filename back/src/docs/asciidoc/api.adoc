@@ -88,3 +88,9 @@ include::{snippets}/find-own-sheets/http-response.adoc[]
 include::{snippets}/find-crew-reservations/http-request.adoc[]
 ==== response
 include::{snippets}/find-crew-reservations/http-response.adoc[]
+
+=== 코치가 크루의 면담시트 조회
+==== request
+include::{snippets}/find-crew-sheets/http-request.adoc[]
+==== response
+include::{snippets}/find-crew-sheets/http-response.adoc[]
