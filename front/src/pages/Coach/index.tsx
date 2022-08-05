@@ -155,6 +155,23 @@ const Coach = () => {
       alert('아직 옮길 수 없어요.');
       return;
     }
+    if (to === 'inProgress' && dayjs.tz(crews[from][itemId].dateTime) < dayjs()) {
+      setCrews((allBoards) => {
+        const copyFromBoard = [...allBoards[from]];
+        const currentItem = copyFromBoard[itemId];
+        const copyToBoard = [...allBoards[to]];
+        copyFromBoard.splice(itemId, 1);
+        copyToBoard.splice(0, 0, currentItem);
+
+        return {
+          ...allBoards,
+          [from]: copyFromBoard,
+          [to]: copyToBoard,
+        };
+      });
+
+      return;
+    }
 
     try {
       await api.post(`/api/reservations/${crews[from][itemId].reservationId}`, {
