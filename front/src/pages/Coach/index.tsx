@@ -123,7 +123,9 @@ const Coach = () => {
       title: '확정된 일정',
       buttonName: '내용보기',
       color: theme.colors.PURPLE_300,
-      handleClickMenuButton: () => console.log('내용보기'),
+      handleClickMenuButton: (index, reservationId) => {
+        navigate(`/view-sheet/${reservationId}`);
+      },
       handleClickCancelButton: handleCancel,
     },
     inProgress: {
