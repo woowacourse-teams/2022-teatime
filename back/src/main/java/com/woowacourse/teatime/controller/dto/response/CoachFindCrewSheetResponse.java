@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.controller.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CoachFindCrewSheetResponse {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
     private String coachName;
     private String coachImage;
