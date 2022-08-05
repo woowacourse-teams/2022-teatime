@@ -96,7 +96,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
           <Textarea
             id="0"
             label={reservationInfo?.sheets[0].questionContent}
-            value={contents[0].answerContent}
+            value={contents[0].answerContent || ''}
             handleChangeContent={handleChangeContent(0)}
             isSubmit={isSubmit}
             isCoach={isCoach}
@@ -104,7 +104,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
           <Textarea
             id="1"
             label={reservationInfo?.sheets[1].questionContent}
-            value={contents[1].answerContent}
+            value={contents[1].answerContent || ''}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
             isCoach={isCoach}
@@ -112,7 +112,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
           <Textarea
             id="2"
             label={reservationInfo?.sheets[2].questionContent}
-            value={contents[2].answerContent}
+            value={contents[2].answerContent || ''}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
             isCoach={isCoach}
