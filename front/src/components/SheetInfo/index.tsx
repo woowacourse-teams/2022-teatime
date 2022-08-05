@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import Textarea from '@components/Textarea';
@@ -13,14 +13,16 @@ import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
 
 interface SheetInfoProps {
-  coach?: boolean;
+  isCoach?: boolean;
+  isView?: boolean;
   title: string;
   firstButton: string;
   secondButton: string;
 }
 
-const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) => {
+const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetInfoProps) => {
   const { id: reservationId } = useParams();
+  const navigate = useNavigate();
   const { data: reservationInfo } = useFetch<ReservationInfo, null>(
     `/api/crews/me/reservations/${reservationId}`
   );
@@ -62,16 +64,17 @@ const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) 
     try {
       await api.put(`/api/crews/me/reservations/${reservationId}`, { status, sheets: contents });
       alert('제출 되었습니다✅');
+      navigate('/crew');
     } catch (error) {
       alert('제출 실패🚫');
     }
   };
 
   useEffect(() => {
-    if (reservationInfo) {
+    if (isView && reservationInfo) {
       setContents(reservationInfo.sheets);
     }
-  });
+  }, [reservationInfo]);
 
   return (
     <>
@@ -96,7 +99,7 @@ const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) 
             value={contents[0].answerContent}
             handleChangeContent={handleChangeContent(0)}
             isSubmit={isSubmit}
-            coach={coach}
+            isCoach={isCoach}
           />
           <Textarea
             id="1"
@@ -104,7 +107,7 @@ const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) 
             value={contents[1].answerContent}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
-            coach={coach}
+            isCoach={isCoach}
           />
           <Textarea
             id="2"
@@ -112,7 +115,7 @@ const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) 
             value={contents[2].answerContent}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
-            coach={coach}
+            isCoach={isCoach}
           />
           <S.ButtonContainer>
             <S.FirstButton onClick={handleSubmit}>{firstButton}</S.FirstButton>
