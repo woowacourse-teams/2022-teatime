@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
@@ -8,9 +7,10 @@ import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { ROUTES } from '@constants/index';
+import api from '@api/index';
+import * as S from './styles';
 
 import CheckCircle from '@assets/check-circle.svg';
-import api from '@api/index';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);
@@ -18,6 +18,7 @@ const TimeList = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isError, setIsError] = useState(false);
+  const [reservationId, setReservationId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
@@ -28,13 +29,14 @@ const TimeList = () => {
 
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
-      await api.post(`/api/reservations`, {
+      const data = await api.post(`/api/reservations`, {
         crewId: 17,
         coachId: 41,
         scheduleId,
       });
-
+      const location = data.headers.location.split('/')[5];
       dispatch({ type: 'RESERVATE_TIME', scheduleId });
+      setReservationId(Number(location));
       setSelectedTimeId(null);
       openModal();
     } catch (error) {
@@ -43,7 +45,7 @@ const TimeList = () => {
   };
 
   const handleClickWriteButton = () => {
-    navigate(`/form/41`);
+    navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
   };
 
   if (isError) return <h1>error</h1>;

@@ -25,7 +25,9 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -94,6 +96,7 @@ public class Reservation {
     }
 
     private boolean isTimePassed() {
+        log.info(LocalDateTime.now().toString());
         return LocalDateTime.now().isAfter(getScheduleDateTime());
     }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import * as S from './styles';
+import { useParams, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import Textarea from '@components/Textarea';
@@ -7,19 +7,25 @@ import Title from '@components/Title';
 import useFetch from '@hooks/useFetch';
 import api from '@api/index';
 import { ReservationInfo } from '@typings/domain';
+import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
 
 interface SheetInfoProps {
-  coach?: boolean;
+  isCoach?: boolean;
+  isView?: boolean;
   title: string;
   firstButton: string;
   secondButton: string;
 }
 
-const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) => {
-  const { data: reservationInfo } = useFetch<ReservationInfo, null>('/api/crews/me/reservations/1');
+const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetInfoProps) => {
+  const { id: reservationId } = useParams();
+  const navigate = useNavigate();
+  const { data: reservationInfo } = useFetch<ReservationInfo, null>(
+    `/api/crews/me/reservations/${reservationId}`
+  );
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState([
     {
@@ -47,24 +53,28 @@ const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    let status = 'WRITING';
+
     if (e.currentTarget.innerText === '제출하기') {
       const checkValidation = contents.some((content) => !content.answerContent);
       setIsSubmit(true);
+      status = 'SUBMITTED';
       if (checkValidation) return;
     }
     try {
-      await api.put(`/api/crews/me/reservations/1`, contents);
+      await api.put(`/api/crews/me/reservations/${reservationId}`, { status, sheets: contents });
       alert('제출 되었습니다✅');
+      navigate('/crew');
     } catch (error) {
       alert('제출 실패🚫');
     }
   };
 
   useEffect(() => {
-    if (reservationInfo) {
+    if (isView && reservationInfo) {
       setContents(reservationInfo.sheets);
     }
-  });
+  }, [reservationInfo]);
 
   return (
     <>
@@ -86,26 +96,26 @@ const SheetInfo = ({ coach, title, firstButton, secondButton }: SheetInfoProps) 
           <Textarea
             id="0"
             label={reservationInfo?.sheets[0].questionContent}
-            value={contents[0].answerContent}
+            value={contents[0].answerContent || ''}
             handleChangeContent={handleChangeContent(0)}
             isSubmit={isSubmit}
-            coach={coach}
+            isCoach={isCoach}
           />
           <Textarea
             id="1"
             label={reservationInfo?.sheets[1].questionContent}
-            value={contents[1].answerContent}
+            value={contents[1].answerContent || ''}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
-            coach={coach}
+            isCoach={isCoach}
           />
           <Textarea
             id="2"
             label={reservationInfo?.sheets[2].questionContent}
-            value={contents[2].answerContent}
+            value={contents[2].answerContent || ''}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
-            coach={coach}
+            isCoach={isCoach}
           />
           <S.ButtonContainer>
             <S.FirstButton onClick={handleSubmit}>{firstButton}</S.FirstButton>

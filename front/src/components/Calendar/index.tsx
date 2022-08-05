@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import DateBox from '@components/DateBox';
@@ -10,6 +9,7 @@ import { ScheduleDispatchContext, ScheduleStateContext } from '@context/Schedule
 import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
 import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
 import { MonthYear } from '@typings/domain';
+import * as S from './styles';
 
 import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';

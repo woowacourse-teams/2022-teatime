@@ -7,9 +7,9 @@ import BoardItem from '@components/BoardItem';
 import api from '@api/index';
 import theme from '@styles/theme';
 import type { CrewListMap } from '@typings/domain';
-
-import PlusIcon from '@assets/plus.svg';
 import * as S from './styles';
+
+import ScheduleIcon from '@assets/schedule-white.svg';
 
 interface BoardItemValue {
   title: string;
@@ -123,7 +123,9 @@ const Coach = () => {
       title: '확정된 일정',
       buttonName: '내용보기',
       color: theme.colors.PURPLE_300,
-      handleClickMenuButton: () => console.log('내용보기'),
+      handleClickMenuButton: (index, reservationId) => {
+        navigate(`/view-sheet/${reservationId}`);
+      },
       handleClickCancelButton: handleCancel,
     },
     inProgress: {
@@ -153,6 +155,23 @@ const Coach = () => {
     if (to === 'inProgress' && from === 'beforeApproved') return;
     if (to === 'inProgress' && dayjs.tz(crews[from][itemId].dateTime) > dayjs()) {
       alert('아직 옮길 수 없어요.');
+      return;
+    }
+    if (to === 'inProgress' && dayjs.tz(crews[from][itemId].dateTime) < dayjs()) {
+      setCrews((allBoards) => {
+        const copyFromBoard = [...allBoards[from]];
+        const currentItem = copyFromBoard[itemId];
+        const copyToBoard = [...allBoards[to]];
+        copyFromBoard.splice(itemId, 1);
+        copyToBoard.splice(0, 0, currentItem);
+
+        return {
+          ...allBoards,
+          [from]: copyFromBoard,
+          [to]: copyToBoard,
+        };
+      });
+
       return;
     }
 
@@ -201,8 +220,8 @@ const Coach = () => {
     <S.Layout>
       <S.BoardListHeader>
         <S.AddScheduleButton onClick={() => navigate(`/schedule/41`)}>
-          <img src={PlusIcon} alt="추가 아이콘" />
-          <span>일정 추가</span>
+          <img src={ScheduleIcon} alt="캘린더 아이콘" />
+          <span>캘린더 관리</span>
         </S.AddScheduleButton>
       </S.BoardListHeader>
       <S.BoardListContainer>
