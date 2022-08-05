@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.woowacourse.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.controller.dto.request.ScheduleFindRequest;
 import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
+import com.woowacourse.teatime.controller.dto.response.ScheduleDto;
 import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
@@ -105,8 +106,30 @@ class ScheduleServiceTest {
         Crew crew = crewRepository.save(CREW);
         reservationService.save(new ReservationReserveRequest(crew.getId(), coach.getId(), schedule.getId()));
 
-        ScheduleUpdateRequest scheduleUpdateRequest = new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date)));
+        ScheduleUpdateRequest scheduleUpdateRequest = new ScheduleUpdateRequest(date,
+                List.of(Date.findFirstTime(date)));
         assertThatThrownBy(() -> scheduleService.update(coach.getId(), scheduleUpdateRequest))
                 .isInstanceOf(UnableToUpdateSchedule.class);
+    }
+
+    @DisplayName("코치의 스케쥴을 업데이트할 때 해당 날짜에 이미 예약이 존재하면 그 예약을 삭제하지 않는다.")
+    @Test
+    void update_if_reservation_exist() {
+        Coach coach = coachRepository.save(COACH_BROWN);
+        LocalDateTime reservedTime = Date.findFirstTime(LocalDate.now());
+        LocalDateTime notReservedTime = Date.findLastTime(LocalDate.now()).minusHours(1);
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
+        Crew crew = crewRepository.save(CREW);
+        reservationService.save(new ReservationReserveRequest(crew.getId(), coach.getId(), schedule1.getId()));
+        scheduleRepository.save(new Schedule(coach, notReservedTime));
+
+        ScheduleUpdateRequest scheduleUpdateRequest
+                = new ScheduleUpdateRequest(reservedTime.toLocalDate(), List.of(reservedTime.plusHours(1), reservedTime.plusHours(2)));
+        scheduleService.update(coach.getId(), scheduleUpdateRequest);
+        List<ScheduleFindResponse> responses
+                = scheduleService.find(coach.getId(), new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
+        List<ScheduleDto> schedules = responses.get(0).getSchedules();
+
+        assertThat(schedules).hasSize(3);
     }
 }

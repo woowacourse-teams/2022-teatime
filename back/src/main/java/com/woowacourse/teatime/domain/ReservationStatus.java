@@ -18,13 +18,9 @@ public enum ReservationStatus {
         this.comparator = comparator;
     }
 
-    public boolean isSameStatus(ReservationStatus status) {
-        return this.equals(status);
-    }
-
     public static List<Reservation> classifyReservations(ReservationStatus status, List<Reservation> reservations) {
         return reservations.stream()
-                .filter(reservation -> reservation.isSameStatus(status))
+                .filter(reservation -> reservation.isReservationStatus(status))
                 .sorted(status.comparator.get())
                 .collect(Collectors.toList());
     }

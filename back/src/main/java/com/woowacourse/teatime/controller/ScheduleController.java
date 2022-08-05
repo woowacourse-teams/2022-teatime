@@ -27,8 +27,8 @@ public class ScheduleController {
     @GetMapping
     public ResponseEntity<List<ScheduleFindResponse>> findSchedules(@PathVariable @NotNull Long coachId,
                                                                     @Valid @ModelAttribute ScheduleFindRequest request) {
-        List<ScheduleFindResponse> scheduleFindRespons = scheduleService.find(coachId, request);
-        return ResponseEntity.ok(scheduleFindRespons);
+        List<ScheduleFindResponse> scheduleFindResponse = scheduleService.find(coachId, request);
+        return ResponseEntity.ok(scheduleFindResponse);
     }
 
     @PutMapping

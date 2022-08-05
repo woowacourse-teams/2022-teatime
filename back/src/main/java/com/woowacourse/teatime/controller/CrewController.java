@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.controller;
 
+import com.woowacourse.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
@@ -7,11 +8,13 @@ import com.woowacourse.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.service.ReservationService;
 import com.woowacourse.teatime.service.SheetService;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,8 +47,16 @@ public class CrewController {
 
     @GetMapping("/{crewId}/reservations/{reservationId}")
     public ResponseEntity<CoachFindCrewSheetResponse> findCrewSheets(@PathVariable @NotNull Long crewId,
-                                                                   @PathVariable @NotNull Long reservationId) {
+                                                                     @PathVariable @NotNull Long reservationId) {
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crewId, reservationId);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/me/reservations/{reservationId}")
+    public ResponseEntity<Void> updateSheetAnswer(@PathVariable @NotNull Long reservationId,
+                                                  @Valid @RequestBody SheetAnswerUpdateRequest request) {
+        sheetService.updateAnswer(reservationId, request);
+        reservationService.updateSheetStatusToSubmitted(reservationId, request.getStatus());
+        return ResponseEntity.ok().build();
     }
 }

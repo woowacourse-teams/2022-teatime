@@ -55,7 +55,7 @@ public class ScheduleService {
         LocalDateTime end = Date.findLastTime(date);
         validateDeletable(coachId, request, start, end);
 
-        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coachId, start, end);
+        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetweenAndIsPossibleNot(coachId, start, end, false);
     }
 
     private void validateDeletable(Long coachId, ScheduleUpdateRequest request, LocalDateTime start,
@@ -66,12 +66,12 @@ public class ScheduleService {
                 .findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);
 
         for (Schedule schedule : oldSchedules) {
-            ValidateIsReserved(newSchedules, schedule);
+            validateIsReserved(newSchedules, schedule);
         }
     }
 
-    private void ValidateIsReserved(List<Schedule> newSchedules, Schedule schedule) {
-        if (!(newSchedules.contains(schedule) || schedule.isPossible())) {
+    private void validateIsReserved(List<Schedule> newSchedules, Schedule schedule) {
+        if ((newSchedules.contains(schedule) && !schedule.isPossible())) {
             throw new UnableToUpdateSchedule();
         }
     }
