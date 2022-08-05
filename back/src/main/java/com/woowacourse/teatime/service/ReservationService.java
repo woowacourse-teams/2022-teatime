@@ -114,6 +114,7 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId,
                 DONE);
         updateReservationStatusToInProgress(reservations);
+        reservationRepository.flush();
         return classifyReservationsAndReturnDto(reservations);
     }
 
