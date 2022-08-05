@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import * as S from './styles';
 
 import Card from '@components/Card';
 import useFetch from '@hooks/useFetch';
 import { ROUTES } from '@constants/index';
 import type { Coach } from '@typings/domain';
+import * as S from './styles';
 
 const Crew = () => {
   const navigate = useNavigate();

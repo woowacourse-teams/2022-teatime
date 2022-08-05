@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import api from '@api/index';
+import * as S from './styles';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);

@@ -1,6 +1,5 @@
-import * as S from './styles';
-
 import { ROUTES } from '@constants/index';
+import * as S from './styles';
 
 import LogoIcon from '@assets/logo.svg';
 
