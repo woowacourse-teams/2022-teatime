@@ -9,7 +9,7 @@ import theme from '@styles/theme';
 import type { CrewListMap } from '@typings/domain';
 import * as S from './styles';
 
-import PlusIcon from '@assets/plus.svg';
+import ScheduleIcon from '@assets/schedule-white.svg';
 
 interface BoardItemValue {
   title: string;
@@ -220,8 +220,8 @@ const Coach = () => {
     <S.Layout>
       <S.BoardListHeader>
         <S.AddScheduleButton onClick={() => navigate(`/schedule/41`)}>
-          <img src={PlusIcon} alt="추가 아이콘" />
-          <span>일정 추가</span>
+          <img src={ScheduleIcon} alt="캘린더 아이콘" />
+          <span>캘린더 관리</span>
         </S.AddScheduleButton>
       </S.BoardListHeader>
       <S.BoardListContainer>
