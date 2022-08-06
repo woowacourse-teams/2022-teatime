@@ -45,6 +45,34 @@ const Coach = () => {
     });
   };
 
+  const moveBoardItem = (from: string, to: string, itemId: number) => {
+    setCrews((allBoards) => {
+      const copyFromBoard = [...allBoards[from]];
+      const currentItem = copyFromBoard[itemId];
+      const copyToBoard = [...allBoards[to]];
+      copyFromBoard.splice(itemId, 1);
+      copyToBoard.push(currentItem);
+
+      return {
+        ...allBoards,
+        [from]: copyFromBoard,
+        [to]: copyToBoard,
+      };
+    });
+  };
+
+  const sortBoardItemByTime = (boardName: string) => {
+    setCrews((allBoards) => {
+      const copyBoard = [...allBoards[boardName]];
+      copyBoard.sort((a, b) => Number(dayjs.tz(a.dateTime)) - Number(dayjs.tz(b.dateTime)));
+
+      return {
+        ...allBoards,
+        [boardName]: copyBoard,
+      };
+    });
+  };
+
   const handleApprove = async (index: number, reservationId: number) => {
     try {
       await api.post(`/api/reservations/${reservationId}`, {
@@ -52,22 +80,8 @@ const Coach = () => {
         isApproved: true,
       });
 
-      setCrews((allBoards) => {
-        const copyBeforeApprovedBoard = [...allBoards.beforeApproved];
-        const currentItem = copyBeforeApprovedBoard[index];
-        const copyApprovedBoard = [...allBoards.approved];
-        copyBeforeApprovedBoard.splice(index, 1);
-        copyApprovedBoard.push(currentItem);
-        copyApprovedBoard.sort(
-          (a, b) => Number(dayjs.tz(a.dateTime)) - Number(dayjs.tz(b.dateTime))
-        );
-
-        return {
-          ...allBoards,
-          beforeApproved: copyBeforeApprovedBoard,
-          approved: copyApprovedBoard,
-        };
-      });
+      moveBoardItem('beforeApproved', 'approved', index);
+      sortBoardItemByTime('approved');
     } catch (error) {
       alert('승인 에러');
       console.log(error);
@@ -113,6 +127,36 @@ const Coach = () => {
     }
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
+    e.dataTransfer?.setData('itemId', String(id));
+    e.dataTransfer?.setData(
+      'listId',
+      ((e.target as Element).closest('[data-status]') as HTMLElement).dataset.status as string
+    );
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    const itemId = Number(e.dataTransfer?.getData('itemId'));
+    const from = e.dataTransfer?.getData('listId');
+    const to = ((e.target as Element).closest('[data-status]') as HTMLElement).dataset
+      .status as string;
+    const draggedItem = crews[from][itemId];
+
+    if (from === to) return;
+    if (from === 'inProgress' || to === 'beforeApproved') return;
+    if (from === 'beforeApproved' && to === 'inProgress') return;
+    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) > dayjs()) {
+      alert('아직 옮길 수 없어요.');
+      return;
+    }
+    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) < dayjs()) {
+      moveBoardItem(from, to, itemId);
+      return;
+    }
+
+    handleApprove(itemId, draggedItem.reservationId);
+  };
+
   const boardItem: BoardItem = {
     beforeApproved: {
       title: '대기중인 일정',
@@ -135,49 +179,6 @@ const Coach = () => {
       handleClickMenuButton: () => console.log('이력작성'),
       handleClickCancelButton: handleCancel,
     },
-  };
-
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
-    e.dataTransfer?.setData('itemId', String(id));
-    e.dataTransfer?.setData(
-      'listId',
-      ((e.target as Element).closest('[data-status]') as HTMLElement).dataset.status as string
-    );
-  };
-
-  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-    const itemId = Number(e.dataTransfer?.getData('itemId'));
-    const from = e.dataTransfer?.getData('listId');
-    const to = ((e.target as Element).closest('[data-status]') as HTMLElement).dataset
-      .status as string;
-    const draggedItem = crews[from][itemId];
-
-    if (from === to) return;
-    if (to === 'beforeApproved' || from === 'inProgress') return;
-    if (to === 'inProgress' && from === 'beforeApproved') return;
-    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) > dayjs()) {
-      alert('아직 옮길 수 없어요.');
-      return;
-    }
-    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) < dayjs()) {
-      setCrews((allBoards) => {
-        const copyFromBoard = [...allBoards[from]];
-        const currentItem = copyFromBoard[itemId];
-        const copyToBoard = [...allBoards[to]];
-        copyFromBoard.splice(itemId, 1);
-        copyToBoard.splice(0, 0, currentItem);
-
-        return {
-          ...allBoards,
-          [from]: copyFromBoard,
-          [to]: copyToBoard,
-        };
-      });
-
-      return;
-    }
-
-    handleApprove(itemId, draggedItem.reservationId);
   };
 
   useEffect(() => {
