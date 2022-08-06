@@ -45,12 +45,12 @@ const Coach = () => {
     });
   };
 
-  const moveBoardItem = (from: string, to: string, itemId: number) => {
+  const moveBoardItem = (from: string, to: string, index: number) => {
     setCrews((allBoards) => {
       const copyFromBoard = [...allBoards[from]];
-      const currentItem = copyFromBoard[itemId];
+      const currentItem = copyFromBoard[index];
       const copyToBoard = [...allBoards[to]];
-      copyFromBoard.splice(itemId, 1);
+      copyFromBoard.splice(index, 1);
       copyToBoard.push(currentItem);
 
       return {
