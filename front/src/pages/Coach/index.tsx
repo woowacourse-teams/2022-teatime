@@ -4,12 +4,13 @@ import dayjs from 'dayjs';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
-import api from '@api/index';
-import theme from '@styles/theme';
 import type { CrewListMap } from '@typings/domain';
-import * as S from './styles';
+import { ROUTES } from '@constants/index';
+import api from '@api/index';
 
 import ScheduleIcon from '@assets/schedule-white.svg';
+import theme from '@styles/theme';
+import * as S from './styles';
 
 interface BoardItemValue {
   title: string;
@@ -111,6 +112,10 @@ const Coach = () => {
     }
   };
 
+  const handleShowContents = (index: number, reservationId: number) => {
+    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  };
+
   const boardItem: BoardItem = {
     beforeApproved: {
       title: '대기중인 일정',
@@ -123,9 +128,7 @@ const Coach = () => {
       title: '확정된 일정',
       buttonName: '내용보기',
       color: theme.colors.PURPLE_300,
-      handleClickMenuButton: (index, reservationId) => {
-        navigate(`/view-sheet/${reservationId}`);
-      },
+      handleClickMenuButton: handleShowContents,
       handleClickCancelButton: handleCancel,
     },
     inProgress: {
