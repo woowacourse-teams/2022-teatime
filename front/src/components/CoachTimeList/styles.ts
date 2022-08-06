@@ -10,15 +10,16 @@ const FadeIn = keyframes`
 `;
 
 const TimeListContainer = styled.div`
+  position: relative;
+  height: 100%;
+  width: 250px;
   margin-left: 60px;
-  animation: ${FadeIn} 0.8s;
 `;
 
 const ScrollContainer = styled.div`
-  width: 250px;
-  height: 370px;
+  animation: ${FadeIn} 0.8s;
+  height: calc(100% - 70px);
   overflow: scroll;
-  margin-bottom: 20px;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -61,6 +62,9 @@ const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean }>`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  position: absolute;
+  bottom: 1px;
+  width: 250px;
 
   button {
     width: 120px;
