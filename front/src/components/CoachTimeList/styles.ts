@@ -10,6 +10,7 @@ const FadeIn = keyframes`
 `;
 
 const TimeListContainer = styled.div`
+  animation: ${FadeIn} 0.8s;
   position: relative;
   height: 100%;
   width: 250px;
@@ -17,7 +18,6 @@ const TimeListContainer = styled.div`
 `;
 
 const ScrollContainer = styled.div`
-  animation: ${FadeIn} 0.8s;
   height: calc(100% - 70px);
   overflow: scroll;
   ::-webkit-scrollbar {
