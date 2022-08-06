@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
@@ -48,16 +48,15 @@ const CoachTimeList = () => {
           const time = dayjs.tz(schedule.dateTime).format('HH:mm');
 
           return (
-            <React.Fragment key={schedule.id}>
-              <S.TimeBox
-                isPossible={schedule.isPossible}
-                aria-disabled={schedule.isPossible}
-                selected={schedule.isSelected ? true : false}
-                onClick={() => handleClickTime(schedule.dateTime)}
-              >
-                {time}
-              </S.TimeBox>
-            </React.Fragment>
+            <S.TimeBox
+              key={schedule.id}
+              isPossible={schedule.isPossible}
+              aria-disabled={schedule.isPossible}
+              selected={schedule.isSelected ? true : false}
+              onClick={() => handleClickTime(schedule.dateTime)}
+            >
+              {time}
+            </S.TimeBox>
           );
         })}
       </S.ScrollContainer>
