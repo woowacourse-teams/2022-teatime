@@ -139,10 +139,7 @@ const Coach = () => {
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
     e.dataTransfer?.setData('itemId', String(id));
-    e.dataTransfer?.setData(
-      'listId',
-      (e.target as any)?.parentElement.parentElement.dataset.status
-    );
+    e.dataTransfer?.setData('listId', (e.target as any).closest('[data-status]')?.dataset.status);
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
@@ -248,7 +245,7 @@ const Coach = () => {
                   color={color}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
-                  onDragStart={(e: DragEvent<HTMLDivElement>) => handleDragStart(e, index)}
+                  onDragStart={(e) => handleDragStart(e, index)}
                 />
               ))}
             </Board>
