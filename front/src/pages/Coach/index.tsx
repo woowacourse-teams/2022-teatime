@@ -62,6 +62,10 @@ const Coach = () => {
     }
   };
 
+  const handleShowContents = (index: number, reservationId: number) => {
+    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  };
+
   const handleReject = async (status: string, index: number, reservationId: number) => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
@@ -87,7 +91,8 @@ const Coach = () => {
   };
 
   const handleCancel = async (status: string, index: number, reservationId: number) => {
-    if (!confirm('예약을 취소하시겠습니까?')) return;
+    if (!confirm(status === 'approved' ? '예약을 취소하시겠습니까?' : '정말 삭제하시겠습니까?'))
+      return;
 
     try {
       await api.delete(`/api/reservations/${reservationId}`, {
@@ -110,10 +115,6 @@ const Coach = () => {
       alert('취소 에러');
       console.log(error);
     }
-  };
-
-  const handleShowContents = (index: number, reservationId: number) => {
-    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
   };
 
   const boardItem: BoardItem = {
