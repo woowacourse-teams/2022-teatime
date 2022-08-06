@@ -48,7 +48,7 @@ const BoardItem = ({
       </S.TopSection>
       <S.BottomSection color={color}>
         <div>
-          <S.ProfileImage src={image} />
+          <S.ProfileImage src={image} alt={`${personName} 이미지`} />
           <span>{personName}</span>
         </div>
         <button onClick={onClickMenu}>{buttonName}</button>
