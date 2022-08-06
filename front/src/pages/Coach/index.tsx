@@ -33,6 +33,18 @@ const Coach = () => {
     inProgress: [],
   });
 
+  const deleteBoardItem = (status: string, index: number) => {
+    setCrews((allBoards) => {
+      const copyBeforeStatusBoard = [...allBoards[status]];
+      copyBeforeStatusBoard.splice(index, 1);
+
+      return {
+        ...allBoards,
+        [status]: copyBeforeStatusBoard,
+      };
+    });
+  };
+
   const handleApprove = async (index: number, reservationId: number) => {
     try {
       await api.post(`/api/reservations/${reservationId}`, {
@@ -75,15 +87,7 @@ const Coach = () => {
         isApproved: false,
       });
 
-      setCrews((allBoards) => {
-        const copyBeforeStatusBoard = [...allBoards[status]];
-        copyBeforeStatusBoard.splice(index, 1);
-
-        return {
-          ...allBoards,
-          [status]: copyBeforeStatusBoard,
-        };
-      });
+      deleteBoardItem(status, index);
     } catch (error) {
       alert('거절 기능 에러');
       console.log(error);
@@ -102,15 +106,7 @@ const Coach = () => {
         },
       });
 
-      setCrews((allBoards) => {
-        const copyBeforeStatusBoard = [...allBoards[status]];
-        copyBeforeStatusBoard.splice(index, 1);
-
-        return {
-          ...allBoards,
-          [status]: copyBeforeStatusBoard,
-        };
-      });
+      deleteBoardItem(status, index);
     } catch (error) {
       alert('취소 에러');
       console.log(error);
