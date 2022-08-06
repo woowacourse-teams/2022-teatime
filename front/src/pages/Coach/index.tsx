@@ -142,13 +142,17 @@ const Coach = () => {
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
     e.dataTransfer?.setData('itemId', String(id));
-    e.dataTransfer?.setData('listId', (e.target as any).closest('[data-status]')?.dataset.status);
+    e.dataTransfer?.setData(
+      'listId',
+      ((e.target as Element).closest('[data-status]') as HTMLElement).dataset.status as string
+    );
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     const itemId = Number(e.dataTransfer?.getData('itemId'));
     const from = e.dataTransfer?.getData('listId');
-    const to = (e.target as any).closest('[data-status]')?.dataset.status;
+    const to = ((e.target as Element).closest('[data-status]') as HTMLElement).dataset
+      .status as string;
 
     if (from === to) return;
     if (to === 'beforeApproved' || from === 'inProgress') return;
