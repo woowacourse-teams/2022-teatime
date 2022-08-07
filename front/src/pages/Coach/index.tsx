@@ -134,7 +134,6 @@ const Coach = () => {
       'listId',
       ((e.target as Element).closest('[data-status]') as HTMLElement).dataset.status as string
     );
-    console.log('start', e);
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
