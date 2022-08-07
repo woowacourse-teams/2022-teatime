@@ -7,10 +7,15 @@ const BoardItemContainer = styled.div<{ color: string }>`
   height: 160px;
   margin: 10px 0px;
   padding: 15px;
-  border-left: 10px solid ${(props) => props.color};
   background-color: ${({ theme }) => theme.colors.WHITE};
+  border-left: 10px solid ${(props) => props.color};
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
 `;
 
 const TopSection = styled.div`
