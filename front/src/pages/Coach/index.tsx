@@ -16,6 +16,7 @@ interface BoardItemValue {
   title: string;
   buttonName: string;
   color: string;
+  draggedColor: string;
   handleClickMenuButton: (index: number, id: number) => void;
   handleClickCancelButton: (status: string, index: number, id: number) => void;
 }
@@ -133,6 +134,7 @@ const Coach = () => {
       'listId',
       ((e.target as Element).closest('[data-status]') as HTMLElement).dataset.status as string
     );
+    console.log('start', e);
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
@@ -162,6 +164,7 @@ const Coach = () => {
       title: '대기중인 일정',
       buttonName: '승인하기',
       color: theme.colors.ORANGE_600,
+      draggedColor: theme.colors.ORANGE_100,
       handleClickMenuButton: handleApprove,
       handleClickCancelButton: handleReject,
     },
@@ -169,6 +172,7 @@ const Coach = () => {
       title: '확정된 일정',
       buttonName: '내용보기',
       color: theme.colors.PURPLE_300,
+      draggedColor: theme.colors.PURPLE_100,
       handleClickMenuButton: handleShowContents,
       handleClickCancelButton: handleCancel,
     },
@@ -176,6 +180,7 @@ const Coach = () => {
       title: '진행중인 일정',
       buttonName: '이력작성',
       color: theme.colors.GREEN_700,
+      draggedColor: theme.colors.GREEN_100,
       handleClickMenuButton: () => console.log('이력작성'),
       handleClickCancelButton: handleCancel,
     },
@@ -206,8 +211,14 @@ const Coach = () => {
       </S.BoardListHeader>
       <S.BoardListContainer>
         {Object.keys(crews).map((status) => {
-          const { title, buttonName, color, handleClickMenuButton, handleClickCancelButton } =
-            boardItem[status];
+          const {
+            title,
+            buttonName,
+            color,
+            draggedColor,
+            handleClickMenuButton,
+            handleClickCancelButton,
+          } = boardItem[status];
 
           return (
             <Board
@@ -226,6 +237,7 @@ const Coach = () => {
                   personName={crew.crewName}
                   buttonName={buttonName}
                   color={color}
+                  draggedColor={draggedColor}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
                   onDragStart={(e) => handleDragStart(e, index)}
