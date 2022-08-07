@@ -34,7 +34,7 @@ const TimeList = () => {
         coachId: 41,
         scheduleId,
       });
-      const location = data.headers.location.split('/')[5];
+      const location = data.headers.location.split('/').pop();
       dispatch({ type: 'RESERVATE_TIME', scheduleId });
       setReservationId(Number(location));
       setSelectedTimeId(null);
