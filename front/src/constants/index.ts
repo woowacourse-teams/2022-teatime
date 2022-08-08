@@ -4,7 +4,8 @@ const ROUTES = {
   COACH: '/coach',
   SCHEDULE: '/schedule',
   RESERVATION: '/reservation',
-  FORM: '/form',
+  ADD_SHEET: '/add-sheet',
+  VIEW_SHEET: '/view-sheet',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
