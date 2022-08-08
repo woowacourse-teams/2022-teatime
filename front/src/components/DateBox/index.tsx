@@ -1,7 +1,7 @@
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import { Schedule } from '@typings/domain';
+import * as S from './styles';
 
 interface DateBoxProps {
   date?: number;
@@ -24,7 +24,9 @@ const DateBox = ({
 }: DateBoxProps) => {
   const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
   const isToday = today === dayjs().format('YYYY-MM-DD');
-  const hasSchedule = daySchedule.filter((time) => time.isPossible === true).length > 0;
+  const hasSchedule =
+    daySchedule.filter((time) => time.isPossible === true || (time.isPossible === false && isCoach))
+      .length > 0;
 
   return (
     <S.DateContainer

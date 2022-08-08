@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.acceptance;
 
+import static com.woowacourse.teatime.acceptance.CoachAcceptanceTest.코치를_저장한다;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -11,7 +12,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.controller.dto.request.ScheduleUpdateRequest;
 import com.woowacourse.teatime.controller.dto.response.ScheduleFindResponse;
-import com.woowacourse.teatime.service.CoachService;
 import com.woowacourse.teatime.service.ScheduleService;
 import com.woowacourse.teatime.util.Date;
 import io.restassured.RestAssured;
@@ -36,14 +36,12 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
     private static final int MONTH = NOW.getMonthValue();
 
     @Autowired
-    private CoachService coachService;
-    @Autowired
     private ScheduleService scheduleService;
 
     @DisplayName("코치에 해당하는 스케줄 목록을 조회한다.")
     @Test
     void findByCoachIdAndDate() {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
         scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
@@ -68,7 +66,7 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void updateByCoachAndDate() {
-        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
 
         LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));

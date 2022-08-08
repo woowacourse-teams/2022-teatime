@@ -1,10 +1,25 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+const FadeIn = keyframes`
+ from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const TimeListContainer = styled.div`
+  animation: ${FadeIn} 0.8s;
+  position: relative;
+  height: 100%;
   width: 250px;
-  height: 370px;
+  margin-left: 60px;
+`;
+
+const ScrollContainer = styled.div`
+  height: calc(100% - 70px);
   overflow: scroll;
-  margin-bottom: 20px;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -47,6 +62,9 @@ const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean }>`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  position: absolute;
+  bottom: 1px;
+  width: 250px;
 
   button {
     width: 120px;
@@ -66,4 +84,4 @@ const ConfirmButton = styled.button`
   color: ${({ theme }) => theme.colors.WHITE};
 `;
 
-export { TimeListContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };
+export { TimeListContainer, ScrollContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };

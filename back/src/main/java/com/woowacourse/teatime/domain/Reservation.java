@@ -1,7 +1,16 @@
 package com.woowacourse.teatime.domain;
 
+import static com.woowacourse.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.domain.ReservationStatus.DONE;
+import static com.woowacourse.teatime.domain.ReservationStatus.IN_PROGRESS;
+import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
+import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
+
 import com.woowacourse.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.exception.UnableToDoneReservationException;
+import com.woowacourse.teatime.exception.UnableToSubmitSheetException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +25,9 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -33,28 +44,27 @@ public class Reservation {
     @JoinColumn(name = "crew_id")
     private Crew crew;
 
-    @Column(name = "reservation_status", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ReservationStatus status;
+    private ReservationStatus reservationStatus;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SheetStatus sheetStatus;
 
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
         this.crew = crew;
-        this.status = ReservationStatus.BEFORE_APPROVED;
-    }
-
-    public Reservation(Schedule schedule, Crew crew, ReservationStatus status) {
-        this.schedule = schedule;
-        this.crew = crew;
-        this.status = status;
+        this.reservationStatus = BEFORE_APPROVED;
+        this.sheetStatus = WRITING;
     }
 
     public void confirm(boolean isApproved) {
-        if (!status.isBeforeApproved()) {
+        if (!isReservationStatus(BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
         if (isApproved) {
-            status = ReservationStatus.APPROVED;
+            reservationStatus = APPROVED;
             return;
         }
         schedule.init();
@@ -68,22 +78,47 @@ public class Reservation {
     }
 
     private boolean isCancelBeforeApprovedByCoach(Role role) {
-        return role.isCoach() && status.isBeforeApproved();
+        return role.isCoach() && isReservationStatus(BEFORE_APPROVED);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {
-        return status.isInProgress() && role.isCrew();
+        return isReservationStatus(IN_PROGRESS) && role.isCrew();
     }
 
     public boolean isSameCrew(Long crewId) {
         return crew.getId().equals(crewId);
     }
 
-    public boolean isSameStatus(ReservationStatus status) {
-        return this.status.equals(status);
+    public void updateReservationStatusToInProgress() {
+        if (isReservationStatus(APPROVED) && isTimePassed()) {
+            reservationStatus = IN_PROGRESS;
+        }
     }
 
-    public LocalDateTime getLocalDateTime() {
+    private boolean isTimePassed() {
+        log.info(LocalDateTime.now().toString());
+        return LocalDateTime.now().isAfter(getScheduleDateTime());
+    }
+
+    public void updateReservationStatusToDone() {
+        if (!isReservationStatus(IN_PROGRESS)) {
+            throw new UnableToDoneReservationException();
+        }
+        reservationStatus = DONE;
+    }
+
+    public boolean isReservationStatus(ReservationStatus status) {
+        return this.reservationStatus.equals(status);
+    }
+
+    public void updateSheetStatusToSubmitted() {
+        if (sheetStatus.equals(SUBMITTED)) {
+            throw new UnableToSubmitSheetException();
+        }
+        sheetStatus = SUBMITTED;
+    }
+
+    public LocalDateTime getScheduleDateTime() {
         return schedule.getLocalDateTime();
     }
 }

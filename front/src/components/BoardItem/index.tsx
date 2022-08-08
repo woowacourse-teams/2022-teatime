@@ -1,9 +1,10 @@
-import * as S from './styles';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';
+import * as S from './styles';
 
 interface BoardItemProps {
   dateTime: string;
@@ -11,15 +12,45 @@ interface BoardItemProps {
   personName: string;
   buttonName: string;
   color: string;
-  onClick: () => void;
+  draggedColor: string;
+  onClickMenu: () => void;
+  onClickCancel: () => void;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: BoardItemProps) => {
+const BoardItem = ({
+  dateTime,
+  image,
+  personName,
+  buttonName,
+  color,
+  draggedColor,
+  onClickMenu,
+  onClickCancel,
+  onDragStart,
+}: BoardItemProps) => {
+  const [isDragging, setIsDragging] = useState(false);
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
+  const onDrag = () => {
+    setIsDragging(true);
+  };
+
+  const onDragEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
-    <S.BoardItemContainer color={color}>
+    <S.BoardItemContainer
+      draggable
+      color={color}
+      draggedColor={draggedColor}
+      onDragStart={onDragStart}
+      onDrag={onDrag}
+      onDragEnd={onDragEnd}
+      isDragging={isDragging}
+    >
       <S.TopSection>
         <S.DateContainer>
           <div>
@@ -32,15 +63,15 @@ const BoardItem = ({ dateTime, image, personName, buttonName, color, onClick }: 
           </div>
         </S.DateContainer>
         <S.CloseIconWrapper>
-          <img src={CloseIcon} alt="닫기 아이콘" />
+          <img src={CloseIcon} alt="취소 아이콘" onClick={onClickCancel} />
         </S.CloseIconWrapper>
       </S.TopSection>
       <S.BottomSection color={color}>
         <div>
-          <S.ProfileImage src={image} />
+          <S.ProfileImage src={image} alt={`${personName} 이미지`} />
           <span>{personName}</span>
         </div>
-        <button onClick={onClick}>{buttonName}</button>
+        <button onClick={onClickMenu}>{buttonName}</button>
       </S.BottomSection>
     </S.BoardItemContainer>
   );

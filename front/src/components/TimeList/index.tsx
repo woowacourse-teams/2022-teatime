@@ -1,21 +1,24 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as S from './styles';
 import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import { ROUTES } from '@constants/index';
+import api from '@api/index';
+import * as S from './styles';
 
 import CheckCircle from '@assets/check-circle.svg';
 
 const TimeList = () => {
   const { daySchedule } = useContext(ScheduleStateContext);
+  const dispatch = useContext(ScheduleDispatchContext);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [reservationId, setReservationId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
@@ -26,22 +29,23 @@ const TimeList = () => {
 
   const handleClickReservationButton = async (scheduleId: number) => {
     try {
-      setIsLoading(true);
-      // await api.post(`/api/reservations`, {
-      //   crewId: 2,
-      //   coachId: 3,
-      //   scheduleId,
-      // });
+      const data = await api.post(`/api/reservations`, {
+        crewId: 17,
+        coachId: 41,
+        scheduleId,
+      });
+      const location = data.headers.location.split('/').pop();
+      dispatch({ type: 'RESERVATE_TIME', scheduleId });
+      setReservationId(Number(location));
+      setSelectedTimeId(null);
       openModal();
     } catch (error) {
       setIsError(true);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleClickWriteButton = () => {
-    navigate(`/form/41`);
+    navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
   };
 
   if (isError) return <h1>error</h1>;
@@ -78,7 +82,8 @@ const TimeList = () => {
           content="면담 내용을 지금 작성 하시겠습니까?"
           firstButtonName="나중에"
           secondButtonName="작성하기"
-          onClick={handleClickWriteButton}
+          onClickFirstButton={() => navigate(ROUTES.CREW)}
+          onClickSecondButton={handleClickWriteButton}
           closeModal={closeModal}
         />
       )}

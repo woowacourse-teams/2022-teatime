@@ -1,6 +1,5 @@
-import * as S from './styles';
-
 import ModalPortal from '../../ModalPortal';
+import * as S from './styles';
 
 import CloseIcon from '@assets/close.svg';
 
@@ -11,7 +10,8 @@ interface ModalProps {
   firstButtonName: string;
   secondButtonName: string;
   closeModal: () => void;
-  onClick: () => void;
+  onClickFirstButton: () => void;
+  onClickSecondButton: () => void;
 }
 
 const Modal = ({
@@ -21,7 +21,8 @@ const Modal = ({
   firstButtonName,
   secondButtonName,
   closeModal,
-  onClick,
+  onClickFirstButton,
+  onClickSecondButton,
 }: ModalProps) => {
   const handleClickDimmer = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -44,8 +45,8 @@ const Modal = ({
             <p>{content}</p>
           </S.InnerContainer>
           <S.ButtonWrapper>
-            <S.FirstButton>{firstButtonName}</S.FirstButton>
-            <S.SecondButton onClick={onClick}>{secondButtonName}</S.SecondButton>
+            <S.FirstButton onClick={onClickFirstButton}>{firstButtonName}</S.FirstButton>
+            <S.SecondButton onClick={onClickSecondButton}>{secondButtonName}</S.SecondButton>
           </S.ButtonWrapper>
         </S.ModalContainer>
       </S.Background>

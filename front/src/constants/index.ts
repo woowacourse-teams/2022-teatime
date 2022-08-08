@@ -5,7 +5,6 @@ const ROUTES = {
   SCHEDULE: '/schedule',
   RESERVATION: '/reservation',
   FORM: '/form',
-  CREW_HISTORY: 'crewHistory',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];

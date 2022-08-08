@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class Sheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
 
     @Column(nullable = false, unique = true)
@@ -38,5 +38,11 @@ public class Sheet {
         this.number = number;
         this.questionContent = questionContent;
         this.answerContent = null;
+    }
+
+    public void modifyAnswer(int number, String content) {
+        if (this.number == number) {
+            this.answerContent = content;
+        }
     }
 }

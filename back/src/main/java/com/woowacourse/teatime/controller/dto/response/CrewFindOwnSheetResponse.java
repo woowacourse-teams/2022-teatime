@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Reservation;
 import com.woowacourse.teatime.domain.Schedule;
+import com.woowacourse.teatime.domain.Sheet;
+import com.woowacourse.teatime.domain.SheetStatus;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,27 +16,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CrewFindOwnReservationResponse {
-
-    private Long reservationId;
-
-    private String coachName;
-
-    private String coachImage;
+public class CrewFindOwnSheetResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
+    private String coachName;
+    private String coachImage;
+    private SheetStatus status;
+    private List<SheetDto> sheets;
 
-    public static List<CrewFindOwnReservationResponse> from(List<Reservation> reservations) {
-        return reservations.stream()
-                .map(CrewFindOwnReservationResponse::from)
-                .collect(Collectors.toList());
-    }
-
-    private static CrewFindOwnReservationResponse from(Reservation reservation) {
+    public static CrewFindOwnSheetResponse of(Reservation reservation, List<Sheet> sheets) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
-        return new CrewFindOwnReservationResponse(reservation.getId(), coach.getName(), coach.getImage(),
-                schedule.getLocalDateTime());
+        List<SheetDto> sheetDtos = SheetDto.from(sheets);
+        return new CrewFindOwnSheetResponse(schedule.getLocalDateTime(), coach.getName(), coach.getImage(),
+                reservation.getSheetStatus(), sheetDtos);
     }
 }

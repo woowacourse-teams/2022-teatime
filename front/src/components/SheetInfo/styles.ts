@@ -26,6 +26,7 @@ const DateWrapper = styled.div`
     height: 18px;
   }
   span {
+    vertical-align: top;
     font-size: 18px;
     color: ${({ theme }) => theme.colors.BLUE_700};
   }

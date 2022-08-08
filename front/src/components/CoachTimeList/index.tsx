@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
-import * as S from './styles';
+import { useContext, useState } from 'react';
 import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import api from '@api/index';
+import * as S from './styles';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
@@ -35,31 +35,31 @@ const CoachTimeList = () => {
       });
       dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
       alert('확정되었습니다.✅');
-    } catch {
+    } catch (error) {
       alert('스케쥴 등록 실패');
+      console.log(error);
     }
   };
 
   return (
-    <div>
-      <S.TimeListContainer>
+    <S.TimeListContainer>
+      <S.ScrollContainer>
         {daySchedule?.schedules.map((schedule) => {
           const time = dayjs.tz(schedule.dateTime).format('HH:mm');
 
           return (
-            <React.Fragment key={schedule.id}>
-              <S.TimeBox
-                isPossible={schedule.isPossible}
-                aria-disabled={schedule.isPossible}
-                selected={schedule.isSelected ? true : false}
-                onClick={() => handleClickTime(schedule.dateTime)}
-              >
-                {time}
-              </S.TimeBox>
-            </React.Fragment>
+            <S.TimeBox
+              key={schedule.id}
+              isPossible={schedule.isPossible}
+              aria-disabled={schedule.isPossible}
+              selected={schedule.isSelected ? true : false}
+              onClick={() => handleClickTime(schedule.dateTime)}
+            >
+              {time}
+            </S.TimeBox>
           );
         })}
-      </S.TimeListContainer>
+      </S.ScrollContainer>
 
       <Conditional condition={daySchedule?.schedules.length !== 0}>
         <S.ButtonContainer>
@@ -69,7 +69,7 @@ const CoachTimeList = () => {
           <S.ConfirmButton onClick={handleUpdateSchedules}>확인</S.ConfirmButton>
         </S.ButtonContainer>
       </Conditional>
-    </div>
+    </S.TimeListContainer>
   );
 };
 

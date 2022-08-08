@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import * as S from './styles';
 
 import { ROUTES } from '@constants/index';
+import * as S from './styles';
 
 const SelectUser = () => {
   return (
     <S.SelectUserContainer>
-      <Link to={ROUTES.COACH}>
+      <Link to={`${ROUTES.COACH}/41`}>
         <button>코치</button>
       </Link>
       <Link to={ROUTES.CREW}>

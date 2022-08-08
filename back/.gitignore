@@ -33,5 +33,10 @@ out/
 .vscode/
 
 *.properties
+application.properties
 *.sql
 *.yml
+
+### Log ###
+logs/
+was-logs/

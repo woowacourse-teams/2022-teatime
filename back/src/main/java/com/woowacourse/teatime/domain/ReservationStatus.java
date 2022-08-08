@@ -6,10 +6,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public enum ReservationStatus {
+
     BEFORE_APPROVED(() -> Comparator.comparing(Reservation::getId)),
-    APPROVED(() -> Comparator.comparing(Reservation::getLocalDateTime)),
-    IN_PROGRESS(() -> Comparator.comparing(Reservation::getLocalDateTime)),
-    DONE(() -> Comparator.comparing(Reservation::getLocalDateTime));
+    APPROVED(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
+    IN_PROGRESS(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
+    DONE(() -> Comparator.comparing(Reservation::getScheduleDateTime));
 
     private final Supplier<Comparator<Reservation>> comparator;
 
@@ -17,17 +18,9 @@ public enum ReservationStatus {
         this.comparator = comparator;
     }
 
-    public boolean isBeforeApproved() {
-        return this.equals(BEFORE_APPROVED);
-    }
-
-    public boolean isInProgress() {
-        return this.equals(IN_PROGRESS);
-    }
-
     public static List<Reservation> classifyReservations(ReservationStatus status, List<Reservation> reservations) {
         return reservations.stream()
-                .filter(reservation -> reservation.isSameStatus(status))
+                .filter(reservation -> reservation.isReservationStatus(status))
                 .sorted(status.comparator.get())
                 .collect(Collectors.toList());
     }

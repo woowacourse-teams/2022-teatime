@@ -63,10 +63,40 @@ include::{snippets}/reserve-cancel/http-request.adoc[]
 ==== response
 include::{snippets}/reserve-cancel/http-response.adoc[]
 
+=== 예약 완료하기
+==== request
+include::{snippets}/reserve-finish/http-request.adoc[]
+==== response
+include::{snippets}/reserve-finish/http-response.adoc[]
+
 == 크루 API
 
-=== 히스토리 조회
+=== 크루가 자신의 히스토리 조회
 ==== request
 include::{snippets}/find-own-reservations/http-request.adoc[]
 ==== response
 include::{snippets}/find-own-reservations/http-response.adoc[]
+
+=== 크루가 자신의 면담시트 조회
+==== request
+include::{snippets}/find-own-sheets/http-request.adoc[]
+==== response
+include::{snippets}/find-own-sheets/http-response.adoc[]
+
+=== 크루가 자신의 면담시트 답변 수정
+==== request
+include::{snippets}/update-sheet-answer/http-request.adoc[]
+==== response
+include::{snippets}/update-sheet-answer/http-response.adoc[]
+
+=== 코치가 크루의 히스토리 조회
+==== request
+include::{snippets}/find-crew-reservations/http-request.adoc[]
+==== response
+include::{snippets}/find-crew-reservations/http-response.adoc[]
+
+=== 코치가 크루의 면담시트 조회
+==== request
+include::{snippets}/find-crew-sheets/http-request.adoc[]
+==== response
+include::{snippets}/find-crew-sheets/http-response.adoc[]
