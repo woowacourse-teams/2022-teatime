@@ -50,19 +50,43 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
     });
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickFirstButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    let status = 'WRITING';
-
-    if (e.currentTarget.innerText === '제출하기') {
-      const checkValidation = contents.some((content) => !content.answerContent);
-      setIsSubmit(true);
-      status = 'SUBMITTED';
-      if (checkValidation) return;
+    if (isCoach) {
+      navigate(-1);
+      return;
     }
+
     try {
-      await api.put(`/api/crews/me/reservations/${reservationId}`, { status, sheets: contents });
+      await api.put(`/api/crews/me/reservations/${reservationId}`, {
+        status: 'WRITING',
+        sheets: contents,
+      });
+      alert('제출 되었습니다✅');
+      navigate('/crew');
+    } catch (error) {
+      alert('제출 실패🚫');
+    }
+  };
+
+  const handleClickSecondButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (isCoach) {
+      navigate('/');
+      return;
+    }
+
+    const checkValidation = contents.some((content) => !content.answerContent);
+    setIsSubmit(true);
+    if (checkValidation) return;
+
+    try {
+      await api.put(`/api/crews/me/reservations/${reservationId}`, {
+        status: 'SUBMITTED',
+        sheets: contents,
+      });
       alert('제출 되었습니다✅');
       navigate('/crew');
     } catch (error) {
@@ -118,8 +142,8 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
             isCoach={isCoach}
           />
           <S.ButtonContainer>
-            <S.FirstButton onClick={handleSubmit}>{firstButton}</S.FirstButton>
-            <S.SecondButton onClick={handleSubmit}>{secondButton}</S.SecondButton>
+            <S.FirstButton onClick={handleClickFirstButton}>{firstButton}</S.FirstButton>
+            <S.SecondButton onClick={handleClickSecondButton}>{secondButton}</S.SecondButton>
           </S.ButtonContainer>
         </form>
       </S.SheetContainer>
