@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import dayjs from 'dayjs';
 
 import ClockIcon from '@assets/clock.svg';
@@ -11,6 +12,7 @@ interface BoardItemProps {
   personName: string;
   buttonName: string;
   color: string;
+  draggedColor: string;
   onClickMenu: () => void;
   onClickCancel: () => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -22,15 +24,33 @@ const BoardItem = ({
   personName,
   buttonName,
   color,
+  draggedColor,
   onClickMenu,
   onClickCancel,
   onDragStart,
 }: BoardItemProps) => {
+  const [isDragging, setIsDragging] = useState(false);
   const date = dayjs.tz(dateTime).format('MM월 DD일');
   const time = dayjs.tz(dateTime).format('HH:mm');
 
+  const onDrag = () => {
+    setIsDragging(true);
+  };
+
+  const onDragEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
-    <S.BoardItemContainer color={color} draggable onDragStart={onDragStart}>
+    <S.BoardItemContainer
+      draggable
+      color={color}
+      draggedColor={draggedColor}
+      onDragStart={onDragStart}
+      onDrag={onDrag}
+      onDragEnd={onDragEnd}
+      isDragging={isDragging}
+    >
       <S.TopSection>
         <S.DateContainer>
           <div>

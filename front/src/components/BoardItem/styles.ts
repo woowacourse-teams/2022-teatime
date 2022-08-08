@@ -1,16 +1,30 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const BoardItemContainer = styled.div<{ color: string }>`
+const BoardItemContainer = styled.div<{ color: string; draggedColor: string; isDragging: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 160px;
   margin: 10px 0px;
   padding: 15px;
-  border-left: 10px solid ${(props) => props.color};
   background-color: ${({ theme }) => theme.colors.WHITE};
+  border-left: 10px solid ${(props) => props.color};
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  ${(props) =>
+    props.isDragging &&
+    css`
+      background-color: ${props.draggedColor};
+      border: 2px dashed ${props.color};
+      opacity: 0.5;
+    `}
 `;
 
 const TopSection = styled.div`
@@ -43,7 +57,6 @@ const DateContainer = styled.div`
 
 const CloseIconWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
 
   img {
     width: 15px;
