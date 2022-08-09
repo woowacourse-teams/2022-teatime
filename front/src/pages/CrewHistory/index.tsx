@@ -3,7 +3,32 @@ import { useEffect, useState } from 'react';
 import api from '@api/index';
 import TableRow from '@components/TableRow';
 import { History } from '@typings/domain';
+import theme from '@styles/theme';
 import * as S from './styles';
+
+type StatusValue = { statusName: string; color: string; backgroundColor: string };
+
+interface HistoryStatus {
+  [key: string]: StatusValue;
+}
+
+const historyStatus: HistoryStatus = {
+  BEFORE_APPROVED: {
+    statusName: '승인전',
+    color: theme.colors.ORANGE_600,
+    backgroundColor: theme.colors.ORANGE_100,
+  },
+  APPROVED: {
+    statusName: '승인완료',
+    color: theme.colors.PURPLE_300,
+    backgroundColor: theme.colors.PURPLE_100,
+  },
+  IN_PROGRESS: {
+    statusName: '면담완료',
+    color: theme.colors.GREEN_700,
+    backgroundColor: theme.colors.GREEN_100,
+  },
+};
 
 const CrewHistory = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);
@@ -14,10 +39,8 @@ const CrewHistory = () => {
         const { data } = await api.get('/api/crews/me/reservations', {
           headers: { crewId: 17 },
         });
-        console.log('data', data);
         setHistoryList(data);
       } catch (error) {
-        alert('크루 히스토리 get 에러');
         console.log(error);
       }
     })();
@@ -37,7 +60,16 @@ const CrewHistory = () => {
       </S.Thead>
       <S.Tbody>
         {historyList.map((history) => {
-          return <TableRow key={history.reservationId} history={history} />;
+          const { statusName, color, backgroundColor } = historyStatus[history.status];
+          return (
+            <TableRow
+              key={history.reservationId}
+              history={history}
+              statusName={statusName}
+              color={color}
+              bgColor={backgroundColor}
+            />
+          );
         })}
       </S.Tbody>
     </S.Table>

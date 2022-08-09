@@ -1,5 +1,4 @@
 import { History } from '@typings/domain';
-import theme from '@styles/theme';
 import { getMonthDate, getHourMinutes } from '@utils/index';
 import * as S from './styles';
 
@@ -7,43 +6,20 @@ import ScheduleIcon from '@assets/schedule.svg';
 
 interface TableRowProps {
   history: History;
+  statusName: string;
+  color: string;
+  bgColor: string;
 }
 
-interface HistoryStatus {
-  [key: string]: Status;
-}
-
-type Status = { statusName: string; color: string; backgroundColor: string };
-
-const historyStatus: HistoryStatus = {
-  BEFORE_APPROVED: {
-    statusName: '승인전',
-    color: theme.colors.ORANGE_600,
-    backgroundColor: theme.colors.ORANGE_100,
-  },
-  APPROVED: {
-    statusName: '승인완료',
-    color: theme.colors.PURPLE_300,
-    backgroundColor: theme.colors.PURPLE_100,
-  },
-  IN_PROGRESS: {
-    statusName: '면담완료',
-    color: theme.colors.GREEN_700,
-    backgroundColor: theme.colors.GREEN_100,
-  },
-};
-
-const TableRow = ({ history }: TableRowProps) => {
-  const { status, coachName, coachImage, dateTime } = history;
-  const { statusName, color, backgroundColor } = historyStatus[status];
-
+const TableRow = ({ history, statusName, color, bgColor }: TableRowProps) => {
+  const { coachName, coachImage, dateTime } = history;
   const date = getMonthDate(dateTime);
   const time = getHourMinutes(dateTime);
 
   return (
     <tr>
       <td>
-        <S.Span bgColor={backgroundColor} color={color}>
+        <S.Span bgColor={bgColor} color={color}>
           {statusName}
         </S.Span>
       </td>
