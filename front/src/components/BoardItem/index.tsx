@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
+import { getHourMinutes, getMonthDate } from '@utils/index';
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';
 import * as S from './styles';
-import { getHourMinutes, getMonthDate } from '@utils/index';
 
 interface BoardItemProps {
   dateTime: string;
