@@ -1,7 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 
 import Crew from '@pages/Crew';
 import Reservation from '@pages/Reservation';
@@ -14,10 +11,6 @@ import ViewSheet from '@pages/ViewSheet';
 import Header from '@components/Header';
 import ScheduleProvider from '@context/ScheduleProvider';
 import { ROUTES } from './constants';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Asia/Seoul');
 
 const App = () => {
   return (

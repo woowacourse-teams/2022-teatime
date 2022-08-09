@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import api from '@api/index';
+import { getHourMinutes } from '@utils/index';
 import * as S from './styles';
 
 const CoachTimeList = () => {
@@ -45,7 +45,7 @@ const CoachTimeList = () => {
     <S.TimeListContainer>
       <S.ScrollContainer>
         {daySchedule?.schedules.map((schedule) => {
-          const time = dayjs.tz(schedule.dateTime).format('HH:mm');
+          const time = getHourMinutes(schedule.dateTime);
 
           return (
             <S.TimeBox

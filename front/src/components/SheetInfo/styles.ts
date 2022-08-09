@@ -24,6 +24,7 @@ const DateWrapper = styled.div`
   img {
     width: 18px;
     height: 18px;
+    margin-right: 5px;
   }
   span {
     vertical-align: top;

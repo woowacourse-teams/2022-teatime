@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 interface Crew {
   reservationId: number;
   crewId: number;
@@ -15,11 +13,11 @@ interface Coach {
 }
 
 interface MonthYear {
-  startDate: dayjs.Dayjs;
-  firstDOW: number; // 0 === Sunday
-  lastDate: number;
   month: string;
   year: string;
+  startDate: Date;
+  firstDOW: number;
+  lastDate: number;
 }
 
 interface Schedule {
