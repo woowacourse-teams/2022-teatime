@@ -13,6 +13,7 @@ import {
   convertToFullDate,
   getCurrentFullDate,
 } from '@utils/index';
+import type { MonthYear } from '@typings/domain';
 import * as S from './styles';
 
 import LeftArrow from '@assets/left-arrow.svg';
@@ -28,9 +29,9 @@ interface CalendarProps {
 const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
   const { id: coachId } = useParams();
   const currentDate = new Date();
-  const currentMonthYear = getMonthYearDetails(new Date());
+  const currentMonthYear = getMonthYearDetails(currentDate);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [monthYear, setMonthYear] = useState(currentMonthYear);
+  const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
   const { monthSchedule } = useContext(ScheduleStateContext);
   const dispatch = useContext(ScheduleDispatchContext);
