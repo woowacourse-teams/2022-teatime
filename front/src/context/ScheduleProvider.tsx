@@ -1,6 +1,7 @@
 import { createContext, useReducer, Dispatch } from 'react';
 
 import type { DaySchedule, Schedule as ScheduleType } from '@typings/domain';
+import { getFormatDate } from '@utils/index';
 
 const timeArray = [
   '10:00',
@@ -55,11 +56,11 @@ const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'SET_MONTH_SCHEDULE': {
       const initialMonthSchedule = Array.from({ length: action.lastDate }, (_, index) => {
+        const currentDateFormat = getFormatDate(action.year, action.month, index + 1);
+
         return {
           day: index + 1,
-          schedules: getAllTime(
-            `${action.year}-${action.month}-${String(index + 1).padStart(2, '0')}`
-          ),
+          schedules: getAllTime(currentDateFormat),
         };
       });
 
