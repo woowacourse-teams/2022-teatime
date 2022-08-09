@@ -24,4 +24,12 @@ const getFormatDate = (year: DateType, month: DateType, day: DateType) => {
   return `${year}-${month}-${String(day).padStart(2, '0')}`;
 };
 
-export { getMonthYearDetails, getNewMonthYear, getFormatDate };
+const getHourMinutes = (time: string) => {
+  const dateTime = new Date(new Date(time).getTime() - 540 * 60 * 1000);
+  const hour = dateTime.getHours();
+  const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+
+  return `${hour}:${minutes}`;
+};
+
+export { getMonthYearDetails, getNewMonthYear, getFormatDate, getHourMinutes };
