@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import Textarea from '@components/Textarea';
 import Title from '@components/Title';
 import useFetch from '@hooks/useFetch';
 import api from '@api/index';
 import { ReservationInfo } from '@typings/domain';
+import { getHourMinutes, getMonthDate } from '@utils/index';
 import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
@@ -107,11 +107,11 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
         <p>{reservationInfo?.coachName}</p>
         <S.DateWrapper>
           <img src={ScheduleIcon} alt="일정 아이콘" />
-          <span>{dayjs.tz(reservationInfo?.dateTime).format(' MM월 DD일')}</span>
+          <span>{getMonthDate(reservationInfo?.dateTime as string)}</span>
         </S.DateWrapper>
         <S.DateWrapper>
           <img src={ClockIcon} alt="시계 아이콘" />
-          <span>{dayjs.tz(reservationInfo?.dateTime).format(' HH:mm')}</span>
+          <span>{getHourMinutes(reservationInfo?.dateTime as string)}</span>
         </S.DateWrapper>
       </S.InfoContainer>
       <S.SheetContainer>

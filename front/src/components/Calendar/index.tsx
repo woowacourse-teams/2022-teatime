@@ -108,7 +108,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
               daySchedule={monthSchedule[date - 1]?.schedules}
               onClick={() => handleClickDate(date, isWeekend)}
               selectedDay={selectedDay}
-              currentDay={getFormatDate(year, month, date)}
+              currentDay={convertToFullDate(year, month, date)}
               isCoach={isCoach}
               isWeekend={isWeekend}
               isPastDay={isPastDay}
