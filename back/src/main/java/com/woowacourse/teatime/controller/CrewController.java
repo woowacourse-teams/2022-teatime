@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class CrewController {
     private final SheetService sheetService;
 
     @GetMapping("/me/reservations")
-    public ResponseEntity<List<CrewFindOwnHistoryResponse>> findOwnReservations(@RequestBody @NotNull Long crewId) {
+    public ResponseEntity<List<CrewFindOwnHistoryResponse>> findOwnReservations(@RequestHeader("crewId") Long crewId) {
         List<CrewFindOwnHistoryResponse> responses = reservationService.findOwnHistoryByCrew(crewId);
         return ResponseEntity.ok(responses);
     }
