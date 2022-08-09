@@ -11,6 +11,8 @@ const InfoContainer = styled.div`
     height: 50px;
     border-radius: 8px;
     margin-bottom: 6px;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgb(190, 190, 190);
   }
 
   > p {

@@ -13,14 +13,13 @@ import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
 
 interface SheetInfoProps {
-  isCoach?: boolean;
-  isView?: boolean;
+  isRead?: boolean;
   title: string;
   firstButton: string;
   secondButton: string;
 }
 
-const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetInfoProps) => {
+const Sheet = ({ isRead, title, firstButton, secondButton }: SheetInfoProps) => {
   const { id: reservationId } = useParams();
   const navigate = useNavigate();
   const { data: reservationInfo } = useFetch<ReservationInfo, null>(
@@ -53,7 +52,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
   const handleClickFirstButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (isCoach) {
+    if (isRead) {
       navigate(-1);
       return;
     }
@@ -73,7 +72,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
   const handleClickSecondButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (isCoach) {
+    if (isRead) {
       navigate('/');
       return;
     }
@@ -95,7 +94,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
   };
 
   useEffect(() => {
-    if (isView && reservationInfo) {
+    if (isRead && reservationInfo) {
       setContents(reservationInfo.sheets);
     }
   }, [reservationInfo]);
@@ -123,7 +122,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
             value={contents[0].answerContent || ''}
             handleChangeContent={handleChangeContent(0)}
             isSubmit={isSubmit}
-            isCoach={isCoach}
+            isRead={isRead}
           />
           <Textarea
             id="1"
@@ -131,7 +130,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
             value={contents[1].answerContent || ''}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
-            isCoach={isCoach}
+            isRead={isRead}
           />
           <Textarea
             id="2"
@@ -139,7 +138,7 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
             value={contents[2].answerContent || ''}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
-            isCoach={isCoach}
+            isRead={isRead}
           />
           <S.ButtonContainer>
             <S.FirstButton onClick={handleClickFirstButton}>{firstButton}</S.FirstButton>
@@ -151,4 +150,4 @@ const SheetInfo = ({ isCoach, isView, title, firstButton, secondButton }: SheetI
   );
 };
 
-export default SheetInfo;
+export default Sheet;
