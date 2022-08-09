@@ -36,10 +36,28 @@ interface ReservationInfo {
   sheets: Sheets[];
 }
 
+interface History {
+  reservationId: number;
+  coachName: string;
+  coachImage: string;
+  dateTime: string;
+  status: string;
+}
+
 type Sheets = { questionNumber: number; questionContent: string; answerContent: string };
 
 type DaySchedule = { day: number; schedules: Schedule[] };
 
 type CrewListMap = Record<string, Crew[]>;
 
-export { Crew, Coach, MonthYear, Schedule, DaySchedule, ReservationInfo, CrewListMap, Sheets };
+export {
+  Crew,
+  Coach,
+  MonthYear,
+  Schedule,
+  DaySchedule,
+  ReservationInfo,
+  CrewListMap,
+  Sheets,
+  History,
+};
