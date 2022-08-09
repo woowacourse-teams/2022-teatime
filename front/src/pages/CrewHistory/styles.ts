@@ -37,45 +37,6 @@ const Tbody = styled.tbody`
     font-size: 18px;
     font-weight: bold;
   }
-
-  tr > :nth-child(1) {
-    span {
-      padding: 4px 10px;
-      font-size: 16px;
-      border-radius: 4px;
-      background-color: ${({ theme }) => theme.colors.ORANGE_100};
-      color: ${({ theme }) => theme.colors.ORANGE_600};
-    }
-  }
-
-  tr :nth-child(2) {
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    img {
-      width: 65px;
-      height: 65px;
-      margin-right: 18px;
-      border-radius: 50%;
-      border: 3px solid white;
-      box-shadow: 0 0 16px rgb(215, 215, 215);
-    }
-  }
-
-  tr :nth-child(5) {
-    img {
-      width: 24px;
-      height: 24px;
-      margin-left: 14px;
-      cursor: pointer;
-      :hover {
-        transform: scale(1.1);
-      }
-    }
-  }
 `;
 
 export { Table, Thead, Tbody };
