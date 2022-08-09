@@ -93,6 +93,8 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;
           const dayNumber = dayjs(`${year}${month}${date - 1}`).day();
           const isWeekend = dayNumber === DAY_NUMBER.SATURDAY || dayNumber === DAY_NUMBER.SUNDAY;
+          const isPastDay =
+            `${year}-${month}-${String(date).padStart(2, '0')}` < dayjs().format('YYYY-MM-DD');
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
@@ -103,9 +105,10 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
               daySchedule={monthSchedule[date - 1]?.schedules}
               onClick={() => handleClickDate(date, isWeekend)}
               selectedDay={selectedDay}
-              today={`${year}-${month}-${String(date).padStart(2, '0')}`}
+              currentDay={`${year}-${month}-${String(date).padStart(2, '0')}`}
               isCoach={isCoach}
               isWeekend={isWeekend}
+              isPastDay={isPastDay}
             />
           );
         })}
