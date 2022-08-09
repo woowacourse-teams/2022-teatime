@@ -13,7 +13,7 @@ const BoardContainer = styled.div<{ isDraggingOver: boolean }>`
   ${(props) =>
     props.isDraggingOver &&
     css`
-      background-color: #ededed;
+      background-color: ${({ theme }) => theme.colors.GRAY_150};
     `}
 `;
 
