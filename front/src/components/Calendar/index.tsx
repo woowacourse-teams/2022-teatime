@@ -61,7 +61,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
           `/api/coaches/${coachId}/schedules?year=${year}&month=${month}`
         );
 
-        dispatch({ type: 'SET_MONTH_SCHEDULE', data: coachSchedules, lastDate, year, month });
+        dispatch({ type: 'SET_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
       } catch {
         alert('스케쥴 get 요청 실패');
       }

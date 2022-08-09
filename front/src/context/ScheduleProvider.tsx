@@ -39,7 +39,7 @@ type State = {
 type Action =
   | {
       type: 'SET_MONTH_SCHEDULE';
-      data: DaySchedule[];
+      coachSchedules: DaySchedule[];
       lastDate: number;
       year: string;
       month: string;
@@ -65,7 +65,9 @@ const reducer = (state: State, action: Action) => {
       });
 
       const newMonthSchedule = initialMonthSchedule.map((daySchedule: DaySchedule) => {
-        const sameDaySchedule = action.data.find((schedule) => schedule.day === daySchedule.day);
+        const sameDaySchedule = action.coachSchedules.find(
+          (schedule) => schedule.day === daySchedule.day
+        );
 
         if (sameDaySchedule) {
           const newDaySchedule = daySchedule.schedules.map((time) => {
