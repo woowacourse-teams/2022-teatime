@@ -15,7 +15,7 @@ class CrewControllerTest extends ControllerTest {
     @DisplayName("크루가 자신의 면담 목록 조회에 성공한다.")
     @Test
     void crewFindOwnReservations() throws Exception {
-        mockMvc.perform(get("/api/crews/me/reservations", 1L))
+        mockMvc.perform(get("/api/crews/me/reservations").header("crewId", 1L))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -23,7 +23,7 @@ class CrewControllerTest extends ControllerTest {
     @DisplayName("크루가 자신의 면담 목록 조회에 실패한다. - 잘못된 크루 아이디")
     @Test
     void crewFindOwnReservations_invalidCrewId() throws Exception {
-        mockMvc.perform(get("/api/crews/me/reservations", null))
+        mockMvc.perform(get("/api/crews/me/reservations").header("crewId", "null"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

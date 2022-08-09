@@ -70,7 +70,7 @@ public class CrewAcceptanceTest extends AcceptanceTest {
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(crewId)
+                .header("crewId", crewId)
                 .filter(document("find-own-reservations", responseFields(
                         fieldWithPath("[].reservationId").description("면담 아이디"),
                         fieldWithPath("[].coachName").description("코치 이름"),
