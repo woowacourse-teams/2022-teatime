@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import TableRow from '@components/TableRow';
 import api from '@api/index';
@@ -33,8 +33,9 @@ const historyStatus: HistoryStatus = {
 };
 
 const CrewHistory = () => {
-  const [historyList, setHistoryList] = useState<History[]>([]);
+  const { id: crewId } = useParams();
   const navigate = useNavigate();
+  const [historyList, setHistoryList] = useState<History[]>([]);
 
   // 임시저장이면 addSheet 이동
   // 제출된 상태, 완료된 면담이면 viewSheet 이동
@@ -44,6 +45,21 @@ const CrewHistory = () => {
       return;
     }
     navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  };
+
+  const deleteReservation = async (reservationId: number) => {
+    if (!confirm('면담을 삭제하시겠습니까?')) return;
+
+    try {
+      await api.delete(`/api/reservations/${reservationId}`, {
+        headers: {
+          applicantId: Number(crewId),
+          role: 'CREW',
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -82,6 +98,7 @@ const CrewHistory = () => {
               color={color}
               bgColor={backgroundColor}
               onClickSheet={moveReservationSheet}
+              onClickDelete={deleteReservation}
             />
           );
         })}
