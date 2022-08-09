@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.controller.dto.request;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,10 @@ public class CrewSaveRequest {
 
     @NotBlank
     private String name;
+
+    @NotBlank
+    @Email
+    private String email;
 
     @NotBlank
     private String image;

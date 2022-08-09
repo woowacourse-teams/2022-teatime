@@ -10,5 +10,6 @@ public class DtoFixture {
     public static CoachSaveRequest COACH_JUNE_SAVE_REQUEST
             = new CoachSaveRequest("june", "i am legend", "image");
 
-    public static CrewSaveRequest CREW_SAVE_REQUEST = new CrewSaveRequest("maru", "image");
+    public static CrewSaveRequest CREW_SAVE_REQUEST
+            = new CrewSaveRequest("maru", "maru@email.com", "image");
 }

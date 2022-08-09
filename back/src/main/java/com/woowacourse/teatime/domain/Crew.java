@@ -21,10 +21,14 @@ public class Crew {
     @Column(nullable = false, length = 10)
     private String name;
 
+    @Column(nullable = false)
+    private String email;
+
     private String image;
 
-    public Crew(String name, String image) {
+    public Crew(String name, String email, String image) {
         this.name = name;
+        this.email = email;
         this.image = image;
     }
 }

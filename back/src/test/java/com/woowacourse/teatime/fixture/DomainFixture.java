@@ -15,5 +15,5 @@ public class DomainFixture {
     public static final LocalTime LOCAL_TIME = LocalTime.MIN;
     public static final LocalDateTime DATE_TIME = LocalDateTime.of(LOCAL_DATE, LOCAL_TIME);
 
-    public static final Crew CREW = new Crew("마루", "image");
+    public static final Crew CREW = new Crew("마루", "maru@email.com", "image");
 }

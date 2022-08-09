@@ -42,6 +42,15 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '12.0'
 
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+
+    implementation 'com.slack.api:bolt:1.24.0'
+    implementation 'com.slack.api:bolt-servlet:1.24.0'
+    implementation 'com.slack.api:bolt-jetty:1.24.0'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation group: 'com.auth0', name: 'java-jwt', version: '3.0.1'
 }
 
 asciidoctor {
