@@ -6,6 +6,11 @@ const Span = styled.span<{ color: string; bgColor: string }>`
   border-radius: 4px;
   background-color: ${({ bgColor }) => bgColor};
   color: ${({ color }) => color};
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const Profile = styled.div`
@@ -24,9 +29,8 @@ const Profile = styled.div`
 `;
 
 const Icon = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-left: 14px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
   :hover {
     transform: scale(1.1);

@@ -1,50 +1,34 @@
-import dayjs from 'dayjs';
-
 import { History } from '@typings/domain';
-import theme from '@styles/theme';
+import { getMonthDate, getHourMinutes } from '@utils/index';
 import * as S from './styles';
 
-import ScheduleIcon from '@assets/schedule.svg';
+import TrashIcon from '@assets/trash.svg';
 
 interface TableRowProps {
   history: History;
+  statusName: string;
+  color: string;
+  bgColor: string;
+  onClickSheet: (sheetStatus: string, reservationId: number) => void;
+  onClickDelete: (reservationId: number) => void;
 }
 
-interface HistoryStatus {
-  [key: string]: Status;
-}
-
-type Status = { statusName: string; color: string; backgroundColor: string };
-
-const historyStatus: HistoryStatus = {
-  BEFORE_APPROVED: {
-    statusName: '승인전',
-    color: theme.colors.ORANGE_600,
-    backgroundColor: theme.colors.ORANGE_100,
-  },
-  APPROVED: {
-    statusName: '승인완료',
-    color: theme.colors.PURPLE_300,
-    backgroundColor: theme.colors.PURPLE_100,
-  },
-  IN_PROGRESS: {
-    statusName: '면담완료',
-    color: theme.colors.GREEN_700,
-    backgroundColor: theme.colors.GREEN_100,
-  },
-};
-
-const TableRow = ({ history }: TableRowProps) => {
-  const { status, coachName, coachImage, dateTime } = history;
-  const { statusName, color, backgroundColor } = historyStatus[status];
-
-  const date = dayjs.tz(dateTime).format('MM월 DD일');
-  const time = dayjs.tz(dateTime).format('HH:mm');
+const TableRow = ({
+  history,
+  statusName,
+  color,
+  bgColor,
+  onClickSheet,
+  onClickDelete,
+}: TableRowProps) => {
+  const { reservationId, status, coachName, coachImage, dateTime } = history;
+  const date = getMonthDate(dateTime);
+  const time = getHourMinutes(dateTime);
 
   return (
     <tr>
       <td>
-        <S.Span bgColor={backgroundColor} color={color}>
+        <S.Span bgColor={bgColor} color={color} onClick={() => onClickSheet(status, reservationId)}>
           {statusName}
         </S.Span>
       </td>
@@ -57,8 +41,13 @@ const TableRow = ({ history }: TableRowProps) => {
       <td>{date}</td>
       <td>{time}</td>
       <td>
-        <S.Icon src={ScheduleIcon} alt="면담 시트 아이콘" />
-        <S.Icon src={ScheduleIcon} alt="휴지통 아이콘" />
+        {status !== 'IN_PROGRESS' && (
+          <S.Icon
+            src={TrashIcon}
+            alt="휴지통 아이콘"
+            onClick={() => onClickDelete(reservationId)}
+          />
+        )}
       </td>
     </tr>
   );

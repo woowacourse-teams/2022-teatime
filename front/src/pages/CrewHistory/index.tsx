@@ -1,12 +1,66 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import api from '@api/index';
 import TableRow from '@components/TableRow';
+import api from '@api/index';
+import { ROUTES } from '@constants/index';
 import { History } from '@typings/domain';
+import theme from '@styles/theme';
 import * as S from './styles';
 
+type StatusValue = { statusName: string; color: string; backgroundColor: string };
+
+interface HistoryStatus {
+  [key: string]: StatusValue;
+}
+
+const historyStatus: HistoryStatus = {
+  BEFORE_APPROVED: {
+    statusName: '승인전',
+    color: theme.colors.ORANGE_600,
+    backgroundColor: theme.colors.ORANGE_100,
+  },
+  APPROVED: {
+    statusName: '승인완료',
+    color: theme.colors.PURPLE_300,
+    backgroundColor: theme.colors.PURPLE_100,
+  },
+  IN_PROGRESS: {
+    statusName: '면담완료',
+    color: theme.colors.GREEN_700,
+    backgroundColor: theme.colors.GREEN_100,
+  },
+};
+
 const CrewHistory = () => {
+  const { id: crewId } = useParams();
+  const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<History[]>([]);
+
+  // 임시저장이면 addSheet 이동
+  // 제출된 상태, 완료된 면담이면 viewSheet 이동
+  const moveReservationSheet = (sheetStatus: string, reservationId: number) => {
+    if (sheetStatus === 'WRITING') {
+      navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
+      return;
+    }
+    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  };
+
+  const deleteReservation = async (reservationId: number) => {
+    if (!confirm('면담을 삭제하시겠습니까?')) return;
+
+    try {
+      await api.delete(`/api/reservations/${reservationId}`, {
+        headers: {
+          applicantId: Number(crewId),
+          role: 'CREW',
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -14,10 +68,8 @@ const CrewHistory = () => {
         const { data } = await api.get('/api/crews/me/reservations', {
           headers: { crewId: 17 },
         });
-        console.log('data', data);
         setHistoryList(data);
       } catch (error) {
-        alert('크루 히스토리 get 에러');
         console.log(error);
       }
     })();
@@ -37,7 +89,18 @@ const CrewHistory = () => {
       </S.Thead>
       <S.Tbody>
         {historyList.map((history) => {
-          return <TableRow key={history.reservationId} history={history} />;
+          const { statusName, color, backgroundColor } = historyStatus[history.status];
+          return (
+            <TableRow
+              key={history.reservationId}
+              history={history}
+              statusName={statusName}
+              color={color}
+              bgColor={backgroundColor}
+              onClickSheet={moveReservationSheet}
+              onClickDelete={deleteReservation}
+            />
+          );
         })}
       </S.Tbody>
     </S.Table>
