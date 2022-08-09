@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import dayjs from 'dayjs';
 
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';
 import * as S from './styles';
+import { getHourMinutes, getMonthDate } from '@utils/index';
 
 interface BoardItemProps {
   dateTime: string;
@@ -30,8 +30,8 @@ const BoardItem = ({
   onDragStart,
 }: BoardItemProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const date = dayjs.tz(dateTime).format('MM월 DD일');
-  const time = dayjs.tz(dateTime).format('HH:mm');
+  const date = getMonthDate(dateTime);
+  const time = getHourMinutes(dateTime);
 
   const handleDrag = () => {
     setIsDragging(true);

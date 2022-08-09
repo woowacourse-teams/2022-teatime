@@ -24,12 +24,25 @@ const getFormatDate = (year: DateType, month: DateType, day: DateType) => {
   return `${year}-${month}-${String(day).padStart(2, '0')}`;
 };
 
-const getHourMinutes = (time: string) => {
-  const dateTime = new Date(new Date(time).getTime() - 540 * 60 * 1000);
+// ------
+
+const getDateTime = (dateString: string) =>
+  new Date(new Date(dateString).getTime() - 540 * 60 * 1000);
+
+const getHourMinutes = (dateString: string) => {
+  const dateTime = getDateTime(dateString);
   const hour = dateTime.getHours();
   const minutes = String(dateTime.getMinutes()).padStart(2, '0');
 
   return `${hour}:${minutes}`;
 };
 
-export { getMonthYearDetails, getNewMonthYear, getFormatDate, getHourMinutes };
+const getMonthDate = (dateString: string) => {
+  const dateTime = getDateTime(dateString);
+  const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+  const date = String(dateTime.getDate()).padStart(2, '0');
+
+  return `${month}월 ${date}일`;
+};
+
+export { getMonthYearDetails, getNewMonthYear, getFormatDate, getHourMinutes, getMonthDate };
