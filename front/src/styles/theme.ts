@@ -2,6 +2,7 @@ const theme = {
   colors: {
     WHITE: '#ffffff',
     GRAY_100: '#f5f5f5',
+    GRAY_150: '#ededed',
     GRAY_200: '#e2e1e1',
     GRAY_300: '#c4c4c4',
     GRAY_500: '#a0a0a0',
