@@ -8,9 +8,10 @@ interface DateBoxProps {
   daySchedule?: Schedule[];
   onClick?: () => void;
   selectedDay?: number | null;
-  today?: string;
+  currentDay?: string;
   isCoach?: boolean;
   isWeekend?: boolean;
+  isPastDay?: boolean;
 }
 
 const DateBox = ({
@@ -18,12 +19,13 @@ const DateBox = ({
   daySchedule = [],
   onClick,
   selectedDay,
-  today,
+  currentDay,
   isCoach,
   isWeekend,
+  isPastDay,
 }: DateBoxProps) => {
   const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
-  const isToday = today === dayjs().format('YYYY-MM-DD');
+  const isToday = currentDay === dayjs().format('YYYY-MM-DD');
   const hasSchedule =
     daySchedule.filter((time) => time.isPossible === true || (time.isPossible === false && isCoach))
       .length > 0;
@@ -35,6 +37,7 @@ const DateBox = ({
       isSelected={!!isSelected}
       isCoach={isCoach}
       isWeekend={isWeekend}
+      isPastDay={isPastDay}
       onClick={onClick}
     >
       {date}

@@ -7,7 +7,7 @@ import Conditional from '@components/Conditional';
 import api from '@api/index';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
+import { getNewMonthYear, getMonthYearDetails, getFormatDate } from '@utils/index';
 import { MonthYear } from '@typings/domain';
 import * as S from './styles';
 
@@ -48,7 +48,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
     dispatch({
       type: 'SELECT_DATE',
       day,
-      date: `${year}-${month}-${String(day).padStart(2, '0')}`,
+      date: getFormatDate(year, month, day),
     });
     openTimeList();
     setSelectedDay(day);
@@ -61,7 +61,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
           `/api/coaches/${coachId}/schedules?year=${year}&month=${month}`
         );
 
-        dispatch({ type: 'SET_MONTH_SCHEDULE', data: coachSchedules, lastDate, year, month });
+        dispatch({ type: 'SET_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
       } catch {
         alert('스케쥴 get 요청 실패');
       }
@@ -93,6 +93,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;
           const dayNumber = dayjs(`${year}${month}${date - 1}`).day();
           const isWeekend = dayNumber === DAY_NUMBER.SATURDAY || dayNumber === DAY_NUMBER.SUNDAY;
+          const isPastDay = getFormatDate(year, month, date) < dayjs().format('YYYY-MM-DD');
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
@@ -103,9 +104,10 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
               daySchedule={monthSchedule[date - 1]?.schedules}
               onClick={() => handleClickDate(date, isWeekend)}
               selectedDay={selectedDay}
-              today={`${year}-${month}-${String(date).padStart(2, '0')}`}
+              currentDay={getFormatDate(year, month, date)}
               isCoach={isCoach}
               isWeekend={isWeekend}
+              isPastDay={isPastDay}
             />
           );
         })}

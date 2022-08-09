@@ -15,8 +15,8 @@ const DayOfWeekBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   padding-top: 3px;
   font-weight: bolder;
   font-size: 20px;

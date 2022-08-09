@@ -1,6 +1,7 @@
 import { createContext, useReducer, Dispatch } from 'react';
 
 import type { DaySchedule, Schedule as ScheduleType } from '@typings/domain';
+import { getFormatDate } from '@utils/index';
 
 const timeArray = [
   '10:00',
@@ -38,7 +39,7 @@ type State = {
 type Action =
   | {
       type: 'SET_MONTH_SCHEDULE';
-      data: DaySchedule[];
+      coachSchedules: DaySchedule[];
       lastDate: number;
       year: string;
       month: string;
@@ -55,16 +56,18 @@ const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'SET_MONTH_SCHEDULE': {
       const initialMonthSchedule = Array.from({ length: action.lastDate }, (_, index) => {
+        const currentDateFormat = getFormatDate(action.year, action.month, index + 1);
+
         return {
           day: index + 1,
-          schedules: getAllTime(
-            `${action.year}-${action.month}-${String(index + 1).padStart(2, '0')}`
-          ),
+          schedules: getAllTime(currentDateFormat),
         };
       });
 
       const newMonthSchedule = initialMonthSchedule.map((daySchedule: DaySchedule) => {
-        const sameDaySchedule = action.data.find((schedule) => schedule.day === daySchedule.day);
+        const sameDaySchedule = action.coachSchedules.find(
+          (schedule) => schedule.day === daySchedule.day
+        );
 
         if (sameDaySchedule) {
           const newDaySchedule = daySchedule.schedules.map((time) => {
