@@ -1,3 +1,4 @@
+import { HOUR_MILLISECONDS } from '@constants/index';
 import { MonthYear } from '@typings/domain';
 
 type DateType = string | number;
@@ -28,7 +29,7 @@ const getNewMonthYear = (prevData: MonthYear, increment: number) => {
 };
 
 const getDateTime = (dateString: string) => {
-  return new Date(new Date(dateString).getTime() - 9 * 60 * 60 * 1000);
+  return new Date(new Date(dateString).getTime() - 9 * HOUR_MILLISECONDS);
 };
 
 const getHourMinutes = (dateString: string) => {
