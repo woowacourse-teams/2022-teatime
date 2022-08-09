@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import api from '@api/index';
 import TableRow from '@components/TableRow';
+import api from '@api/index';
+import { ROUTES } from '@constants/index';
 import { History } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from './styles';
@@ -32,6 +34,17 @@ const historyStatus: HistoryStatus = {
 
 const CrewHistory = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);
+  const navigate = useNavigate();
+
+  // 임시저장이면 addSheet 이동
+  // 제출된 상태, 완료된 면담이면 viewSheet 이동
+  const moveReservationSheet = (sheetStatus: string, reservationId: number) => {
+    if (sheetStatus === 'WRITING') {
+      navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
+      return;
+    }
+    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  };
 
   useEffect(() => {
     (async () => {
@@ -68,6 +81,7 @@ const CrewHistory = () => {
               statusName={statusName}
               color={color}
               bgColor={backgroundColor}
+              onClickSheet={moveReservationSheet}
             />
           );
         })}
