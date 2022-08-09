@@ -8,6 +8,7 @@ import Coach from '@pages/Coach';
 import NotFound from '@pages/NotFound';
 import AddSheet from '@pages/AddSheet';
 import ViewSheet from '@pages/ViewSheet';
+import CrewHistory from '@pages/CrewHistory/index';
 import Header from '@components/Header';
 import ScheduleProvider from '@context/ScheduleProvider';
 import { ROUTES } from './constants';
@@ -24,6 +25,7 @@ const App = () => {
         <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
         <Route path={`${ROUTES.ADD_SHEET}/:id`} element={<AddSheet />} />
         <Route path={`${ROUTES.VIEW_SHEET}/:id`} element={<ViewSheet />} />
+        <Route path={`${ROUTES.HISTORY}/:id`} element={<CrewHistory />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </ScheduleProvider>

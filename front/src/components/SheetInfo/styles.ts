@@ -29,7 +29,7 @@ const DateWrapper = styled.div`
   span {
     vertical-align: top;
     font-size: 18px;
-    color: ${({ theme }) => theme.colors.GRAY_800};
+    color: ${({ theme }) => theme.colors.BLUE_700};
   }
 `;
 
