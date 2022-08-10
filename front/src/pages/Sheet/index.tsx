@@ -76,8 +76,8 @@ const Sheet = () => {
     <Frame>
       <S.InfoContainer>
         <ReservationInfo
-          coachImage={reservationInfo?.coachImage}
-          coachName={reservationInfo?.coachName}
+          image={reservationInfo?.coachImage}
+          name={reservationInfo?.coachName}
           dateTime={reservationInfo?.dateTime}
         />
         {reservationInfo?.status === 'SUBMITTED' && (

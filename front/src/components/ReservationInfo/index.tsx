@@ -5,16 +5,16 @@ import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
 
 interface ReservationInfoProps {
-  coachImage?: string;
-  coachName?: string;
+  image?: string;
+  name?: string;
   dateTime?: string;
 }
 
-const ReservationInfo = ({ coachImage, coachName, dateTime }: ReservationInfoProps) => {
+const ReservationInfo = ({ image, name, dateTime }: ReservationInfoProps) => {
   return (
     <>
-      <S.CoachImg src={coachImage} alt="코치 프로필 이미지" />
-      <p>{coachName}</p>
+      <S.CoachImg src={image} alt="코치 프로필 이미지" />
+      <p>{name}</p>
       <S.DateWrapper>
         <img src={ScheduleIcon} alt="일정 아이콘" />
         <span>{getMonthDate(dateTime as string)}</span>
