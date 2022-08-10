@@ -50,7 +50,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation group: 'com.auth0', name: 'java-jwt', version: '3.0.1'
 }
 
 asciidoctor {
@@ -76,7 +75,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-processResources.dependsOn('copySecret','copyTestSecret')
+processResources.dependsOn('copySecret', 'copyTestSecret')
 
 task copySecret(type: Copy) {
     from '../config/application.yml'
@@ -87,7 +86,7 @@ task copyTestSecret(type: Copy) {
     from '../config/application-test.yml'
     into 'src/test/resources'
     rename {
-        String fileName -> fileName.replace('application-test','application')
+        String fileName -> fileName.replace('application-test', 'application')
     }
 }
 

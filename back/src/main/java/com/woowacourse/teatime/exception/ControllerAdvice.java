@@ -57,6 +57,7 @@ public class ControllerAdvice {
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
             ConstraintViolationException.class,
+            SlackException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidRequest(RuntimeException e) {
         log.info(e.getMessage(), e);
