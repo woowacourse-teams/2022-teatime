@@ -22,17 +22,21 @@ public class Coach {
     @Column(nullable = false, length = 10)
     private String name;
 
+    @Column(nullable = false)
+    private String email;
+
     @Lob
     private String description;
 
     private String image;
 
-    public Coach(String name) {
-        this.name = name;
+    public Coach(String name, String email, String image) {
+        this(name, email, "안녕하세요~ " + name + "입니다:)", image);
     }
 
-    public Coach(String name, String description, String image) {
+    public Coach(String name, String email, String description, String image) {
         this.name = name;
+        this.email = email;
         this.description = description;
         this.image = image;
     }

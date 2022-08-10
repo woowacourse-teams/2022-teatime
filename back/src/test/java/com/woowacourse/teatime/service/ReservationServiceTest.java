@@ -3,6 +3,7 @@ package com.woowacourse.teatime.service;
 import static com.woowacourse.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
+import static com.woowacourse.teatime.fixture.DomainFixture.COACH_JASON;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,10 +101,10 @@ class ReservationServiceTest {
     @DisplayName("예약을 할 때 코치 아이디가 일치하지 않으면 예외를 반환한다.")
     @Test
     void reserveFailNotMatchedCoach() {
-        Coach fakeCoach = coachRepository.save(new Coach("ori"));
+        Coach differentCoach = coachRepository.save(COACH_JASON);
 
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(crew.getId(),
-                fakeCoach.getId(),
+                differentCoach.getId(),
                 schedule.getId());
         assertThatThrownBy(() -> reservationService.save(reservationReserveRequest))
                 .isInstanceOf(NotFoundScheduleException.class);
@@ -213,9 +214,7 @@ class ReservationServiceTest {
         Long 말도_안되는_아이디 = reservationId + 100L;
 
         assertThatThrownBy(
-                () -> {
-                    reservationService.cancel(말도_안되는_아이디, coach.getId(), "CREW");
-                })
+                () -> reservationService.cancel(말도_안되는_아이디, coach.getId(), "CREW"))
                 .isInstanceOf(NotFoundReservationException.class);
     }
 

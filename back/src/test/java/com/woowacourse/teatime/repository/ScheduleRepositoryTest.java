@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.repository;
 
+import static com.woowacourse.teatime.fixture.DomainFixture.COACH_JASON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -27,11 +28,10 @@ public class ScheduleRepositoryTest {
     @Test
     void findAll() {
         LocalDateTime now = LocalDateTime.now();
-        Coach coach = new Coach("제이슨");
-        coachRepository.save(coach);
+        Coach coach = coachRepository.save(COACH_JASON);
         scheduleRepository.save(new Schedule(coach, now));
 
-        List<Schedule> schedules = this.scheduleRepository.findAll();
+        List<Schedule> schedules = scheduleRepository.findAll();
 
         assertThat(schedules).hasSize(1);
     }
@@ -44,13 +44,13 @@ public class ScheduleRepositoryTest {
         LocalDateTime dateTime2 = start.plusDays(2);
         LocalDateTime end = start.plusDays(3);
 
-        Coach coach = coachRepository.save(new Coach("제이슨"));
+        Coach coach = coachRepository.save(COACH_JASON);
         Schedule schedule1 = new Schedule(coach, dateTime1);
         Schedule schedule2 = new Schedule(coach, dateTime2);
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
 
-        List<Schedule> schedules = this.scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(
+        List<Schedule> schedules = scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(
                 coach.getId(), start, end);
 
         assertAll(
@@ -65,7 +65,7 @@ public class ScheduleRepositoryTest {
         LocalDateTime july1_1 = LocalDateTime.of(2022, 7, 1, 1, 0, 0);
         LocalDateTime july2_1 = LocalDateTime.of(2022, 7, 2, 1, 0, 0);
 
-        Coach coach = coachRepository.save(new Coach("제이슨"));
+        Coach coach = coachRepository.save(COACH_JASON);
         scheduleRepository.save(new Schedule(coach, july1_1));
         scheduleRepository.save(new Schedule(coach, july2_1));
 

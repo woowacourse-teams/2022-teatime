@@ -8,8 +8,8 @@ import java.time.LocalTime;
 
 public class DomainFixture {
 
-    public static final Coach COACH_BROWN = new Coach("브라운", "i am legend", "image");
-    public static final Coach COACH_JASON = new Coach("제이슨", "i am legend", "image");
+    public static final Coach COACH_BROWN = new Coach("브라운", "brown@email.com", "i am legend", "image");
+    public static final Coach COACH_JASON = new Coach("제이슨", "jason@email.com", "i am legend", "image");
 
     public static final LocalDate LOCAL_DATE = LocalDate.now();
     public static final LocalTime LOCAL_TIME = LocalTime.MIN;
