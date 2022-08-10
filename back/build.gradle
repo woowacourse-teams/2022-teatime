@@ -37,19 +37,27 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured:4.4.0'
 
+    //dateTime format
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.1"
 
+    //snake case to camel case (DB table)
     implementation group: 'com.google.guava', name: 'guava', version: '12.0'
 
+    //rest docs
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
 
+    //slack
     implementation 'com.slack.api:bolt:1.24.0'
     implementation 'com.slack.api:bolt-servlet:1.24.0'
     implementation 'com.slack.api:bolt-jetty:1.24.0'
 
+    //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    //문자열 자르기
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 asciidoctor {

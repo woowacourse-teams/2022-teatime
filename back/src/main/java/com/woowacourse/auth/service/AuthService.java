@@ -1,20 +1,16 @@
 package com.woowacourse.auth.service;
 
-import com.slack.api.methods.SlackApiException;
-import com.slack.api.methods.impl.MethodsClientImpl;
-import com.slack.api.methods.request.openid.connect.OpenIDConnectTokenRequest;
-import com.slack.api.methods.request.openid.connect.OpenIDConnectUserInfoRequest;
-import com.slack.api.methods.response.openid.connect.OpenIDConnectTokenResponse;
-import com.slack.api.methods.response.openid.connect.OpenIDConnectUserInfoResponse;
+
 import com.woowacourse.auth.controller.dto.TokenResponse;
 import com.woowacourse.auth.support.JwtTokenProvider;
+import com.woowacourse.auth.support.OpenIdAuth;
+import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
-import com.woowacourse.teatime.exception.SlackException;
+import com.woowacourse.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.repository.CrewRepository;
-import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,69 +19,52 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final CrewRepository crewRepository;
+    private static final String COACH_EMAIL_DOMAIN = "woowahan";
 
+    private final OpenIdAuth openIdAuth;
+    private final CrewRepository crewRepository;
+    private final CoachRepository coachRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final MethodsClientImpl methodsClient;
-
-    @Value("${slack.clientId}")
-    private String clientId;
-
-    @Value("${slack.clientSecret}")
-    private String clientSecret;
-
-    @Value("${slack.redirectUrl}")
-    private String redirectUrl;
-
     public TokenResponse login(String code) {
-        OpenIDConnectTokenResponse openIdTokenResponse = getTokenResponse(code);
-        OpenIDConnectUserInfoResponse openIdUserInfoResponse = getUserInfoResponse(
-                openIdTokenResponse.getAccessToken());
-
-        Crew crew = findCrew(openIdUserInfoResponse);
-
-        Map<String, Object> claims = Map.of("id", crew.getId(), "email", crew.getEmail());
-        String token = jwtTokenProvider.createToken(claims);
-        return new TokenResponse(token);
+        String accessToken = openIdAuth.getAccessToken(code);
+        UserInfoDto userInfo = openIdAuth.getUserInfo(accessToken);
+        return getTokenResponse(userInfo);
     }
 
-    private OpenIDConnectTokenResponse getTokenResponse(String code) {
-        OpenIDConnectTokenRequest tokenRequest = OpenIDConnectTokenRequest.builder()
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .code(code)
-                .redirectUri(redirectUrl)
-                .build();
+    private TokenResponse getTokenResponse(UserInfoDto userInfo) {
+        String email = userInfo.getEmail();
+        String emailDomain = StringUtils.substringBetween(email, "@", ".");
 
-        try {
-            return methodsClient.openIDConnectToken(tokenRequest);
-        } catch (SlackApiException | IOException e) {
-            throw new SlackException();
+        if (COACH_EMAIL_DOMAIN.equals(emailDomain)) {
+            return new TokenResponse(getCoachToken(userInfo));
         }
+        return new TokenResponse(getCrewToken(userInfo));
     }
 
-    private OpenIDConnectUserInfoResponse getUserInfoResponse(String accessToken) {
-        OpenIDConnectUserInfoRequest userInfoRequest = OpenIDConnectUserInfoRequest.builder()
-                .token(accessToken)
-                .build();
-
-        try {
-            return methodsClient.openIDConnectUserInfo(userInfoRequest);
-        } catch (SlackApiException | IOException e) {
-            throw new SlackException();
-        }
+    private String getCoachToken(UserInfoDto userInfo) {
+        Coach coach = coachRepository.findByEmail(userInfo.getEmail())
+                .orElseGet(() -> {
+                    Coach newCoach = new Coach(
+                            userInfo.getName(),
+                            userInfo.getEmail(),
+                            userInfo.getImage());
+                    return coachRepository.save(newCoach);
+                });
+        Map<String, Object> claims = Map.of("id", coach.getId(), "email", coach.getEmail());
+        return jwtTokenProvider.createToken(claims);
     }
 
-    private Crew findCrew(OpenIDConnectUserInfoResponse openIdUserInfoResponse) {
-        String email = openIdUserInfoResponse.getEmail();
-        return crewRepository.findByEmail(email)
+    private String getCrewToken(UserInfoDto userInfo) {
+        Crew crew = crewRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> {
                     Crew newCrew = new Crew(
-                            openIdUserInfoResponse.getName(),
-                            email,
-                            openIdUserInfoResponse.getUserImage24());
+                            userInfo.getName(),
+                            userInfo.getEmail(),
+                            userInfo.getImage());
                     return crewRepository.save(newCrew);
                 });
+        Map<String, Object> claims = Map.of("id", crew.getId(), "email", crew.getEmail());
+        return jwtTokenProvider.createToken(claims);
     }
 }
