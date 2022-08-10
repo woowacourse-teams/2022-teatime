@@ -12,6 +12,7 @@ import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
+import LeftArrowIcon from '@assets/left-arrow-disabled.svg';
 
 const Sheet = () => {
   const { id: reservationId } = useParams();
@@ -77,7 +78,7 @@ const Sheet = () => {
   return (
     <Frame>
       <S.InfoContainer>
-        <img src={reservationInfo?.coachImage} alt="코치 프로필 이미지" />
+        <S.CoachImg src={reservationInfo?.coachImage} alt="코치 프로필 이미지" />
         <p>{reservationInfo?.coachName}</p>
         <S.DateWrapper>
           <img src={ScheduleIcon} alt="일정 아이콘" />
@@ -88,7 +89,7 @@ const Sheet = () => {
           <span>{getHourMinutes(reservationInfo?.dateTime as string)}</span>
         </S.DateWrapper>
         {reservationInfo?.status === 'SUBMITTED' && (
-          <button onClick={() => navigate(-1)}>뒤로가기</button>
+          <S.ArrowIcon src={LeftArrowIcon} alt="화살표 아이콘" onClick={() => navigate(-1)} />
         )}
       </S.InfoContainer>
       <S.SheetContainer>

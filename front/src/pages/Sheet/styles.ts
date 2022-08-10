@@ -1,23 +1,24 @@
 import styled from 'styled-components';
 
 const InfoContainer = styled.div`
+  position: relative;
   width: 30%;
   margin-right: 50px;
   border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
   font-weight: bold;
 
-  > img {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    border: 2px solid white;
-    box-shadow: 0 0 10px rgb(190, 190, 190);
-  }
-
   > p {
     font-size: 20px;
   }
+`;
+
+const CoachImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 2px solid white;
+  box-shadow: 0 0 10px rgb(190, 190, 190);
 `;
 
 const DateWrapper = styled.div`
@@ -28,10 +29,29 @@ const DateWrapper = styled.div`
     height: 18px;
     margin-right: 5px;
   }
+
   span {
     vertical-align: top;
     font-size: 18px;
     color: ${({ theme }) => theme.colors.BLUE_700};
+  }
+`;
+
+const ArrowIcon = styled.img`
+  position: absolute;
+  left: -1em;
+  bottom: 1em;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.BLUE_800};
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+    transition: ease-in-out 0.2s;
   }
 `;
 
@@ -54,6 +74,9 @@ const ButtonContainer = styled.div`
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    :hover {
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -69,4 +92,13 @@ const SecondButton = styled.button`
   border: none;
 `;
 
-export { InfoContainer, DateWrapper, SheetContainer, ButtonContainer, FirstButton, SecondButton };
+export {
+  InfoContainer,
+  CoachImg,
+  DateWrapper,
+  SheetContainer,
+  ButtonContainer,
+  FirstButton,
+  SecondButton,
+  ArrowIcon,
+};
