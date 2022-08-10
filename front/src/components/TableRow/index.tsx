@@ -9,7 +9,7 @@ interface TableRowProps {
   statusName: string;
   color: string;
   bgColor: string;
-  onClickSheet: (sheetStatus: string, reservationId: number) => void;
+  onClickSheet: (reservationId: number) => void;
   onClickDelete: (reservationId: number) => void;
 }
 
@@ -28,7 +28,7 @@ const TableRow = ({
   return (
     <tr>
       <td>
-        <S.Span bgColor={bgColor} color={color} onClick={() => onClickSheet(status, reservationId)}>
+        <S.Span bgColor={bgColor} color={color} onClick={() => onClickSheet(reservationId)}>
           {statusName}
         </S.Span>
       </td>

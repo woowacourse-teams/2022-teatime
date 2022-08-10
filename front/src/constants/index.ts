@@ -4,8 +4,7 @@ const ROUTES = {
   COACH: '/coach',
   SCHEDULE: '/schedule',
   RESERVATION: '/reservation',
-  ADD_SHEET: '/add-sheet',
-  VIEW_SHEET: '/view-sheet',
+  SHEET: '/sheet',
   HISTORY: '/history',
 };
 
