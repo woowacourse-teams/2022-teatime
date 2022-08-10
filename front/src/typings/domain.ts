@@ -31,6 +31,7 @@ interface ReservationInfo {
   dateTime: string;
   coachName: string;
   coachImage: string;
+  status: string;
   sheets: Sheets[];
 }
 
