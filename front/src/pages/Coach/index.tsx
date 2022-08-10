@@ -90,7 +90,7 @@ const Coach = () => {
   };
 
   const handleShowContents = (index: number, reservationId: number) => {
-    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+    navigate(`${ROUTES.SHEET}/${reservationId}`);
   };
 
   const handleReject = async (status: string, index: number, reservationId: number) => {

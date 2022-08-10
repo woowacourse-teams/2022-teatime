@@ -37,14 +37,8 @@ const CrewHistory = () => {
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<History[]>([]);
 
-  // 임시저장이면 addSheet 이동
-  // 제출된 상태, 완료된 면담이면 viewSheet 이동
-  const moveReservationSheet = (sheetStatus: string, reservationId: number) => {
-    if (sheetStatus === 'WRITING') {
-      navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
-      return;
-    }
-    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  const moveReservationSheet = (reservationId: number) => {
+    navigate(`${ROUTES.SHEET}/${reservationId}`);
   };
 
   const deleteReservation = async (reservationId: number) => {

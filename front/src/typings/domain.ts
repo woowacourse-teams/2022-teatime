@@ -27,10 +27,11 @@ interface Schedule {
   isSelected?: boolean;
 }
 
-interface ReservationInfo {
+interface Reservation {
   dateTime: string;
   coachName: string;
   coachImage: string;
+  status: string;
   sheets: Sheets[];
 }
 
@@ -48,14 +49,4 @@ type DaySchedule = { day: number; schedules: Schedule[] };
 
 type CrewListMap = Record<string, Crew[]>;
 
-export {
-  Crew,
-  Coach,
-  MonthYear,
-  Schedule,
-  DaySchedule,
-  ReservationInfo,
-  CrewListMap,
-  Sheets,
-  History,
-};
+export { Crew, Coach, MonthYear, Schedule, DaySchedule, Reservation, CrewListMap, Sheets, History };
