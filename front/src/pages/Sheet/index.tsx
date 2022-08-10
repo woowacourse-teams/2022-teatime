@@ -5,19 +5,17 @@ import Frame from '@components/Frame';
 import Textarea from '@components/Textarea';
 import Title from '@components/Title';
 import useFetch from '@hooks/useFetch';
+import ReservationInfo from '@components/ReservationInfo';
 import api from '@api/index';
-import { ReservationInfo } from '@typings/domain';
-import { getHourMinutes, getMonthDate } from '@utils/index';
+import { Reservation } from '@typings/domain';
 import * as S from './styles';
 
-import ScheduleIcon from '@assets/schedule.svg';
-import ClockIcon from '@assets/clock.svg';
 import LeftArrowIcon from '@assets/left-arrow-disabled.svg';
 
 const Sheet = () => {
   const { id: reservationId } = useParams();
   const navigate = useNavigate();
-  const { data: reservationInfo } = useFetch<ReservationInfo, null>(
+  const { data: reservationInfo } = useFetch<Reservation, null>(
     `/api/crews/me/reservations/${reservationId}`
   );
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -71,23 +69,17 @@ const Sheet = () => {
   };
 
   useEffect(() => {
-    console.log('reservationInfo', reservationInfo);
     reservationInfo && setContents(reservationInfo.sheets);
   }, [reservationInfo]);
 
   return (
     <Frame>
       <S.InfoContainer>
-        <S.CoachImg src={reservationInfo?.coachImage} alt="코치 프로필 이미지" />
-        <p>{reservationInfo?.coachName}</p>
-        <S.DateWrapper>
-          <img src={ScheduleIcon} alt="일정 아이콘" />
-          <span>{getMonthDate(reservationInfo?.dateTime as string)}</span>
-        </S.DateWrapper>
-        <S.DateWrapper>
-          <img src={ClockIcon} alt="시계 아이콘" />
-          <span>{getHourMinutes(reservationInfo?.dateTime as string)}</span>
-        </S.DateWrapper>
+        <ReservationInfo
+          coachImage={reservationInfo?.coachImage}
+          coachName={reservationInfo?.coachName}
+          dateTime={reservationInfo?.dateTime}
+        />
         {reservationInfo?.status === 'SUBMITTED' && (
           <S.ArrowIcon src={LeftArrowIcon} alt="화살표 아이콘" onClick={() => navigate(-1)} />
         )}
