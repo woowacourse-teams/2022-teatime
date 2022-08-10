@@ -40,10 +40,10 @@
             <appender-ref ref="FILE-ERROR"/>
         </logger>
 
-        <!--        <logger name="org.springframework" level="INFO">-->
-        <!--            <appender-ref ref="FILE-INFO"/>-->
-        <!--            <appender-ref ref="PROD-WARN"/>-->
-        <!--            <appender-ref ref="FILE-ERROR"/>-->
-        <!--        </logger>-->
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="PROD-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+        </logger>
     </springProfile>
 </configuration>
