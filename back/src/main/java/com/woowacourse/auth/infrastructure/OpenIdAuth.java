@@ -1,4 +1,4 @@
-package com.woowacourse.auth.support;
+package com.woowacourse.auth.infrastructure;
 
 import com.woowacourse.auth.service.UserInfoDto;
 

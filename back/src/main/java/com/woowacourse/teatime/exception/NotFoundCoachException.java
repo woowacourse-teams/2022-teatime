@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.exception;
 
+import com.woowacourse.exception.NotFoundException;
+
 public class NotFoundCoachException extends NotFoundException {
 
     private static final String ERROR_MESSAGE = "존재하지 않는 코치입니다.";

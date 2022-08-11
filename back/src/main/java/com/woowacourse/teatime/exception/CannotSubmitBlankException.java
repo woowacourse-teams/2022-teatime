@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.exception;
 
+import com.woowacourse.exception.BadRequestException;
+
 public class CannotSubmitBlankException extends BadRequestException {
 
     private static final String ERROR_MESSAGE = "빈칸이 포함된 시트를 제출할 수 없습니다.";

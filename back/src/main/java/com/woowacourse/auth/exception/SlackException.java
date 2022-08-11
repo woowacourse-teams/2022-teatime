@@ -1,6 +1,8 @@
-package com.woowacourse.teatime.exception;
+package com.woowacourse.auth.exception;
 
-public class SlackException extends RuntimeException{
+import com.woowacourse.exception.BadGatewayException;
+
+public class SlackException extends BadGatewayException {
 
     private static final String ERROR_MESSAGE = "슬랙 오류가 발생하였습니다.";
 

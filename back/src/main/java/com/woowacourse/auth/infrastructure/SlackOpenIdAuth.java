@@ -1,4 +1,4 @@
-package com.woowacourse.auth.support;
+package com.woowacourse.auth.infrastructure;
 
 
 import com.slack.api.methods.SlackApiException;
@@ -8,7 +8,7 @@ import com.slack.api.methods.request.openid.connect.OpenIDConnectUserInfoRequest
 import com.slack.api.methods.response.openid.connect.OpenIDConnectTokenResponse;
 import com.slack.api.methods.response.openid.connect.OpenIDConnectUserInfoResponse;
 import com.woowacourse.auth.service.UserInfoDto;
-import com.woowacourse.teatime.exception.SlackException;
+import com.woowacourse.auth.exception.SlackException;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

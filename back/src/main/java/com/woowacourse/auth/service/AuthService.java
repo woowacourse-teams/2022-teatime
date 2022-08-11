@@ -2,8 +2,8 @@ package com.woowacourse.auth.service;
 
 
 import com.woowacourse.auth.controller.dto.TokenResponse;
-import com.woowacourse.auth.support.JwtTokenProvider;
-import com.woowacourse.auth.support.OpenIdAuth;
+import com.woowacourse.auth.infrastructure.JwtTokenProvider;
+import com.woowacourse.auth.infrastructure.OpenIdAuth;
 import com.woowacourse.teatime.domain.Coach;
 import com.woowacourse.teatime.domain.Crew;
 import com.woowacourse.teatime.repository.CoachRepository;

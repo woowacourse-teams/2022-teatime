@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.config;
+package com.woowacourse.auth.support;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

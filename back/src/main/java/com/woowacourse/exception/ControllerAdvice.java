@@ -1,10 +1,11 @@
-package com.woowacourse.teatime.exception;
+package com.woowacourse.exception;
 
+import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.REQUEST_TIMEOUT;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-import com.woowacourse.teatime.exception.dto.ErrorResponse;
+import com.woowacourse.exception.dto.ErrorResponse;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,12 @@ public class ControllerAdvice {
         return ResponseEntity.status(UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
     }
 
+    @ExceptionHandler(BadGatewayException.class)
+    public ResponseEntity<ErrorResponse> badGatewayExceptionHandler(BadGatewayException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(BAD_GATEWAY).body(new ErrorResponse(e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequest(BindingResult bindingResult) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -56,8 +63,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
-            ConstraintViolationException.class,
-            SlackException.class
+            ConstraintViolationException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidRequest(RuntimeException e) {
         log.warn(e.getMessage(), e);
