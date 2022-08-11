@@ -30,18 +30,20 @@ const CrewSheet = () => {
     }
   };
 
+  if (!reservationInfo) return;
+
   return (
     <Frame>
       <ReservationInfo
-        image={reservationInfo?.coachImage}
-        name={reservationInfo?.coachName}
-        dateTime={reservationInfo?.dateTime}
+        image={reservationInfo.coachImage}
+        name={reservationInfo.coachName}
+        dateTime={reservationInfo.dateTime}
         isView={isView}
         onClick={() => navigate(-1)}
       />
       <Sheet
         title="면담 내용 작성"
-        sheets={reservationInfo?.sheets}
+        sheets={reservationInfo.sheets}
         handleSubmit={handleSubmit}
         isView={isView}
       />

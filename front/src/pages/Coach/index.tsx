@@ -17,7 +17,7 @@ interface BoardItemValue {
   buttonName: string;
   color: string;
   draggedColor: string;
-  handleClickMenuButton: (index: number, id: number) => void;
+  handleClickMenuButton: (index: number, reservationId: number, crewId?: number) => void;
   handleClickCancelButton: (status: string, index: number, id: number) => void;
 }
 
@@ -89,8 +89,8 @@ const Coach = () => {
     }
   };
 
-  const handleShowContents = (index: number, reservationId: number) => {
-    navigate(`${ROUTES.SHEET}/${reservationId}`);
+  const handleShowContents = (index: number, reservationId: number, crewId?: number) => {
+    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: crewId });
   };
 
   const handleReject = async (status: string, index: number, reservationId: number) => {
@@ -237,7 +237,7 @@ const Coach = () => {
                   buttonName={buttonName}
                   color={color}
                   draggedColor={draggedColor}
-                  onClickMenu={() => handleClickMenuButton(index, crew.reservationId)}
+                  onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
                   onDragStart={(e) => handleDragStart(e, index)}
                 />

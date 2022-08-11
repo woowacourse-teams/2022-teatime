@@ -5,23 +5,14 @@ import Title from '@components/Title';
 import * as S from './styles';
 import { Sheets } from '@typings/domain';
 
-// 크루 : 작성하는 시트, 보는 시트
-// 코치 : 보는 시트, 히스토리 보는 시트
-
-// 보는거 - readOnly
-// 작성하는거 - 유효성 검사, onChange
-
-// 시트를 두개 만들기(쓰기, 보기)
-// 페이지를 두개 만들기(코치, 크루)
-
 interface SheetProps {
   title: string;
-  sheets?: Sheets[];
-  handleSubmit: (isSubmitted: boolean, contents: Sheets[]) => void;
+  sheets: Sheets[];
+  handleSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
   isView: boolean;
 }
 
-const Sheet = ({ title, sheets = [], handleSubmit, isView }: SheetProps) => {
+const Sheet = ({ title, sheets, handleSubmit, isView }: SheetProps) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
@@ -42,7 +33,7 @@ const Sheet = ({ title, sheets = [], handleSubmit, isView }: SheetProps) => {
       const checkValidation = contents.some((content) => !content.answerContent);
       if (checkValidation) return;
     }
-    handleSubmit(isSubmitted, contents);
+    handleSubmit?.(isSubmitted, contents);
   };
 
   return (
@@ -50,6 +41,7 @@ const Sheet = ({ title, sheets = [], handleSubmit, isView }: SheetProps) => {
       <S.SheetContainer>
         <Title text={title} />
         <form>
+          {/* {console.log()} */}
           <Textarea
             id="0"
             label={contents[0].questionContent}
