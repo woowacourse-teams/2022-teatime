@@ -2,12 +2,14 @@ import { useContext, useState } from 'react';
 
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import useSnackbar from '@hooks/useSnackbar';
 import api from '@api/index';
 import { getHourMinutes } from '@utils/index';
 import * as S from './styles';
 
 const CoachTimeList = () => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
+  const showSnackbar = useSnackbar();
   const { daySchedule, date } = useContext(ScheduleStateContext);
   const dispatch = useContext(ScheduleDispatchContext);
 
@@ -33,8 +35,9 @@ const CoachTimeList = () => {
         date,
         schedules: selectedTimes,
       });
+
       dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
-      alert('확정되었습니다.✅');
+      showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
       alert('스케쥴 등록 실패');
       console.log(error);
