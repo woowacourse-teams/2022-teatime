@@ -80,6 +80,11 @@ public class SheetService {
         }
     }
 
+    private void validateReservation(Long reservationId) {
+        reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+    }
+
     private void validateAnswer(List<SheetAnswerUpdateDto> sheetDtos) {
         for (SheetAnswerUpdateDto sheetDto : sheetDtos) {
             String answerContent = sheetDto.getAnswerContent();
@@ -87,11 +92,6 @@ public class SheetService {
                 throw new CannotSubmitBlankException();
             }
         }
-    }
-
-    private void validateReservation(Long reservationId) {
-        reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
     }
 
     private void modifyAnswer(List<SheetAnswerUpdateDto> sheetDtos, Sheet sheet) {
