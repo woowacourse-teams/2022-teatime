@@ -1,14 +1,19 @@
 import { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import api from '@api/index';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import { getNewMonthYear, getMonthYearDetails } from '@utils/index';
-import { MonthYear } from '@typings/domain';
+import {
+  getNewMonthYear,
+  getMonthYearDetails,
+  getFormatDate,
+  convertToFullDate,
+  getCurrentFullDate,
+} from '@utils/index';
+import type { MonthYear } from '@typings/domain';
 import * as S from './styles';
 
 import LeftArrow from '@assets/left-arrow.svg';
@@ -23,8 +28,8 @@ interface CalendarProps {
 
 const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
   const { id: coachId } = useParams();
-  const currentDate = dayjs();
-  const currentMonthYear = getMonthYearDetails(dayjs());
+  const currentDate = new Date();
+  const currentMonthYear = getMonthYearDetails(currentDate);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
@@ -48,7 +53,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
     dispatch({
       type: 'SELECT_DATE',
       day,
-      date: `${year}-${month}-${String(day).padStart(2, '0')}`,
+      date: getFormatDate(year, month, day),
     });
     openTimeList();
     setSelectedDay(day);
@@ -61,7 +66,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
           `/api/coaches/${coachId}/schedules?year=${year}&month=${month}`
         );
 
-        dispatch({ type: 'SET_MONTH_SCHEDULE', data: coachSchedules, lastDate, year, month });
+        dispatch({ type: 'SET_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
       } catch {
         alert('스케쥴 get 요청 실패');
       }
@@ -91,8 +96,9 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW + 1;
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;
-          const dayNumber = dayjs(`${year}${month}${date - 1}`).day();
-          const isWeekend = dayNumber === DAY_NUMBER.SATURDAY || dayNumber === DAY_NUMBER.SUNDAY;
+          const dayNumber = convertToFullDate(year, month, date).getDay();
+          const isWeekend = dayNumber === DAY_NUMBER.SUNDAY || dayNumber === DAY_NUMBER.SATURDAY;
+          const isPastDay = convertToFullDate(year, month, date) < getCurrentFullDate();
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
@@ -103,9 +109,10 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
               daySchedule={monthSchedule[date - 1]?.schedules}
               onClick={() => handleClickDate(date, isWeekend)}
               selectedDay={selectedDay}
-              today={`${year}-${month}-${String(date).padStart(2, '0')}`}
+              currentDay={convertToFullDate(year, month, date)}
               isCoach={isCoach}
               isWeekend={isWeekend}
+              isPastDay={isPastDay}
             />
           );
         })}

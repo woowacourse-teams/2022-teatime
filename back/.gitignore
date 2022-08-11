@@ -33,6 +33,7 @@ out/
 .vscode/
 
 *.properties
+application.properties
 *.sql
 *.yml
 

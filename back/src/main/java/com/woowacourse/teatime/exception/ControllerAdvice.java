@@ -23,19 +23,19 @@ public class ControllerAdvice {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(BadRequestException e) {
-        log.info(e.getMessage(), e);
+        log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> notFoundExceptionHandler(NotFoundException e) {
-        log.info(e.getMessage(), e);
+        log.warn(e.getMessage(), e);
         return ResponseEntity.status(NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<ErrorResponse> unAuthorizedExceptionHandler(UnAuthorizedException e) {
-        log.info(e.getMessage(), e);
+        log.warn(e.getMessage(), e);
         return ResponseEntity.status(UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
     }
 
@@ -43,14 +43,14 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleInvalidRequest(BindingResult bindingResult) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         FieldError mainError = fieldErrors.get(0);
-        log.info(mainError.getDefaultMessage());
+        log.warn(mainError.getDefaultMessage());
 
         return ResponseEntity.badRequest().body(new ErrorResponse(mainError.getDefaultMessage()));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPathVariable(MethodArgumentTypeMismatchException e) {
-        log.info(e.getMessage(), e);
+        log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
     }
 
@@ -60,13 +60,13 @@ public class ControllerAdvice {
             SlackException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidRequest(RuntimeException e) {
-        log.info(e.getMessage(), e);
+        log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnhandledException(RuntimeException e) {
-        log.warn("예상하지 못한 에러가 발생하였습니다.", e.getMessage(), e);
+        log.error("예상하지 못한 에러가 발생하였습니다. {} {}", e.getMessage(), e);
         return ResponseEntity.status(REQUEST_TIMEOUT).body(new ErrorResponse("Unhandled Exception"));
     }
 }

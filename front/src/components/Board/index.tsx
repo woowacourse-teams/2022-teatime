@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as S from './styles';
 
 interface BoardProps {
@@ -6,16 +7,34 @@ interface BoardProps {
   color: string;
   length: number;
   status: string;
-  onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>) => Promise<void>;
 }
 
-const Board = ({ children, title, color, length, onDrop, status }: BoardProps) => {
+const Board = ({ children, title, color, length, status, onDrop }: BoardProps) => {
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    onDrop(e);
+    setIsDraggingOver(false);
   };
 
   return (
-    <S.BoardContainer onDragOver={handleDragOver} onDrop={onDrop} data-status={status}>
+    <S.BoardContainer
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragLeave={handleDragLeave}
+      isDraggingOver={isDraggingOver}
+      data-status={status}
+    >
       <S.TitleContainer color={color}>
         <S.TitleCircle />
         <span>{title}</span>

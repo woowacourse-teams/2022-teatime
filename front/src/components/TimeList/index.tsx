@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { ROUTES } from '@constants/index';
+import { getHourMinutes } from '@utils/index';
 import api from '@api/index';
 import * as S from './styles';
 
@@ -45,7 +45,7 @@ const TimeList = () => {
   };
 
   const handleClickWriteButton = () => {
-    navigate(`${ROUTES.ADD_SHEET}/${reservationId}`);
+    navigate(`${ROUTES.SHEET}/${reservationId}`);
   };
 
   if (isError) return <h1>error</h1>;
@@ -53,7 +53,7 @@ const TimeList = () => {
   return (
     <S.TimeListContainer>
       {coachSchedule.map((schedule) => {
-        const time = dayjs.tz(schedule.dateTime).format('HH:mm');
+        const time = getHourMinutes(schedule.dateTime);
 
         return (
           <React.Fragment key={schedule.id}>

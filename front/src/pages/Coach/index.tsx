@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import api from '@api/index';
+import { getDateTime } from '@utils/index';
 
 import ScheduleIcon from '@assets/schedule-white.svg';
 import theme from '@styles/theme';
@@ -65,7 +65,7 @@ const Coach = () => {
   const sortBoardItemByTime = (boardName: string) => {
     setCrews((allBoards) => {
       const copyBoard = [...allBoards[boardName]];
-      copyBoard.sort((a, b) => Number(dayjs.tz(a.dateTime)) - Number(dayjs.tz(b.dateTime)));
+      copyBoard.sort((a, b) => Number(new Date(a.dateTime)) - Number(new Date(b.dateTime)));
 
       return {
         ...allBoards,
@@ -90,7 +90,7 @@ const Coach = () => {
   };
 
   const handleShowContents = (index: number, reservationId: number) => {
-    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+    navigate(`${ROUTES.SHEET}/${reservationId}`);
   };
 
   const handleReject = async (status: string, index: number, reservationId: number) => {
@@ -146,11 +146,11 @@ const Coach = () => {
     if (from === to) return;
     if (from === 'inProgress' || to === 'beforeApproved') return;
     if (from === 'beforeApproved' && to === 'inProgress') return;
-    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) > dayjs()) {
+    if (to === 'inProgress' && getDateTime(draggedItem.dateTime) > new Date()) {
       alert('아직 옮길 수 없어요.');
       return;
     }
-    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) < dayjs()) {
+    if (to === 'inProgress' && getDateTime(draggedItem.dateTime) < new Date()) {
       moveBoardItem(from, to, itemId);
       return;
     }

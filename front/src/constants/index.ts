@@ -4,8 +4,8 @@ const ROUTES = {
   COACH: '/coach',
   SCHEDULE: '/schedule',
   RESERVATION: '/reservation',
-  ADD_SHEET: '/add-sheet',
-  VIEW_SHEET: '/view-sheet',
+  SHEET: '/sheet',
+  HISTORY: '/history',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
@@ -16,8 +16,10 @@ const CALENDAR_DATE_LENGTH = {
 };
 
 const DAY_NUMBER = {
-  SATURDAY: 5,
-  SUNDAY: 6,
+  SATURDAY: 6,
+  SUNDAY: 0,
 };
 
-export { ROUTES, DAY_OF_WEEKS, CALENDAR_DATE_LENGTH, DAY_NUMBER };
+const HOUR_MILLISECONDS = 60 * 60 * 1000;
+
+export { ROUTES, DAY_OF_WEEKS, CALENDAR_DATE_LENGTH, DAY_NUMBER, HOUR_MILLISECONDS };

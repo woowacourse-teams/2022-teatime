@@ -15,6 +15,7 @@ const DateContainer = styled.div<{
   isSelected: boolean;
   isCoach?: boolean;
   isWeekend?: boolean;
+  isPastDay?: boolean;
 }>`
   position: relative;
   display: flex;
@@ -30,7 +31,6 @@ const DateContainer = styled.div<{
   cursor: ${(props) => (props.hasSchedule || props.isCoach) && 'pointer'};
 
   ${(props) =>
-    !props.isWeekend &&
     props.isSelected &&
     css`
       background-color: ${({ theme }) => theme.colors.GREEN_900};
@@ -38,7 +38,6 @@ const DateContainer = styled.div<{
     `}
 
   ${(props) =>
-    !props.isWeekend &&
     props.isCoach &&
     props.hasDate &&
     css`
@@ -46,16 +45,17 @@ const DateContainer = styled.div<{
     `}
 
   ${(props) =>
-    props.isWeekend &&
-    css`
-      cursor: default;
-    `}
-
-  ${(props) =>
     !props.hasSchedule &&
     !props.isCoach &&
     css`
       pointer-events: none;
+    `}
+
+  ${(props) =>
+    (props.isPastDay || props.isWeekend) &&
+    css`
+      pointer-events: none;
+      border: none;
     `}
 `;
 
