@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <appender name="SLACK-DEV-WARN" class="com.github.maricn.logback.SlackAppender">
+        <webhookUri>${dev-slack-alarm}</webhookUri>
+        <channel>#알림-개발서버-오류</channel>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${ERROR_LOG_PATTERN}</pattern>
+        </layout>
+        <username>알림봇</username>
+        <iconEmoji>:bimo:</iconEmoji>
+    </appender>
+
+    <appender name="DEV_ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SLACK-DEV-WARN"/>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+    </appender>
+</included>
