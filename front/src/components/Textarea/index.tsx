@@ -6,10 +6,10 @@ interface TextareaProps {
   value: string;
   handleChangeContent: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   isSubmit: boolean;
-  isRead?: boolean;
+  isView: boolean;
 }
 
-const Textarea = ({ id, label, value, handleChangeContent, isSubmit, isRead }: TextareaProps) => {
+const Textarea = ({ id, label, value, handleChangeContent, isSubmit, isView }: TextareaProps) => {
   return (
     <S.TextareaContainer>
       <S.Label htmlFor={id}>{label}</S.Label>
@@ -18,7 +18,7 @@ const Textarea = ({ id, label, value, handleChangeContent, isSubmit, isRead }: T
         value={value}
         onChange={handleChangeContent}
         isFocus={isSubmit && !value}
-        disabled={isRead}
+        disabled={isView}
       />
       {isSubmit && !value && <S.Span>내용을 입력해 주세요.</S.Span>}
     </S.TextareaContainer>

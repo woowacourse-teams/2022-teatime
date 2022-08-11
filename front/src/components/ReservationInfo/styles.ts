@@ -1,5 +1,35 @@
 import styled from 'styled-components';
 
+const InfoContainer = styled.div`
+  position: relative;
+  width: 30%;
+  margin-right: 50px;
+  border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
+  font-weight: bold;
+
+  > p {
+    font-size: 20px;
+  }
+`;
+
+const ArrowIcon = styled.img`
+  position: absolute;
+  left: -1em;
+  bottom: 1em;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.BLUE_800};
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+    transition: ease-in-out 0.2s;
+  }
+`;
+
 const CoachImg = styled.img`
   width: 50px;
   height: 50px;
@@ -25,4 +55,4 @@ const DateWrapper = styled.div`
   }
 `;
 
-export { CoachImg, DateWrapper };
+export { InfoContainer, ArrowIcon, CoachImg, DateWrapper };
