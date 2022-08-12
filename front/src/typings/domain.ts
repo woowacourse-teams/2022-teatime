@@ -43,9 +43,16 @@ interface History {
   status: string;
 }
 
-type Sheets = { questionNumber: number; questionContent: string; answerContent: string };
+interface Sheets {
+  questionNumber: number;
+  questionContent: string;
+  answerContent: string;
+}
 
-type DaySchedule = { day: number; schedules: Schedule[] };
+interface DaySchedule {
+  day: number;
+  schedules: Schedule[];
+}
 
 type CrewListMap = Record<string, Crew[]>;
 
