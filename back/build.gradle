@@ -58,6 +58,8 @@ dependencies {
 
     //문자열 자르기
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    implementation "com.github.maricn:logback-slack-appender:1.6.1"
 }
 
 asciidoctor {
@@ -83,7 +85,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-processResources.dependsOn('copySecret', 'copyTestSecret')
+processResources.dependsOn('copySecret','copyTestSecret','copySlackWebHook')
 
 task copySecret(type: Copy) {
     from '../config/application.yml'
@@ -98,4 +100,7 @@ task copyTestSecret(type: Copy) {
     }
 }
 
-
+task copySlackWebHook(type: Copy) {
+    from '../config/application-slack-web-hook.yml'
+    into 'src/main/resources'
+}

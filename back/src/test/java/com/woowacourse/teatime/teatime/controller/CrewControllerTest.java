@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.teatime.controller;
 
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
+import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -88,7 +89,7 @@ class CrewControllerTest extends ControllerTest {
     @Test
     void updateAnswer() throws Exception {
         mockMvc.perform(put("/api/crews/me/reservations/1",
-                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(1, "a")))))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -97,7 +98,7 @@ class CrewControllerTest extends ControllerTest {
     @Test
     void updateAnswer_notFoundReservationId() throws Exception {
         mockMvc.perform(put("/api/crews/me/reservations/a",
-                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(1, "a")))))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE))))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -106,7 +107,7 @@ class CrewControllerTest extends ControllerTest {
     @Test
     void updateAnswer_statusNull() throws Exception {
         mockMvc.perform(put("/api/crews/me/reservations/a",
-                        new SheetAnswerUpdateRequest(null, List.of(new SheetAnswerUpdateDto(1, "a")))))
+                        new SheetAnswerUpdateRequest(null, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE))))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -115,7 +116,7 @@ class CrewControllerTest extends ControllerTest {
     @Test
     void updateAnswer_questionNumberNull() throws Exception {
         mockMvc.perform(put("/api/crews/me/reservations/a",
-                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(null, "a")))))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(null, "a", "a")))))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

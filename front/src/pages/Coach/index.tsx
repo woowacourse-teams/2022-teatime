@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
+import useSnackbar from '@hooks/useSnackbar';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import api from '@api/index';
@@ -28,6 +29,7 @@ interface BoardItem {
 const Coach = () => {
   const { id: coachId } = useParams();
   const navigate = useNavigate();
+  const showSnackBar = useSnackbar();
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -103,6 +105,7 @@ const Coach = () => {
       });
 
       deleteBoardItem(status, index);
+      showSnackBar({ message: '삭제되었습니다. ✅' });
     } catch (error) {
       alert('거절 기능 에러');
       console.log(error);

@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.teatime.controller.dto.request;
 
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,5 +16,9 @@ public class SheetAnswerUpdateDto {
     @NotNull
     private Integer questionNumber;
 
+    @NotBlank
+    private String questionContent;
+
+    @NotBlank
     private String answerContent;
 }

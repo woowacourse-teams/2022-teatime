@@ -1,4 +1,4 @@
-import ModalPortal from '../../ModalPortal';
+import Portal from '../../Portal';
 import * as S from './styles';
 
 import CloseIcon from '@assets/close.svg';
@@ -31,7 +31,7 @@ const Modal = ({
   };
 
   return (
-    <ModalPortal>
+    <Portal id="modal">
       <S.Background onClick={handleClickDimmer}>
         <S.ModalContainer>
           <S.InnerContainer>
@@ -50,7 +50,7 @@ const Modal = ({
           </S.ButtonWrapper>
         </S.ModalContainer>
       </S.Background>
-    </ModalPortal>
+    </Portal>
   );
 };
 
