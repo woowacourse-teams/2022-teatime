@@ -1,11 +1,12 @@
 package com.woowacourse.teatime.auth.service;
 
 
-import com.woowacourse.teatime.auth.controller.dto.TokenResponse;
+import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.OpenIdAuth;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
+import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import java.util.Map;
@@ -26,20 +27,20 @@ public class AuthService {
     private final CoachRepository coachRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public TokenResponse login(String code) {
+    public LoginResponse login(String code) {
         String accessToken = openIdAuth.getAccessToken(code);
         UserInfoDto userInfo = openIdAuth.getUserInfo(accessToken);
-        return getTokenResponse(userInfo);
+        return getLoginResponse(userInfo);
     }
 
-    private TokenResponse getTokenResponse(UserInfoDto userInfo) {
+    private LoginResponse getLoginResponse(UserInfoDto userInfo) {
         String email = userInfo.getEmail();
         String emailDomain = StringUtils.substringBetween(email, "@", ".");
 
         if (COACH_EMAIL_DOMAIN.equals(emailDomain)) {
-            return new TokenResponse(getCoachToken(userInfo));
+            return new LoginResponse(getCoachToken(userInfo), Role.COACH);
         }
-        return new TokenResponse(getCrewToken(userInfo));
+        return new LoginResponse(getCrewToken(userInfo), Role.CREW);
     }
 
     private String getCoachToken(UserInfoDto userInfo) {

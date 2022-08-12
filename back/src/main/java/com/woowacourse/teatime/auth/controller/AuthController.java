@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.auth.controller;
 
-import com.woowacourse.teatime.auth.controller.dto.TokenResponse;
+import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
 import com.woowacourse.teatime.auth.service.AuthService;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody @NotNull String code) {
-        TokenResponse response = authService.login(code);
+    public ResponseEntity<LoginResponse> login(@RequestBody @NotNull String code) {
+        LoginResponse response = authService.login(code);
         return ResponseEntity.ok(response);
     }
 }
