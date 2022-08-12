@@ -2,7 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 
 import Crew from '@pages/Crew';
 import Reservation from '@pages/Reservation';
-import SelectUser from '@pages/SelectUser';
+import SelectUser from '@pages/Home';
+import Certification from '@pages/Certification';
 import Schedule from '@pages/Schedule';
 import Coach from '@pages/Coach';
 import NotFound from '@pages/NotFound';
@@ -20,6 +21,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path={ROUTES.HOME} element={<SelectUser />} />
+          <Route path={ROUTES.CERTIFICATION} element={<Certification />} />
           <Route path={ROUTES.CREW} element={<Crew />} />
           <Route path={`${ROUTES.COACH}/:id`} element={<Coach />} />
           <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />

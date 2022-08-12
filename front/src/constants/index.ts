@@ -6,6 +6,7 @@ const ROUTES = {
   RESERVATION: '/reservation',
   SHEET: '/sheet',
   HISTORY: '/history',
+  CERTIFICATION: '/certification',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
