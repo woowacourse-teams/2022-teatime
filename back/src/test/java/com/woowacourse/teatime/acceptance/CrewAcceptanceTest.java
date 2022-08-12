@@ -10,6 +10,9 @@ import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
+import static com.woowacourse.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
+import static com.woowacourse.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_THREE;
+import static com.woowacourse.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_TWO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -55,6 +58,15 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     private Long coachId;
     private Long scheduleId;
     private Long crewId;
+
+    private static ExtractableResponse<Response> 크루가_자신의_면담시트를_조회한다(Long reservationId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .when().get("/api/crews/me/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+    }
 
     @BeforeEach
     void setUp() {
@@ -203,9 +215,9 @@ public class CrewAcceptanceTest extends AcceptanceTest {
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "물고기 자리"),
-                new SheetAnswerUpdateDto(1, "야호"),
-                new SheetAnswerUpdateDto(3, "entp"));
+                new SheetAnswerUpdateDto(2, "별자리가 뭔가요?", "물고기 자리"),
+                new SheetAnswerUpdateDto(1, "이름이 뭔가요?", "야호"),
+                new SheetAnswerUpdateDto(3, "mbti는 뭔가요?", "entp"));
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
@@ -238,16 +250,16 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     @Test
     void updateAnswer_submit() {
         Coach coach = coachRepository.findById(coachId).get();
-        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
+        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
         questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
         questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "물고기 자리"),
-                new SheetAnswerUpdateDto(1, "야호"),
-                new SheetAnswerUpdateDto(3, "entp"));
+                SHEET_ANSWER_UPDATE_REQUEST_ONE,
+                SHEET_ANSWER_UPDATE_REQUEST_TWO,
+                SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
@@ -270,18 +282,9 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(sheetStatus).isEqualTo(SUBMITTED.name()),
                 () -> assertThat(answers).hasSize(3),
-                () -> assertThat(answers.get(0)).isEqualTo("야호"),
+                () -> assertThat(answers.get(0)).isEqualTo("B형"),
                 () -> assertThat(answers.get(1)).isEqualTo("물고기 자리"),
                 () -> assertThat(answers.get(2)).isEqualTo("entp")
         );
-    }
-
-    private static ExtractableResponse<Response> 크루가_자신의_면담시트를_조회한다(Long reservationId) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("reservationId", reservationId)
-                .when().get("/api/crews/me/reservations/{reservationId}")
-                .then().log().all()
-                .extract();
     }
 }
