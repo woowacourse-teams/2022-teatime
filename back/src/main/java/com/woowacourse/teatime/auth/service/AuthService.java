@@ -1,12 +1,14 @@
 package com.woowacourse.teatime.auth.service;
 
 
+import static com.woowacourse.teatime.teatime.domain.Role.COACH;
+import static com.woowacourse.teatime.teatime.domain.Role.CREW;
+
 import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.OpenIdAuth;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
-import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import java.util.Map;
@@ -38,9 +40,9 @@ public class AuthService {
         String emailDomain = StringUtils.substringBetween(email, "@", ".");
 
         if (COACH_EMAIL_DOMAIN.equals(emailDomain)) {
-            return new LoginResponse(getCoachToken(userInfo), Role.COACH);
+            return new LoginResponse(getCoachToken(userInfo), COACH);
         }
-        return new LoginResponse(getCrewToken(userInfo), Role.CREW);
+        return new LoginResponse(getCrewToken(userInfo), CREW);
     }
 
     private String getCoachToken(UserInfoDto userInfo) {
@@ -52,7 +54,7 @@ public class AuthService {
                             userInfo.getImage());
                     return coachRepository.save(newCoach);
                 });
-        Map<String, Object> claims = Map.of("id", coach.getId(), "email", coach.getEmail());
+        Map<String, Object> claims = Map.of("id", coach.getId(), "role", COACH);
         return jwtTokenProvider.createToken(claims);
     }
 
@@ -65,7 +67,7 @@ public class AuthService {
                             userInfo.getImage());
                     return crewRepository.save(newCrew);
                 });
-        Map<String, Object> claims = Map.of("id", crew.getId(), "email", crew.getEmail());
+        Map<String, Object> claims = Map.of("id", crew.getId(), "role", CREW);
         return jwtTokenProvider.createToken(claims);
     }
 }
