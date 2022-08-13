@@ -1,14 +1,16 @@
 import styled from 'styled-components';
 
-const Item = styled.div`
+const Item = styled.div<{ isSelected: boolean }>`
   margin: 0 16px 10px 0;
   padding: 8px 12px;
-  border: 2px solid ${({ theme }) => theme.colors.GRAY_200};
+  background-color: ${({ theme, isSelected }) =>
+    isSelected ? theme.colors.GREEN_400 : theme.colors.GREEN_100};
   border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.GRAY_100};
   cursor: pointer;
 
   :hover {
-    border: 2px solid ${({ theme }) => theme.colors.GRAY_500};
+    border: 1px solid ${({ theme }) => theme.colors.GRAY_500};
   }
 `;
 

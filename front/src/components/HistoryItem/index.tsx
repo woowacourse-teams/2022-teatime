@@ -2,16 +2,18 @@ import { getMonthDate } from '@utils/index';
 import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
-
 interface HistoryItemProps {
+  index: number;
   image: string;
   name: string;
   dateTime: string;
+  onClick: (index: number) => void;
+  historyIndex: number;
 }
 
-const HistoryItem = ({ image, name, dateTime }: HistoryItemProps) => {
+const HistoryItem = ({ index, image, name, dateTime, onClick, historyIndex }: HistoryItemProps) => {
   return (
-    <S.Item>
+    <S.Item onClick={() => onClick(index)} isSelected={index === historyIndex}>
       <S.Date>
         <img src={ScheduleIcon} alt="일정 아이콘" />
         <span>{getMonthDate(dateTime as string)}</span>

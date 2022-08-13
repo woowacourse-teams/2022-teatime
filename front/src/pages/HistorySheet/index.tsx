@@ -13,20 +13,27 @@ const HistorySheet = () => {
   const [historyIndex, setHistoryIndex] = useState(0);
   const { data: historyList } = useFetch<HistoryList[], null>(`/api/crews/${crewId}/reservations`);
 
+  const handleClickHistoryItem = (index: number) => {
+    setHistoryIndex(index);
+  };
+
   if (!historyList) return <></>;
 
   return (
     <Frame>
       <S.InfoContainer>
-        {historyList.map((history) => {
+        {historyList.map((history, index) => {
           const { reservationId, coachImage, coachName, dateTime } = history;
           return (
             <HistoryItem
               key={reservationId}
+              index={index}
               image={coachImage}
               name={coachName}
               dateTime={dateTime}
-            ></HistoryItem>
+              onClick={handleClickHistoryItem}
+              historyIndex={historyIndex}
+            />
           );
         })}
       </S.InfoContainer>
