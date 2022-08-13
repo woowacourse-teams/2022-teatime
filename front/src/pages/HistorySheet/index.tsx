@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import Frame from '@components/Frame';
 import Sheet from '@components/Sheet';
+import BackButton from '@components/BackButton';
 import useFetch from '@hooks/useFetch';
 import { HistoryList } from '@typings/domain';
 import * as S from '@styles/common';
@@ -36,6 +37,7 @@ const HistorySheet = () => {
             />
           );
         })}
+        <BackButton />
       </S.InfoContainer>
       <Sheet title="작성한 면담 내용" sheets={historyList[historyIndex].sheets} isView />
     </Frame>

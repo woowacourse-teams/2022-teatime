@@ -41,7 +41,6 @@ const CrewSheet = () => {
           name={reservationInfo.coachName}
           dateTime={reservationInfo.dateTime}
           isView={isView}
-          onClick={() => navigate(-1)}
         />
       </S.InfoContainer>
       <Sheet

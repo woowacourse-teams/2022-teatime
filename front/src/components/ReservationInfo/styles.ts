@@ -4,24 +4,6 @@ const Name = styled.p`
   font-size: 20px;
 `;
 
-const ArrowIcon = styled.img`
-  position: absolute;
-  left: -1em;
-  bottom: 1em;
-  width: 50px;
-  height: 50px;
-  padding: 10px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.BLUE_800};
-  cursor: pointer;
-
-  :hover {
-    opacity: 0.7;
-    transform: scale(1.1);
-    transition: ease-in-out 0.2s;
-  }
-`;
-
 const CoachImg = styled.img`
   width: 50px;
   height: 50px;
@@ -47,4 +29,4 @@ const DateWrapper = styled.div`
   }
 `;
 
-export { Name, ArrowIcon, CoachImg, DateWrapper };
+export { Name, CoachImg, DateWrapper };
