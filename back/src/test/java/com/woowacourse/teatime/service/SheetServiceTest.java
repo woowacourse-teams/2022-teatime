@@ -5,6 +5,9 @@ import static com.woowacourse.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
+import static com.woowacourse.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_THREE;
+import static com.woowacourse.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_TWO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -143,9 +146,9 @@ class SheetServiceTest {
         sheetService.save(coach.getId(), reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "물고기 자리"),
-                new SheetAnswerUpdateDto(1, "B형"),
-                new SheetAnswerUpdateDto(3, "entp"));
+                SHEET_ANSWER_UPDATE_REQUEST_TWO,
+                SHEET_ANSWER_UPDATE_REQUEST_ONE,
+                SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
         sheetService.updateAnswer(reservation.getId(), request);
 
@@ -164,9 +167,9 @@ class SheetServiceTest {
         sheetService.save(coach.getId(), reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "물고기 자리"),
-                new SheetAnswerUpdateDto(1, "B형"),
-                new SheetAnswerUpdateDto(3, "entp"));
+                SHEET_ANSWER_UPDATE_REQUEST_TWO,
+                SHEET_ANSWER_UPDATE_REQUEST_ONE,
+                SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
         sheetService.updateAnswer(reservation.getId(), request);
 
@@ -186,9 +189,9 @@ class SheetServiceTest {
         sheetService.save(coach.getId(), reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, answer),
-                new SheetAnswerUpdateDto(1, "B형"),
-                new SheetAnswerUpdateDto(3, "entp"));
+                new SheetAnswerUpdateDto(2, "당신의 별자리는?", answer),
+                SHEET_ANSWER_UPDATE_REQUEST_ONE,
+                SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
 
         assertThatThrownBy(() -> sheetService.updateAnswer(reservation.getId(), request))
@@ -201,9 +204,9 @@ class SheetServiceTest {
         sheetService.save(coach.getId(), reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, null),
-                new SheetAnswerUpdateDto(1, "B형"),
-                new SheetAnswerUpdateDto(3, "entp"));
+                new SheetAnswerUpdateDto(2, "당신의 별자리는?", null),
+                SHEET_ANSWER_UPDATE_REQUEST_ONE,
+                SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
 
         assertThatThrownBy(() -> sheetService.updateAnswer(reservation.getId(), request))
