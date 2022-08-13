@@ -6,7 +6,8 @@ const ROUTES = {
   RESERVATION: '/reservation',
   CREW_SHEET: '/crew-sheet',
   COACH_SHEET: '/coach-sheet',
-  HISTORY: '/history',
+  HISTORY_SHEET: '/history-sheet',
+  CREW_HISTORY: '/crew-history',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];

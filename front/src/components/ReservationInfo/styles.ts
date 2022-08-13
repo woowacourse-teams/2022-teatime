@@ -1,15 +1,7 @@
 import styled from 'styled-components';
 
-const InfoContainer = styled.div`
-  position: relative;
-  width: 30%;
-  margin-right: 50px;
-  border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
-  font-weight: bold;
-
-  > p {
-    font-size: 20px;
-  }
+const Name = styled.p`
+  font-size: 20px;
 `;
 
 const ArrowIcon = styled.img`
@@ -55,4 +47,4 @@ const DateWrapper = styled.div`
   }
 `;
 
-export { InfoContainer, ArrowIcon, CoachImg, DateWrapper };
+export { Name, ArrowIcon, CoachImg, DateWrapper };

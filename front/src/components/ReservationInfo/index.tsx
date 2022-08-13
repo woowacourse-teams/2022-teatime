@@ -15,9 +15,9 @@ interface ReservationInfoProps {
 
 const ReservationInfo = ({ image, name, dateTime, isView, onClick }: ReservationInfoProps) => {
   return (
-    <S.InfoContainer>
+    <>
       <S.CoachImg src={image} alt="코치 프로필 이미지" />
-      <p>{name}</p>
+      <S.Name>{name}</S.Name>
       <S.DateWrapper>
         <img src={ScheduleIcon} alt="일정 아이콘" />
         <span>{getMonthDate(dateTime as string)}</span>
@@ -27,7 +27,7 @@ const ReservationInfo = ({ image, name, dateTime, isView, onClick }: Reservation
         <span>{getHourMinutes(dateTime as string)}</span>
       </S.DateWrapper>
       {isView && <S.ArrowIcon src={LeftArrowIcon} alt="화살표 아이콘" onClick={onClick} />}
-    </S.InfoContainer>
+    </>
   );
 };
 

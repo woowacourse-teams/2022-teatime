@@ -43,6 +43,14 @@ interface History {
   status: string;
 }
 
+interface HistoryList {
+  reservationId: number;
+  coachName: string;
+  coachImage: string;
+  dateTime: string;
+  sheets: Sheets[];
+}
+
 interface Sheets {
   questionNumber: number;
   questionContent: string;
@@ -56,4 +64,15 @@ interface DaySchedule {
 
 type CrewListMap = Record<string, Crew[]>;
 
-export { Crew, Coach, MonthYear, Schedule, DaySchedule, Reservation, CrewListMap, Sheets, History };
+export {
+  Crew,
+  Coach,
+  MonthYear,
+  Schedule,
+  DaySchedule,
+  Reservation,
+  CrewListMap,
+  Sheets,
+  History,
+  HistoryList,
+};

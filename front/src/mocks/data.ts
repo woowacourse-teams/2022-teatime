@@ -218,7 +218,7 @@ const historySheet = [
     ],
   },
   {
-    reservationId: 1,
+    reservationId: 2,
     coachName: '공원',
     coachImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
     dateTime: '2022-07-01T01:00:00.000Z',
@@ -241,7 +241,7 @@ const historySheet = [
     ],
   },
   {
-    reservationId: 1,
+    reservationId: 3,
     coachName: '포비',
     coachImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
     dateTime: '2022-07-01T01:00:00.000Z',

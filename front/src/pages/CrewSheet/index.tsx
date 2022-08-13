@@ -7,6 +7,7 @@ import useFetch from '@hooks/useFetch';
 import { Reservation, Sheets } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import api from '@api/index';
+import * as S from '@styles/common';
 
 const CrewSheet = () => {
   const navigate = useNavigate();
@@ -30,17 +31,19 @@ const CrewSheet = () => {
     }
   };
 
-  if (!reservationInfo) return;
+  if (!reservationInfo) return <></>;
 
   return (
     <Frame>
-      <ReservationInfo
-        image={reservationInfo.coachImage}
-        name={reservationInfo.coachName}
-        dateTime={reservationInfo.dateTime}
-        isView={isView}
-        onClick={() => navigate(-1)}
-      />
+      <S.InfoContainer>
+        <ReservationInfo
+          image={reservationInfo.coachImage}
+          name={reservationInfo.coachName}
+          dateTime={reservationInfo.dateTime}
+          isView={isView}
+          onClick={() => navigate(-1)}
+        />
+      </S.InfoContainer>
       <Sheet
         title="면담 내용 작성"
         sheets={reservationInfo.sheets}

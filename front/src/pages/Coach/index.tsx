@@ -204,7 +204,7 @@ const Coach = () => {
     <S.Layout>
       <S.BoardListHeader>
         <S.AddScheduleButton onClick={() => navigate(`/schedule/41`)}>
-          <img src={ScheduleIcon} alt="캘린더 아이콘" />
+          <img src={ScheduleIcon} alt="일정 아이콘" />
           <span>캘린더 관리</span>
         </S.AddScheduleButton>
       </S.BoardListHeader>

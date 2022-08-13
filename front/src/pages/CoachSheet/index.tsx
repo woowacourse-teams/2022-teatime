@@ -5,6 +5,7 @@ import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
 import useFetch from '@hooks/useFetch';
 import { Reservation } from '@typings/domain';
+import * as S from '@styles/common';
 
 const CoachSheet = () => {
   const navigate = useNavigate();
@@ -15,18 +16,20 @@ const CoachSheet = () => {
     `/api/crews/${crewId}/reservations/${reservationId}`
   );
 
-  if (!reservationInfo) return;
+  if (!reservationInfo) return <></>;
 
   return (
     <Frame>
-      <ReservationInfo
-        image={reservationInfo.coachImage}
-        name={reservationInfo.coachName}
-        dateTime={reservationInfo.dateTime}
-        isView={true}
-        onClick={() => navigate(-1)}
-      />
-      <Sheet title="면담 내용 작성" sheets={reservationInfo.sheets} isView={true} />
+      <S.InfoContainer>
+        <ReservationInfo
+          image={reservationInfo.coachImage}
+          name={reservationInfo.coachName}
+          dateTime={reservationInfo.dateTime}
+          isView={true}
+          onClick={() => navigate(-1)}
+        />
+      </S.InfoContainer>
+      <Sheet title="작성한 면담 내용" sheets={reservationInfo.sheets} isView={true} />
     </Frame>
   );
 };
