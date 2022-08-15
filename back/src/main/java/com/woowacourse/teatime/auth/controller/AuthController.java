@@ -4,7 +4,6 @@ import com.woowacourse.teatime.auth.controller.dto.LoginRequest;
 import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
 import com.woowacourse.teatime.auth.service.AuthService;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
