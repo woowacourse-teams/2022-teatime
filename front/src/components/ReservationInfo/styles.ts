@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+const Name = styled.p`
+  font-size: 20px;
+`;
+
 const CoachImg = styled.img`
   width: 50px;
   height: 50px;
@@ -25,4 +29,4 @@ const DateWrapper = styled.div`
   }
 `;
 
-export { CoachImg, DateWrapper };
+export { Name, CoachImg, DateWrapper };

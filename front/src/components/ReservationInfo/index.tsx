@@ -1,3 +1,4 @@
+import BackButton from '@components/BackButton';
 import { getHourMinutes, getMonthDate } from '@utils/index';
 import * as S from './styles';
 
@@ -5,16 +6,17 @@ import ScheduleIcon from '@assets/schedule.svg';
 import ClockIcon from '@assets/clock.svg';
 
 interface ReservationInfoProps {
-  coachImage?: string;
-  coachName?: string;
+  image?: string;
+  name?: string;
   dateTime?: string;
+  isView: boolean;
 }
 
-const ReservationInfo = ({ coachImage, coachName, dateTime }: ReservationInfoProps) => {
+const ReservationInfo = ({ image, name, dateTime, isView }: ReservationInfoProps) => {
   return (
     <>
-      <S.CoachImg src={coachImage} alt="코치 프로필 이미지" />
-      <p>{coachName}</p>
+      <S.CoachImg src={image} alt="코치 프로필 이미지" />
+      <S.Name>{name}</S.Name>
       <S.DateWrapper>
         <img src={ScheduleIcon} alt="일정 아이콘" />
         <span>{getMonthDate(dateTime as string)}</span>
@@ -23,6 +25,7 @@ const ReservationInfo = ({ coachImage, coachName, dateTime }: ReservationInfoPro
         <img src={ClockIcon} alt="시계 아이콘" />
         <span>{getHourMinutes(dateTime as string)}</span>
       </S.DateWrapper>
+      {isView && <BackButton />}
     </>
   );
 };

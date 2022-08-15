@@ -193,4 +193,77 @@ const crewList = {
   ],
 };
 
-export { coachList, scheduleList, interviewInfo, crewList };
+const historySheet = [
+  {
+    reservationId: 1,
+    coachName: '포코',
+    coachImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
+    dateTime: '2022-07-01T01:00:00.000Z',
+    sheets: [
+      {
+        questionNumber: 1,
+        questionContent: '이번 면담을 통해 논의하고 싶은 내용',
+        answerContent: '포코 면담 입니다.',
+      },
+      {
+        questionNumber: 2,
+        questionContent: '최근에 자신이 긍정적으로 보는 시도와 변화',
+        answerContent: '제출되었습니다.',
+      },
+      {
+        questionNumber: 3,
+        questionContent: '이번 면담을 통해 생기기를 원하는 변화',
+        answerContent: '',
+      },
+    ],
+  },
+  {
+    reservationId: 2,
+    coachName: '공원',
+    coachImage: 'https://avatars.githubusercontent.com/u/81607552?v=4',
+    dateTime: '2022-07-01T01:00:00.000Z',
+    sheets: [
+      {
+        questionNumber: 1,
+        questionContent: '이번 면담을 통해 논의하고 싶은 내용',
+        answerContent: '공원 면담 입니다.',
+      },
+      {
+        questionNumber: 2,
+        questionContent: '최근에 자신이 긍정적으로 보는 시도와 변화',
+        answerContent: '제출되었습니다.',
+      },
+      {
+        questionNumber: 3,
+        questionContent: '이번 면담을 통해 생기기를 원하는 변화',
+        answerContent: '',
+      },
+    ],
+  },
+  {
+    reservationId: 3,
+    coachName: '포비',
+    coachImage:
+      'https://user-images.githubusercontent.com/48676844/177775689-096b53fd-a9f2-44e6-9daf-73e4e0b9a603.png',
+    dateTime: '2022-07-01T01:00:00.000Z',
+    sheets: [
+      {
+        questionNumber: 1,
+        questionContent: '이번 면담을 통해 논의하고 싶은 내용',
+        answerContent: '포비 면담 입니다.',
+      },
+      {
+        questionNumber: 2,
+        questionContent: '최근에 자신이 긍정적으로 보는 시도와 변화',
+        answerContent: '제출되었습니다.',
+      },
+      {
+        questionNumber: 3,
+        questionContent: '이번 면담을 통해 생기기를 원하는 변화',
+        answerContent: '',
+      },
+    ],
+  },
+];
+
+export { coachList, scheduleList, interviewInfo, crewList, historySheet };
