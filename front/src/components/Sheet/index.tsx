@@ -41,7 +41,6 @@ const Sheet = ({ title, sheets, handleSubmit, isView }: SheetProps) => {
       <S.SheetContainer>
         <Title text={title} />
         <form>
-          {/* {console.log()} */}
           <Textarea
             id="0"
             label={contents[0].questionContent}
