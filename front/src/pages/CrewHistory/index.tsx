@@ -38,7 +38,7 @@ const CrewHistory = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);
 
   const moveReservationSheet = (reservationId: number) => {
-    navigate(`${ROUTES.SHEET}/${reservationId}`);
+    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
   const deleteReservation = async (reservationId: number) => {

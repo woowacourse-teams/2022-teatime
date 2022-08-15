@@ -45,7 +45,7 @@ const TimeList = () => {
   };
 
   const handleClickWriteButton = () => {
-    navigate(`${ROUTES.SHEET}/${reservationId}`);
+    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
   if (isError) return <h1>error</h1>;

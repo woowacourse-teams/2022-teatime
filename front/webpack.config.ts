@@ -2,6 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -65,6 +66,9 @@ const config: webpack.Configuration = {
     new HtmlWebpackPlugin({
       template: 'public/index.html',
       favicon: 'src/assets/logo.png',
+    }),
+    new BundleAnalyzerPlugin({
+      openAnalyzer: false,
     }),
   ],
   devServer: {
