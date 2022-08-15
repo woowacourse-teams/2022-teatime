@@ -39,11 +39,12 @@ public class SlackOpenIdAuth implements OpenIdAuth {
                 .redirectUri(redirectUrl)
                 .build();
 
-        log.info("token request : " + request.getClientId() + request.getClientSecret() + request.getCode() + request.getRedirectUri());
+        log.info("token request - code: " + request.getCode());
+
         try {
             OpenIDConnectTokenResponse response = slackClient.openIDConnectToken(request);
-            log.info("token response error : " + response.getError());
-            log.info("token response : " + response.getAccessToken());
+            log.warn("token response error : " + response.getError());
+            log.info("token response - accessToken : " + response.getAccessToken());
             return response.getAccessToken();
         } catch (SlackApiException | IOException e) {
             throw new SlackException();
@@ -55,11 +56,10 @@ public class SlackOpenIdAuth implements OpenIdAuth {
                 .token(accessToken)
                 .build();
 
-        log.info("user info request : " + request.getToken());
         try {
             OpenIDConnectUserInfoResponse response = slackClient.openIDConnectUserInfo(request);
-            log.info("user info response error : " + response.getError());
-            log.info("user info response : " + response.getName() + response.getEmail() + response.getUserImage24());
+            log.warn("user info response error : " + response.getError());
+            log.info("user info response - email : " + response.getEmail());
             return new UserInfoDto(response.getName(), response.getEmail(), response.getUserImage24());
         } catch (SlackApiException | IOException e) {
             throw new SlackException();

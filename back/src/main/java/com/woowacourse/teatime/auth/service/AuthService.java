@@ -4,6 +4,7 @@ package com.woowacourse.teatime.auth.service;
 import static com.woowacourse.teatime.teatime.domain.Role.COACH;
 import static com.woowacourse.teatime.teatime.domain.Role.CREW;
 
+import com.woowacourse.teatime.auth.controller.dto.LoginRequest;
 import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.OpenIdAuth;
@@ -29,7 +30,8 @@ public class AuthService {
     private final CoachRepository coachRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public LoginResponse login(String code) {
+    public LoginResponse login(LoginRequest loginRequest) {
+        String code = loginRequest.getCode();
         String accessToken = openIdAuth.getAccessToken(code);
         UserInfoDto userInfo = openIdAuth.getUserInfo(accessToken);
         return getLoginResponse(userInfo);
