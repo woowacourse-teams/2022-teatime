@@ -32,6 +32,9 @@ public class SlackOpenIdAuth implements OpenIdAuth {
     private String redirectUrl;
 
     public String getAccessToken(String code) {
+        log.info(clientId);
+        log.info(clientSecret);
+
         OpenIDConnectTokenRequest request = OpenIDConnectTokenRequest.builder()
                 .clientId(clientId)
                 .clientSecret(clientSecret)
