@@ -2,7 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -67,9 +67,10 @@ const config: webpack.Configuration = {
       template: 'public/index.html',
       favicon: 'src/assets/logo.png',
     }),
-    // new BundleAnalyzerPlugin({
-    //   openAnalyzer: false,
-    // }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+    }),
   ],
   devServer: {
     historyApiFallback: true,
