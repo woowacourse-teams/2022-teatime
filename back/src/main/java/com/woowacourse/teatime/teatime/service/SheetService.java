@@ -105,7 +105,6 @@ public class SheetService {
 
     public void updateAnswerV2(Long crewId, Long reservationId, SheetAnswerUpdateRequest request) {
         validateAuthorization(crewId, findReservation(reservationId));
-        validateReservation(reservationId);
         SheetStatus status = request.getStatus();
         List<SheetAnswerUpdateDto> sheetDtos = request.getSheets();
         if (SheetStatus.SUBMITTED.equals(status)) {
