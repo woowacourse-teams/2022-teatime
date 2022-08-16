@@ -27,9 +27,16 @@ public class ScheduleControllerV2 {
     private final ScheduleService scheduleService;
 
     @GetMapping("/{coachId}/schedules")
-    public ResponseEntity<List<ScheduleFindResponse>> findSchedules(@CrewAuthenticationPrincipal Long crewId,
-                                                                    @PathVariable @NotNull Long coachId,
-                                                                    @Valid @ModelAttribute ScheduleFindRequest request) {
+    public ResponseEntity<List<ScheduleFindResponse>> findCoachSchedules(@CrewAuthenticationPrincipal Long crewId,
+                                                                         @PathVariable @NotNull Long coachId,
+                                                                         @Valid @ModelAttribute ScheduleFindRequest request) {
+        List<ScheduleFindResponse> scheduleFindResponse = scheduleService.find(coachId, request);
+        return ResponseEntity.ok(scheduleFindResponse);
+    }
+
+    @GetMapping("/me/schedules")
+    public ResponseEntity<List<ScheduleFindResponse>> findOwnSchedules(@CoachAuthenticationPrincipal Long coachId,
+                                                                       @Valid @ModelAttribute ScheduleFindRequest request) {
         List<ScheduleFindResponse> scheduleFindResponse = scheduleService.find(coachId, request);
         return ResponseEntity.ok(scheduleFindResponse);
     }
