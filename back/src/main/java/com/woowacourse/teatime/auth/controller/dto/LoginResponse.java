@@ -13,4 +13,6 @@ public class LoginResponse {
 
     private String token;
     private Role role;
+    private String image;
+    private String name;
 }

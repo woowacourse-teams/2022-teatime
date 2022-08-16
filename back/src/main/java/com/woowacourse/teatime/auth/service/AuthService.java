@@ -42,12 +42,12 @@ public class AuthService {
         String emailDomain = StringUtils.substringBetween(email, "@", ".");
 
         if (COACH_EMAIL_DOMAIN.equals(emailDomain)) {
-            return new LoginResponse(getCoachToken(userInfo), COACH);
+            return getCoachLoginResponse(userInfo);
         }
-        return new LoginResponse(getCrewToken(userInfo), CREW);
+        return getCrewLoginResponse(userInfo);
     }
 
-    private String getCoachToken(UserInfoDto userInfo) {
+    private LoginResponse getCoachLoginResponse(UserInfoDto userInfo) {
         Coach coach = coachRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> {
                     Coach newCoach = new Coach(
@@ -57,10 +57,11 @@ public class AuthService {
                     return coachRepository.save(newCoach);
                 });
         Map<String, Object> claims = Map.of("id", coach.getId(), "role", COACH);
-        return jwtTokenProvider.createToken(claims);
+        String token = jwtTokenProvider.createToken(claims);
+        return new LoginResponse(token, COACH, coach.getImage(), coach.getName());
     }
 
-    private String getCrewToken(UserInfoDto userInfo) {
+    private LoginResponse getCrewLoginResponse(UserInfoDto userInfo) {
         Crew crew = crewRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> {
                     Crew newCrew = new Crew(
@@ -70,6 +71,7 @@ public class AuthService {
                     return crewRepository.save(newCrew);
                 });
         Map<String, Object> claims = Map.of("id", crew.getId(), "role", CREW);
-        return jwtTokenProvider.createToken(claims);
+        String token = jwtTokenProvider.createToken(claims);
+        return new LoginResponse(token, CREW, crew.getImage(), crew.getName());
     }
 }
