@@ -5,9 +5,12 @@ import { ScheduleDispatchContext, ScheduleStateContext } from '@context/Schedule
 import useSnackbar from '@hooks/useSnackbar';
 import api from '@api/index';
 import { getHourMinutes } from '@utils/index';
+import { getStorage } from '@utils/localStorage';
+import { LOCAL_DB } from '@constants/index';
 import * as S from './styles';
 
 const CoachTimeList = () => {
+  const { token } = getStorage(LOCAL_DB.USER);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
   const showSnackbar = useSnackbar();
   const { daySchedule, date } = useContext(ScheduleStateContext);
@@ -31,10 +34,18 @@ const CoachTimeList = () => {
     }, [] as string[]);
 
     try {
-      await api.put(`/api/coaches/41/schedules`, {
-        date,
-        schedules: selectedTimes,
-      });
+      await api.put(
+        `/api/v2/coaches/me/schedules`,
+        {
+          date,
+          schedules: selectedTimes,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
       showSnackbar({ message: '확정되었습니다. ✅' });
