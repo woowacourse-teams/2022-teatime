@@ -17,7 +17,7 @@ const Certification = () => {
           code,
         });
         setStorage(LOCAL_DB.USER, data);
-        navigate(data.role.toLowerCase());
+        navigate(`/${data.role.toLowerCase()}`, { replace: true });
       } catch (error) {
         console.log(error);
       }
