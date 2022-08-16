@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.auth.support;
 
+import static com.woowacourse.teatime.teatime.domain.Role.COACH;
+
 import com.woowacourse.teatime.auth.exception.UnAuthorizedTokenException;
 import com.woowacourse.teatime.auth.infrastructure.PayloadExtractor;
 import com.woowacourse.teatime.teatime.domain.Role;
@@ -27,8 +29,8 @@ public class CoachArgumentResolver implements HandlerMethodArgumentResolver {
     public Long resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Claims payload = payloadExtractor.extract(webRequest);
-        Role role = payload.get("role", Role.class);
-        if (!role.isCoach()) {
+        String role = payload.get("role", String.class);
+        if (!COACH.name().equals(role)) {
             throw new UnAuthorizedTokenException();
         }
 
