@@ -6,8 +6,11 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 
+import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
@@ -52,10 +55,32 @@ public class ReservationService {
         return reservation.getId();
     }
 
+    public Long saveV2(Long crewId, ReservationReserveRequestV2 reservationReserveRequest) {
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(NotFoundCrewException::new);
+        Schedule schedule = scheduleRepository.findById(reservationReserveRequest.getScheduleId())
+                .orElseThrow(NotFoundScheduleException::new);
+
+        schedule.reserve();
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        return reservation.getId();
+    }
+
     public void approve(Long reservationId, ReservationApproveRequest reservationApproveRequest) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         validateIsSameCoach(reservationApproveRequest.getCoachId(), reservation);
+
+        reservation.confirm(reservationApproveRequest.getIsApproved());
+        if (!reservationApproveRequest.getIsApproved()) {
+            reservationRepository.delete(reservation);
+        }
+    }
+
+    public void approveV2(Long coachId, Long reservationId, ReservationApproveRequestV2 reservationApproveRequest) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        validateIsSameCoach(coachId, reservation);
 
         reservation.confirm(reservationApproveRequest.getIsApproved());
         if (!reservationApproveRequest.getIsApproved()) {
@@ -141,6 +166,13 @@ public class ReservationService {
         reservation.updateReservationStatusToDone();
     }
 
+    public void updateReservationStatusToDoneV2(Long coachId, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        validateCoachAuthorization(coachId, reservation);
+        reservation.updateReservationStatusToDone();
+    }
+
     public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations =
@@ -153,6 +185,27 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
         if (SUBMITTED.equals(status)) {
             reservation.updateSheetStatusToSubmitted();
+        }
+    }
+
+    public void updateSheetStatusToSubmittedV2(Long crewId, Long reservationId, SheetStatus status) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        validateCrewAuthorization(crewId, reservation);
+        if (SUBMITTED.equals(status)) {
+            reservation.updateSheetStatusToSubmitted();
+        }
+    }
+
+    private void validateCrewAuthorization(Long crewId, Reservation reservation) {
+        if (!reservation.isSameCrew(crewId)) {
+            throw new UnAuthorizedException();
+        }
+    }
+
+    private void validateCoachAuthorization(Long coachId, Reservation reservation) {
+        if (!reservation.isSameCoach(coachId)) {
+            throw new UnAuthorizedException();
         }
     }
 }
