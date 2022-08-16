@@ -16,7 +16,7 @@ const Crew = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/coaches'`, {
+        const { data } = await api.get(`/api/v2/coaches`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
