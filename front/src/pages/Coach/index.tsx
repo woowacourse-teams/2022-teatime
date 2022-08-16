@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import useSnackbar from '@hooks/useSnackbar';
 import type { CrewListMap } from '@typings/domain';
-import { ROUTES } from '@constants/index';
-import api from '@api/index';
+import { LOCAL_DB, ROUTES } from '@constants/index';
+import { getStorage } from '@utils/localStorage';
 import { getDateTime } from '@utils/index';
+import api from '@api/index';
 
 import ScheduleIcon from '@assets/schedule-white.svg';
 import theme from '@styles/theme';
@@ -27,9 +28,9 @@ interface BoardItem {
 }
 
 const Coach = () => {
-  const { id: coachId } = useParams();
   const navigate = useNavigate();
   const showSnackBar = useSnackbar();
+  const { token } = getStorage(LOCAL_DB.USER);
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -78,10 +79,17 @@ const Coach = () => {
 
   const handleApprove = async (index: number, reservationId: number) => {
     try {
-      await api.post(`/api/reservations/${reservationId}`, {
-        coachId,
-        isApproved: true,
-      });
+      await api.post(
+        `/api/v2/reservations/${reservationId}`,
+        {
+          isApproved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
@@ -99,10 +107,17 @@ const Coach = () => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
-      await api.post(`/api/reservations/${reservationId}`, {
-        coachId,
-        isApproved: false,
-      });
+      await api.post(
+        `/api/v2/reservations/${reservationId}`,
+        {
+          isApproved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       deleteBoardItem(status, index);
       showSnackBar({ message: '삭제되었습니다. ✅' });
@@ -117,10 +132,9 @@ const Coach = () => {
       return;
 
     try {
-      await api.delete(`/api/reservations/${reservationId}`, {
+      await api.delete(`/api/v2/reservations/${reservationId}`, {
         headers: {
-          applicantId: Number(coachId),
-          role: 'COACH',
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -191,10 +205,11 @@ const Coach = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: crewListMap } = await api.get('/api/coaches/me/reservations', {
-          headers: { coachId: Number(coachId) },
+        const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-
         setCrews(crewListMap);
       } catch (error) {
         alert('크루 목록 get 에러');
