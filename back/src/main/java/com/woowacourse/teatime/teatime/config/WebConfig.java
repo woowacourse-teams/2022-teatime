@@ -1,13 +1,22 @@
 package com.woowacourse.teatime.teatime.config;
 
 import com.google.common.net.HttpHeaders;
+import com.woowacourse.teatime.auth.support.CoachArgumentResolver;
+import com.woowacourse.teatime.auth.support.CrewArgumentResolver;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@RequiredArgsConstructor
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
+
+    private final CoachArgumentResolver coachArgumentResolver;
+    private final CrewArgumentResolver crewArgumentResolver;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
@@ -19,5 +28,10 @@ public class WebConfig implements WebMvcConfigurer {
                 )
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .exposedHeaders(HttpHeaders.LOCATION);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.addAll(List.of(coachArgumentResolver, crewArgumentResolver));
     }
 }
