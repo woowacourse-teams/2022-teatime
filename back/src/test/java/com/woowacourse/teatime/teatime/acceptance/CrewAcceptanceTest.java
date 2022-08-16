@@ -106,7 +106,11 @@ public class CrewAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치가 크루의 히스토리를 조회한다.")
     @Test
     void findCrewReservations() {
-        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
+        Coach coach = coachRepository.findById(coachId).get();
+        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
+        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
+        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coach.getId(), scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
         코치의_면담목록을_불러온다(coachId);
         예약을_완료한다(reservationId);
@@ -118,7 +122,11 @@ public class CrewAcceptanceTest extends AcceptanceTest {
                         fieldWithPath("[].reservationId").description("면담 아이디"),
                         fieldWithPath("[].coachName").description("코치 이름"),
                         fieldWithPath("[].coachImage").description("코치 이미지"),
-                        fieldWithPath("[].dateTime").description("날짜")
+                        fieldWithPath("[].dateTime").description("날짜"),
+                        fieldWithPath("[].sheets[].questionNumber").description("질문 번호"),
+                        fieldWithPath("[].sheets[].questionContent").description("질문 내용"),
+                        fieldWithPath("[].sheets[].answerContent").description("답변 내용")
+
                 )))
                 .when().get("/api/crews/{crewId}/reservations")
                 .then().log().all()
