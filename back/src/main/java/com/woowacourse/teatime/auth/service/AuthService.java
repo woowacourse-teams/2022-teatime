@@ -71,15 +71,18 @@ public class AuthService {
 
     private LoginResponse getCrewLoginResponse(UserInfoDto userInfo) {
         Crew crew = crewRepository.findByEmail(userInfo.getEmail())
-                .orElseGet(() -> {
-                    Crew newCrew = new Crew(
-                            userInfo.getName(),
-                            userInfo.getEmail(),
-                            userInfo.getImage());
-                    return crewRepository.save(newCrew);
-                });
+                .orElseGet(() -> saveCrew(userInfo));
         Map<String, Object> claims = Map.of("id", crew.getId(), "role", CREW);
         String token = jwtTokenProvider.createToken(claims);
         return new LoginResponse(token, CREW, crew.getImage(), crew.getName());
+    }
+
+    @NotNull
+    private Crew saveCrew(UserInfoDto userInfo) {
+        Crew newCrew = new Crew(
+                userInfo.getName(),
+                userInfo.getEmail(),
+                userInfo.getImage());
+        return crewRepository.save(newCrew);
     }
 }

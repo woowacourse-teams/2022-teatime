@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.auth.infrastructure;
+package com.woowacourse.teatime.util;
 
 import com.google.common.net.HttpHeaders;
 import com.woowacourse.teatime.auth.exception.InvalidTokenFormatException;

@@ -33,7 +33,7 @@ public class QuestionServiceTest {
     void create() {
         Coach coach = coachRepository.save(COACH_BROWN);
         questionService.saveDefaultQuestion(coach);
-        List<String> contents = questionRepository.findByCoachId(COACH_BROWN.getId()).stream()
+        List<String> contents = questionRepository.findByCoachId(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
 
