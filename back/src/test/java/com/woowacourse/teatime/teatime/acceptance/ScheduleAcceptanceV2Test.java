@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-public class ScheduleAcceptanceV2Test extends AcceptanceTest {
+class ScheduleAcceptanceV2Test extends AcceptanceTest {
 
     private static final LocalDate NOW = LocalDate.now();
     private static final LocalDate LAST_DATE_OF_MONTH = NOW.withDayOfMonth(NOW.lengthOfMonth());
