@@ -42,7 +42,6 @@ const HistorySheet = () => {
   if (!historyList.length) {
     alert('아직 히스토리가 없습니다.');
     navigate(ROUTES.COACH);
-    return;
   }
 
   return (
