@@ -51,12 +51,13 @@ public class Coach {
             return false;
         }
         Coach coach = (Coach) o;
-        return Objects.equals(name, coach.name) && Objects.equals(email, coach.email)
-                && Objects.equals(description, coach.description) && Objects.equals(image, coach.image);
+        return Objects.equals(getName(), coach.getName()) && Objects.equals(getEmail(), coach.getEmail())
+                && Objects.equals(getDescription(), coach.getDescription()) && Objects.equals(getImage(),
+                coach.getImage());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, email, description, image);
+        return Objects.hash(getName(), getEmail(), getDescription(), getImage());
     }
 }

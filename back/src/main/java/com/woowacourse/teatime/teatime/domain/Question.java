@@ -45,12 +45,12 @@ public class Question {
             return false;
         }
         Question question = (Question) o;
-        return Objects.equals(coach, question.coach) && Objects.equals(number, question.number)
-                && Objects.equals(content, question.content);
+        return Objects.equals(getCoach(), question.getCoach()) && Objects.equals(getNumber(), question.getNumber())
+                && Objects.equals(getContent(), question.getContent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(coach, number, content);
+        return Objects.hash(getCoach(), getNumber(), getContent());
     }
 }
