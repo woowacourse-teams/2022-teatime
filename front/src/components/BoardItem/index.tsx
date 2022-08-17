@@ -14,6 +14,7 @@ interface BoardItemProps {
   color: string;
   draggedColor: string;
   onClickMenu: () => void;
+  onClickProfile: () => void;
   onClickCancel: () => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
 }
@@ -26,6 +27,7 @@ const BoardItem = ({
   color,
   draggedColor,
   onClickMenu,
+  onClickProfile,
   onClickCancel,
   onDragStart,
 }: BoardItemProps) => {
@@ -67,7 +69,7 @@ const BoardItem = ({
         </S.CloseIconWrapper>
       </S.TopSection>
       <S.BottomSection color={color}>
-        <div>
+        <div onClick={onClickProfile}>
           <S.ProfileImage src={image} alt={`${personName} 이미지`} />
           <span>{personName}</span>
         </div>
