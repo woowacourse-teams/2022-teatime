@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
@@ -15,6 +16,8 @@ import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
+import com.woowacourse.teatime.teatime.domain.Coach;
+import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
@@ -22,6 +25,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +38,25 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
     private ScheduleService scheduleService;
 
     @Autowired
+    private CoachRepository coachRepository;
+
+    @Autowired
     private CrewService crewService;
+
+    private String coachToken;
+
+    @BeforeEach
+    void setUp() {
+        Coach coach = coachRepository.save(COACH_BROWN);
+        coachToken = 코치의_토큰을_발급한다(coach.getId());
+        coachRepository.delete(coach);
+    }
 
     @DisplayName("코치 목록을 조회한다.")
     @Test
     void findAll() {
-        코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
-        코치를_저장한다(COACH_JUNE_SAVE_REQUEST);
+        코치를_저장한다(COACH_BROWN_SAVE_REQUEST, coachToken);
+        코치를_저장한다(COACH_JUNE_SAVE_REQUEST, coachToken);
 
         Long crewId = crewService.save(CREW_SAVE_REQUEST);
         String crewToken = 크루의_토큰을_발급한다(crewId);
@@ -90,7 +106,7 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
     @DisplayName("코치의 면담 목록을 불러온다.")
     @Test
     void findReservations() {
-        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
+        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST, coachToken);
 
         Long scheduleId = scheduleService.save(coachId, LocalDateTime.now());
         Long scheduleId2 = scheduleService.save(coachId, LocalDateTime.now().plusDays(1));
@@ -124,8 +140,8 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
                 .statusCode(HttpStatus.OK.value());
     }
 
-    public static Long 코치를_저장한다(CoachSaveRequest request) {
-        ExtractableResponse<Response> response = post("/api/coaches", request);
-        return Long.parseLong(response.header("Location").split("/")[5]);
+    public static Long 코치를_저장한다(CoachSaveRequest request, String token) {
+        ExtractableResponse<Response> response = postV2("/api/v2/coaches", request, token);
+        return Long.parseLong(response.header("Location").split("/coaches/")[1]);
     }
 }
