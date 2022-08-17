@@ -13,11 +13,11 @@ const Certification = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.post('/api/auth/login', {
+        const { data: userData } = await api.post('/api/auth/login', {
           code,
         });
-        dispatch({ type: 'SET_USER', userData: data });
-        navigate(`/${data.role.toLowerCase()}`, { replace: true });
+        dispatch({ type: 'SET_USER', userData });
+        navigate(`/${userData.role.toLowerCase()}`, { replace: true });
       } catch (error) {
         console.log(error);
       }
