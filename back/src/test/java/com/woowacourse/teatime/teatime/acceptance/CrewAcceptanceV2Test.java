@@ -8,6 +8,9 @@ import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTe
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion1;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion2;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion3;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
@@ -27,7 +30,6 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHist
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
-import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.QuestionRepository;
@@ -62,11 +64,12 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
     private String crewToken;
     private String coachToken;
 
-    private static ExtractableResponse<Response> 크루가_자신의_면담시트를_조회한다(Long reservationId) {
+    private static ExtractableResponse<Response> 크루가_자신의_면담시트를_하나를_조회한다(Long reservationId, String crewToken) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
-                .when().get("/api/crews/me/reservations/{reservationId}")
+                .header("Authorization", "Bearer " + crewToken)
+                .when().get("/api/v2/crews/me/reservations/{reservationId}")
                 .then().log().all()
                 .extract();
     }
@@ -88,7 +91,6 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
-                .header("crewId", crewId)
                 .filter(document("find-own-reservations", responseFields(
                         fieldWithPath("[].reservationId").description("면담 아이디"),
                         fieldWithPath("[].coachName").description("코치 이름"),
@@ -114,9 +116,9 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
     void findCrewReservations() {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
-        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
-        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coach.getId(), scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
         코치의_면담목록을_불러온다(coachId);
@@ -134,7 +136,6 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
                         fieldWithPath("[].sheets[].questionNumber").description("질문 번호"),
                         fieldWithPath("[].sheets[].questionContent").description("질문 내용"),
                         fieldWithPath("[].sheets[].answerContent").description("답변 내용")
-
                 )))
                 .when().get("/api/v2/crews/{crewId}/reservations")
                 .then().log().all()
@@ -154,9 +155,9 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
     void findOwnSheet() {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
-        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
-        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
 
@@ -190,9 +191,9 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
     void findCrewSheets() {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
-        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
-        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
 
@@ -229,9 +230,9 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
     void updateAnswer_notSubmit() {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        questionRepository.save(new Question(coach, 1, "이름이 뭔가요?"));
-        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
-        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
 
@@ -251,7 +252,7 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
-        ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_조회한다(reservationId);
+        ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_하나를_조회한다(reservationId, crewToken);
         String sheetStatus = findOwnSheetResponse.jsonPath().getObject("status", String.class);
         List<SheetDto> sheetDtos = findOwnSheetResponse.jsonPath().getList("sheets.", SheetDto.class);
         List<String> answers = sheetDtos.stream()
@@ -273,9 +274,9 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
     void updateAnswer_submit() {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
-        questionRepository.save(new Question(coach, 2, "별자리가 뭔가요?"));
-        questionRepository.save(new Question(coach, 3, "mbti는 뭔가요?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
         예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
 
@@ -288,13 +289,14 @@ class CrewAcceptanceV2Test extends AcceptanceTest {
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
+                .header("Authorization", "Bearer " + crewToken)
                 .body(request)
                 .filter(document("update-sheet-answer"))
-                .when().put("/api/crews/me/reservations/{reservationId}")
+                .when().put("/api/v2/crews/me/reservations/{reservationId}")
                 .then().log().all()
                 .extract();
 
-        ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_조회한다(reservationId);
+        ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_하나를_조회한다(reservationId, crewToken);
         String sheetStatus = findOwnSheetResponse.jsonPath().getObject("status", String.class);
         List<SheetDto> sheetDtos = findOwnSheetResponse.jsonPath().getList("sheets.", SheetDto.class);
         List<String> answers = sheetDtos.stream()

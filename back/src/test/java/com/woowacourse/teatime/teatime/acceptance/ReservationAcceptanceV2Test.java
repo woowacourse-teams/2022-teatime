@@ -155,7 +155,7 @@ class ReservationAcceptanceV2Test extends AcceptanceTest {
                 .filter(document("reserve-finish"))
                 .when().put("/api/v2/reservations/{reservationId}")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
 }

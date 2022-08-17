@@ -11,6 +11,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
@@ -109,32 +110,22 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
         ReservationAcceptanceTest.예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
         ReservationAcceptanceTest.예약을_승인한다(reservationId2, new ReservationApproveRequest(coachId, true));
 
-        String crewToken = 크루의_토큰을_발급한다(crewId);
+        String coachToken = 코치의_토큰을_발급한다(coachId);
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + crewToken)
-                .header("coachId", coachId)
+                .header("Authorization", "Bearer " + coachToken)
                 .filter(document("find-coach-reservations", responseFields(
                         subsectionWithPath("beforeApproved").description("승인 전"),
                         subsectionWithPath("approved").description("승인 후"),
                         subsectionWithPath("inProgress").description("면담 중")
                 )))
-                .when().get("/api/coaches/me/reservations")
+                .when().get("/api/v2/coaches/me/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }
 
-    public static Long 코치를_저장한다(Object body) {
-        ExtractableResponse<Response> response = post("/api/coaches", body);
+    public static Long 코치를_저장한다(CoachSaveRequest request) {
+        ExtractableResponse<Response> response = post("/api/coaches", request);
         return Long.parseLong(response.header("Location").split("/")[5]);
-    }
-
-    public static void 코치의_면담목록을_불러온다(Long coachId) {
-        RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("coachId", coachId)
-                .when().get("/api/coaches/me/reservations")
-                .then().log().all()
-                .extract();
     }
 }

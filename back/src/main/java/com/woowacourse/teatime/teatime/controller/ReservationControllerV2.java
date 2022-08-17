@@ -63,6 +63,6 @@ public class ReservationControllerV2 {
     public ResponseEntity<Void> finish(@CoachAuthenticationPrincipal Long coachId,
                                        @PathVariable @NotNull Long reservationId) {
         reservationService.updateReservationStatusToDoneV2(coachId, reservationId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
