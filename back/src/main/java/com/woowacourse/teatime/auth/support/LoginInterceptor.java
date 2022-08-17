@@ -1,8 +1,8 @@
 package com.woowacourse.teatime.auth.support;
 
 import com.woowacourse.teatime.auth.exception.UnAuthorizedTokenException;
-import com.woowacourse.teatime.auth.infrastructure.AuthorizationExtractor;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
+import com.woowacourse.teatime.util.AuthorizationExtractor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
