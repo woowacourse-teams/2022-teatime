@@ -103,6 +103,10 @@ const Coach = () => {
     navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: crewId });
   };
 
+  const handleClickProfile = (crewId: number) => {
+    navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`);
+  };
+
   const handleReject = async (status: string, index: number, reservationId: number) => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
@@ -256,6 +260,7 @@ const Coach = () => {
                   color={color}
                   draggedColor={draggedColor}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}
+                  onClickProfile={() => handleClickProfile(crew.crewId)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
                   onDragStart={(e) => handleDragStart(e, index)}
                 />
