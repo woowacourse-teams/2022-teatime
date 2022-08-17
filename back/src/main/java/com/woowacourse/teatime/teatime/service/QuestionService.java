@@ -1,9 +1,14 @@
 package com.woowacourse.teatime.teatime.service;
 
+import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
+import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
+import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.QuestionRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,17 +18,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class QuestionService {
 
-    private static final String DEFAULT_QUESTION_1 = "이번 면담을 통해 논의하고 싶은 내용";
-    private static final String DEFAULT_QUESTION_2 = "최근에 자신이 긍정적으로 보는 시도와 변화";
-    private static final String DEFAULT_QUESTION_3 = "이번 면담을 통해 생기기를 원하는 변화";
-
     private final QuestionRepository questionRepository;
+    private final CoachRepository coachRepository;
 
-    public void saveDefaultQuestion(Coach coach) {
-        List<Question> questions = List.of(
-                new Question(coach, 1, DEFAULT_QUESTION_1),
-                new Question(coach, 2, DEFAULT_QUESTION_2),
-                new Question(coach, 3, DEFAULT_QUESTION_3));
-        questionRepository.saveAll(questions);
+    public void updateQuestions(Long coachId, List<SheetQuestionUpdateDto> request) {
+        Coach coach = findCoach(coachId);
+
+        List<Question> savedQuestions = questionRepository.findByCoachId(coach.getId());
+        List<Question> requestQuestions = request.stream()
+                .map(question -> new Question(coach, question.getQuestionNumber(), question.getQuestionContent()))
+                .collect(Collectors.toList());
+
+        deleteOldQuestions(savedQuestions, requestQuestions);
+        saveNewQuestions(savedQuestions, requestQuestions);
+    }
+
+    private Coach findCoach(Long coachId) {
+        return coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+    }
+
+    private void deleteOldQuestions(List<Question> savedQuestions, List<Question> requestQuestions) {
+        List<Question> copyQuestions = new ArrayList<>(savedQuestions);
+        copyQuestions.removeAll(requestQuestions);
+        questionRepository.deleteAllInBatch(copyQuestions);
+    }
+
+    private void saveNewQuestions(List<Question> savedQuestions, List<Question> requestQuestions) {
+        requestQuestions.removeAll(savedQuestions);
+        questionRepository.saveAll(requestQuestions);
     }
 }

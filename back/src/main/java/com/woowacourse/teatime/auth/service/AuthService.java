@@ -8,11 +8,13 @@ import com.woowacourse.teatime.auth.controller.dto.LoginRequest;
 import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.OpenIdAuth;
+import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.service.QuestionService;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,9 @@ public class AuthService {
 
     private static final String COACH_EMAIL_DOMAIN = "woowahan";
     private static final String ADMIN_EMAIL = "teatime";
+    private static final String DEFAULT_QUESTION_1 = "이번 면담을 통해 논의하고 싶은 내용";
+    private static final String DEFAULT_QUESTION_2 = "최근에 자신이 긍정적으로 보는 시도와 변화";
+    private static final String DEFAULT_QUESTION_3 = "이번 면담을 통해 생기기를 원하는 변화";
 
     private final OpenIdAuth openIdAuth;
     private final CrewRepository crewRepository;
@@ -53,19 +58,25 @@ public class AuthService {
 
     private LoginResponse getCoachLoginResponse(UserInfoDto userInfo) {
         Coach coach = coachRepository.findByEmail(userInfo.getEmail())
-                .orElseGet(() -> saveCoach(userInfo));
+                .orElseGet(() -> saveCoachAndDefaultQuestions(userInfo));
         Map<String, Object> claims = Map.of("id", coach.getId(), "role", COACH);
         String token = jwtTokenProvider.createToken(claims);
         return new LoginResponse(token, COACH, coach.getImage(), coach.getName());
     }
 
     @NotNull
-    private Coach saveCoach(UserInfoDto userInfo) {
+    private Coach saveCoachAndDefaultQuestions(UserInfoDto userInfo) {
         Coach coach = coachRepository.save(new Coach(
                 userInfo.getName(),
                 userInfo.getEmail(),
                 userInfo.getImage()));
-        questionService.saveDefaultQuestion(coach);
+
+        List<SheetQuestionUpdateDto> defaultQuestionDtos = List.of(
+                new SheetQuestionUpdateDto(1, DEFAULT_QUESTION_1),
+                new SheetQuestionUpdateDto(2, DEFAULT_QUESTION_2),
+                new SheetQuestionUpdateDto(3, DEFAULT_QUESTION_3));
+
+        questionService.updateQuestions(coach.getId(), defaultQuestionDtos);
         return coach;
     }
 

@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.domain;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,5 +34,23 @@ public class Question {
         this.coach = coach;
         this.number = number;
         this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Question question = (Question) o;
+        return Objects.equals(coach, question.coach) && Objects.equals(number, question.number)
+                && Objects.equals(content, question.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(coach, number, content);
     }
 }

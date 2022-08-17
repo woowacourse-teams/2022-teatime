@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CoachServiceTest {
 
     @Autowired
-    CoachService coachService;
+    private CoachService coachService;
 
     @DisplayName("코치 목록을 조회한다.")
     @Test
