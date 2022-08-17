@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.domain;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,5 +40,23 @@ public class Coach {
         this.email = email;
         this.description = description;
         this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Coach coach = (Coach) o;
+        return Objects.equals(name, coach.name) && Objects.equals(email, coach.email)
+                && Objects.equals(description, coach.description) && Objects.equals(image, coach.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, description, image);
     }
 }
