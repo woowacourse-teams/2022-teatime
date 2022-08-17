@@ -19,6 +19,7 @@ import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.domain.Schedule;
+import com.woowacourse.teatime.teatime.domain.Sheet;
 import com.woowacourse.teatime.teatime.domain.SheetStatus;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
@@ -28,6 +29,8 @@ import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.teatime.repository.SheetRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,7 @@ public class ReservationService {
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
     private final CoachRepository coachRepository;
+    private final SheetRepository sheetRepository;
 
     public Long save(ReservationReserveRequest reservationReserveRequest) {
         Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
@@ -177,7 +181,15 @@ public class ReservationService {
         validateCrewId(crewId);
         List<Reservation> reservations =
                 reservationRepository.findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(crewId, DONE);
-        return CoachFindCrewHistoryResponse.from(reservations);
+
+        List<CoachFindCrewHistoryResponse> response = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(
+                    reservation.getId());
+            response.add(CoachFindCrewHistoryResponse.from(reservation, sheets));
+        }
+
+        return response;
     }
 
     public void updateSheetStatusToSubmitted(Long reservationId, SheetStatus status) {

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.Schedule;
+import com.woowacourse.teatime.teatime.domain.Sheet;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,16 +26,12 @@ public class CoachFindCrewHistoryResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
 
-    public static List<CoachFindCrewHistoryResponse> from(List<Reservation> reservations) {
-        return reservations.stream()
-                .map(CoachFindCrewHistoryResponse::from)
-                .collect(Collectors.toList());
-    }
+    private List<SheetDto> sheets;
 
-    private static CoachFindCrewHistoryResponse from(Reservation reservation) {
+    public static CoachFindCrewHistoryResponse from(Reservation reservation, List<Sheet> sheets) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
         return new CoachFindCrewHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
-                schedule.getLocalDateTime());
+                schedule.getLocalDateTime(), SheetDto.from(sheets));
     }
 }
