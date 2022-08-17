@@ -23,7 +23,7 @@ public class Question {
     @ManyToOne(fetch = FetchType.LAZY)
     private Coach coach;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer number;
 
     @Column(nullable = false)
