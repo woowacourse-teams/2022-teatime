@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private static final String COACH_EMAIL_DOMAIN = "woowahan";
+    private static final String ADMIN_EMAIL = "teatime";
 
     private final OpenIdAuth openIdAuth;
     private final CrewRepository crewRepository;
@@ -41,7 +42,7 @@ public class AuthService {
         String email = userInfo.getEmail();
         String emailDomain = StringUtils.substringBetween(email, "@", ".");
 
-        if (COACH_EMAIL_DOMAIN.equals(emailDomain)) {
+        if (COACH_EMAIL_DOMAIN.equals(emailDomain) || email.contains(ADMIN_EMAIL)) {
             return new LoginResponse(getCoachToken(userInfo), COACH);
         }
         return new LoginResponse(getCrewToken(userInfo), CREW);
