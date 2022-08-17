@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 50px;
   padding: 0 10%;
@@ -12,11 +13,11 @@ const HeaderContainer = styled.div`
   h1 {
     font-size: 18px;
   }
+`;
 
-  img {
-    width: 30px;
-    margin-right: 8px;
-  }
+const LogoImage = styled.img`
+  width: 30px;
+  margin-right: 8px;
 `;
 
 const LogoLink = styled(Link)`
@@ -27,4 +28,10 @@ const LogoLink = styled(Link)`
   cursor: pointer;
 `;
 
-export { HeaderContainer, LogoLink };
+const ProfileImage = styled.img`
+  width: 35px;
+  height: 35px;
+  border-radius: 20px;
+`;
+
+export { HeaderContainer, LogoLink, LogoImage, ProfileImage };
