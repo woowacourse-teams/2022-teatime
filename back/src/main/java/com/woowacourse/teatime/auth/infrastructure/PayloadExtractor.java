@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.auth.infrastructure;
 
+import com.woowacourse.teatime.util.AuthorizationExtractor;
 import io.jsonwebtoken.Claims;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

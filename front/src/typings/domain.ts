@@ -1,3 +1,11 @@
+type UserRole = 'CREW' | 'COACH';
+
+interface UserInfo {
+  image: string;
+  name: string;
+  role: UserRole;
+  token: string;
+}
 interface Crew {
   reservationId: number;
   crewId: number;
@@ -65,6 +73,7 @@ interface DaySchedule {
 type CrewListMap = Record<string, Crew[]>;
 
 export {
+  UserInfo,
   Crew,
   Coach,
   MonthYear,
