@@ -52,7 +52,6 @@ public class ReservationControllerV2 {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Deprecated
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<Void> cancel(@PathVariable @NotNull Long reservationId,
                                        @UserAuthenticationPrincipal UserRoleDto userRoleDto) {
