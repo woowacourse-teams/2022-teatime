@@ -8,11 +8,11 @@ import { Sheets } from '@typings/domain';
 interface SheetProps {
   title: string;
   sheets: Sheets[];
-  handleSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
+  onSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
   isView: boolean;
 }
 
-const Sheet = ({ title, sheets, handleSubmit, isView }: SheetProps) => {
+const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
@@ -24,7 +24,7 @@ const Sheet = ({ title, sheets, handleSubmit, isView }: SheetProps) => {
     });
   };
 
-  const onSubmitButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmitButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const isSubmitted = e.currentTarget.innerText === '제출하기';
@@ -33,7 +33,7 @@ const Sheet = ({ title, sheets, handleSubmit, isView }: SheetProps) => {
       const checkValidation = contents.some((content) => !content.answerContent);
       if (checkValidation) return;
     }
-    handleSubmit?.(isSubmitted, contents);
+    onSubmit?.(isSubmitted, contents);
   };
 
   return (
@@ -67,8 +67,8 @@ const Sheet = ({ title, sheets, handleSubmit, isView }: SheetProps) => {
           />
           {!isView && (
             <S.ButtonContainer>
-              <S.FirstButton onClick={onSubmitButton}>임시저장</S.FirstButton>
-              <S.SecondButton onClick={onSubmitButton}>제출하기</S.SecondButton>
+              <S.FirstButton onClick={handleSubmitButton}>임시저장</S.FirstButton>
+              <S.SecondButton onClick={handleSubmitButton}>제출하기</S.SecondButton>
             </S.ButtonContainer>
           )}
         </form>
