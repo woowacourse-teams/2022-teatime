@@ -69,7 +69,7 @@ const CrewSheet = () => {
       <Sheet
         title="면담 내용 작성"
         sheets={reservationInfo.sheets}
-        handleSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         isView={isView}
       />
     </Frame>

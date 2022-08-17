@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 const ArrowIcon = styled.img`
   position: absolute;
-  left: -1em;
-  bottom: 1em;
+  left: -10px;
+  bottom: 10px;
   width: 50px;
   height: 50px;
   padding: 10px;

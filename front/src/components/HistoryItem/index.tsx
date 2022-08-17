@@ -2,6 +2,7 @@ import { getMonthDate } from '@utils/date';
 import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
+
 interface HistoryItemProps {
   index: number;
   image: string;
