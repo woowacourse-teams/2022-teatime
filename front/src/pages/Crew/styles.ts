@@ -4,7 +4,7 @@ const Layout = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 50px auto 0 auto;
+  margin: 50px auto;
 `;
 
 const CardListContainer = styled.div`
