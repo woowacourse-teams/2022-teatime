@@ -6,6 +6,7 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 
+import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
@@ -98,6 +99,16 @@ public class ReservationService {
 
         validateAuthorization(applicantId, Role.search(role), reservation);
         reservation.cancel(Role.search(role));
+        reservationRepository.delete(reservation);
+    }
+
+    public void cancelV2(Long reservationId, UserRoleDto userRoleDto) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+
+        Role role = Role.search(userRoleDto.getRole());
+        validateAuthorization(userRoleDto.getId(), role, reservation);
+        reservation.cancel(role);
         reservationRepository.delete(reservation);
     }
 

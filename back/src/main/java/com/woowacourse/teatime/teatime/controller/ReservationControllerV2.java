@@ -2,6 +2,8 @@ package com.woowacourse.teatime.teatime.controller;
 
 import com.woowacourse.teatime.auth.support.CoachAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
+import com.woowacourse.teatime.auth.support.UserAuthenticationPrincipal;
+import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
 import com.woowacourse.teatime.teatime.service.ReservationService;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -54,9 +55,8 @@ public class ReservationControllerV2 {
     @Deprecated
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<Void> cancel(@PathVariable @NotNull Long reservationId,
-                                       @RequestHeader("applicantId") Long applicantId,
-                                       @RequestHeader("role") String role) {
-        reservationService.cancel(reservationId, applicantId, role);
+                                       @UserAuthenticationPrincipal UserRoleDto userRoleDto) {
+        reservationService.cancelV2(reservationId, userRoleDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
