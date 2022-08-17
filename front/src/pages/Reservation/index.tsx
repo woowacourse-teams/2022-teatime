@@ -9,7 +9,7 @@ import { ScheduleDispatchContext } from '@context/ScheduleProvider';
 import api from '@api/index';
 import useTimeList from '@hooks/useTimeList';
 import * as S from '@styles/common';
-import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/index';
+import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { MonthYear } from '@typings/domain';
 import { CALENDAR_DATE_LENGTH, LOCAL_DB } from '@constants/index';
 import { getStorage } from '@utils/localStorage';

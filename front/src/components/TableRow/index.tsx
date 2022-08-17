@@ -1,5 +1,5 @@
+import { getMonthDate, getHourMinutes } from '@utils/date';
 import { History } from '@typings/domain';
-import { getMonthDate, getHourMinutes } from '@utils/index';
 import * as S from './styles';
 
 import TrashIcon from '@assets/trash.svg';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { getHourMinutes, getMonthDate } from '@utils/index';
+import { getHourMinutes, getMonthDate } from '@utils/date';
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';

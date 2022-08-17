@@ -7,7 +7,7 @@ import CoachTimeList from '@components/CoachTimeList';
 import useTimeList from '@hooks/useTimeList';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
 import api from '@api/index';
-import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/index';
+import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { getStorage } from '@utils/localStorage';
 import { CALENDAR_DATE_LENGTH, LOCAL_DB } from '@constants/index';
 import { MonthYear } from '@typings/domain';

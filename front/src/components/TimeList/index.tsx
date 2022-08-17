@@ -6,7 +6,7 @@ import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { LOCAL_DB, ROUTES } from '@constants/index';
-import { getHourMinutes } from '@utils/index';
+import { getHourMinutes } from '@utils/date';
 import { getStorage } from '@utils/localStorage';
 import api from '@api/index';
 import * as S from './styles';
