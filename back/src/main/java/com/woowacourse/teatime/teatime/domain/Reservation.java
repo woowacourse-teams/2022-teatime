@@ -82,6 +82,10 @@ public class Reservation {
         return crew.getId().equals(crewId);
     }
 
+    public boolean isSameCoach(Long coachId) {
+        return getCoach().getId().equals(coachId);
+    }
+
     public void updateReservationStatusToInProgress() {
         if (isReservationStatus(ReservationStatus.APPROVED) && isTimePassed()) {
             reservationStatus = ReservationStatus.IN_PROGRESS;
@@ -113,6 +117,10 @@ public class Reservation {
 
     public LocalDateTime getScheduleDateTime() {
         return schedule.getLocalDateTime();
+    }
+
+    public Coach getCoach() {
+        return schedule.getCoach();
     }
 }
 

@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.teatime.controller.dto;
+package com.woowacourse.teatime.teatime.controller.dto.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

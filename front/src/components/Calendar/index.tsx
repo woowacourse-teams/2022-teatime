@@ -1,18 +1,10 @@
-import { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useContext } from 'react';
 
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
-import api from '@api/index';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import { CALENDAR_DATE_LENGTH, DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import {
-  getNewMonthYear,
-  getMonthYearDetails,
-  getFormatDate,
-  convertToFullDate,
-  getCurrentFullDate,
-} from '@utils/index';
+import { ScheduleStateContext } from '@context/ScheduleProvider';
+import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { convertToFullDate, getCurrentFullDate } from '@utils/date';
 import type { MonthYear } from '@typings/domain';
 import * as S from './styles';
 
@@ -22,56 +14,24 @@ import RightArrow from '@assets/right-arrow.svg';
 
 interface CalendarProps {
   isCoach?: boolean;
-  openTimeList: () => void;
-  closeTimeList: () => void;
+  onUpdateMonth: (increment: number) => void;
+  onClickDate: (day: number, isWeekend: boolean) => void;
+  monthYear: MonthYear;
+  dateBoxLength: number;
+  selectedDay: number | null;
 }
 
-const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
-  const { id: coachId } = useParams();
-  const currentDate = new Date();
-  const currentMonthYear = getMonthYearDetails(currentDate);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
+const Calendar = ({
+  isCoach,
+  onUpdateMonth,
+  onClickDate,
+  monthYear,
+  dateBoxLength,
+  selectedDay,
+}: CalendarProps) => {
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
   const { monthSchedule } = useContext(ScheduleStateContext);
-  const dispatch = useContext(ScheduleDispatchContext);
-
-  const dateBoxLength =
-    monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
-      ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX;
-
-  const handleUpdateMonth = (increment: number) => {
-    closeTimeList();
-    setSelectedDay(null);
-    setMonthYear((prev) => getNewMonthYear(prev, increment));
-  };
-
-  const handleClickDate = (day: number, isWeekend: boolean) => {
-    if (isWeekend) return;
-
-    dispatch({
-      type: 'SELECT_DATE',
-      day,
-      date: getFormatDate(year, month, day),
-    });
-    openTimeList();
-    setSelectedDay(day);
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data: coachSchedules } = await api.get(
-          `/api/coaches/${coachId}/schedules?year=${year}&month=${month}`
-        );
-
-        dispatch({ type: 'SET_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
-      } catch {
-        alert('스케쥴 get 요청 실패');
-      }
-    })();
-  }, [monthYear]);
+  const currentDate = new Date();
 
   return (
     <S.CalendarContainer>
@@ -84,9 +44,9 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
             <img src={LeftArrowDisabled} alt="이전 버튼 비활성화 아이콘" />
           </Conditional>
           <Conditional condition={startDate >= currentDate}>
-            <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => handleUpdateMonth(-1)} />
+            <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => onUpdateMonth(-1)} />
           </Conditional>
-          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => handleUpdateMonth(1)} />
+          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => onUpdateMonth(1)} />
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
@@ -107,7 +67,7 @@ const Calendar = ({ isCoach, openTimeList, closeTimeList }: CalendarProps) => {
               key={index}
               date={date}
               daySchedule={monthSchedule[date - 1]?.schedules}
-              onClick={() => handleClickDate(date, isWeekend)}
+              onClick={() => onClickDate(date, isWeekend)}
               selectedDay={selectedDay}
               currentDay={convertToFullDate(year, month, date)}
               isCoach={isCoach}

@@ -1,22 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Frame from '@components/Frame';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
-import useFetch from '@hooks/useFetch';
-import { HistoryList } from '@typings/domain';
-import * as S from '@styles/common';
 import HistoryItem from '@components/HistoryItem';
+import { HistoryList } from '@typings/domain';
+import api from '@api/index';
+import { LOCAL_DB } from '@constants/index';
+import { getStorage } from '@utils/localStorage';
+import * as S from '@styles/common';
 
 const HistorySheet = () => {
+  const { token } = getStorage(LOCAL_DB.USER);
   const { id: crewId } = useParams();
   const [historyIndex, setHistoryIndex] = useState(0);
-  const { data: historyList } = useFetch<HistoryList[], null>(`/api/crews/${crewId}/reservations`);
+  const [historyList, setHistoryList] = useState<HistoryList[]>();
 
   const handleClickHistoryItem = (index: number) => {
     setHistoryIndex(index);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get(`/api/v2/crews/${crewId}/reservations`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setHistoryList(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   if (!historyList) return <></>;
 

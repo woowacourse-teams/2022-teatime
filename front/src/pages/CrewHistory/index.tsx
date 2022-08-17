@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import TableRow from '@components/TableRow';
 import api from '@api/index';
-import { ROUTES } from '@constants/index';
+import { LOCAL_DB, ROUTES } from '@constants/index';
 import { History } from '@typings/domain';
+import { getStorage } from '@utils/localStorage';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -33,7 +34,7 @@ const historyStatus: HistoryStatus = {
 };
 
 const CrewHistory = () => {
-  const { id: crewId } = useParams();
+  const { token } = getStorage(LOCAL_DB.USER);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<History[]>([]);
 
@@ -45,10 +46,9 @@ const CrewHistory = () => {
     if (!confirm('면담을 삭제하시겠습니까?')) return;
 
     try {
-      await api.delete(`/api/reservations/${reservationId}`, {
+      await api.delete(`/api/v2/reservations/${reservationId}`, {
         headers: {
-          applicantId: Number(crewId),
-          role: 'CREW',
+          Authorization: `Bearer ${token}`,
         },
       });
     } catch (error) {
@@ -59,8 +59,10 @@ const CrewHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/crews/me/reservations', {
-          headers: { crewId: 17 },
+        const { data } = await api.get('/api/v2/crews/me/reservations', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         setHistoryList(data);
       } catch (error) {

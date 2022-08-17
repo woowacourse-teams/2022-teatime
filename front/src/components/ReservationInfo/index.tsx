@@ -1,5 +1,5 @@
 import BackButton from '@components/BackButton';
-import { getHourMinutes, getMonthDate } from '@utils/index';
+import { getHourMinutes, getMonthDate } from '@utils/date';
 import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';

@@ -1,6 +1,6 @@
+import { getCurrentFullDate } from '@utils/date';
 import { Schedule } from '@typings/domain';
 import * as S from './styles';
-import { getCurrentFullDate } from '@utils/index';
 
 interface DateBoxProps {
   date?: number;
