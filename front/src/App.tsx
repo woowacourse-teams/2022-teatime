@@ -26,8 +26,8 @@ const App = () => {
           <Route path={ROUTES.CERTIFICATION} element={<Certification />} />
           <Route path={ROUTES.CREW} element={<Crew />} />
           <Route path={ROUTES.COACH} element={<Coach />} />
+          <Route path={ROUTES.SCHEDULE} element={<Schedule />} />
           <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
-          <Route path={`${ROUTES.SCHEDULE}/:id`} element={<Schedule />} />
           <Route path={`${ROUTES.CREW_SHEET}/:id`} element={<CrewSheet />} />
           <Route path={`${ROUTES.COACH_SHEET}/:id`} element={<CoachSheet />} />
           <Route path={`${ROUTES.HISTORY_SHEET}/:id`} element={<HistorySheet />} />
