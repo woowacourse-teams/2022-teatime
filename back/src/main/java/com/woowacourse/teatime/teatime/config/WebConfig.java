@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.config;
 import com.google.common.net.HttpHeaders;
 import com.woowacourse.teatime.auth.support.CoachArgumentResolver;
 import com.woowacourse.teatime.auth.support.CrewArgumentResolver;
+import com.woowacourse.teatime.auth.support.UserArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final CoachArgumentResolver coachArgumentResolver;
     private final CrewArgumentResolver crewArgumentResolver;
+    private final UserArgumentResolver userArgumentResolver;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
@@ -32,6 +34,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.addAll(List.of(coachArgumentResolver, crewArgumentResolver));
+        resolvers.addAll(List.of(
+                coachArgumentResolver,
+                crewArgumentResolver,
+                userArgumentResolver));
     }
 }
