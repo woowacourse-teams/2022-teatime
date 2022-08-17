@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import TableRow from '@components/TableRow';
+import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
-import { LOCAL_DB, ROUTES } from '@constants/index';
+import { ROUTES } from '@constants/index';
 import { History } from '@typings/domain';
-import { getStorage } from '@utils/localStorage';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -34,7 +34,7 @@ const historyStatus: HistoryStatus = {
 };
 
 const CrewHistory = () => {
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<History[]>([]);
 
@@ -48,7 +48,7 @@ const CrewHistory = () => {
     try {
       await api.delete(`/api/v2/reservations/${reservationId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userData?.token}`,
         },
       });
     } catch (error) {
@@ -61,7 +61,7 @@ const CrewHistory = () => {
       try {
         const { data } = await api.get('/api/v2/crews/me/reservations', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         });
         setHistoryList(data);

@@ -6,13 +6,13 @@ import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
+import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import useTimeList from '@hooks/useTimeList';
-import * as S from '@styles/common';
+import { CALENDAR_DATE_LENGTH } from '@constants/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { MonthYear } from '@typings/domain';
-import { CALENDAR_DATE_LENGTH, LOCAL_DB } from '@constants/index';
-import { getStorage } from '@utils/localStorage';
+import * as S from '@styles/common';
 
 const Reservation = () => {
   const currentDate = new Date();
@@ -23,7 +23,7 @@ const Reservation = () => {
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month } = monthYear;
   const dispatch = useContext(ScheduleDispatchContext);
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
 
   const dateBoxLength =
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
@@ -55,7 +55,7 @@ const Reservation = () => {
           `/api/v2/coaches/${coachId}/schedules?year=${year}&month=${month}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${userData?.token}`,
             },
           }
         );

@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import useSnackbar from '@hooks/useSnackbar';
 import type { CrewListMap } from '@typings/domain';
-import { LOCAL_DB, ROUTES } from '@constants/index';
-import { getStorage } from '@utils/localStorage';
+import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
 import api from '@api/index';
 
 import ScheduleIcon from '@assets/schedule-white.svg';
 import theme from '@styles/theme';
 import * as S from './styles';
+import { UserStateContext } from '@context/UserProvider';
 
 interface BoardItemValue {
   title: string;
@@ -30,7 +30,7 @@ interface BoardItem {
 const Coach = () => {
   const navigate = useNavigate();
   const showSnackBar = useSnackbar();
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -86,7 +86,7 @@ const Coach = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         }
       );
@@ -118,7 +118,7 @@ const Coach = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         }
       );
@@ -138,7 +138,7 @@ const Coach = () => {
     try {
       await api.delete(`/api/v2/reservations/${reservationId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userData?.token}`,
         },
       });
 
@@ -211,7 +211,7 @@ const Coach = () => {
       try {
         const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         });
         setCrews(crewListMap);
