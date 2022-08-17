@@ -1,4 +1,3 @@
-// import '@types/jest';
 import { getFormatDate, getHourMinutes, getMonthDate, getMonthYearDetails } from '../date';
 
 describe('입력한 날짜 정보를 올바른 포맷으로 변환하는지 확인한다.', () => {
