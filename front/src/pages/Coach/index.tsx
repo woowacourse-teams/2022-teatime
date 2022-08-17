@@ -7,7 +7,7 @@ import useSnackbar from '@hooks/useSnackbar';
 import type { CrewListMap } from '@typings/domain';
 import { LOCAL_DB, ROUTES } from '@constants/index';
 import { getStorage } from '@utils/localStorage';
-import { getDateTime } from '@utils/index';
+import { getDateTime } from '@utils/date';
 import api from '@api/index';
 
 import ScheduleIcon from '@assets/schedule-white.svg';

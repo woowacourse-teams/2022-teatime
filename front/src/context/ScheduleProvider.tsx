@@ -1,7 +1,7 @@
 import { createContext, useReducer, Dispatch } from 'react';
 
 import type { DaySchedule, Schedule as ScheduleType } from '@typings/domain';
-import { getFormatDate } from '@utils/index';
+import { getFormatDate } from '@utils/date';
 
 const timeArray = [
   '10:00',

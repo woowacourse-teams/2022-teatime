@@ -4,7 +4,7 @@ import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import { ScheduleStateContext } from '@context/ScheduleProvider';
 import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
-import { convertToFullDate, getCurrentFullDate } from '@utils/index';
+import { convertToFullDate, getCurrentFullDate } from '@utils/date';
 import type { MonthYear } from '@typings/domain';
 import * as S from './styles';
 

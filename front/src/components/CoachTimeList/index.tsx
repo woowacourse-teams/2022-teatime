@@ -4,7 +4,7 @@ import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import useSnackbar from '@hooks/useSnackbar';
 import api from '@api/index';
-import { getHourMinutes } from '@utils/index';
+import { getHourMinutes } from '@utils/date';
 import { getStorage } from '@utils/localStorage';
 import { LOCAL_DB } from '@constants/index';
 import * as S from './styles';
