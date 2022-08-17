@@ -2,9 +2,11 @@ import { createContext, useEffect, useState } from 'react';
 import Snackbar from '@components/Snackbar';
 import Portal from '../Portal';
 
+type SnackbarType = 'success' | 'error';
+
 export interface SnackbarInfo {
   message: string;
-  type?: 'success' | 'error';
+  type?: SnackbarType;
 }
 
 type SnackbarContextType = ({ message, type }: SnackbarInfo) => void;
