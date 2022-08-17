@@ -1,5 +1,5 @@
 // import '@types/jest';
-import { getFormatDate, getHourMinutes, getMonthDate, getMonthYearDetails } from './date';
+import { getFormatDate, getHourMinutes, getMonthDate, getMonthYearDetails } from '../date';
 
 describe('입력한 날짜 정보를 올바른 포맷으로 변환하는지 확인한다.', () => {
   test("년도, 월, 일이 입력되면 'YYYY-MM-DD' 형식으로 변환한다.", () => {
