@@ -10,7 +10,7 @@ const getFormatDate = (year: DateType, month: DateType, day: DateType) => {
 const getMonthYearDetails = (initialDate: Date) => {
   const month = String(initialDate.getMonth() + 1).padStart(2, '0');
   const year = String(initialDate.getFullYear());
-  const startDate = new Date(`${year} ${month}`);
+  const startDate = new Date(`${year}-${month}`);
   const firstDOW = startDate.getDay();
   const lastDateString = String(
     new Date(initialDate.getFullYear(), initialDate.getMonth() + 1, 0).getDate()
