@@ -17,6 +17,10 @@ const Crew = () => {
   const dispatch = useContext(UserDispatchContext);
   const [coaches, setCoaches] = useState<Coach[]>();
 
+  const handleClickCard = (id: number) => {
+    navigate(`${ROUTES.RESERVATION}/${id}`);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -39,10 +43,6 @@ const Crew = () => {
       }
     })();
   }, []);
-
-  const handleClickCard = (id: number) => {
-    navigate(`${ROUTES.RESERVATION}/${id}`);
-  };
 
   return (
     <S.Layout>
