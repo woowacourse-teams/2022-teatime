@@ -267,6 +267,7 @@ const Coach = () => {
                   image={crew.crewImage}
                   personName={crew.crewName}
                   buttonName={buttonName}
+                  buttonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
                   color={color}
                   draggedColor={draggedColor}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}
