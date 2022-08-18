@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
+import { UserStateContext } from '@context/UserProvider';
 import useSnackbar from '@hooks/useSnackbar';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
@@ -12,7 +13,6 @@ import api from '@api/index';
 import ScheduleIcon from '@assets/schedule-white.svg';
 import theme from '@styles/theme';
 import * as S from './styles';
-import { UserStateContext } from '@context/UserProvider';
 
 interface BoardItemValue {
   title: string;
