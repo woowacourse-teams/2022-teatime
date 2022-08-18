@@ -81,6 +81,7 @@ const BottomSection = styled.div<{ color: string }>`
   div {
     display: flex;
     align-items: flex-end;
+    cursor: pointer;
   }
 
   button {
