@@ -26,7 +26,7 @@ const Header = () => {
           <S.ProfileImage
             src={userData.image}
             alt="프로필 이미지"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen((prev) => !prev)}
           />
           {isOpen && <Dropdown onClick={toggleDropdown} />}
         </S.ProfileContainer>
