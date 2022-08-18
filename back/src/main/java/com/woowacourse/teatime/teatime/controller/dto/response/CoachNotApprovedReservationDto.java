@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CoachMainReservationDto {
+public class CoachNotApprovedReservationDto {
 
     private Long reservationId;
 
@@ -26,14 +26,14 @@ public class CoachMainReservationDto {
 
     private String crewImage;
 
-    public static List<CoachMainReservationDto> from(List<Reservation> reservations) {
+    public static List<CoachNotApprovedReservationDto> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(CoachMainReservationDto::from)
+                .map(CoachNotApprovedReservationDto::from)
                 .collect(Collectors.toList());
     }
 
-    private static CoachMainReservationDto from(Reservation reservation) {
-        return new CoachMainReservationDto(
+    private static CoachNotApprovedReservationDto from(Reservation reservation) {
+        return new CoachNotApprovedReservationDto(
                 reservation.getId(),
                 reservation.getScheduleDateTime(),
                 reservation.getCrew().getId(),
