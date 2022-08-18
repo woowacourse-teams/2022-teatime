@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
-import { UserStateContext } from '@context/UserProvider';
+import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
 import useSnackbar from '@hooks/useSnackbar';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
@@ -29,8 +30,9 @@ interface BoardItem {
 
 const Coach = () => {
   const navigate = useNavigate();
-  const showSnackBar = useSnackbar();
+  const showSnackbar = useSnackbar();
   const { userData } = useContext(UserStateContext);
+  const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -124,7 +126,7 @@ const Coach = () => {
       );
 
       deleteBoardItem(status, index);
-      showSnackBar({ message: '삭제되었습니다. ✅' });
+      showSnackbar({ message: '삭제되었습니다. ✅' });
     } catch (error) {
       alert('거절 기능 에러');
       console.log(error);
@@ -216,8 +218,16 @@ const Coach = () => {
         });
         setCrews(crewListMap);
       } catch (error) {
-        alert('크루 목록 get 에러');
-        console.log(error);
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch({ type: 'DELETE_USER' });
+            showSnackbar({ message: '토큰이 만료되었습니다. 다시 로그인해주세요.' });
+            navigate(ROUTES.HOME);
+            return;
+          } else {
+            alert(error);
+          }
+        }
       }
     })();
   }, []);
