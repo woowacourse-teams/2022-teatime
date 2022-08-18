@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import useSnackbar from '@hooks/useSnackbar';
+import Loading from '@components/Loading';
 import { UserDispatchContext } from '@context/UserProvider';
 import api from '@api/index';
 
@@ -27,7 +28,7 @@ const Certification = () => {
     })();
   }, []);
 
-  return <div>로그인 중...</div>;
+  return <Loading />;
 };
 
 export default Certification;
