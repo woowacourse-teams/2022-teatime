@@ -2,15 +2,14 @@ import { useContext, useState } from 'react';
 
 import Conditional from '@components/Conditional';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import { UserStateContext } from '@context/UserProvider';
 import useSnackbar from '@hooks/useSnackbar';
 import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
-import { getStorage } from '@utils/localStorage';
-import { LOCAL_DB } from '@constants/index';
 import * as S from './styles';
 
 const CoachTimeList = () => {
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
   const showSnackbar = useSnackbar();
   const { daySchedule, date } = useContext(ScheduleStateContext);
@@ -42,7 +41,7 @@ const CoachTimeList = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         }
       );

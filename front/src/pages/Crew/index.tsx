@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Card from '@components/Card';
-import { LOCAL_DB, ROUTES } from '@constants/index';
+import { ROUTES } from '@constants/index';
 import type { Coach } from '@typings/domain';
-import { getStorage } from '@utils/localStorage';
 import api from '@api/index';
 import * as S from './styles';
+import { UserStateContext } from '@context/UserProvider';
 
 const Crew = () => {
   const navigate = useNavigate();
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
   const [coaches, setCoaches] = useState<Coach[]>();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Crew = () => {
       try {
         const { data } = await api.get(`/api/v2/coaches`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         });
         setCoaches(data);

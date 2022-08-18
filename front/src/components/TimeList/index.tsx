@@ -5,23 +5,23 @@ import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import { LOCAL_DB, ROUTES } from '@constants/index';
+import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
-import { getStorage } from '@utils/localStorage';
 import api from '@api/index';
-import * as S from './styles';
 
 import CheckCircle from '@assets/check-circle.svg';
+import { UserStateContext } from '@context/UserProvider';
+import * as S from './styles';
 
 const TimeList = () => {
-  const { daySchedule } = useContext(ScheduleStateContext);
-  const dispatch = useContext(ScheduleDispatchContext);
+  const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const dispatch = useContext(ScheduleDispatchContext);
+  const { daySchedule } = useContext(ScheduleStateContext);
+  const { userData } = useContext(UserStateContext);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [isError, setIsError] = useState(false);
   const [reservationId, setReservationId] = useState<number | null>(null);
-  const { token } = getStorage(LOCAL_DB.USER);
-  const navigate = useNavigate();
 
   const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
 
@@ -38,7 +38,7 @@ const TimeList = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         }
       );
