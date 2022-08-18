@@ -51,6 +51,9 @@ const CrewHistory = () => {
           Authorization: `Bearer ${userData?.token}`,
         },
       });
+      setHistoryList((prevHistory) => {
+        return prevHistory.filter((history) => history.reservationId !== reservationId);
+      });
     } catch (error) {
       console.log(error);
     }

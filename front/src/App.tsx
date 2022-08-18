@@ -32,7 +32,7 @@ const App = () => {
               <Route path={ROUTES.CREW} element={<Crew />} />
               <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
               <Route path={`${ROUTES.CREW_SHEET}/:id`} element={<CrewSheet />} />
-              <Route path={`${ROUTES.CREW_HISTORY}/:id`} element={<CrewHistory />} />
+              <Route path={ROUTES.CREW_HISTORY} element={<CrewHistory />} />
             </Route>
             <Route element={<AuthRoute role="COACH" />}>
               <Route path={ROUTES.COACH} element={<Coach />} />
