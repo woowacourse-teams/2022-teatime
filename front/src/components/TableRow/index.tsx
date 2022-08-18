@@ -47,7 +47,7 @@ const TableRow = ({
           alt="스캐줄 아이콘"
           onClick={() => onClickSheet(reservationId)}
         />
-        {status !== 'IN_PROGRESS' && (
+        {status !== 'DONE' && (
           <S.Icon
             src={TrashIcon}
             alt="휴지통 아이콘"
