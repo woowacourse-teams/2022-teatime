@@ -63,7 +63,7 @@ public class SlackOpenIdAuth implements OpenIdAuth {
             OpenIDConnectUserInfoResponse response = slackClient.openIDConnectUserInfo(request);
             log.warn("user info response error : " + response.getError());
             log.info("user info response - email : " + response.getEmail());
-            return new UserInfoDto(response.getName(), response.getEmail(), response.getUserImage24());
+            return new UserInfoDto(response.getName(), response.getEmail(), response.getUserImage192());
         } catch (SlackApiException | IOException e) {
             throw new SlackException();
         }
