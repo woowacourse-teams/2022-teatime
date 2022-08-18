@@ -22,7 +22,7 @@
       "@context/*": ["src/context/*"],
       "@api/*": ["src/api/*"]
     },
-    "typeRoots": ["src/typings"]
+    "typeRoots": ["src/typings", "./node_modules/@types"]
   },
   "ts-node": {
     "compilerOptions": {
