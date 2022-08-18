@@ -95,6 +95,7 @@ const Coach = () => {
 
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
+      showSnackbar({ message: '승인되었습니다. ✅' });
     } catch (error) {
       alert('승인 에러');
       console.log(error);
@@ -126,7 +127,7 @@ const Coach = () => {
       );
 
       deleteBoardItem(status, index);
-      showSnackbar({ message: '삭제되었습니다. ✅' });
+      showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
       alert('거절 기능 에러');
       console.log(error);
@@ -145,8 +146,31 @@ const Coach = () => {
       });
 
       deleteBoardItem(status, index);
+      showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
       alert('취소 에러');
+      console.log(error);
+    }
+  };
+
+  const handleFinish = async (index: number, reservationId: number) => {
+    if (!confirm('면담을 완료하시겠습니까?')) return;
+
+    try {
+      await api.put(
+        `/api/v2/reservations/${reservationId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        }
+      );
+
+      deleteBoardItem('inProgress', index);
+      showSnackbar({ message: '완료되었습니다. ✅' });
+    } catch (error) {
+      alert(error);
       console.log(error);
     }
   };
@@ -200,10 +224,10 @@ const Coach = () => {
     },
     inProgress: {
       title: '진행중인 일정',
-      buttonName: '이력작성',
+      buttonName: '면담완료',
       color: theme.colors.GREEN_700,
       draggedColor: theme.colors.GREEN_100,
-      handleClickMenuButton: () => console.log('이력작성'),
+      handleClickMenuButton: handleFinish,
       handleClickCancelButton: handleCancel,
     },
   };
