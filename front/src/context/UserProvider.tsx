@@ -1,6 +1,6 @@
 import { createContext, Dispatch, useReducer } from 'react';
 
-import { getStorage, setStorage } from '@utils/localStorage';
+import { clearStorage, getStorage, setStorage } from '@utils/localStorage';
 import { LOCAL_DB } from '@constants/index';
 import { UserInfo } from '@typings/domain';
 
@@ -8,7 +8,7 @@ type State = {
   userData: UserInfo | null;
 };
 
-type Action = { type: 'SET_USER'; userData: UserInfo };
+type Action = { type: 'SET_USER'; userData: UserInfo } | { type: 'DELETE_USER' };
 
 type UserDispatch = Dispatch<Action>;
 
@@ -21,6 +21,14 @@ const reducer = (state: State, action: Action) => {
       return {
         ...state,
         userData,
+      };
+    }
+    case 'DELETE_USER': {
+      clearStorage(LOCAL_DB.USER);
+
+      return {
+        ...state,
+        userData: null,
       };
     }
     default:
