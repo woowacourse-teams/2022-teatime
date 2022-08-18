@@ -7,8 +7,8 @@ import com.slack.api.methods.request.openid.connect.OpenIDConnectTokenRequest;
 import com.slack.api.methods.request.openid.connect.OpenIDConnectUserInfoRequest;
 import com.slack.api.methods.response.openid.connect.OpenIDConnectTokenResponse;
 import com.slack.api.methods.response.openid.connect.OpenIDConnectUserInfoResponse;
-import com.woowacourse.teatime.auth.service.UserInfoDto;
 import com.woowacourse.teatime.auth.exception.SlackException;
+import com.woowacourse.teatime.auth.service.UserInfoDto;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +32,6 @@ public class SlackOpenIdAuth implements OpenIdAuth {
     private String redirectUrl;
 
     public String getAccessToken(String code) {
-        log.info(clientId);
-        log.info(clientSecret);
-
         OpenIDConnectTokenRequest request = OpenIDConnectTokenRequest.builder()
                 .clientId(clientId)
                 .clientSecret(clientSecret)
@@ -42,14 +39,11 @@ public class SlackOpenIdAuth implements OpenIdAuth {
                 .redirectUri(redirectUrl)
                 .build();
 
-        log.info("token request - code: " + request.getCode());
-
         try {
             OpenIDConnectTokenResponse response = slackClient.openIDConnectToken(request);
-            log.warn("token response error : " + response.getError());
-            log.info("token response - accessToken : " + response.getAccessToken());
             return response.getAccessToken();
         } catch (SlackApiException | IOException e) {
+            log.warn("token response error : " + e.getMessage());
             throw new SlackException();
         }
     }
@@ -61,10 +55,9 @@ public class SlackOpenIdAuth implements OpenIdAuth {
 
         try {
             OpenIDConnectUserInfoResponse response = slackClient.openIDConnectUserInfo(request);
-            log.warn("user info response error : " + response.getError());
-            log.info("user info response - email : " + response.getEmail());
             return new UserInfoDto(response.getName(), response.getEmail(), response.getUserImage192());
         } catch (SlackApiException | IOException e) {
+            log.warn("user info response error : " + e.getMessage());
             throw new SlackException();
         }
     }
