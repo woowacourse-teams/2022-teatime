@@ -33,9 +33,8 @@ const Crew = () => {
             showSnackbar({ message: '토큰이 만료되었습니다. 다시 로그인해주세요.' });
             navigate(ROUTES.HOME);
             return;
-          } else {
-            alert(error);
           }
+          alert(error);
         }
       }
     })();
