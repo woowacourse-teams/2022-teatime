@@ -1,5 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+
 import { UserStateContext } from '@context/UserProvider';
+import Dropdown from '@components/Dropdown';
 import { ROUTES } from '@constants/index';
 
 import LogoIcon from '@assets/logo.svg';
@@ -7,6 +9,11 @@ import * as S from './styles';
 
 const Header = () => {
   const { userData } = useContext(UserStateContext);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(false);
+  };
 
   return (
     <S.HeaderContainer>
@@ -14,7 +21,16 @@ const Header = () => {
         <S.LogoImage src={LogoIcon} />
         <h1>티타임</h1>
       </S.LogoLink>
-      {userData && <S.ProfileImage src={userData.image} alt="프로필 이미지" />}
+      {userData && (
+        <S.ProfileContainer>
+          <S.ProfileImage
+            src={userData.image}
+            alt="프로필 이미지"
+            onClick={() => setIsOpen((prev) => !prev)}
+          />
+          {isOpen && <Dropdown onClick={toggleDropdown} />}
+        </S.ProfileContainer>
+      )}
     </S.HeaderContainer>
   );
 };
