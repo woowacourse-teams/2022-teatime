@@ -49,12 +49,12 @@ const getMonthDate = (dateString: string) => {
 };
 
 const convertToFullDate = (year: DateType, month: DateType, date: DateType) => {
-  return new Date(`${year}-${month}-${date}`);
+  return new Date(`${year}/${month}/${date}`);
 };
 
 const getCurrentFullDate = () => {
   return new Date(
-    `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
+    `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`
   );
 };
 
