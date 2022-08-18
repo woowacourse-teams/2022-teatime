@@ -4,7 +4,7 @@ const Name = styled.p`
   font-size: 20px;
 `;
 
-const CoachImg = styled.img`
+const Image = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 8px;
@@ -29,4 +29,4 @@ const DateWrapper = styled.div`
   }
 `;
 
-export { Name, CoachImg, DateWrapper };
+export { Name, Image, DateWrapper };

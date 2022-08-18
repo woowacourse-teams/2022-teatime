@@ -74,6 +74,7 @@ type CrewListMap = Record<string, Crew[]>;
 
 export {
   UserInfo,
+  UserRole,
   Crew,
   Coach,
   MonthYear,

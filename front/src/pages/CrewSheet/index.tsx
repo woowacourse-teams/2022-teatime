@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
+import { UserStateContext } from '@context/UserProvider';
 import { Reservation, Sheets } from '@typings/domain';
-import { LOCAL_DB, ROUTES } from '@constants/index';
-import { getStorage } from '@utils/localStorage';
+import { ROUTES } from '@constants/index';
 import api from '@api/index';
 import * as S from '@styles/common';
 
 const CrewSheet = () => {
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
   const navigate = useNavigate();
   const { id: reservationId } = useParams();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
@@ -28,7 +28,7 @@ const CrewSheet = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         }
       );
@@ -44,7 +44,7 @@ const CrewSheet = () => {
       try {
         const { data } = await api.get(`/api/v2/crews/me/reservations/${reservationId}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         });
         setReservationInfo(data);
@@ -69,7 +69,7 @@ const CrewSheet = () => {
       <Sheet
         title="면담 내용 작성"
         sheets={reservationInfo.sheets}
-        handleSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         isView={isView}
       />
     </Frame>

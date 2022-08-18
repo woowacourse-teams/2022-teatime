@@ -6,10 +6,10 @@ import Title from '@components/Title';
 import CoachTimeList from '@components/CoachTimeList';
 import useTimeList from '@hooks/useTimeList';
 import { ScheduleDispatchContext } from '@context/ScheduleProvider';
+import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import { getStorage } from '@utils/localStorage';
-import { CALENDAR_DATE_LENGTH, LOCAL_DB } from '@constants/index';
+import { CALENDAR_DATE_LENGTH } from '@constants/index';
 import { MonthYear } from '@typings/domain';
 import * as S from '@styles/common';
 
@@ -21,7 +21,7 @@ const Schedule = () => {
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { lastDate, year, month } = monthYear;
   const dispatch = useContext(ScheduleDispatchContext);
-  const { token } = getStorage(LOCAL_DB.USER);
+  const { userData } = useContext(UserStateContext);
 
   const dateBoxLength =
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
@@ -53,7 +53,7 @@ const Schedule = () => {
           `/api/v2/coaches/me/schedules?year=${year}&month=${month}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${userData?.token}`,
             },
           }
         );
