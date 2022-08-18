@@ -6,11 +6,6 @@ const Span = styled.span<{ color: string; bgColor: string }>`
   border-radius: 4px;
   background-color: ${({ bgColor }) => bgColor};
   color: ${({ color }) => color};
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.7;
-  }
 `;
 
 const Profile = styled.div`
@@ -19,9 +14,9 @@ const Profile = styled.div`
   align-items: center;
 
   img {
-    width: 65px;
-    height: 65px;
-    margin-right: 18px;
+    width: 48px;
+    height: 48px;
+    margin-right: 14px;
     border-radius: 50%;
     border: 3px solid white;
     box-shadow: 0 0 16px rgb(210, 210, 210);
@@ -29,8 +24,9 @@ const Profile = styled.div`
 `;
 
 const Icon = styled.img`
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
   cursor: pointer;
   :hover {
     transform: scale(1.1);

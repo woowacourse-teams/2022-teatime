@@ -2,6 +2,7 @@ import { getMonthDate, getHourMinutes } from '@utils/date';
 import { History } from '@typings/domain';
 import * as S from './styles';
 
+import ScheduleIcon from '@assets/schedule.svg';
 import TrashIcon from '@assets/trash.svg';
 
 interface TableRowProps {
@@ -28,7 +29,7 @@ const TableRow = ({
   return (
     <tr>
       <td>
-        <S.Span bgColor={bgColor} color={color} onClick={() => onClickSheet(reservationId)}>
+        <S.Span bgColor={bgColor} color={color}>
           {statusName}
         </S.Span>
       </td>
@@ -41,6 +42,11 @@ const TableRow = ({
       <td>{date}</td>
       <td>{time}</td>
       <td>
+        <S.Icon
+          src={ScheduleIcon}
+          alt="스캐줄 아이콘"
+          onClick={() => onClickSheet(reservationId)}
+        />
         {status !== 'IN_PROGRESS' && (
           <S.Icon
             src={TrashIcon}
