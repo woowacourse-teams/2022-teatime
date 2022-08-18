@@ -72,7 +72,7 @@ const ProfileImage = styled.img`
   margin-right: 10px;
 `;
 
-const BottomSection = styled.div<{ color: string }>`
+const BottomSection = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
@@ -81,23 +81,33 @@ const BottomSection = styled.div<{ color: string }>`
   div {
     display: flex;
     align-items: flex-end;
-  }
-
-  button {
-    width: 100px;
-    height: 25px;
-    border: none;
-    border-radius: 15px;
-    color: #fff;
-    background-color: ${(props) => props.color};
-    font-weight: bold;
     cursor: pointer;
-
-    &:hover {
-      opacity: 0.6;
-      transition: ease-in-out 0.2s;
-    }
   }
+`;
+
+const MenuButton = styled.button<{ color: string; buttonDisabled?: boolean }>`
+  width: 100px;
+  height: 25px;
+  border: none;
+  border-radius: 15px;
+  color: ${({ theme }) => theme.colors.WHITE};
+  background-color: ${(props) => props.color};
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.6;
+    transition: ease-in-out 0.2s;
+  }
+
+  ${(props) =>
+    props.buttonDisabled === true &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
+      color: ${({ theme }) => theme.colors.GRAY_500};
+      cursor: default;
+      pointer-events: none;
+    `}
 `;
 
 export {
@@ -107,4 +117,5 @@ export {
   CloseIconWrapper,
   ProfileImage,
   BottomSection,
+  MenuButton,
 };

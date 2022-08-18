@@ -93,6 +93,7 @@ const Coach = () => {
         }
       );
 
+      showSnackbar({ message: '승인되었습니다. ✅' });
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
       showSnackbar({ message: '승인되었습니다. ✅' });
@@ -290,6 +291,7 @@ const Coach = () => {
                   image={crew.crewImage}
                   personName={crew.crewName}
                   buttonName={buttonName}
+                  buttonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
                   color={color}
                   draggedColor={draggedColor}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}

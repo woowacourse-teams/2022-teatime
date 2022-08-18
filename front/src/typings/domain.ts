@@ -1,5 +1,7 @@
 type UserRole = 'CREW' | 'COACH';
 
+type SheetStatus = 'WRITING' | 'SUBMITTED';
+
 interface UserInfo {
   image: string;
   name: string;
@@ -12,6 +14,7 @@ interface Crew {
   crewName: string;
   crewImage: string;
   dateTime: string;
+  sheetStatus?: SheetStatus;
 }
 interface Coach {
   id: number;
