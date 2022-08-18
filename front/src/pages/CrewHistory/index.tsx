@@ -27,9 +27,14 @@ const historyStatus: HistoryStatus = {
     backgroundColor: theme.colors.PURPLE_100,
   },
   IN_PROGRESS: {
-    statusName: '면담완료',
+    statusName: '진행중',
     color: theme.colors.GREEN_700,
     backgroundColor: theme.colors.GREEN_100,
+  },
+  DONE: {
+    statusName: '면담완료',
+    color: theme.colors.GRAY_500,
+    backgroundColor: theme.colors.GRAY_200,
   },
 };
 

@@ -8,8 +8,7 @@ import HistoryItem from '@components/HistoryItem';
 import { UserStateContext } from '@context/UserProvider';
 import { HistoryList } from '@typings/domain';
 import api from '@api/index';
-import { LOCAL_DB, ROUTES } from '@constants/index';
-import { getStorage } from '@utils/localStorage';
+import { ROUTES } from '@constants/index';
 import * as S from '@styles/common';
 
 const HistorySheet = () => {
