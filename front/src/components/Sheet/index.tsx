@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import Textarea from '@components/Textarea';
-import Title from '@components/Title';
-import * as S from './styles';
 import { Sheets } from '@typings/domain';
+import * as S from './styles';
 
 interface SheetProps {
   title: string;
@@ -39,7 +38,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
   return (
     <>
       <S.SheetContainer>
-        <Title text={title} />
+        <h2>{title}</h2>
         <form>
           <Textarea
             id="0"

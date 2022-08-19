@@ -3,12 +3,14 @@ import styled from 'styled-components';
 const ScheduleContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
 `;
 
 const CalendarContainer = styled.div`
   display: flex;
-  margin-top: 30px;
+  justify-content: center;
+  margin-top: 50px;
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
