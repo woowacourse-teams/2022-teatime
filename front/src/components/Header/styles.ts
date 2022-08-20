@@ -30,11 +30,13 @@ const LogoLink = styled(Link)`
 
 const ProfileContainer = styled.div`
   position: relative;
+  width: 35px;
+  height: 35px;
 `;
 
 const ProfileImage = styled.img`
-  width: 35px;
-  height: 35px;
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
 `;
 
