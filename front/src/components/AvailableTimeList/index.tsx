@@ -13,7 +13,11 @@ import api from '@api/index';
 import CheckCircle from '@assets/check-circle.svg';
 import * as S from './styles';
 
-const AvailableTimeList = () => {
+interface AvailableTimeListProps {
+  selectedDay: number;
+}
+
+const AvailableTimeList = ({ selectedDay }: AvailableTimeListProps) => {
   const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
   const dispatch = useContext(ScheduleDispatchContext);
@@ -40,7 +44,7 @@ const AvailableTimeList = () => {
         }
       );
       const location = data.headers.location.split('/').pop();
-      dispatch({ type: 'RESERVATE_TIME', scheduleId });
+      dispatch({ type: 'RESERVATE_TIME', scheduleId, selectedDay });
       setReservationId(Number(location));
       setSelectedTimeId(null);
       openModal();

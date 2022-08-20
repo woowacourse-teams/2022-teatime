@@ -18,7 +18,7 @@ const Schedule = () => {
   const currentDate = new Date();
   const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
   const currentMonthYear = getMonthYearDetails(currentDate);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number>(0);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { lastDate, year, month } = monthYear;
   const dispatch = useContext(ScheduleDispatchContext);
@@ -32,7 +32,7 @@ const Schedule = () => {
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
-    setSelectedDay(null);
+    setSelectedDay(0);
     setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
 

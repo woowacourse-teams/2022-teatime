@@ -54,8 +54,8 @@ type Action =
   | { type: 'SELECT_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
   | { type: 'SELECT_ALL_TIMES'; isSelectedAll: boolean }
-  | { type: 'UPDATE_SCHEDULE'; selectedTimes: string[]; selectedDay: number | null }
-  | { type: 'RESERVATE_TIME'; scheduleId: number };
+  | { type: 'UPDATE_SCHEDULE'; selectedTimes: string[]; selectedDay: number }
+  | { type: 'RESERVATE_TIME'; scheduleId: number; selectedDay: number };
 
 type ScheduleDispatch = Dispatch<Action>;
 
@@ -134,7 +134,6 @@ const reducer = (state: State, action: Action) => {
       return { ...state, allDaySchdule: newSchedules };
     }
     case 'UPDATE_SCHEDULE': {
-      if (!action.selectedDay) return state;
       const newDaySchedule = state.allMonthSchedule[action.selectedDay].map((daySchedule) => {
         if (action.selectedTimes.includes(daySchedule.dateTime)) {
           return {
@@ -160,7 +159,14 @@ const reducer = (state: State, action: Action) => {
         return time;
       });
 
-      return { ...state, availableDaySchedule: newDaySchedule };
+      return {
+        ...state,
+        availableMonthSchedule: {
+          ...state.availableMonthSchedule,
+          [action.selectedDay]: newDaySchedule,
+        },
+        availableDaySchedule: newDaySchedule,
+      };
     }
     default:
       return state;

@@ -9,7 +9,7 @@ import { getHourMinutes } from '@utils/date';
 import * as S from './styles';
 
 interface AllTimeListProps {
-  selectedDay: number | null;
+  selectedDay: number;
 }
 
 const AllTimeList = ({ selectedDay }: AllTimeListProps) => {

@@ -19,7 +19,7 @@ const Reservation = () => {
   const { id: coachId } = useParams();
   const currentDate = new Date();
   const currentMonthYear = getMonthYearDetails(currentDate);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number>(0);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month } = monthYear;
   const dispatch = useContext(ScheduleDispatchContext);
@@ -34,7 +34,7 @@ const Reservation = () => {
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
-    setSelectedDay(null);
+    setSelectedDay(0);
     setMonthYear((prev) => getNewMonthYear(prev, increment));
   };
 
@@ -83,7 +83,7 @@ const Reservation = () => {
             dateBoxLength={dateBoxLength}
             selectedDay={selectedDay}
           />
-          {isOpenTimeList && <AvailableTimeList />}
+          {isOpenTimeList && <AvailableTimeList selectedDay={selectedDay} />}
         </S.CalendarContainer>
       </S.ScheduleContainer>
     </Frame>
