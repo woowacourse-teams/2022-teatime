@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from 'react';
 import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
 import Title from '@components/Title';
-import CoachTimeList from '@components/CoachTimeList';
+import AllTimeList from '@components/AllTimeList';
 import useTimeList from '@hooks/useTimeList';
-import { ScheduleDispatchContext } from '@context/ScheduleProvider';
+import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
@@ -23,6 +23,7 @@ const Schedule = () => {
   const { lastDate, year, month } = monthYear;
   const dispatch = useContext(ScheduleDispatchContext);
   const { userData } = useContext(UserStateContext);
+  const { allMonthSchedule } = useContext(ScheduleStateContext);
 
   const dateBoxLength =
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
@@ -59,7 +60,7 @@ const Schedule = () => {
           }
         );
 
-        dispatch({ type: 'SET_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
+        dispatch({ type: 'SET_ALL_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
       } catch (error) {
         alert(error);
       }
@@ -78,13 +79,14 @@ const Schedule = () => {
         <S.CalendarContainer>
           <Calendar
             isCoach
+            monthSchedule={allMonthSchedule}
             onUpdateMonth={handleUpdateMonth}
             onClickDate={handleClickDate}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
             selectedDay={selectedDay}
           />
-          {isOpenTimeList && <CoachTimeList />}
+          {isOpenTimeList && <AllTimeList selectedDay={selectedDay} />}
         </S.CalendarContainer>
       </S.ScheduleContainer>
     </Frame>

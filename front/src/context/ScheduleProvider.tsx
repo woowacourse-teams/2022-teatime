@@ -1,6 +1,6 @@
 import { createContext, useReducer, Dispatch } from 'react';
 
-import type { DaySchedule, Schedule as ScheduleType } from '@typings/domain';
+import type { DaySchedule, Schedule, ScheduleMap } from '@typings/domain';
 import { getFormatDate } from '@utils/date';
 
 const timeArray = [
@@ -31,122 +31,136 @@ const getAllTime = (date: string) => {
 };
 
 type State = {
-  monthSchedule: DaySchedule[];
-  daySchedule: DaySchedule;
+  allMonthSchedule: ScheduleMap;
+  availableMonthSchedule: ScheduleMap;
+  allDaySchdule: Schedule[];
+  availableDaySchedule: Schedule[];
   date: string;
 };
 
 type Action =
   | {
-      type: 'SET_MONTH_SCHEDULE';
+      type: 'SET_ALL_MONTH_SCHEDULE';
       coachSchedules: DaySchedule[];
       lastDate: number;
       year: string;
       month: string;
     }
+  | {
+      type: 'SET_AVAILABLE_MONTH_SCHEDULE';
+      coachSchedules: DaySchedule[];
+    }
+  | { type: 'SELECT_AVAILABLE_DATE'; day: number }
   | { type: 'SELECT_DATE'; day: number; date: string }
   | { type: 'SELECT_TIME'; dateTime: string }
   | { type: 'SELECT_ALL_TIMES'; isSelectedAll: boolean }
-  | { type: 'UPDATE_SCHEDULE'; dateTimes: string[] }
+  | { type: 'UPDATE_SCHEDULE'; selectedTimes: string[]; selectedDay: number | null }
   | { type: 'RESERVATE_TIME'; scheduleId: number };
 
 type ScheduleDispatch = Dispatch<Action>;
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'SET_MONTH_SCHEDULE': {
-      const initialMonthSchedule = Array.from({ length: action.lastDate }, (_, index) => {
-        const currentDateFormat = getFormatDate(action.year, action.month, index + 1);
+    case 'SET_ALL_MONTH_SCHEDULE': {
+      const initialMonthSchedule = Array.from({ length: action.lastDate }).reduce(
+        (newObj: ScheduleMap, _, index) => {
+          const currentDateFormat = getFormatDate(action.year, action.month, index + 1);
+          newObj[index + 1] = getAllTime(currentDateFormat);
+          return newObj;
+        },
+        {}
+      );
 
-        return {
-          day: index + 1,
-          schedules: getAllTime(currentDateFormat),
-        };
-      });
-
-      const newMonthSchedule = initialMonthSchedule.map((daySchedule: DaySchedule) => {
-        const sameDaySchedule = action.coachSchedules.find(
-          (schedule) => schedule.day === daySchedule.day
-        );
-
-        if (sameDaySchedule) {
-          const newDaySchedule = daySchedule.schedules.map((time) => {
-            const sameTimeSchedule = sameDaySchedule.schedules.find(
-              (sameTime: ScheduleType) => sameTime.dateTime === time.dateTime
-            );
-            if (sameTimeSchedule) {
-              return {
-                id: sameTimeSchedule.id,
-                dateTime: sameTimeSchedule.dateTime,
-                isPossible: sameTimeSchedule.isPossible,
-                isSelected: sameTimeSchedule.isPossible,
-              };
+      const availableMonthSchedule = action.coachSchedules.reduce(
+        (newObj: ScheduleMap, { day, schedules }) => {
+          const currentDateFormat = getFormatDate(action.year, action.month, day);
+          const newSchedule = getAllTime(currentDateFormat).map((time) => {
+            const sameTime = schedules.find((coachTime) => coachTime.dateTime === time.dateTime);
+            if (sameTime) {
+              sameTime.isSelected = sameTime.isPossible;
+              return sameTime;
             }
-
             return time;
           });
 
-          return { day: daySchedule.day, schedules: newDaySchedule };
-        }
+          newObj[day] = newSchedule;
+          return newObj;
+        },
+        {}
+      );
 
-        return daySchedule;
-      });
+      return {
+        ...state,
+        allMonthSchedule: {
+          ...initialMonthSchedule,
+          ...availableMonthSchedule,
+        },
+      };
+    }
+    case 'SET_AVAILABLE_MONTH_SCHEDULE': {
+      const availableMonthSchedule = action.coachSchedules.reduce((newObj, { day, schedules }) => {
+        newObj[day] = schedules;
+        return newObj;
+      }, {} as ScheduleMap);
 
-      return { ...state, monthSchedule: newMonthSchedule };
+      return { ...state, availableMonthSchedule };
+    }
+    case 'SELECT_AVAILABLE_DATE': {
+      const selectedDaySchedule = state.availableMonthSchedule[action.day];
+
+      return { ...state, availableDaySchedule: selectedDaySchedule };
     }
     case 'SELECT_DATE': {
-      const selectedDaySchedule = state.monthSchedule.find(
-        (daySchedule) => daySchedule.day === action.day
-      ) as DaySchedule;
+      const selectedDaySchedule = state.allMonthSchedule[action.day];
 
-      return { ...state, daySchedule: selectedDaySchedule, date: action.date };
+      return { ...state, allDaySchdule: selectedDaySchedule, date: action.date };
     }
     case 'SELECT_TIME': {
-      const selectedIndex = state.daySchedule.schedules.findIndex(
-        (time: ScheduleType) => time.dateTime === action.dateTime
+      const selectedIndex = state.allDaySchdule.findIndex(
+        (time: Schedule) => time.dateTime === action.dateTime
       );
-      const newSchedules = [...state.daySchedule.schedules];
+      const newSchedules = [...state.allDaySchdule];
       newSchedules[selectedIndex].isSelected = !newSchedules[selectedIndex].isSelected;
-
-      return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newSchedules } };
+      return { ...state, allDaySchdule: newSchedules };
     }
     case 'SELECT_ALL_TIMES': {
-      const newSchedules = state.daySchedule.schedules.map((schedule) => {
+      const newSchedules = state.allDaySchdule.map((schedule) => {
         if (schedule.isPossible !== false) {
           schedule.isSelected = action.isSelectedAll ? false : true;
         }
         return schedule;
       });
 
-      return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newSchedules } };
+      return { ...state, allDaySchdule: newSchedules };
     }
     case 'UPDATE_SCHEDULE': {
-      const newMonthSchedule = state.monthSchedule.map((daySchedule) => {
-        if (daySchedule.day === state.daySchedule.day) {
-          const newDaySchedule = daySchedule.schedules.map((time: ScheduleType) => {
-            if (action.dateTimes.includes(time.dateTime)) {
-              return { id: time.id, dateTime: time.dateTime, isPossible: true, isSelected: true };
-            }
-            return { id: time.id, dateTime: time.dateTime, isSelected: false };
-          });
-
-          return { day: daySchedule.day, schedules: newDaySchedule };
+      if (!action.selectedDay) return state;
+      const newDaySchedule = state.allMonthSchedule[action.selectedDay].map((daySchedule) => {
+        if (action.selectedTimes.includes(daySchedule.dateTime)) {
+          return {
+            id: daySchedule.id,
+            dateTime: daySchedule.dateTime,
+            isPossible: true,
+            isSelected: true,
+          };
         }
-
-        return daySchedule;
+        return { id: daySchedule.id, dateTime: daySchedule.dateTime, isSelected: false };
       });
 
-      return { ...state, monthSchedule: newMonthSchedule };
+      return {
+        ...state,
+        allMonthSchedule: { ...state.allMonthSchedule, [action.selectedDay]: newDaySchedule },
+      };
     }
     case 'RESERVATE_TIME': {
-      const newDaySchedule = state.daySchedule.schedules.map((time) => {
+      const newDaySchedule = state.availableDaySchedule.map((time) => {
         if (time.id === action.scheduleId) {
           return { id: action.scheduleId, dateTime: time.dateTime, isPossible: false };
         }
         return time;
       });
 
-      return { ...state, daySchedule: { day: state.daySchedule.day, schedules: newDaySchedule } };
+      return { ...state, availableDaySchedule: newDaySchedule };
     }
     default:
       return state;
@@ -154,8 +168,10 @@ const reducer = (state: State, action: Action) => {
 };
 
 const initialState: State = {
-  monthSchedule: [],
-  daySchedule: { day: 0, schedules: [] },
+  allMonthSchedule: {},
+  availableMonthSchedule: {},
+  allDaySchdule: [],
+  availableDaySchedule: [],
   date: '',
 };
 

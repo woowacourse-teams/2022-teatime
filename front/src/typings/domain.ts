@@ -73,6 +73,8 @@ interface DaySchedule {
   schedules: Schedule[];
 }
 
+type ScheduleMap = Record<number, Schedule[]>;
+
 type CrewListMap = Record<string, Crew[]>;
 
 export {
@@ -84,6 +86,7 @@ export {
   Schedule,
   DaySchedule,
   Reservation,
+  ScheduleMap,
   CrewListMap,
   Sheets,
   History,

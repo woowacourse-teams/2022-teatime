@@ -5,25 +5,22 @@ import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import { UserStateContext } from '@context/UserProvider';
 import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
 import api from '@api/index';
 
 import CheckCircle from '@assets/check-circle.svg';
-import { UserStateContext } from '@context/UserProvider';
 import * as S from './styles';
 
-const TimeList = () => {
+const AvailableTimeList = () => {
   const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
   const dispatch = useContext(ScheduleDispatchContext);
-  const { daySchedule } = useContext(ScheduleStateContext);
+  const { availableDaySchedule } = useContext(ScheduleStateContext);
   const { userData } = useContext(UserStateContext);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [isError, setIsError] = useState(false);
   const [reservationId, setReservationId] = useState<number | null>(null);
-
-  const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
 
   const handleClickTime = (id: number) => {
     setSelectedTimeId(id);
@@ -48,7 +45,8 @@ const TimeList = () => {
       setSelectedTimeId(null);
       openModal();
     } catch (error) {
-      setIsError(true);
+      alert(error);
+      console.log(error);
     }
   };
 
@@ -56,11 +54,9 @@ const TimeList = () => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
-  if (isError) return <h1>error</h1>;
-
   return (
     <S.TimeListContainer>
-      {coachSchedule.map((schedule) => {
+      {availableDaySchedule.map((schedule) => {
         const time = getHourMinutes(schedule.dateTime);
 
         return (
@@ -99,4 +95,4 @@ const TimeList = () => {
   );
 };
 
-export default TimeList;
+export default AvailableTimeList;

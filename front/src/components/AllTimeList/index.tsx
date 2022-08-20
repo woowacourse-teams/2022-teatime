@@ -8,12 +8,16 @@ import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
 import * as S from './styles';
 
-const CoachTimeList = () => {
-  const { userData } = useContext(UserStateContext);
-  const [isSelectedAll, setIsSelectedAll] = useState(false);
+interface AllTimeListProps {
+  selectedDay: number | null;
+}
+
+const AllTimeList = ({ selectedDay }: AllTimeListProps) => {
   const showSnackbar = useSnackbar();
-  const { daySchedule, date } = useContext(ScheduleStateContext);
+  const { userData } = useContext(UserStateContext);
+  const { allDaySchdule, date } = useContext(ScheduleStateContext);
   const dispatch = useContext(ScheduleDispatchContext);
+  const [isSelectedAll, setIsSelectedAll] = useState(false);
 
   const handleClickTime = (dateTime: string) => {
     dispatch({ type: 'SELECT_TIME', dateTime });
@@ -25,7 +29,7 @@ const CoachTimeList = () => {
   };
 
   const handleUpdateSchedules = async () => {
-    const selectedTimes = daySchedule.schedules.reduce((newArray, { isSelected, dateTime }) => {
+    const selectedTimes = allDaySchdule.reduce((newArray, { isSelected, dateTime }) => {
       if (isSelected) {
         newArray.push(dateTime);
       }
@@ -45,8 +49,7 @@ const CoachTimeList = () => {
           },
         }
       );
-
-      dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
+      dispatch({ type: 'UPDATE_SCHEDULE', selectedTimes, selectedDay });
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
       alert('스케쥴 등록 실패');
@@ -57,7 +60,7 @@ const CoachTimeList = () => {
   return (
     <S.TimeListContainer>
       <S.ScrollContainer>
-        {daySchedule?.schedules.map((schedule) => {
+        {allDaySchdule.map((schedule) => {
           const time = getHourMinutes(schedule.dateTime);
 
           return (
@@ -74,7 +77,7 @@ const CoachTimeList = () => {
         })}
       </S.ScrollContainer>
 
-      <Conditional condition={daySchedule?.schedules.length !== 0}>
+      <Conditional condition={allDaySchdule.length !== 0}>
         <S.ButtonContainer>
           <S.CheckButton onClick={handleSelectedAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}
@@ -86,4 +89,4 @@ const CoachTimeList = () => {
   );
 };
 
-export default CoachTimeList;
+export default AllTimeList;
