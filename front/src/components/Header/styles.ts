@@ -32,6 +32,7 @@ const ProfileContainer = styled.div`
   position: relative;
   width: 35px;
   height: 35px;
+  cursor: pointer;
 `;
 
 const ProfileImage = styled.img`
