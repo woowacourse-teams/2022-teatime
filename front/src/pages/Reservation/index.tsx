@@ -12,6 +12,7 @@ import useTimeList from '@hooks/useTimeList';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { MonthYear } from '@typings/domain';
+import theme from '@styles/theme';
 import * as S from '@styles/common';
 
 const Reservation = () => {
@@ -69,7 +70,12 @@ const Reservation = () => {
   return (
     <Frame>
       <S.ScheduleContainer>
-        <Title text="신청 날짜를 선택해주세요" />
+        <Title
+          text="예약할"
+          highlightText={isOpenTimeList ? '시간을' : '날짜를'}
+          hightlightColor={theme.colors.GREEN_300}
+          extraText="선택해주세요."
+        />
         <S.CalendarContainer>
           <Calendar
             onUpdateMonth={handleUpdateMonth}
