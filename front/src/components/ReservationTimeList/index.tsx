@@ -14,7 +14,6 @@ import CheckCircle from '@assets/check-circle.svg';
 import * as S from './styles';
 
 interface ReservationTimeListProps {
-  selectedDay: number;
   daySchedule: TimeSchedule[];
   onReservateTime: (scheduleId: number) => void;
 }

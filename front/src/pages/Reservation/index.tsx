@@ -119,7 +119,6 @@ const Reservation = () => {
           />
           {isOpenTimeList && (
             <ReservationTimeList
-              selectedDay={selectedDay}
               daySchedule={schedule.daySchedule}
               onReservateTime={handleReservateTime}
             />
