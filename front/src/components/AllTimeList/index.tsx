@@ -1,10 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 import Conditional from '@components/Conditional';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import { UserStateContext } from '@context/UserProvider';
-import useSnackbar from '@hooks/useSnackbar';
-import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
 import * as S from './styles';
 

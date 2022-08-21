@@ -97,14 +97,14 @@ const reducer = (state: State, action: Action) => {
     //     },
     //   };
     // }
-    case 'SET_AVAILABLE_MONTH_SCHEDULE': {
-      const availableMonthSchedule = action.coachSchedules.reduce((newObj, { day, schedules }) => {
-        newObj[day] = schedules;
-        return newObj;
-      }, {} as ScheduleMap);
+    // case 'SET_AVAILABLE_MONTH_SCHEDULE': {
+    //   const availableMonthSchedule = action.coachSchedules.reduce((newObj, { day, schedules }) => {
+    //     newObj[day] = schedules;
+    //     return newObj;
+    //   }, {} as ScheduleMap);
 
-      return { ...state, availableMonthSchedule };
-    }
+    //   return { ...state, availableMonthSchedule };
+    // }
     case 'SELECT_AVAILABLE_DATE': {
       const selectedDaySchedule = state.availableMonthSchedule[action.day];
 

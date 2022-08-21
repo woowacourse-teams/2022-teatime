@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { UserStateContext } from '@context/UserProvider';
 import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
@@ -13,15 +12,22 @@ import api from '@api/index';
 import CheckCircle from '@assets/check-circle.svg';
 import * as S from './styles';
 
-interface AvailableTimeListProps {
-  selectedDay: number;
+interface TimeSchedule {
+  id: number;
+  dateTime: string;
+  isPossible?: boolean;
+  isSelected?: boolean;
 }
 
-const AvailableTimeList = ({ selectedDay }: AvailableTimeListProps) => {
+interface AvailableTimeListProps {
+  selectedDay: number;
+  daySchedule: TimeSchedule[];
+  reservateTime: (scheduleId: number) => void;
+}
+
+const AvailableTimeList = ({ daySchedule, reservateTime }: AvailableTimeListProps) => {
   const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
-  const dispatch = useContext(ScheduleDispatchContext);
-  const { availableDaySchedule } = useContext(ScheduleStateContext);
   const { userData } = useContext(UserStateContext);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [reservationId, setReservationId] = useState<number | null>(null);
@@ -30,7 +36,7 @@ const AvailableTimeList = ({ selectedDay }: AvailableTimeListProps) => {
     setSelectedTimeId(id);
   };
 
-  const handleClickReservationButton = async (scheduleId: number) => {
+  const handleClickReservation = async (scheduleId: number) => {
     try {
       const data = await api.post(
         `/api/v2/reservations`,
@@ -44,9 +50,9 @@ const AvailableTimeList = ({ selectedDay }: AvailableTimeListProps) => {
         }
       );
       const location = data.headers.location.split('/').pop();
-      dispatch({ type: 'RESERVATE_TIME', scheduleId, selectedDay });
       setReservationId(Number(location));
       setSelectedTimeId(null);
+      reservateTime(scheduleId);
       openModal();
     } catch (error) {
       alert(error);
@@ -60,7 +66,7 @@ const AvailableTimeList = ({ selectedDay }: AvailableTimeListProps) => {
 
   return (
     <S.TimeListContainer>
-      {availableDaySchedule.map((schedule) => {
+      {daySchedule.map((schedule) => {
         const time = getHourMinutes(schedule.dateTime);
 
         return (
@@ -68,7 +74,7 @@ const AvailableTimeList = ({ selectedDay }: AvailableTimeListProps) => {
             <Conditional condition={selectedTimeId === schedule.id}>
               <S.ReserveButtonWrapper>
                 <div>{time}</div>
-                <button onClick={() => handleClickReservationButton(schedule.id)}>예약하기</button>
+                <button onClick={() => handleClickReservation(schedule.id)}>예약하기</button>
               </S.ReserveButtonWrapper>
             </Conditional>
             <Conditional condition={selectedTimeId !== schedule.id}>

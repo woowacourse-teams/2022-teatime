@@ -55,9 +55,10 @@ interface Schedule {
 
 const Schedule = () => {
   const currentDate = new Date();
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
-  const showSnackbar = useSnackbar();
   const currentMonthYear = getMonthYearDetails(currentDate);
+  const showSnackbar = useSnackbar();
+  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const { userData } = useContext(UserStateContext);
   const [schedule, setSchedule] = useState<Schedule>({
     monthSchedule: {},
     daySchedule: [],
@@ -66,7 +67,6 @@ const Schedule = () => {
   const [selectedDay, setSelectedDay] = useState<number>(0);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { lastDate, year, month } = monthYear;
-  const { userData } = useContext(UserStateContext);
 
   const dateBoxLength =
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
@@ -229,7 +229,6 @@ const Schedule = () => {
             },
           }
         );
-
         createMapSchedule(coachSchedules);
       } catch (error) {
         alert(error);
@@ -254,8 +253,8 @@ const Schedule = () => {
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
             selectedDay={selectedDay}
-            onUpdateMonth={handleUpdateMonth}
             onClickDate={handleClickDate}
+            onUpdateMonth={handleUpdateMonth}
           />
           {isOpenTimeList && (
             <AllTimeList

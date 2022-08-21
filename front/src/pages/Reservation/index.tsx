@@ -11,26 +11,82 @@ import api from '@api/index';
 import useTimeList from '@hooks/useTimeList';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
 import { getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import { MonthYear } from '@typings/domain';
+import { DaySchedule, MonthYear, ScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
+interface TimeSchedule {
+  id: number;
+  dateTime: string;
+  isPossible?: boolean;
+  isSelected?: boolean;
+}
+
+//Omit date
+interface Schedule {
+  monthSchedule: ScheduleMap;
+  daySchedule: TimeSchedule[];
+}
 
 const Reservation = () => {
   const { id: coachId } = useParams();
   const currentDate = new Date();
   const currentMonthYear = getMonthYearDetails(currentDate);
+  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const { userData } = useContext(UserStateContext);
+  const [schedule, setSchedule] = useState<Schedule>({
+    monthSchedule: {},
+    daySchedule: [],
+  });
   const [selectedDay, setSelectedDay] = useState<number>(0);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { firstDOW, lastDate, year, month } = monthYear;
-  const dispatch = useContext(ScheduleDispatchContext);
-  const { userData } = useContext(UserStateContext);
-  const { availableMonthSchedule } = useContext(ScheduleStateContext);
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
 
   const dateBoxLength =
     firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
       : CALENDAR_DATE_LENGTH.MAX;
+
+  const createMapSchedule = (scheduleArray: DaySchedule[]) => {
+    setSchedule((allSchedules) => {
+      const newMonthSchedule = scheduleArray.reduce((newObj, { day, schedules }) => {
+        newObj[day] = schedules;
+        return newObj;
+      }, {} as ScheduleMap);
+
+      return {
+        ...allSchedules,
+        monthSchedule: newMonthSchedule,
+      };
+    });
+  };
+
+  const selectDaySchedule = (day: number) => {
+    setSchedule((allSchedules) => {
+      const selectedDaySchedule = schedule.monthSchedule[day];
+
+      return {
+        ...allSchedules,
+        daySchedule: selectedDaySchedule,
+      };
+    });
+  };
+
+  const reservateTime = (scheduleId: number) => {
+    setSchedule((allSchedules) => {
+      const newDaySchedule = schedule.daySchedule.map((time) => {
+        if (time.id === scheduleId) {
+          return { id: scheduleId, dateTime: time.dateTime, isPossible: false };
+        }
+        return time;
+      });
+
+      return {
+        ...allSchedules,
+        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
+        daySchedule: newDaySchedule,
+      };
+    });
+  };
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
@@ -41,8 +97,8 @@ const Reservation = () => {
   const handleClickDate = (day: number, isWeekend: boolean) => {
     if (isWeekend) return;
 
-    dispatch({ type: 'SELECT_AVAILABLE_DATE', day });
     openTimeList();
+    selectDaySchedule(day);
     setSelectedDay(day);
   };
 
@@ -57,7 +113,7 @@ const Reservation = () => {
             },
           }
         );
-        dispatch({ type: 'SET_AVAILABLE_MONTH_SCHEDULE', coachSchedules });
+        createMapSchedule(coachSchedules);
       } catch (error) {
         alert(error);
         console.log(error);
@@ -76,14 +132,20 @@ const Reservation = () => {
         />
         <S.CalendarContainer>
           <Calendar
-            monthSchedule={availableMonthSchedule}
-            onUpdateMonth={handleUpdateMonth}
-            onClickDate={handleClickDate}
+            monthSchedule={schedule.monthSchedule}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
             selectedDay={selectedDay}
+            onClickDate={handleClickDate}
+            onUpdateMonth={handleUpdateMonth}
           />
-          {isOpenTimeList && <AvailableTimeList selectedDay={selectedDay} />}
+          {isOpenTimeList && (
+            <AvailableTimeList
+              selectedDay={selectedDay}
+              daySchedule={schedule.daySchedule}
+              reservateTime={reservateTime}
+            />
+          )}
         </S.CalendarContainer>
       </S.ScheduleContainer>
     </Frame>
