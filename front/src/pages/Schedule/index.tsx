@@ -10,7 +10,7 @@ import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
-import { DaySchedule, MonthYear, ScheduleMap } from '@typings/domain';
+import { DaySchedule, MonthYear, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 
@@ -41,25 +41,13 @@ const getAllTime = (date: string) => {
   }));
 };
 
-interface TimeSchedule {
-  id: number;
-  dateTime: string;
-  isPossible?: boolean;
-  isSelected?: boolean;
-}
-interface Schedule {
-  monthSchedule: ScheduleMap;
-  daySchedule: TimeSchedule[];
-  date: string;
-}
-
 const Schedule = () => {
   const currentDate = new Date();
   const currentMonthYear = getMonthYearDetails(currentDate);
   const showSnackbar = useSnackbar();
   const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
   const { userData } = useContext(UserStateContext);
-  const [schedule, setSchedule] = useState<Schedule>({
+  const [schedule, setSchedule] = useState<ScheduleInfo>({
     monthSchedule: {},
     daySchedule: [],
     date: '',
@@ -89,7 +77,7 @@ const Schedule = () => {
   const createMapSchedule = (scheduleArray: DaySchedule[]) => {
     setSchedule((allSchedules) => {
       const initialMonthSchedule = Array.from({ length: lastDate }).reduce(
-        (newObj: ScheduleMap, _, index) => {
+        (newObj: MonthScheduleMap, _, index) => {
           const currentDateFormat = getFormatDate(year, month, index + 1);
           newObj[index + 1] = getAllTime(currentDateFormat);
           return newObj;
@@ -98,7 +86,7 @@ const Schedule = () => {
       );
 
       const availableMonthSchedule = scheduleArray.reduce(
-        (newObj: ScheduleMap, { day, schedules }) => {
+        (newObj: MonthScheduleMap, { day, schedules }) => {
           const currentDateFormat = getFormatDate(year, month, day);
           const newSchedule = getAllTime(currentDateFormat).map((time) => {
             const sameTime = schedules.find((coachTime) => coachTime.dateTime === time.dateTime);

@@ -5,27 +5,14 @@ import AvailableTimeList from '@components/AvailableTimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import useTimeList from '@hooks/useTimeList';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
 import { getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import { DaySchedule, MonthYear, ScheduleMap } from '@typings/domain';
+import { DaySchedule, MonthYear, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
-interface TimeSchedule {
-  id: number;
-  dateTime: string;
-  isPossible?: boolean;
-  isSelected?: boolean;
-}
-
-//Omit date
-interface Schedule {
-  monthSchedule: ScheduleMap;
-  daySchedule: TimeSchedule[];
-}
 
 const Reservation = () => {
   const { id: coachId } = useParams();
@@ -33,7 +20,7 @@ const Reservation = () => {
   const currentMonthYear = getMonthYearDetails(currentDate);
   const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
   const { userData } = useContext(UserStateContext);
-  const [schedule, setSchedule] = useState<Schedule>({
+  const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
     monthSchedule: {},
     daySchedule: [],
   });
@@ -51,7 +38,7 @@ const Reservation = () => {
       const newMonthSchedule = scheduleArray.reduce((newObj, { day, schedules }) => {
         newObj[day] = schedules;
         return newObj;
-      }, {} as ScheduleMap);
+      }, {} as MonthScheduleMap);
 
       return {
         ...allSchedules,
