@@ -5,11 +5,11 @@ import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
 import { UserStateContext } from '@context/UserProvider';
+import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
-import api from '@api/index';
-
 import type { TimeSchedule } from '@typings/domain';
+
 import CheckCircle from '@assets/check-circle.svg';
 import * as S from './styles';
 

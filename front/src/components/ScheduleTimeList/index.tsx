@@ -3,9 +3,10 @@ import { useContext, useState } from 'react';
 import Conditional from '@components/Conditional';
 import useSnackbar from '@hooks/useSnackbar';
 import { UserStateContext } from '@context/UserProvider';
+import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
-import api from '@api/index';
+
 import * as S from './styles';
 
 interface ScheduleTimeListProps {
