@@ -82,7 +82,7 @@ const Reservation = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: coachSchedules } = await api.get(
+        const { data: coachSchedules } = await api.get<DaySchedule[]>(
           `/api/v2/coaches/${coachId}/schedules?year=${year}&month=${month}`,
           {
             headers: {
