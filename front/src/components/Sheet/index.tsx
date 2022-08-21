@@ -51,7 +51,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
           <Textarea
             id="1"
             label={contents[1].questionContent}
-            value={contents[1].answerContent || ''}
+            value={sheets[1].answerContent || ''}
             handleChangeContent={handleChangeContent(1)}
             isSubmit={isSubmit}
             isView={isView}
@@ -59,7 +59,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
           <Textarea
             id="2"
             label={contents[2].questionContent}
-            value={contents[2].answerContent || ''}
+            value={sheets[2].answerContent || ''}
             handleChangeContent={handleChangeContent(2)}
             isSubmit={isSubmit}
             isView={isView}
