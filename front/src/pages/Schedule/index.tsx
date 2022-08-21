@@ -113,29 +113,17 @@ const Schedule = () => {
 
   const updateDaySchedule = (selectedTimes: string[]) => {
     setSchedule((allSchedules) => {
-      const newDaySchedule = schedule.monthSchedule[selectedDay].map((daySchedule) => {
-        if (selectedTimes.includes(daySchedule.dateTime)) {
-          return {
-            id: daySchedule.id,
-            dateTime: daySchedule.dateTime,
-            isPossible: true,
-            isSelected: true,
-          };
+      const newDaySchedule = schedule.monthSchedule[selectedDay].map(
+        ({ id, dateTime, isPossible }) => {
+          if (selectedTimes.includes(dateTime)) {
+            return { id, dateTime, isPossible: true, isSelected: true };
+          }
+          if (isPossible === false) {
+            return { id, dateTime, isPossible, isSelected: false };
+          }
+          return { id, dateTime, isSelected: false };
         }
-        if (daySchedule.isPossible === false) {
-          return {
-            id: daySchedule.id,
-            dateTime: daySchedule.dateTime,
-            isPossible: false,
-            isSelected: false,
-          };
-        }
-        return {
-          id: daySchedule.id,
-          dateTime: daySchedule.dateTime,
-          isSelected: false,
-        };
-      });
+      );
 
       return {
         ...allSchedules,
@@ -174,7 +162,7 @@ const Schedule = () => {
     setSchedule((allSchedules) => {
       const newSchedules = schedule.daySchedule.map((schedule) => {
         if (schedule.isPossible !== false) {
-          schedule.isSelected = isSelectedAll ? false : true;
+          schedule.isSelected = !isSelectedAll;
         }
         return schedule;
       });
