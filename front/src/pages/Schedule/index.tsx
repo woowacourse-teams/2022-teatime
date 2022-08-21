@@ -6,11 +6,11 @@ import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import useTimeList from '@hooks/useTimeList';
 import useSnackbar from '@hooks/useSnackbar';
+import useCalendar from '@hooks/useSchedule';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
-import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import { CALENDAR_DATE_LENGTH } from '@constants/index';
-import type { DaySchedule, MonthYear, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
+import { getFormatDate } from '@utils/date';
+import type { DaySchedule, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 
@@ -42,24 +42,16 @@ const getAllTime = (date: string) => {
 };
 
 const Schedule = () => {
-  const currentDate = new Date();
-  const currentMonthYear = getMonthYearDetails(currentDate);
+  const { userData } = useContext(UserStateContext);
   const showSnackbar = useSnackbar();
   const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
-  const { userData } = useContext(UserStateContext);
+  const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
+  const { lastDate, year, month } = monthYear;
   const [schedule, setSchedule] = useState<ScheduleInfo>({
     monthSchedule: {},
     daySchedule: [],
     date: '',
   });
-  const [selectedDay, setSelectedDay] = useState<number>(0);
-  const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
-  const { lastDate, year, month } = monthYear;
-
-  const dateBoxLength =
-    monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
-      ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX;
 
   const selectDaySchedule = (day: number) => {
     setSchedule((allSchedules) => {
@@ -142,8 +134,7 @@ const Schedule = () => {
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
-    setSelectedDay(0);
-    setMonthYear((prev) => getNewMonthYear(prev, increment));
+    updateMonthYear(increment);
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {

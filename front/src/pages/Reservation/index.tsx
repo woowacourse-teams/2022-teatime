@@ -8,30 +8,21 @@ import Title from '@components/Title';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import useTimeList from '@hooks/useTimeList';
-import { CALENDAR_DATE_LENGTH } from '@constants/index';
-import { getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import type { DaySchedule, MonthYear, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
+import useCalendar from '@hooks/useSchedule';
+import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 
 const Reservation = () => {
   const { id: coachId } = useParams();
-  const currentDate = new Date();
-  const currentMonthYear = getMonthYearDetails(currentDate);
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
   const { userData } = useContext(UserStateContext);
+  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
+  const { year, month } = monthYear;
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
     monthSchedule: {},
     daySchedule: [],
   });
-  const [selectedDay, setSelectedDay] = useState<number>(0);
-  const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
-  const { firstDOW, lastDate, year, month } = monthYear;
-
-  const dateBoxLength =
-    firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
-      ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX;
 
   const createMapSchedule = (scheduleArray: DaySchedule[]) => {
     setSchedule((allSchedules) => {
@@ -77,8 +68,9 @@ const Reservation = () => {
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
-    setSelectedDay(0);
-    setMonthYear((prev) => getNewMonthYear(prev, increment));
+    // setSelectedDay(0);
+    // setMonthYear((prev) => getNewMonthYear(prev, increment));
+    updateMonthYear(increment);
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
