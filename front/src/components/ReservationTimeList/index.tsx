@@ -13,16 +13,16 @@ import type { TimeSchedule } from '@typings/domain';
 import CheckCircle from '@assets/check-circle.svg';
 import * as S from './styles';
 
-interface AvailableTimeListProps {
+interface ReservationTimeListProps {
   selectedDay: number;
   daySchedule: TimeSchedule[];
   onReservateTime: (scheduleId: number) => void;
 }
 
-const AvailableTimeList = ({ daySchedule, onReservateTime }: AvailableTimeListProps) => {
+const ReservationTimeList = ({ daySchedule, onReservateTime }: ReservationTimeListProps) => {
   const navigate = useNavigate();
-  const { isModalOpen, openModal, closeModal } = useModal();
   const { userData } = useContext(UserStateContext);
+  const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [reservationId, setReservationId] = useState<number | null>(null);
 
@@ -52,10 +52,6 @@ const AvailableTimeList = ({ daySchedule, onReservateTime }: AvailableTimeListPr
       alert(error);
       console.log(error);
     }
-  };
-
-  const handleClickWriteButton = () => {
-    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
   return (
@@ -91,7 +87,7 @@ const AvailableTimeList = ({ daySchedule, onReservateTime }: AvailableTimeListPr
           firstButtonName="나중에"
           secondButtonName="작성하기"
           onClickFirstButton={() => navigate(ROUTES.CREW)}
-          onClickSecondButton={handleClickWriteButton}
+          onClickSecondButton={() => navigate(`${ROUTES.CREW_SHEET}/${reservationId}`)}
           closeModal={closeModal}
         />
       )}
@@ -99,4 +95,4 @@ const AvailableTimeList = ({ daySchedule, onReservateTime }: AvailableTimeListPr
   );
 };
 
-export default AvailableTimeList;
+export default ReservationTimeList;

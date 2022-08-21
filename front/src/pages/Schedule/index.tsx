@@ -5,8 +5,7 @@ import Calendar from '@components/Calendar';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import useTimeList from '@hooks/useTimeList';
-import useSnackbar from '@hooks/useSnackbar';
-import useCalendar from '@hooks/useSchedule';
+import useCalendar from '@hooks/useCalendar';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate } from '@utils/date';
@@ -43,7 +42,6 @@ const getAllTime = (date: string) => {
 
 const Schedule = () => {
   const { userData } = useContext(UserStateContext);
-  const showSnackbar = useSnackbar();
   const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
@@ -66,7 +64,7 @@ const Schedule = () => {
     });
   };
 
-  const createMapSchedule = (scheduleArray: DaySchedule[]) => {
+  const createScheduleMap = (scheduleArray: DaySchedule[]) => {
     setSchedule((allSchedules) => {
       const initialMonthSchedule = Array.from({ length: lastDate }).reduce(
         (newObj: MonthScheduleMap, _, index) => {
@@ -98,36 +96,6 @@ const Schedule = () => {
       return {
         ...allSchedules,
         monthSchedule: { ...initialMonthSchedule, ...availableMonthSchedule },
-      };
-    });
-  };
-
-  const getSelectedTimes = () => {
-    return schedule.daySchedule.reduce((newArray, { isSelected, dateTime }) => {
-      if (isSelected) {
-        newArray.push(dateTime);
-      }
-      return newArray;
-    }, [] as string[]);
-  };
-
-  const updateDaySchedule = (selectedTimes: string[]) => {
-    setSchedule((allSchedules) => {
-      const newDaySchedule = schedule.monthSchedule[selectedDay].map(
-        ({ id, dateTime, isPossible }) => {
-          if (selectedTimes.includes(dateTime)) {
-            return { id, dateTime, isPossible: true, isSelected: true };
-          }
-          if (isPossible === false) {
-            return { id, dateTime, isPossible, isSelected: false };
-          }
-          return { id, dateTime, isSelected: false };
-        }
-      );
-
-      return {
-        ...allSchedules,
-        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
       };
     });
   };
@@ -174,27 +142,25 @@ const Schedule = () => {
     });
   };
 
-  const handleUpdateDaySchedule = async () => {
-    const selectedTimes = getSelectedTimes();
-    try {
-      await api.put(
-        `/api/v2/coaches/me/schedules`,
-        {
-          date: schedule.date,
-          schedules: selectedTimes,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
+  const handleUpdateDaySchedule = (selectedTimes: string[]) => {
+    setSchedule((allSchedules) => {
+      const newDaySchedule = schedule.monthSchedule[selectedDay].map(
+        ({ id, dateTime, isPossible }) => {
+          if (selectedTimes.includes(dateTime)) {
+            return { id, dateTime, isPossible: true, isSelected: true };
+          }
+          if (isPossible === false) {
+            return { id, dateTime, isPossible, isSelected: false };
+          }
+          return { id, dateTime, isSelected: false };
         }
       );
-      updateDaySchedule(selectedTimes);
-      showSnackbar({ message: '확정되었습니다. ✅' });
-    } catch (error) {
-      alert(error);
-      console.log(error);
-    }
+
+      return {
+        ...allSchedules,
+        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
+      };
+    });
   };
 
   useEffect(() => {
@@ -208,7 +174,7 @@ const Schedule = () => {
             },
           }
         );
-        createMapSchedule(coachSchedules);
+        createScheduleMap(coachSchedules);
       } catch (error) {
         alert(error);
         console.log(error);
@@ -237,6 +203,7 @@ const Schedule = () => {
           />
           {isOpenTimeList && (
             <ScheduleTimeList
+              date={schedule.date}
               daySchedule={schedule.daySchedule}
               onClickTime={handleClickTime}
               onSelectAll={handleSelectAll}

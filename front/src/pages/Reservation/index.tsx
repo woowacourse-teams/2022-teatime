@@ -6,7 +6,7 @@ import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
 import useTimeList from '@hooks/useTimeList';
-import useCalendar from '@hooks/useSchedule';
+import useCalendar from '@hooks/useCalendar';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
@@ -24,7 +24,7 @@ const Reservation = () => {
     daySchedule: [],
   });
 
-  const createMapSchedule = (scheduleArray: DaySchedule[]) => {
+  const createScheduleMap = (scheduleArray: DaySchedule[]) => {
     setSchedule((allSchedules) => {
       const newMonthSchedule = scheduleArray.reduce((newObj, { day, schedules }) => {
         newObj[day] = schedules;
@@ -90,7 +90,7 @@ const Reservation = () => {
             },
           }
         );
-        createMapSchedule(coachSchedules);
+        createScheduleMap(coachSchedules);
       } catch (error) {
         alert(error);
         console.log(error);
