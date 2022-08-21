@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
 import Title from '@components/Title';
-import AllTimeList from '@components/AllTimeList';
+import ScheduleTimeList from '@components/ScheduleTimeList';
 import useTimeList from '@hooks/useTimeList';
 import useSnackbar from '@hooks/useSnackbar';
 import { UserStateContext } from '@context/UserProvider';
@@ -245,7 +245,7 @@ const Schedule = () => {
             onUpdateMonth={handleUpdateMonth}
           />
           {isOpenTimeList && (
-            <AllTimeList
+            <ScheduleTimeList
               daySchedule={schedule.daySchedule}
               onClickTime={handleClickTime}
               onSelectAll={handleSelectAll}

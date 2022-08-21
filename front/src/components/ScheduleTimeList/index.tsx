@@ -2,28 +2,22 @@ import { useState } from 'react';
 
 import Conditional from '@components/Conditional';
 import { getHourMinutes } from '@utils/date';
+import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
 
-interface TimeSchedule {
-  id: number;
-  dateTime: string;
-  isPossible?: boolean;
-  isSelected?: boolean;
-}
-
-interface AllTimeListProps {
+interface ReservationTimeListProps {
   daySchedule: TimeSchedule[];
   onClickTime: (dateTime: string) => void;
   onSelectAll: (isSelected: boolean) => void;
   onUpdateSchedule: () => Promise<void>;
 }
 
-const AllTimeList = ({
+const ReservationTimeList = ({
   daySchedule,
   onClickTime,
   onSelectAll,
   onUpdateSchedule,
-}: AllTimeListProps) => {
+}: ReservationTimeListProps) => {
   const [isSelectedAll, setIsSelectedAll] = useState(false);
 
   const handleSelectAll = () => {
@@ -63,4 +57,4 @@ const AllTimeList = ({
   );
 };
 
-export default AllTimeList;
+export default ReservationTimeList;

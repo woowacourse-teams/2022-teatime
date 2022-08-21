@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import AvailableTimeList from '@components/AvailableTimeList';
+import ReservationTimeList from '@components/ReservationTimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
@@ -127,7 +127,7 @@ const Reservation = () => {
             onUpdateMonth={handleUpdateMonth}
           />
           {isOpenTimeList && (
-            <AvailableTimeList
+            <ReservationTimeList
               selectedDay={selectedDay}
               daySchedule={schedule.daySchedule}
               reservateTime={reservateTime}
