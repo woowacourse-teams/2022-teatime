@@ -53,8 +53,6 @@ const Schedule = () => {
     date: '',
   });
 
-  console.log('schedule', schedule);
-
   const selectDaySchedule = (day: number) => {
     setSchedule((allSchedules) => {
       const selectedDaySchedule = schedule.monthSchedule[day];
@@ -124,7 +122,19 @@ const Schedule = () => {
             isSelected: true,
           };
         }
-        return daySchedule;
+        if (daySchedule.isPossible === false) {
+          return {
+            id: daySchedule.id,
+            dateTime: daySchedule.dateTime,
+            isPossible: false,
+            isSelected: false,
+          };
+        }
+        return {
+          id: daySchedule.id,
+          dateTime: daySchedule.dateTime,
+          isSelected: false,
+        };
       });
 
       return {

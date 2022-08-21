@@ -49,7 +49,7 @@ const Reservation = () => {
     });
   };
 
-  const reservateTime = (scheduleId: number) => {
+  const handleReservateTime = (scheduleId: number) => {
     setSchedule((allSchedules) => {
       const newDaySchedule = schedule.daySchedule.map((time) => {
         if (time.id === scheduleId) {
@@ -68,8 +68,6 @@ const Reservation = () => {
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
-    // setSelectedDay(0);
-    // setMonthYear((prev) => getNewMonthYear(prev, increment));
     updateMonthYear(increment);
   };
 
@@ -122,7 +120,7 @@ const Reservation = () => {
             <ReservationTimeList
               selectedDay={selectedDay}
               daySchedule={schedule.daySchedule}
-              reservateTime={reservateTime}
+              onReservateTime={handleReservateTime}
             />
           )}
         </S.CalendarContainer>

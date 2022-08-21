@@ -16,10 +16,10 @@ import * as S from './styles';
 interface AvailableTimeListProps {
   selectedDay: number;
   daySchedule: TimeSchedule[];
-  reservateTime: (scheduleId: number) => void;
+  onReservateTime: (scheduleId: number) => void;
 }
 
-const AvailableTimeList = ({ daySchedule, reservateTime }: AvailableTimeListProps) => {
+const AvailableTimeList = ({ daySchedule, onReservateTime }: AvailableTimeListProps) => {
   const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
   const { userData } = useContext(UserStateContext);
@@ -46,7 +46,7 @@ const AvailableTimeList = ({ daySchedule, reservateTime }: AvailableTimeListProp
       const location = data.headers.location.split('/').pop();
       setReservationId(Number(location));
       setSelectedTimeId(null);
-      reservateTime(scheduleId);
+      onReservateTime(scheduleId);
       openModal();
     } catch (error) {
       alert(error);
