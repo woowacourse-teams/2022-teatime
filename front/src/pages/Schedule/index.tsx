@@ -10,7 +10,7 @@ import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
-import { DaySchedule, MonthYear, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
+import type { DaySchedule, MonthYear, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 

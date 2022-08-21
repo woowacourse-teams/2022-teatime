@@ -10,7 +10,7 @@ import api from '@api/index';
 import useTimeList from '@hooks/useTimeList';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
 import { getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import { DaySchedule, MonthYear, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
+import type { DaySchedule, MonthYear, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 

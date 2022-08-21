@@ -3,11 +3,11 @@ import Conditional from '@components/Conditional';
 import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
 import { convertToFullDate, getCurrentFullDate } from '@utils/date';
 import type { MonthYear, MonthScheduleMap } from '@typings/domain';
-import * as S from './styles';
 
 import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
+import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;

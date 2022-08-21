@@ -9,7 +9,7 @@ import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
 import api from '@api/index';
 
-import { TimeSchedule } from '@typings/domain';
+import type { TimeSchedule } from '@typings/domain';
 import CheckCircle from '@assets/check-circle.svg';
 import * as S from './styles';
 
