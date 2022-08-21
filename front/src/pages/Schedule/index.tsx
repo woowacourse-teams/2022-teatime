@@ -5,30 +5,152 @@ import Calendar from '@components/Calendar';
 import Title from '@components/Title';
 import AllTimeList from '@components/AllTimeList';
 import useTimeList from '@hooks/useTimeList';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import useSnackbar from '@hooks/useSnackbar';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
 import { CALENDAR_DATE_LENGTH } from '@constants/index';
-import { MonthYear } from '@typings/domain';
+import { DaySchedule, MonthYear, ScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
+
+const timeArray = [
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '12:00',
+  '12:30',
+  '13:00',
+  '13:30',
+  '14:00',
+  '14:30',
+  '15:00',
+  '15:30',
+  '16:00',
+  '16:30',
+  '17:00',
+  '17:30',
+];
+
+const getAllTime = (date: string) => {
+  return timeArray.map((time, index) => ({
+    id: index,
+    dateTime: `${date}T${time}:00.000Z`,
+    isSelected: false,
+  }));
+};
+
+interface TimeSchedule {
+  id: number;
+  dateTime: string;
+  isPossible?: boolean;
+  isSelected?: boolean;
+}
+interface Schedule {
+  monthSchedule: ScheduleMap;
+  daySchedule: TimeSchedule[];
+  date: string;
+}
 
 const Schedule = () => {
   const currentDate = new Date();
   const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const showSnackbar = useSnackbar();
   const currentMonthYear = getMonthYearDetails(currentDate);
+  const [schedule, setSchedule] = useState<Schedule>({
+    monthSchedule: {},
+    daySchedule: [],
+    date: '',
+  });
   const [selectedDay, setSelectedDay] = useState<number>(0);
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const { lastDate, year, month } = monthYear;
-  const dispatch = useContext(ScheduleDispatchContext);
   const { userData } = useContext(UserStateContext);
-  const { allMonthSchedule } = useContext(ScheduleStateContext);
 
   const dateBoxLength =
     monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
       : CALENDAR_DATE_LENGTH.MAX;
+
+  const selectDaySchedule = (day: number) => {
+    setSchedule((allSchedules) => {
+      const selectedDaySchedule = schedule.monthSchedule[day];
+      const date = getFormatDate(year, month, day);
+
+      return {
+        ...allSchedules,
+        daySchedule: selectedDaySchedule,
+        date,
+      };
+    });
+  };
+
+  const createMapSchedule = (scheduleArray: DaySchedule[]) => {
+    setSchedule((allSchedules) => {
+      const initialMonthSchedule = Array.from({ length: lastDate }).reduce(
+        (newObj: ScheduleMap, _, index) => {
+          const currentDateFormat = getFormatDate(year, month, index + 1);
+          newObj[index + 1] = getAllTime(currentDateFormat);
+          return newObj;
+        },
+        {}
+      );
+
+      const availableMonthSchedule = scheduleArray.reduce(
+        (newObj: ScheduleMap, { day, schedules }) => {
+          const currentDateFormat = getFormatDate(year, month, day);
+          const newSchedule = getAllTime(currentDateFormat).map((time) => {
+            const sameTime = schedules.find((coachTime) => coachTime.dateTime === time.dateTime);
+            if (sameTime) {
+              sameTime.isSelected = sameTime.isPossible;
+              return sameTime;
+            }
+            return time;
+          });
+
+          newObj[day] = newSchedule;
+          return newObj;
+        },
+        {}
+      );
+
+      return {
+        ...allSchedules,
+        monthSchedule: { ...initialMonthSchedule, ...availableMonthSchedule },
+      };
+    });
+  };
+
+  const getSelectedTimes = () => {
+    return schedule.daySchedule.reduce((newArray, { isSelected, dateTime }) => {
+      if (isSelected) {
+        newArray.push(dateTime);
+      }
+      return newArray;
+    }, [] as string[]);
+  };
+
+  const updateDaySchedule = (selectedTimes: string[]) => {
+    setSchedule((allSchedules) => {
+      const newDaySchedule = schedule.monthSchedule[selectedDay].map((daySchedule) => {
+        if (selectedTimes.includes(daySchedule.dateTime)) {
+          return {
+            id: daySchedule.id,
+            dateTime: daySchedule.dateTime,
+            isPossible: true,
+            isSelected: true,
+          };
+        }
+        return { id: daySchedule.id, dateTime: daySchedule.dateTime, isSelected: false };
+      });
+
+      return {
+        ...allSchedules,
+        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
+      };
+    });
+  };
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
@@ -39,19 +161,67 @@ const Schedule = () => {
   const handleClickDate = (day: number, isWeekend: boolean) => {
     if (isWeekend) return;
 
-    dispatch({
-      type: 'SELECT_DATE',
-      day,
-      date: getFormatDate(year, month, day),
-    });
     openTimeList();
+    selectDaySchedule(day);
     setSelectedDay(day);
+  };
+
+  const handleClickTime = (dateTime: string) => {
+    setSchedule((allSchedules) => {
+      const selectedIndex = schedule.daySchedule.findIndex((time) => time.dateTime === dateTime);
+      const newSchedules = [...schedule.daySchedule];
+      newSchedules[selectedIndex].isSelected = !newSchedules[selectedIndex].isSelected;
+
+      return {
+        ...allSchedules,
+        daySchedule: newSchedules,
+      };
+    });
+  };
+
+  const handleSelectAll = (isSelectedAll: boolean) => {
+    setSchedule((allSchedules) => {
+      const newSchedules = schedule.daySchedule.map((schedule) => {
+        if (schedule.isPossible !== false) {
+          schedule.isSelected = isSelectedAll ? false : true;
+        }
+        return schedule;
+      });
+
+      return {
+        ...allSchedules,
+        daySchedule: newSchedules,
+      };
+    });
+  };
+
+  const handleUpdateDaySchedule = async () => {
+    const selectedTimes = getSelectedTimes();
+    try {
+      await api.put(
+        `/api/v2/coaches/me/schedules`,
+        {
+          date: schedule.date,
+          schedules: selectedTimes,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        }
+      );
+      updateDaySchedule(selectedTimes);
+      showSnackbar({ message: '확정되었습니다. ✅' });
+    } catch (error) {
+      alert(error);
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const { data: coachSchedules } = await api.get(
+        const { data: coachSchedules } = await api.get<DaySchedule[]>(
           `/api/v2/coaches/me/schedules?year=${year}&month=${month}`,
           {
             headers: {
@@ -60,9 +230,10 @@ const Schedule = () => {
           }
         );
 
-        dispatch({ type: 'SET_ALL_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
+        createMapSchedule(coachSchedules);
       } catch (error) {
         alert(error);
+        console.log(error);
       }
     })();
   }, [monthYear]);
@@ -79,14 +250,21 @@ const Schedule = () => {
         <S.CalendarContainer>
           <Calendar
             isCoach
-            monthSchedule={allMonthSchedule}
-            onUpdateMonth={handleUpdateMonth}
-            onClickDate={handleClickDate}
+            monthSchedule={schedule.monthSchedule}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
             selectedDay={selectedDay}
+            onUpdateMonth={handleUpdateMonth}
+            onClickDate={handleClickDate}
           />
-          {isOpenTimeList && <AllTimeList selectedDay={selectedDay} />}
+          {isOpenTimeList && (
+            <AllTimeList
+              daySchedule={schedule.daySchedule}
+              onClickTime={handleClickTime}
+              onSelectAll={handleSelectAll}
+              onUpdateSchedule={handleUpdateDaySchedule}
+            />
+          )}
         </S.CalendarContainer>
       </S.ScheduleContainer>
     </Frame>
