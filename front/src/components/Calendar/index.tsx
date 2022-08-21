@@ -2,7 +2,7 @@ import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
 import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
 import { convertToFullDate, getCurrentFullDate } from '@utils/date';
-import type { MonthYear, ScheduleMap } from '@typings/domain';
+import type { MonthYear, MonthScheduleMap } from '@typings/domain';
 import * as S from './styles';
 
 import LeftArrow from '@assets/left-arrow.svg';
@@ -16,7 +16,7 @@ interface CalendarProps {
   monthYear: MonthYear;
   dateBoxLength: number;
   selectedDay: number | null;
-  monthSchedule: ScheduleMap;
+  monthSchedule: MonthScheduleMap;
 }
 
 const Calendar = ({
