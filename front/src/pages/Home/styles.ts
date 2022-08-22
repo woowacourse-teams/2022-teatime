@@ -32,7 +32,6 @@ const Flow = keyframes`
 `;
 
 const Container = styled.div`
-  /* overflow-y: scroll; */
   height: calc(100vh - 50px);
   width: 100%;
   overflow-x: hidden;
@@ -50,7 +49,7 @@ const MainSection = styled.section`
     width: 100vw;
     height: 100vh;
     left: 50%;
-    background-color: #333333;
+    background-color: ${({ theme }) => theme.colors.GRAY_800};
     border-radius: 50%;
     transform-origin: bottom;
     transform: translateX(-60%) scale(4);
@@ -65,7 +64,7 @@ const Description = styled.div`
   padding-left: 20%;
 
   p {
-    color: white;
+    color: ${({ theme }) => theme.colors.WHITE};
     z-index: 1;
     font-size: 25px;
     padding-top: 15px;
@@ -81,12 +80,12 @@ const OverlapContent = styled.div`
   h2 {
     position: absolute;
     left: 20%;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.WHITE};
     font-size: 80px;
   }
 
   h2:nth-child(1) {
-    color: #fff;
+    color: ${({ theme }) => theme.colors.WHITE};
   }
 
   h2:nth-child(2) {
@@ -132,22 +131,22 @@ const ButtonContainer = styled.div`
 `;
 
 const SlackButton = styled.button`
-  color: black;
-  background-color: white;
+  color: ${({ theme }) => theme.colors.BLACK};
+  background-color: ${({ theme }) => theme.colors.WHITE};
 
   &:hover {
-    background-color: #653866;
-    color: white;
+    background-color: ${({ theme }) => theme.colors.PURPLE_700};
+    color: ${({ theme }) => theme.colors.WHITE};
   }
 `;
 
 const TeamIntroButton = styled.button`
-  color: black;
-  background-color: #fae0af;
+  color: ${({ theme }) => theme.colors.BLACK};
+  background-color: ${({ theme }) => theme.colors.ORANGE_200};
 
   &:hover {
-    background-color: #f5c264;
-    color: white;
+    background-color: ${({ theme }) => theme.colors.ORANGE_600};
+    color: ${({ theme }) => theme.colors.WHITE};
   }
 `;
 
