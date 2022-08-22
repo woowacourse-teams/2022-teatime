@@ -116,6 +116,7 @@ const ButtonContainer = styled.div`
     border-radius: 12px;
     font-size: 20px;
     font-weight: 500;
+    font-family: 'BMJUA';
     cursor: pointer;
 
     &:hover {
