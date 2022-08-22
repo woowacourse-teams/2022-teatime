@@ -45,9 +45,10 @@ const TitleContainer = styled.div<{ color: string }>`
     align-items: center;
     justify-content: center;
     margin-left: 15px;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-weight: bold;
     background-color: ${({ theme }) => theme.colors.GRAY_200};
     color: ${({ theme }) => theme.colors.GRAY_600};
   }
