@@ -80,7 +80,7 @@ const BottomSection = styled.div`
 
   div {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     cursor: pointer;
   }
 `;
