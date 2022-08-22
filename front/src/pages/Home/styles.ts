@@ -34,18 +34,15 @@ const Flow = keyframes`
 const Container = styled.div`
   height: calc(100vh - 50px);
   width: 100%;
-  overflow-x: hidden;
 `;
 
 const MainSection = styled.section`
   padding-top: 100px;
   width: 100vw;
-  overflow-x: hidden;
 
   &::before {
     content: '';
     position: absolute;
-    overflow-x: hidden;
     width: 100vw;
     height: 100vh;
     left: 50%;
@@ -58,9 +55,9 @@ const MainSection = styled.section`
 `;
 
 const Description = styled.div`
-  padding-top: 150px;
   display: flex;
   flex-direction: column;
+  padding-top: 120px;
   padding-left: 20%;
 
   p {
@@ -89,7 +86,7 @@ const OverlapContent = styled.div`
   }
 
   h2:nth-child(2) {
-    color: #008dff;
+    color: ${({ theme }) => theme.colors.BLUE_600};
     animation: ${Flow} 4s ease-in-out infinite;
   }
 `;
