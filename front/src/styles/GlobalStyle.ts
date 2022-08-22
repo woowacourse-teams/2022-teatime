@@ -12,7 +12,6 @@ const GlobalStyle = createGlobalStyle`
     } 
 
     body {
-      font-family: 'BMJUA';
       max-width: 100%;
       overflow-x: hidden;
     }
