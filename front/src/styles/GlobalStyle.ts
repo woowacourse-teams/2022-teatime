@@ -4,17 +4,19 @@ const GlobalStyle = createGlobalStyle`
     * {  
       margin: 0;
       box-sizing: border-box;
+      font-family: 'BMJUA';
     } 
 
     a {
       text-decoration: none;
     } 
 
-    body{
+    body {
       font-family: 'BMJUA';
       max-width: 100%;
       overflow-x: hidden;
     }
+ 
 `;
 
 export default GlobalStyle;
