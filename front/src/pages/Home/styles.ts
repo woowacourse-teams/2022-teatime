@@ -38,7 +38,7 @@ const Container = styled.div`
 `;
 
 const MainSection = styled.section`
-  padding-top: 200px;
+  padding-top: 100px;
   width: 100vw;
   overflow-x: hidden;
 
