@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { UserStateContext } from '@context/UserProvider';
+
 import SlackIcon from '@assets/slack.svg';
 import * as S from './styles';
 
