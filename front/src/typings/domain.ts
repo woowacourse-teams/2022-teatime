@@ -31,13 +31,6 @@ interface MonthYear {
   lastDate: number;
 }
 
-interface Schedule {
-  id: number;
-  dateTime: string;
-  isPossible?: boolean;
-  isSelected?: boolean;
-}
-
 interface Reservation {
   dateTime: string;
   coachName: string;
@@ -68,10 +61,25 @@ interface Sheets {
   answerContent: string;
 }
 
+interface TimeSchedule {
+  id: number;
+  dateTime: string;
+  isPossible?: boolean;
+  isSelected?: boolean;
+}
+
 interface DaySchedule {
   day: number;
-  schedules: Schedule[];
+  schedules: TimeSchedule[];
 }
+
+interface ScheduleInfo {
+  monthSchedule: MonthScheduleMap;
+  daySchedule: TimeSchedule[];
+  date: string;
+}
+
+type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
 
@@ -81,9 +89,11 @@ export {
   Crew,
   Coach,
   MonthYear,
-  Schedule,
+  ScheduleInfo,
   DaySchedule,
+  TimeSchedule,
   Reservation,
+  MonthScheduleMap,
   CrewListMap,
   Sheets,
   History,

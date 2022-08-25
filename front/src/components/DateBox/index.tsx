@@ -1,10 +1,10 @@
 import { getCurrentFullDate } from '@utils/date';
-import { Schedule } from '@typings/domain';
+import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
 
 interface DateBoxProps {
   date?: number;
-  daySchedule?: Schedule[];
+  daySchedule?: TimeSchedule[];
   onClick?: () => void;
   selectedDay?: number | null;
   currentDay?: Date;
