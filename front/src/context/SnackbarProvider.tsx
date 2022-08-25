@@ -29,7 +29,7 @@ const SnackbarProvider = ({ children }: { children: React.ReactNode }) => {
     }, 2000);
 
     return () => clearTimeout(snackbarTimer);
-  }, [snackbarInfo]);
+  }, [snackbarInfo.message]);
 
   return (
     <SnackbarContext.Provider value={showSnackbar}>

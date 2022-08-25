@@ -1,16 +1,13 @@
-import { useContext } from 'react';
-
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
-import { ScheduleStateContext } from '@context/ScheduleProvider';
 import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
 import { convertToFullDate, getCurrentFullDate } from '@utils/date';
-import type { MonthYear } from '@typings/domain';
-import * as S from './styles';
+import type { MonthYear, MonthScheduleMap } from '@typings/domain';
 
 import LeftArrow from '@assets/left-arrow.svg';
 import LeftArrowDisabled from '@assets/left-arrow-disabled.svg';
 import RightArrow from '@assets/right-arrow.svg';
+import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;
@@ -19,6 +16,7 @@ interface CalendarProps {
   monthYear: MonthYear;
   dateBoxLength: number;
   selectedDay: number | null;
+  monthSchedule: MonthScheduleMap;
 }
 
 const Calendar = ({
@@ -28,9 +26,9 @@ const Calendar = ({
   monthYear,
   dateBoxLength,
   selectedDay,
+  monthSchedule,
 }: CalendarProps) => {
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
-  const { monthSchedule } = useContext(ScheduleStateContext);
   const currentDate = new Date();
 
   return (
@@ -66,7 +64,7 @@ const Calendar = ({
             <DateBox
               key={index}
               date={date}
-              daySchedule={monthSchedule[date - 1]?.schedules}
+              daySchedule={monthSchedule[date]}
               onClick={() => onClickDate(date, isWeekend)}
               selectedDay={selectedDay}
               currentDay={convertToFullDate(year, month, date)}

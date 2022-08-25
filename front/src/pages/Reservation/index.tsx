@@ -1,58 +1,89 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import TimeList from '@components/TimeList';
+import ReservationTimeList from '@components/ReservationTimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
-import { ScheduleDispatchContext } from '@context/ScheduleProvider';
+import useTimeList from '@hooks/useTimeList';
+import useCalendar from '@hooks/useCalendar';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
-import useTimeList from '@hooks/useTimeList';
-import { CALENDAR_DATE_LENGTH } from '@constants/index';
-import { getFormatDate, getMonthYearDetails, getNewMonthYear } from '@utils/date';
-import { MonthYear } from '@typings/domain';
+import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
+
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 
 const Reservation = () => {
-  const currentDate = new Date();
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
   const { id: coachId } = useParams();
-  const currentMonthYear = getMonthYearDetails(currentDate);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
-  const { firstDOW, lastDate, year, month } = monthYear;
-  const dispatch = useContext(ScheduleDispatchContext);
   const { userData } = useContext(UserStateContext);
+  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
+  const { year, month } = monthYear;
+  const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
+    monthSchedule: {},
+    daySchedule: [],
+  });
 
-  const dateBoxLength =
-    firstDOW + lastDate < CALENDAR_DATE_LENGTH.MIN
-      ? CALENDAR_DATE_LENGTH.MIN
-      : CALENDAR_DATE_LENGTH.MAX;
+  const createScheduleMap = (scheduleArray: DaySchedule[]) => {
+    setSchedule((allSchedules) => {
+      const newMonthSchedule = scheduleArray.reduce((newObj, { day, schedules }) => {
+        newObj[day] = schedules;
+        return newObj;
+      }, {} as MonthScheduleMap);
+
+      return {
+        ...allSchedules,
+        monthSchedule: newMonthSchedule,
+      };
+    });
+  };
+
+  const selectDaySchedule = (day: number) => {
+    setSchedule((allSchedules) => {
+      const selectedDaySchedule = schedule.monthSchedule[day];
+
+      return {
+        ...allSchedules,
+        daySchedule: selectedDaySchedule,
+      };
+    });
+  };
+
+  const handleReservateTime = (scheduleId: number) => {
+    setSchedule((allSchedules) => {
+      const newDaySchedule = schedule.daySchedule.map((time) => {
+        if (time.id === scheduleId) {
+          return { id: scheduleId, dateTime: time.dateTime, isPossible: false };
+        }
+        return time;
+      });
+
+      return {
+        ...allSchedules,
+        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
+        daySchedule: newDaySchedule,
+      };
+    });
+  };
 
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
-    setSelectedDay(null);
-    setMonthYear((prev) => getNewMonthYear(prev, increment));
+    updateMonthYear(increment);
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
     if (isWeekend) return;
 
-    dispatch({
-      type: 'SELECT_DATE',
-      day,
-      date: getFormatDate(year, month, day),
-    });
     openTimeList();
+    selectDaySchedule(day);
     setSelectedDay(day);
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const { data: coachSchedules } = await api.get(
+        const { data: coachSchedules } = await api.get<DaySchedule[]>(
           `/api/v2/coaches/${coachId}/schedules?year=${year}&month=${month}`,
           {
             headers: {
@@ -60,9 +91,10 @@ const Reservation = () => {
             },
           }
         );
-        dispatch({ type: 'SET_MONTH_SCHEDULE', coachSchedules, lastDate, year, month });
-      } catch {
-        alert('스케쥴 get 요청 실패');
+        createScheduleMap(coachSchedules);
+      } catch (error) {
+        alert(error);
+        console.log(error);
       }
     })();
   }, [monthYear]);
@@ -78,13 +110,19 @@ const Reservation = () => {
         />
         <S.CalendarContainer>
           <Calendar
-            onUpdateMonth={handleUpdateMonth}
-            onClickDate={handleClickDate}
+            monthSchedule={schedule.monthSchedule}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
             selectedDay={selectedDay}
+            onClickDate={handleClickDate}
+            onUpdateMonth={handleUpdateMonth}
           />
-          {isOpenTimeList && <TimeList />}
+          {isOpenTimeList && (
+            <ReservationTimeList
+              daySchedule={schedule.daySchedule}
+              onReservateTime={handleReservateTime}
+            />
+          )}
         </S.CalendarContainer>
       </S.ScheduleContainer>
     </Frame>
