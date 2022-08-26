@@ -1,40 +1,11 @@
 import styled, { css } from 'styled-components';
 
-const ProfileContainer = styled.div`
-  position: relative;
-`;
-
-const ProfileWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 4px 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  border-radius: 90px;
-  transition: box-shadow 0.2s ease;
-  cursor: pointer;
-
-  :hover {
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  span {
-    font-weight: bold;
-    font-size: 14px;
-    margin: 0 10px;
-  }
-
-  img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-  }
-`;
-
-const ContentList = styled.div<{ isActive: boolean }>`
+const ContentList = styled.ul<{ isActive: boolean }>`
   position: absolute;
   z-index: 100;
   width: 150px;
   top: 48px;
+  padding: 0;
   background-color: ${({ theme }) => theme.colors.WHITE};
   box-shadow: 0 0 10px rgb(190, 190, 190);
   border-radius: 8px;
@@ -42,7 +13,7 @@ const ContentList = styled.div<{ isActive: boolean }>`
   overflow: hidden;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
 
   ${(props) =>
     props.isActive &&
@@ -52,12 +23,8 @@ const ContentList = styled.div<{ isActive: boolean }>`
       transform: translateY(0);
     `}
 
-  ul {
-    padding: 0;
-  }
-
   li {
-    padding: 8px;
+    padding: 12px 0;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.GRAY_600};
     text-align: center;
@@ -70,4 +37,4 @@ const ContentList = styled.div<{ isActive: boolean }>`
   }
 `;
 
-export { ProfileContainer, ProfileWrapper, ContentList };
+export { ContentList };
