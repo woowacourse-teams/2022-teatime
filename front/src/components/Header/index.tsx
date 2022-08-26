@@ -2,21 +2,16 @@ import { useContext, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import Dropdown from '@components/Dropdown';
+import Conditional from '@components/Conditional/index';
 import useOutsideClick from '@hooks/useOutsideClick';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { ROUTES } from '@constants/index';
 import * as S from './styles';
 
 import LogoIcon from '@assets/logo.svg';
-import Conditional from '../Conditional/index';
 
 const Header = () => {
-  // const { userData } = useContext(UserStateContext);
-  const userData = {
-    name: '아키',
-    image: 'https://avatars.githubusercontent.com/u/23068523?v=4',
-    role: 'CREW',
-  };
+  const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const navigate = useNavigate();
   const profileRef = useRef(null);
