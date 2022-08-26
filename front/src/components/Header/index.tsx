@@ -1,18 +1,32 @@
 import { useContext, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 import Dropdown from '@components/Dropdown';
 import useOutsideClick from '@hooks/useOutsideClick';
-import { UserStateContext } from '@context/UserProvider';
+import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { ROUTES } from '@constants/index';
 import * as S from './styles';
 
 import LogoIcon from '@assets/logo.svg';
+import Conditional from '../Conditional/index';
 
 const Header = () => {
-  const { userData } = useContext(UserStateContext);
+  // const { userData } = useContext(UserStateContext);
+  const userData = {
+    name: '아키',
+    image: 'https://avatars.githubusercontent.com/u/23068523?v=4',
+    role: 'CREW',
+  };
+  const dispatch = useContext(UserDispatchContext);
+  const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const profileRef = useRef(null);
   const [isActive, setIsActive] = useOutsideClick(profileRef, dropdownRef, false);
+
+  const handleLogout = () => {
+    dispatch({ type: 'DELETE_USER' });
+    navigate(ROUTES.HOME);
+  };
 
   const toggleDropdown = () => {
     setIsActive(!isActive);
@@ -24,17 +38,27 @@ const Header = () => {
         <S.LogoImage src={LogoIcon} />
         <h1>티타임</h1>
       </S.LogoLink>
-      <S.ProfileContainer>
-        {userData && (
+      {userData && (
+        <S.ProfileContainer>
           <S.ProfileWrapper ref={profileRef} onClick={toggleDropdown}>
             <span>{userData.name}</span>
             <img src={userData.image} alt="프로필 이미지" />
           </S.ProfileWrapper>
-        )}
-        {isActive && (
-          <Dropdown dropdownRef={dropdownRef} isActive={isActive} role={userData?.role} />
-        )}
-      </S.ProfileContainer>
+          <Conditional condition={isActive && userData.role === 'CREW'}>
+            <Dropdown dropdownRef={dropdownRef} isActive={isActive}>
+              <Link to={ROUTES.CREW_HISTORY}>
+                <li>히스토리</li>
+              </Link>
+              <li onClick={handleLogout}>로그아웃</li>
+            </Dropdown>
+          </Conditional>
+          <Conditional condition={isActive && userData.role === 'COACH'}>
+            <Dropdown dropdownRef={dropdownRef} isActive={isActive}>
+              <li onClick={handleLogout}>로그아웃</li>
+            </Dropdown>
+          </Conditional>
+        </S.ProfileContainer>
+      )}
     </S.HeaderContainer>
   );
 };
