@@ -37,10 +37,13 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Claims getPayload(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
+    public PayloadDto getPayload(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody();
+        String role = claims.get("role", String.class);
+        Long id = claims.get("id", Long.class);
+        return new PayloadDto(role, id);
     }
 
     public boolean validateToken(String token) {

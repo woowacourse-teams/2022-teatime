@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
-import static com.woowacourse.teatime.teatime.acceptance.CoachAcceptanceTest.코치를_저장한다;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,6 +12,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.ScheduleFindResponse;
+import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import com.woowacourse.teatime.util.Date;
@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,26 @@ class ScheduleAcceptanceV2Test extends AcceptanceTest {
     private static final int MONTH = NOW.getMonthValue();
 
     @Autowired
+    private CoachService coachService;
+
+    @Autowired
     private CrewService crewService;
 
     @Autowired
     private ScheduleService scheduleService;
 
+    private Long coachId;
+    private String coachToken;
+
+    @BeforeEach
+    void setUp() {
+        coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        coachToken = 코치의_토큰을_발급한다(coachId);
+    }
+
     @DisplayName("크루가 코치의 스케줄을 조회한다.")
     @Test
     void findByCoachIdAndDate() {
-        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
         Long crewId = crewService.save(CREW_SAVE_REQUEST);
         String crewToken = 크루의_토큰을_발급한다(crewId);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
@@ -73,8 +85,6 @@ class ScheduleAcceptanceV2Test extends AcceptanceTest {
     @DisplayName("코치가 자신의 스케줄을 조회한다.")
     @Test
     void findOwnSchedules() {
-        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
-        String coachToken = 코치의_토큰을_발급한다(coachId);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
         scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
@@ -99,8 +109,6 @@ class ScheduleAcceptanceV2Test extends AcceptanceTest {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void updateByCoachAndDate() {
-        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
-        String coachToken = 코치의_토큰을_발급한다(coachId);
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
 
         LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));

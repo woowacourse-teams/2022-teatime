@@ -8,9 +8,7 @@ import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.exception.UnAuthorizedException;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
@@ -48,19 +46,7 @@ public class ReservationService {
     private final CoachRepository coachRepository;
     private final SheetRepository sheetRepository;
 
-    public Long save(ReservationReserveRequest reservationReserveRequest) {
-        Crew crew = crewRepository.findById(reservationReserveRequest.getCrewId())
-                .orElseThrow(NotFoundCrewException::new);
-        Schedule schedule = scheduleRepository.findByIdAndCoachId(
-                        reservationReserveRequest.getScheduleId(), reservationReserveRequest.getCoachId())
-                .orElseThrow(NotFoundScheduleException::new);
-
-        schedule.reserve();
-        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        return reservation.getId();
-    }
-
-    public Long saveV2(Long crewId, ReservationReserveRequestV2 reservationReserveRequest) {
+    public Long save(Long crewId, ReservationReserveRequestV2 reservationReserveRequest) {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findById(reservationReserveRequest.getScheduleId())
@@ -71,18 +57,7 @@ public class ReservationService {
         return reservation.getId();
     }
 
-    public void approve(Long reservationId, ReservationApproveRequest reservationApproveRequest) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-        validateIsSameCoach(reservationApproveRequest.getCoachId(), reservation);
-
-        reservation.confirm(reservationApproveRequest.getIsApproved());
-        if (!reservationApproveRequest.getIsApproved()) {
-            reservationRepository.delete(reservation);
-        }
-    }
-
-    public void approveV2(Long coachId, Long reservationId, ReservationApproveRequestV2 reservationApproveRequest) {
+    public void approve(Long coachId, Long reservationId, ReservationApproveRequestV2 reservationApproveRequest) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         validateIsSameCoach(coachId, reservation);
@@ -93,16 +68,7 @@ public class ReservationService {
         }
     }
 
-    public void cancel(Long reservationId, Long applicantId, String role) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-
-        validateAuthorization(applicantId, Role.search(role), reservation);
-        reservation.cancel(Role.search(role));
-        reservationRepository.delete(reservation);
-    }
-
-    public void cancelV2(Long reservationId, UserRoleDto userRoleDto) {
+    public void cancel(Long reservationId, UserRoleDto userRoleDto) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
 

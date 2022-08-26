@@ -3,7 +3,6 @@ package com.woowacourse.teatime.teatime.service;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_JASON;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,8 +10,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
@@ -76,48 +76,36 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
 
         Optional<Reservation> actual = reservationRepository.findById(reservationId);
+
         assertTrue(actual.isPresent());
     }
 
     @DisplayName("예약을 할 때 크루 아이디가 존재하지 않는 아이디면 예외를 반환한다.")
     @Test
     void reserveFailNotExistedCrew() {
-        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(crew.getId() + 100L,
-                coach.getId(),
-                schedule.getId());
-        assertThatThrownBy(() -> reservationService.save(reservationReserveRequest))
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+
+        assertThatThrownBy(() -> reservationService.save(crew.getId() + 100L, reservationReserveRequest))
                 .isInstanceOf(NotFoundCrewException.class);
     }
 
     @DisplayName("예약을 할 때 스케줄 아이디가 존재하지 않는 아이디면 예외를 반환한다.")
     @Test
     void reserveFailNotExistedSchedule() {
-        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(
                 schedule.getId() + 100L);
-        assertThatThrownBy(() -> reservationService.save(reservationReserveRequest))
-                .isInstanceOf(NotFoundScheduleException.class);
-    }
 
-    @DisplayName("예약을 할 때 코치 아이디가 일치하지 않으면 예외를 반환한다.")
-    @Test
-    void reserveFailNotMatchedCoach() {
-        Coach differentCoach = coachRepository.save(COACH_JASON);
-
-        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(crew.getId(),
-                differentCoach.getId(),
-                schedule.getId());
-        assertThatThrownBy(() -> reservationService.save(reservationReserveRequest))
+        assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
                 .isInstanceOf(NotFoundScheduleException.class);
     }
 
     @DisplayName("예약을 할 때 예약할 수 없는 스케줄이면 예외를 반환한다.")
     @Test
     void reserveFailAlreadyReserved() {
-        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        reservationService.save(reservationReserveRequest);
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+        reservationService.save(crew.getId(), reservationReserveRequest);
 
-        assertThatThrownBy(() -> reservationService.save(reservationReserveRequest))
+        assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
                 .isInstanceOf(AlreadyReservedException.class);
     }
 
@@ -150,7 +138,7 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
         예약_승인을_확정한다(reservationId, true);
 
-        reservationService.cancel(reservationId, coach.getId(), "COACH");
+        reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), "COACH"));
 
         assertAll(
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
@@ -164,7 +152,7 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
         예약_승인을_확정한다(reservationId, true);
 
-        reservationService.cancel(reservationId, crew.getId(), "CREW");
+        reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW"));
 
         assertAll(
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
@@ -177,7 +165,7 @@ class ReservationServiceTest {
     void cancel_unapprovedReservation() {
         Long reservationId = 예약에_성공한다();
 
-        reservationService.cancel(reservationId, crew.getId(), "CREW");
+        reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW"));
 
         assertAll(
                 () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
@@ -193,7 +181,7 @@ class ReservationServiceTest {
         예약_승인을_확정한다(reservationId, true);
 
         assertThatThrownBy(
-                () -> reservationService.cancel(reservationId, coach.getId(), role))
+                () -> reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), role)))
                 .isInstanceOf(NotFoundRoleException.class);
     }
 
@@ -203,7 +191,7 @@ class ReservationServiceTest {
         Long reservationId = 예약에_성공한다();
 
         assertThatThrownBy(
-                () -> reservationService.cancel(reservationId, coach.getId(), "COACH"))
+                () -> reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), "COACH")))
                 .isInstanceOf(UnCancellableReservationException.class);
     }
 
@@ -214,16 +202,15 @@ class ReservationServiceTest {
         Long 말도_안되는_아이디 = reservationId + 100L;
 
         assertThatThrownBy(
-                () -> reservationService.cancel(말도_안되는_아이디, coach.getId(), "CREW"))
+                () -> reservationService.cancel(말도_안되는_아이디, new UserRoleDto(coach.getId(), "CREW")))
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
     @DisplayName("크루가 자신에 해당되는 면담 예약 목록을 조회한다.")
     @Test
     void findOwnHistoryByCrew() {
-        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        reservationService.save(reserveRequest);
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+        reservationService.save(crew.getId(), reservationReserveRequest);
 
         List<CrewFindOwnHistoryResponse> reservations = reservationService.findOwnHistoryByCrew(crew.getId());
 
@@ -233,10 +220,9 @@ class ReservationServiceTest {
     @DisplayName("코치가 크루의 히스토리를 조회한다.")
     @Test
     void findCrewHistoryByCoach() {
-        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        Long reservationId = reservationService.save(reserveRequest);
-        reservationService.approve(reservationId, new ReservationApproveRequest(coach.getId(), true));
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+        Long reservationId = reservationService.save(crew.getId(), reservationReserveRequest);
+        예약_승인을_확정한다(reservationId, true);
         reservationService.findByCoachId(coach.getId());
         reservationService.updateReservationStatusToDone(reservationId);
 
@@ -248,10 +234,9 @@ class ReservationServiceTest {
     @DisplayName("코치가 크루의 히스토리를 조회한다. -종료된 면담이 아닌 경우 조회되지 않는다.")
     @Test
     void findCrewHistoryByCoach_noDoneReservation() {
-        ReservationReserveRequest reserveRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        Long reservationId = reservationService.save(reserveRequest);
-        reservationService.approve(reservationId, new ReservationApproveRequest(coach.getId(), true));
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+        Long reservationId = reservationService.save(crew.getId(), reservationReserveRequest);
+        예약_승인을_확정한다(reservationId, true);
 
         List<CoachFindCrewHistoryResponse> reservations = reservationService.findCrewHistoryByCoach(crew.getId());
 
@@ -298,17 +283,6 @@ class ReservationServiceTest {
                 () -> assertThat(response.getApproved()).hasSize(1),
                 () -> assertThat(response.getInProgress()).hasSize(1)
         );
-    }
-
-    private Long 예약에_성공한다() {
-        ReservationReserveRequest reservationRequest = new ReservationReserveRequest(crew.getId(), coach.getId(),
-                schedule.getId());
-        return reservationService.save(reservationRequest);
-    }
-
-    private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
-        ReservationApproveRequest reservationApproveRequest = new ReservationApproveRequest(coach.getId(), isApproved);
-        reservationService.approve(reservationId, reservationApproveRequest);
     }
 
     @DisplayName("진행중인 면담을 완료하면 완료된 상태로 바뀐다.")
@@ -361,5 +335,14 @@ class ReservationServiceTest {
 
         assertThatThrownBy(() -> reservationService.updateSheetStatusToSubmitted(reservation.getId(), SUBMITTED))
                 .isInstanceOf(UnableToSubmitSheetException.class);
+    }
+
+    private Long 예약에_성공한다() {
+        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+        return reservationService.save(crew.getId(), reservationReserveRequest);
+    }
+
+    private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
+        reservationService.approve(coach.getId(), reservationId, new ReservationApproveRequestV2(isApproved));
     }
 }

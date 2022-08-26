@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_승인한다;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_한다;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
@@ -14,10 +15,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
-import com.woowacourse.teatime.teatime.domain.Coach;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
+import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
@@ -38,25 +38,28 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
     private ScheduleService scheduleService;
 
     @Autowired
-    private CoachRepository coachRepository;
+    private CoachService coachService;
 
     @Autowired
     private CrewService crewService;
 
+    private Long coachId;
     private String coachToken;
+    private Long crewId;
+    private String crewToken;
 
     @BeforeEach
     void setUp() {
-        Coach coach = coachRepository.save(COACH_BROWN);
-        coachToken = 코치의_토큰을_발급한다(coach.getId());
-        coachRepository.delete(coach);
+        crewId = crewService.save(CREW_SAVE_REQUEST);
+        crewToken = 크루의_토큰을_발급한다(crewId);
+        coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        coachToken = 코치의_토큰을_발급한다(coachId);
     }
 
     @DisplayName("코치 목록을 조회한다.")
     @Test
     void findAll() {
-        코치를_저장한다(COACH_BROWN_SAVE_REQUEST, coachToken);
-        코치를_저장한다(COACH_JUNE_SAVE_REQUEST, coachToken);
+        coachService.save(COACH_JUNE_SAVE_REQUEST);
 
         Long crewId = crewService.save(CREW_SAVE_REQUEST);
         String crewToken = 크루의_토큰을_발급한다(crewId);
@@ -113,18 +116,16 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
         Long scheduleId3 = scheduleService.save(coachId, LocalDateTime.now().plusDays(2));
         Long scheduleId4 = scheduleService.save(coachId, LocalDateTime.now().plusDays(3));
 
-        Long crewId = crewService.save(CREW_SAVE_REQUEST);
+        예약을_한다(new ReservationReserveRequestV2(scheduleId3), crewToken);
+        예약을_한다(new ReservationReserveRequestV2(scheduleId), crewToken);
 
-        ReservationAcceptanceTest.예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId3));
-        ReservationAcceptanceTest.예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
+        Long reservationId = 예약을_한다(
+                new ReservationReserveRequestV2(scheduleId4), crewToken);
+        Long reservationId2 = 예약을_한다(
+                new ReservationReserveRequestV2(scheduleId2), crewToken);
 
-        Long reservationId = ReservationAcceptanceTest.예약을_한다(
-                new ReservationReserveRequest(crewId, coachId, scheduleId4));
-        Long reservationId2 = ReservationAcceptanceTest.예약을_한다(
-                new ReservationReserveRequest(crewId, coachId, scheduleId2));
-
-        ReservationAcceptanceTest.예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
-        ReservationAcceptanceTest.예약을_승인한다(reservationId2, new ReservationApproveRequest(coachId, true));
+        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true), coachToken);
+        예약을_승인한다(reservationId2, new ReservationApproveRequest(coachId, true), coachToken);
 
         String coachToken = 코치의_토큰을_발급한다(coachId);
         RestAssured.given(super.spec).log().all()
@@ -143,5 +144,9 @@ class CoachAcceptanceV2Test extends AcceptanceTest {
     public static Long 코치를_저장한다(CoachSaveRequest request, String token) {
         ExtractableResponse<Response> response = postV2("/api/v2/coaches", request, token);
         return Long.parseLong(response.header("Location").split("/coaches/")[1]);
+    }
+
+    public static void 코치의_면담목록을_불러온다(String token) {
+        getV2("/api/v2/coaches/me/reservations", token);
     }
 }

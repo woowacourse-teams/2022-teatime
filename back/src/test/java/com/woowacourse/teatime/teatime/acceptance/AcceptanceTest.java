@@ -67,8 +67,8 @@ public class AcceptanceTest {
 
     protected static ExtractableResponse<Response> postV2(String uri, Object body, String token) {
         return RestAssured.given().log().all()
-                .body(body)
                 .header("Authorization", "Bearer " + token)
+                .body(body)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .post(uri)
@@ -78,6 +78,16 @@ public class AcceptanceTest {
 
     protected static ExtractableResponse<Response> get(String uri) {
         return RestAssured.given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get(uri)
+                .then().log().all()
+                .extract();
+    }
+
+    protected static ExtractableResponse<Response> getV2(String uri, String token) {
+        return RestAssured.given().log().all()
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get(uri)
