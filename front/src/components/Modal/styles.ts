@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-const fadeIn = keyframes`
+const FadeIn = keyframes`
   from {
     opacity: 0
   }
@@ -20,7 +20,7 @@ const Background = styled.div`
   top: 0;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.7);
-  animation: ${fadeIn} 0.3s;
+  animation: ${FadeIn} 0.3s;
 `;
 
 const ModalContainer = styled.div`
