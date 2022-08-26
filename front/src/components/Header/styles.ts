@@ -6,7 +6,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 60px;
+  height: 50px;
   padding: 0 10%;
   box-shadow: 0px 3px 4px ${({ theme }) => theme.colors.GRAY_300};
 
