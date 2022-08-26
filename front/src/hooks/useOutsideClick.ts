@@ -1,17 +1,16 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type UseOutsideClickType = (
-  profile: React.RefObject<HTMLDivElement>,
-  el: React.RefObject<HTMLUListElement>,
+  element: React.RefObject<HTMLDivElement>,
   initialState: boolean
 ) => [boolean, Dispatch<SetStateAction<boolean>>];
 
-const useOutsideClick: UseOutsideClickType = (profile, el, initialState) => {
+const useOutsideClick: UseOutsideClickType = (element, initialState) => {
   const [isActive, setIsActive] = useState(initialState);
 
   useEffect(() => {
     const pageClickEvent = (e: MouseEvent) => {
-      if (profile.current !== null && profile.current.contains(e.target as HTMLDivElement)) {
+      if (element.current !== null && element.current.contains(e.target as HTMLDivElement)) {
         return;
       }
       setIsActive(!isActive);
@@ -24,7 +23,7 @@ const useOutsideClick: UseOutsideClickType = (profile, el, initialState) => {
     return () => {
       window.removeEventListener('click', pageClickEvent);
     };
-  }, [isActive, el]);
+  }, [isActive]);
 
   return [isActive, setIsActive];
 };

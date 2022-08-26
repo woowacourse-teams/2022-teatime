@@ -19,9 +19,8 @@ const Header = () => {
   };
   const dispatch = useContext(UserDispatchContext);
   const navigate = useNavigate();
-  const dropdownRef = useRef(null);
   const profileRef = useRef(null);
-  const [isActive, setIsActive] = useOutsideClick(profileRef, dropdownRef, false);
+  const [isActive, setIsActive] = useOutsideClick(profileRef, false);
 
   const handleLogout = () => {
     dispatch({ type: 'DELETE_USER' });
@@ -44,16 +43,16 @@ const Header = () => {
             <span>{userData.name}</span>
             <img src={userData.image} alt="프로필 이미지" />
           </S.ProfileWrapper>
-          <Conditional condition={isActive && userData.role === 'CREW'}>
-            <Dropdown dropdownRef={dropdownRef} isActive={isActive}>
+          <Conditional condition={userData.role === 'CREW'}>
+            <Dropdown isActive={isActive}>
               <Link to={ROUTES.CREW_HISTORY}>
                 <li>히스토리</li>
               </Link>
               <li onClick={handleLogout}>로그아웃</li>
             </Dropdown>
           </Conditional>
-          <Conditional condition={isActive && userData.role === 'COACH'}>
-            <Dropdown dropdownRef={dropdownRef} isActive={isActive}>
+          <Conditional condition={userData.role === 'COACH'}>
+            <Dropdown isActive={isActive}>
               <li onClick={handleLogout}>로그아웃</li>
             </Dropdown>
           </Conditional>
