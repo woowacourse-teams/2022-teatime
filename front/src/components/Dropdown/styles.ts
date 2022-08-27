@@ -1,17 +1,30 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const ContentList = styled.ul`
+const ContentList = styled.ul<{ isActive: boolean }>`
   position: absolute;
-  width: 150px;
-  background-color: ${({ theme }) => theme.colors.WHITE};
   z-index: 100;
+  width: 150px;
+  top: 48px;
+  padding: 0;
+  background-color: ${({ theme }) => theme.colors.WHITE};
   box-shadow: 0 0 10px rgb(190, 190, 190);
   border-radius: 8px;
-  padding: 0;
+  opacity: 0;
   overflow: hidden;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+
+  ${(props) =>
+    props.isActive &&
+    css`
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    `}
 
   li {
-    padding: 8px;
+    padding: 12px 0;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.GRAY_600};
     text-align: center;

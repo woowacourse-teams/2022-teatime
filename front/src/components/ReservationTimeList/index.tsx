@@ -4,32 +4,32 @@ import { useNavigate } from 'react-router-dom';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useModal from '@hooks/useModal';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
+import { UserStateContext } from '@context/UserProvider';
+import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
-import api from '@api/index';
+import type { TimeSchedule } from '@typings/domain';
 
 import CheckCircle from '@assets/check-circle.svg';
-import { UserStateContext } from '@context/UserProvider';
 import * as S from './styles';
 
-const TimeList = () => {
-  const navigate = useNavigate();
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const dispatch = useContext(ScheduleDispatchContext);
-  const { daySchedule } = useContext(ScheduleStateContext);
-  const { userData } = useContext(UserStateContext);
-  const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [isError, setIsError] = useState(false);
-  const [reservationId, setReservationId] = useState<number | null>(null);
+interface ReservationTimeListProps {
+  daySchedule: TimeSchedule[];
+  onReservateTime: (scheduleId: number) => void;
+}
 
-  const coachSchedule = daySchedule.schedules.filter((time) => time.isPossible !== undefined);
+const ReservationTimeList = ({ daySchedule, onReservateTime }: ReservationTimeListProps) => {
+  const navigate = useNavigate();
+  const { userData } = useContext(UserStateContext);
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
+  const [reservationId, setReservationId] = useState<number | null>(null);
 
   const handleClickTime = (id: number) => {
     setSelectedTimeId(id);
   };
 
-  const handleClickReservationButton = async (scheduleId: number) => {
+  const handleClickReservation = async (scheduleId: number) => {
     try {
       const data = await api.post(
         `/api/v2/reservations`,
@@ -43,24 +43,19 @@ const TimeList = () => {
         }
       );
       const location = data.headers.location.split('/').pop();
-      dispatch({ type: 'RESERVATE_TIME', scheduleId });
       setReservationId(Number(location));
       setSelectedTimeId(null);
+      onReservateTime(scheduleId);
       openModal();
     } catch (error) {
-      setIsError(true);
+      alert(error);
+      console.log(error);
     }
   };
 
-  const handleClickWriteButton = () => {
-    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
-  };
-
-  if (isError) return <h1>error</h1>;
-
   return (
     <S.TimeListContainer>
-      {coachSchedule.map((schedule) => {
+      {daySchedule.map((schedule) => {
         const time = getHourMinutes(schedule.dateTime);
 
         return (
@@ -68,7 +63,7 @@ const TimeList = () => {
             <Conditional condition={selectedTimeId === schedule.id}>
               <S.ReserveButtonWrapper>
                 <div>{time}</div>
-                <button onClick={() => handleClickReservationButton(schedule.id)}>예약하기</button>
+                <button onClick={() => handleClickReservation(schedule.id)}>예약하기</button>
               </S.ReserveButtonWrapper>
             </Conditional>
             <Conditional condition={selectedTimeId !== schedule.id}>
@@ -91,7 +86,7 @@ const TimeList = () => {
           firstButtonName="나중에"
           secondButtonName="작성하기"
           onClickFirstButton={() => navigate(ROUTES.CREW)}
-          onClickSecondButton={handleClickWriteButton}
+          onClickSecondButton={() => navigate(`${ROUTES.CREW_SHEET}/${reservationId}`)}
           closeModal={closeModal}
         />
       )}
@@ -99,4 +94,4 @@ const TimeList = () => {
   );
 };
 
-export default TimeList;
+export default ReservationTimeList;

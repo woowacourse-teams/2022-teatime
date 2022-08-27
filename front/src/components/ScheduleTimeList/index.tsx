@@ -1,37 +1,49 @@
 import { useContext, useState } from 'react';
 
 import Conditional from '@components/Conditional';
-import { ScheduleDispatchContext, ScheduleStateContext } from '@context/ScheduleProvider';
-import { UserStateContext } from '@context/UserProvider';
 import useSnackbar from '@hooks/useSnackbar';
+import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
+import type { TimeSchedule } from '@typings/domain';
+
 import * as S from './styles';
 
-const CoachTimeList = () => {
+interface ScheduleTimeListProps {
+  date: string;
+  daySchedule: TimeSchedule[];
+  onClickTime: (dateTime: string) => void;
+  onSelectAll: (isSelected: boolean) => void;
+  onUpdateSchedule: (selectedTimes: string[]) => void;
+}
+
+const ScheduleTimeList = ({
+  date,
+  daySchedule,
+  onClickTime,
+  onSelectAll,
+  onUpdateSchedule,
+}: ScheduleTimeListProps) => {
   const { userData } = useContext(UserStateContext);
-  const [isSelectedAll, setIsSelectedAll] = useState(false);
   const showSnackbar = useSnackbar();
-  const { daySchedule, date } = useContext(ScheduleStateContext);
-  const dispatch = useContext(ScheduleDispatchContext);
+  const [isSelectedAll, setIsSelectedAll] = useState(false);
 
-  const handleClickTime = (dateTime: string) => {
-    dispatch({ type: 'SELECT_TIME', dateTime });
-  };
-
-  const handleSelectedAll = () => {
-    dispatch({ type: 'SELECT_ALL_TIMES', isSelectedAll });
-    setIsSelectedAll((prev) => !prev);
-  };
-
-  const handleUpdateSchedules = async () => {
-    const selectedTimes = daySchedule.schedules.reduce((newArray, { isSelected, dateTime }) => {
+  const getSelectedTimes = () => {
+    return daySchedule.reduce((newArray, { isSelected, dateTime }) => {
       if (isSelected) {
         newArray.push(dateTime);
       }
       return newArray;
     }, [] as string[]);
+  };
 
+  const handleSelectAll = () => {
+    setIsSelectedAll((prev) => !prev);
+    onSelectAll(isSelectedAll);
+  };
+
+  const handleUpdateDaySchedule = async () => {
+    const selectedTimes = getSelectedTimes();
     try {
       await api.put(
         `/api/v2/coaches/me/schedules`,
@@ -45,11 +57,10 @@ const CoachTimeList = () => {
           },
         }
       );
-
-      dispatch({ type: 'UPDATE_SCHEDULE', dateTimes: selectedTimes });
+      onUpdateSchedule(selectedTimes);
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
-      alert('스케쥴 등록 실패');
+      alert(error);
       console.log(error);
     }
   };
@@ -57,7 +68,7 @@ const CoachTimeList = () => {
   return (
     <S.TimeListContainer>
       <S.ScrollContainer>
-        {daySchedule?.schedules.map((schedule) => {
+        {daySchedule.map((schedule) => {
           const time = getHourMinutes(schedule.dateTime);
 
           return (
@@ -66,7 +77,7 @@ const CoachTimeList = () => {
               isPossible={schedule.isPossible}
               aria-disabled={schedule.isPossible}
               selected={schedule.isSelected ? true : false}
-              onClick={() => handleClickTime(schedule.dateTime)}
+              onClick={() => onClickTime(schedule.dateTime)}
             >
               {time}
             </S.TimeBox>
@@ -74,16 +85,16 @@ const CoachTimeList = () => {
         })}
       </S.ScrollContainer>
 
-      <Conditional condition={daySchedule?.schedules.length !== 0}>
+      <Conditional condition={daySchedule.length !== 0}>
         <S.ButtonContainer>
-          <S.CheckButton onClick={handleSelectedAll}>
+          <S.CheckButton onClick={handleSelectAll}>
             {isSelectedAll ? '전체 해제' : '전체 선택'}
           </S.CheckButton>
-          <S.ConfirmButton onClick={handleUpdateSchedules}>확인</S.ConfirmButton>
+          <S.ConfirmButton onClick={handleUpdateDaySchedule}>확인</S.ConfirmButton>
         </S.ButtonContainer>
       </Conditional>
     </S.TimeListContainer>
   );
 };
 
-export default CoachTimeList;
+export default ScheduleTimeList;

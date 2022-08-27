@@ -32,10 +32,30 @@ const ProfileContainer = styled.div`
   position: relative;
 `;
 
-const ProfileImage = styled.img`
-  width: 35px;
-  height: 35px;
-  border-radius: 20px;
+const ProfileWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 4px 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 90px;
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+
+  :hover {
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  span {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 10px;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
 `;
 
-export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileImage };
+export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper };
