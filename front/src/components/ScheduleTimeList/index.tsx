@@ -1,12 +1,11 @@
 import { useContext, useState } from 'react';
 
 import Conditional from '@components/Conditional';
-import useSnackbar from '@hooks/useSnackbar';
 import { UserStateContext } from '@context/UserProvider';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
-
 import * as S from './styles';
 
 interface ScheduleTimeListProps {
@@ -25,7 +24,7 @@ const ScheduleTimeList = ({
   onUpdateSchedule,
 }: ScheduleTimeListProps) => {
   const { userData } = useContext(UserStateContext);
-  const showSnackbar = useSnackbar();
+  const showSnackbar = useContext(SnackbarContext);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
 
   const getSelectedTimes = () => {
