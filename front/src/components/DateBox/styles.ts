@@ -57,6 +57,11 @@ const DateContainer = styled.div<{
       pointer-events: none;
       border: none;
     `}
+
+  @media all and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 export { DateContainer, TodayIndicator };

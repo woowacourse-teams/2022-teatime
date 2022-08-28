@@ -17,6 +17,16 @@ const TimeListContainer = styled.div`
     display: none;
   }
   animation: ${FadeIn} 0.8s;
+
+  @media all and (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    margin-left: 0;
+    margin-top: 50px;
+  }
 `;
 
 const TimeBox = styled.div<{ isPossible?: boolean }>`
@@ -44,6 +54,10 @@ const TimeBox = styled.div<{ isPossible?: boolean }>`
       text-decoration: line-through;
       pointer-events: none;
     `}
+
+  @media all and (max-width: 768px) {
+    width: 100px;
+  }
 `;
 
 const ReserveButtonWrapper = styled.div`
@@ -76,6 +90,16 @@ const ReserveButtonWrapper = styled.div`
     border: none;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  @media all and (max-width: 768px) {
+    div {
+      display: none;
+    }
+
+    button {
+      width: 100px;
+    }
   }
 `;
 

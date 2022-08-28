@@ -15,6 +15,11 @@ const CalendarContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+
+  @media all and (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const InfoContainer = styled.div`

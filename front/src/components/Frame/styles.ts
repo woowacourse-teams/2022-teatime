@@ -8,6 +8,13 @@ const Container = styled.div`
   padding: 30px 50px;
   margin: 50px auto;
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.25);
+
+  @media all and (max-width: 768px) {
+    width: 100%;
+    height: 100%;
+    padding: 20px 10px;
+    box-shadow: none;
+  }
 `;
 
 export { Container };

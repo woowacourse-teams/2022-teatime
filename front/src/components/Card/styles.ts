@@ -52,6 +52,21 @@ const CardContainer = styled.div`
   &:hover {
     transform: scale(1.03);
   }
+
+  @media all and (max-width: 480px) {
+    width: 150px;
+    height: 200px;
+    padding: 20px 10px;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    p {
+      display: none;
+    }
+  }
 `;
 
 const ImageWrapper = styled.div`

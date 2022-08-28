@@ -13,6 +13,10 @@ const Title = styled.h1`
   text-align: center;
   font-size: 24px;
   color: ${({ theme }) => theme.colors.GREEN_900};
+
+  @media all and (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const HighLightText = styled(Title)<{ hightlightColor?: string }>`
