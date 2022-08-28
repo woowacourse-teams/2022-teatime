@@ -64,7 +64,7 @@ public class CrewController {
                                                   @PathVariable @NotNull Long reservationId,
                                                   @Valid @RequestBody SheetAnswerUpdateRequest request) {
         sheetService.updateAnswer(crewId, reservationId, request);
-        reservationService.updateSheetStatusToSubmittedV2(crewId, reservationId, request.getStatus());
+        reservationService.updateSheetStatusToSubmitted(crewId, reservationId, request.getStatus());
         return ResponseEntity.ok().build();
     }
 }

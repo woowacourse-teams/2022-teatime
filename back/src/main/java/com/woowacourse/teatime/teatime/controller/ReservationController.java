@@ -4,8 +4,8 @@ import com.woowacourse.teatime.auth.support.CoachAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.UserAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.SheetService;
 import java.net.URI;
@@ -33,7 +33,7 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Void> reserve(@CrewAuthenticationPrincipal Long crewId,
-                                        @Valid @RequestBody ReservationReserveRequestV2 request) {
+                                        @Valid @RequestBody ReservationReserveRequest request) {
         Long reservationId = reservationService.save(crewId, request);
         sheetService.save(reservationId);
         URI location = ServletUriComponentsBuilder
@@ -47,7 +47,7 @@ public class ReservationController {
     @PostMapping("/{reservationId}")
     public ResponseEntity<Void> approve(@CoachAuthenticationPrincipal Long coachId,
                                         @PathVariable @NotNull Long reservationId,
-                                        @Valid @RequestBody ReservationApproveRequestV2 request) {
+                                        @Valid @RequestBody ReservationApproveRequest request) {
         reservationService.approve(coachId, reservationId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }

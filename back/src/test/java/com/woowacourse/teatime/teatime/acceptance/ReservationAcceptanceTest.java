@@ -9,8 +9,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
@@ -43,7 +42,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     private String crewToken;
     private Long scheduleId;
 
-    public static Long 예약을_한다(ReservationReserveRequestV2 request, String crewToken) {
+    public static Long 예약을_한다(ReservationReserveRequest request, String crewToken) {
         ExtractableResponse<Response> response = postV2("/api/v2/reservations", request, crewToken);
         return Long.parseLong(response.header("Location").split("/reservations/")[1]);
     }
@@ -84,7 +83,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
-                .body(new ReservationReserveRequestV2(scheduleId))
+                .body(new ReservationReserveRequest(scheduleId))
                 .filter(document("reserve", requestFields(
                         fieldWithPath("scheduleId").description("스케줄 아이디")
                 )))
@@ -97,13 +96,13 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void approve(boolean isApprove) {
-        Long reservationId = 예약을_한다(new ReservationReserveRequestV2(scheduleId), crewToken);
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + coachToken)
-                .body(new ReservationApproveRequestV2(isApprove))
+                .body(new ReservationApproveRequest(isApprove))
                 .filter(document("reserve-approve", requestFields(
                         fieldWithPath("isApproved").description("승인 여부")
                 )))
@@ -115,8 +114,8 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치가 예약을 취소할 수 있다.")
     @Test
     void cancel_by_coach() {
-        Long reservationId = 예약을_한다(new ReservationReserveRequestV2(scheduleId), crewToken);
-        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true), coachToken);
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -131,8 +130,8 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("크루가 예약을 취소할 수 있다.")
     @Test
     void cancel_by_crew() {
-        Long reservationId = 예약을_한다(new ReservationReserveRequestV2(scheduleId), crewToken);
-        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true), coachToken);
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -147,8 +146,8 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("진행중인 일정을 완료한다.")
     @Test
     void finish() {
-        Long reservationId = 예약을_한다(new ReservationReserveRequestV2(scheduleId), crewToken);
-        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true), coachToken);
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
         코치의_면담목록을_불러온다(coachToken);
 
         RestAssured.given(super.spec).log().all()

@@ -15,7 +15,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
@@ -116,16 +116,16 @@ class CoachAcceptanceTest extends AcceptanceTest {
         Long scheduleId3 = scheduleService.save(coachId, LocalDateTime.now().plusDays(2));
         Long scheduleId4 = scheduleService.save(coachId, LocalDateTime.now().plusDays(3));
 
-        예약을_한다(new ReservationReserveRequestV2(scheduleId3), crewToken);
-        예약을_한다(new ReservationReserveRequestV2(scheduleId), crewToken);
+        예약을_한다(new ReservationReserveRequest(scheduleId3), crewToken);
+        예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
 
         Long reservationId = 예약을_한다(
-                new ReservationReserveRequestV2(scheduleId4), crewToken);
+                new ReservationReserveRequest(scheduleId4), crewToken);
         Long reservationId2 = 예약을_한다(
-                new ReservationReserveRequestV2(scheduleId2), crewToken);
+                new ReservationReserveRequest(scheduleId2), crewToken);
 
-        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true), coachToken);
-        예약을_승인한다(reservationId2, new ReservationApproveRequest(coachId, true), coachToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
+        예약을_승인한다(reservationId2, new ReservationApproveRequest(true), coachToken);
 
         String coachToken = 코치의_토큰을_발급한다(coachId);
         RestAssured.given(super.spec).log().all()

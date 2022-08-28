@@ -6,7 +6,7 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleFindRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.ScheduleDto;
@@ -104,7 +104,7 @@ class ScheduleServiceTest {
         LocalDate date = LocalDate.now();
         Schedule schedule = scheduleRepository.save(new Schedule(coach, Date.findFirstTime(date)));
         Crew crew = crewRepository.save(CREW);
-        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule.getId());
+        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
 
         ScheduleUpdateRequest scheduleUpdateRequest = new ScheduleUpdateRequest(date,
@@ -121,7 +121,7 @@ class ScheduleServiceTest {
         LocalDateTime notReservedTime = Date.findLastTime(LocalDate.now()).minusHours(1);
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
         Crew crew = crewRepository.save(CREW);
-        ReservationReserveRequestV2 reservationReserveRequest = new ReservationReserveRequestV2(schedule1.getId());
+        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule1.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
         scheduleRepository.save(new Schedule(coach, notReservedTime));
 

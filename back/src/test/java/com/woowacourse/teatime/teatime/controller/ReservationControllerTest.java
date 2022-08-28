@@ -8,8 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
@@ -27,7 +27,7 @@ class ReservationControllerTest extends ControllerTest {
         String token = "나 크루다.";
         크루의_토큰을_검증한다(token);
 
-        mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequestV2(1L))
+        mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(1L))
                 .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -39,7 +39,7 @@ class ReservationControllerTest extends ControllerTest {
         String token = "나 크루다.";
         크루의_토큰을_검증한다(token);
 
-        mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequestV2(null))
+        mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(null))
                 .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -52,9 +52,9 @@ class ReservationControllerTest extends ControllerTest {
         크루의_토큰을_검증한다(token);
 
         doThrow(new NotFoundScheduleException()).when(reservationService)
-                .save(anyLong(), any(ReservationReserveRequestV2.class));
+                .save(anyLong(), any(ReservationReserveRequest.class));
 
-        mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequestV2(1L))
+        mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(1L))
                 .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -68,7 +68,7 @@ class ReservationControllerTest extends ControllerTest {
         String token = "나 코치다";
         코치의_토큰을_검증한다(token);
 
-        mockMvc.perform(post("/api/v2/reservations/1", new ReservationApproveRequestV2(isApproved))
+        mockMvc.perform(post("/api/v2/reservations/1", new ReservationApproveRequest(isApproved))
                 .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -82,9 +82,9 @@ class ReservationControllerTest extends ControllerTest {
         코치의_토큰을_검증한다(token);
 
         doThrow(new NotFoundReservationException()).when(reservationService)
-                .approve(anyLong(), anyLong(), any(ReservationApproveRequestV2.class));
+                .approve(anyLong(), anyLong(), any(ReservationApproveRequest.class));
 
-        mockMvc.perform(post("/api/v2/reservations/1", new ReservationApproveRequestV2(isApproved))
+        mockMvc.perform(post("/api/v2/reservations/1", new ReservationApproveRequest(isApproved))
                 .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -99,9 +99,9 @@ class ReservationControllerTest extends ControllerTest {
         코치의_토큰을_검증한다(token);
 
         doThrow(new AlreadyApprovedException()).when(reservationService)
-                .approve(anyLong(), anyLong(), any(ReservationApproveRequestV2.class));
+                .approve(anyLong(), anyLong(), any(ReservationApproveRequest.class));
 
-        mockMvc.perform(post("/api/v2/reservations/1", new ReservationApproveRequestV2(isApproved))
+        mockMvc.perform(post("/api/v2/reservations/1", new ReservationApproveRequest(isApproved))
                 .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isBadRequest())

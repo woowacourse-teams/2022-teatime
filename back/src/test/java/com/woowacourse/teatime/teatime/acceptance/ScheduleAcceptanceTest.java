@@ -128,7 +128,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
 
         if (!IS_LAST_DAY_OF_MONTH) {
             assertAll(
-                    () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                    () -> assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value()),
                     () -> assertThat(result).hasSize(2)
             );
         }

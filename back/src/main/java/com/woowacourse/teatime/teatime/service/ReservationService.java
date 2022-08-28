@@ -8,8 +8,8 @@ import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.exception.UnAuthorizedException;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequestV2;
-import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequestV2;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
@@ -46,7 +46,7 @@ public class ReservationService {
     private final CoachRepository coachRepository;
     private final SheetRepository sheetRepository;
 
-    public Long save(Long crewId, ReservationReserveRequestV2 reservationReserveRequest) {
+    public Long save(Long crewId, ReservationReserveRequest reservationReserveRequest) {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findById(reservationReserveRequest.getScheduleId())
@@ -57,7 +57,7 @@ public class ReservationService {
         return reservation.getId();
     }
 
-    public void approve(Long coachId, Long reservationId, ReservationApproveRequestV2 reservationApproveRequest) {
+    public void approve(Long coachId, Long reservationId, ReservationApproveRequest reservationApproveRequest) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         validateIsSameCoach(coachId, reservation);
@@ -169,15 +169,7 @@ public class ReservationService {
         return response;
     }
 
-    public void updateSheetStatusToSubmitted(Long reservationId, SheetStatus status) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-        if (SUBMITTED.equals(status)) {
-            reservation.updateSheetStatusToSubmitted();
-        }
-    }
-
-    public void updateSheetStatusToSubmittedV2(Long crewId, Long reservationId, SheetStatus status) {
+    public void updateSheetStatusToSubmitted(Long crewId, Long reservationId, SheetStatus status) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         validateCrewAuthorization(crewId, reservation);

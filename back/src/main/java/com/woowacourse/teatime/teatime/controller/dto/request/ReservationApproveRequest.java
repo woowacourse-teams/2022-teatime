@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.teatime.controller.dto.request;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,10 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class ReservationApproveRequest {
-
-    @NotNull
-    @Min(1)
-    private Long coachId;
 
     @NotNull
     private Boolean isApproved;
