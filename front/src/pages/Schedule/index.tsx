@@ -4,8 +4,8 @@ import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
-import useTimeList from '@hooks/useTimeList';
 import useCalendar from '@hooks/useCalendar';
+import useToggle from '@hooks/useToggle';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate } from '@utils/date';
@@ -43,7 +43,7 @@ const getAllTime = (date: string) => {
 
 const Schedule = () => {
   const { userData } = useContext(UserStateContext);
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const { isOpen, openElement: openTimeList, closeElement: closeTimeList } = useToggle();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [schedule, setSchedule] = useState<ScheduleInfo>({
@@ -188,7 +188,7 @@ const Schedule = () => {
       <S.ScheduleContainer>
         <Title
           text="등록 가능한"
-          highlightText={isOpenTimeList ? '시간을' : '날짜를'}
+          highlightText={isOpen ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
@@ -202,7 +202,7 @@ const Schedule = () => {
             onClickDate={handleClickDate}
             onUpdateMonth={handleUpdateMonth}
           />
-          {isOpenTimeList && (
+          {isOpen && (
             <ScheduleTimeList
               date={schedule.date}
               daySchedule={schedule.daySchedule}

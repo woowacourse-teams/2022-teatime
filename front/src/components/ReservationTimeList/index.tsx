@@ -3,25 +3,25 @@ import { useNavigate } from 'react-router-dom';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
-import useModal from '@hooks/useModal';
+import useToggle from '@hooks/useToggle';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
+import * as S from './styles';
 
 import CheckCircle from '@assets/check-circle.svg';
-import * as S from './styles';
 
 interface ReservationTimeListProps {
   daySchedule: TimeSchedule[];
-  onReservateTime: (scheduleId: number) => void;
+  onReservationTime: (scheduleId: number) => void;
 }
 
-const ReservationTimeList = ({ daySchedule, onReservateTime }: ReservationTimeListProps) => {
+const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTimeListProps) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
-  const { isModalOpen, openModal, closeModal } = useModal();
+  const { isOpen, openElement: openModal, closeElement: closeModal } = useToggle();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [reservationId, setReservationId] = useState<number | null>(null);
 
@@ -45,7 +45,7 @@ const ReservationTimeList = ({ daySchedule, onReservateTime }: ReservationTimeLi
       const location = data.headers.location.split('/').pop();
       setReservationId(Number(location));
       setSelectedTimeId(null);
-      onReservateTime(scheduleId);
+      onReservationTime(scheduleId);
       openModal();
     } catch (error) {
       alert(error);
@@ -78,7 +78,7 @@ const ReservationTimeList = ({ daySchedule, onReservateTime }: ReservationTimeLi
           </React.Fragment>
         );
       })}
-      {isModalOpen && (
+      {isOpen && (
         <Modal
           icon={CheckCircle}
           title="예약완료"

@@ -5,8 +5,8 @@ import ReservationTimeList from '@components/ReservationTimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
-import useTimeList from '@hooks/useTimeList';
 import useCalendar from '@hooks/useCalendar';
+import useToggle from '@hooks/useToggle';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
@@ -17,7 +17,7 @@ import * as S from '@styles/common';
 const Reservation = () => {
   const { id: coachId } = useParams();
   const { userData } = useContext(UserStateContext);
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const { isOpen, openElement: openTimeList, closeElement: closeTimeList } = useToggle();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { year, month } = monthYear;
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
@@ -50,7 +50,7 @@ const Reservation = () => {
     });
   };
 
-  const handleReservateTime = (scheduleId: number) => {
+  const handleReservationTime = (scheduleId: number) => {
     setSchedule((allSchedules) => {
       const newDaySchedule = schedule.daySchedule.map((time) => {
         if (time.id === scheduleId) {
@@ -104,7 +104,7 @@ const Reservation = () => {
       <S.ScheduleContainer>
         <Title
           text="예약할"
-          highlightText={isOpenTimeList ? '시간을' : '날짜를'}
+          highlightText={isOpen ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
@@ -117,10 +117,10 @@ const Reservation = () => {
             onClickDate={handleClickDate}
             onUpdateMonth={handleUpdateMonth}
           />
-          {isOpenTimeList && (
+          {isOpen && (
             <ReservationTimeList
               daySchedule={schedule.daySchedule}
-              onReservateTime={handleReservateTime}
+              onReservationTime={handleReservationTime}
             />
           )}
         </S.CalendarContainer>
