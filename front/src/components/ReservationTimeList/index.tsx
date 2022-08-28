@@ -21,7 +21,7 @@ interface ReservationTimeListProps {
 const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTimeListProps) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
-  const { isOpen, openElement: openModal, closeElement: closeModal } = useToggle();
+  const { isOpen: isOpenModal, openElement: openModal, closeElement: closeModal } = useToggle();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [reservationId, setReservationId] = useState<number | null>(null);
 
@@ -78,7 +78,7 @@ const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTime
           </React.Fragment>
         );
       })}
-      {isOpen && (
+      {isOpenModal && (
         <Modal
           icon={CheckCircle}
           title="예약완료"

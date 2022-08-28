@@ -17,7 +17,11 @@ import * as S from '@styles/common';
 const Reservation = () => {
   const { id: coachId } = useParams();
   const { userData } = useContext(UserStateContext);
-  const { isOpen, openElement: openTimeList, closeElement: closeTimeList } = useToggle();
+  const {
+    isOpen: isOpenTimeList,
+    openElement: openTimeList,
+    closeElement: closeTimeList,
+  } = useToggle();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { year, month } = monthYear;
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
@@ -104,7 +108,7 @@ const Reservation = () => {
       <S.ScheduleContainer>
         <Title
           text="예약할"
-          highlightText={isOpen ? '시간을' : '날짜를'}
+          highlightText={isOpenTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
@@ -117,7 +121,7 @@ const Reservation = () => {
             onClickDate={handleClickDate}
             onUpdateMonth={handleUpdateMonth}
           />
-          {isOpen && (
+          {isOpenTimeList && (
             <ReservationTimeList
               daySchedule={schedule.daySchedule}
               onReservationTime={handleReservationTime}

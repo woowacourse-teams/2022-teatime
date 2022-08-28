@@ -43,7 +43,11 @@ const getAllTime = (date: string) => {
 
 const Schedule = () => {
   const { userData } = useContext(UserStateContext);
-  const { isOpen, openElement: openTimeList, closeElement: closeTimeList } = useToggle();
+  const {
+    isOpen: isOpenTimeList,
+    openElement: openTimeList,
+    closeElement: closeTimeList,
+  } = useToggle();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [schedule, setSchedule] = useState<ScheduleInfo>({
@@ -188,7 +192,7 @@ const Schedule = () => {
       <S.ScheduleContainer>
         <Title
           text="등록 가능한"
-          highlightText={isOpen ? '시간을' : '날짜를'}
+          highlightText={isOpenTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
@@ -202,7 +206,7 @@ const Schedule = () => {
             onClickDate={handleClickDate}
             onUpdateMonth={handleUpdateMonth}
           />
-          {isOpen && (
+          {isOpenTimeList && (
             <ScheduleTimeList
               date={schedule.date}
               daySchedule={schedule.daySchedule}
