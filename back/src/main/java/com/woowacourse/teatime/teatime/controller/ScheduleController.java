@@ -45,6 +45,6 @@ public class ScheduleController {
     public ResponseEntity<Void> updateSchedules(@CoachAuthenticationPrincipal Long coachId,
                                                 @RequestBody ScheduleUpdateRequest request) {
         scheduleService.update(coachId, request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
