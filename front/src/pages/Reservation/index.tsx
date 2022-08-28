@@ -6,7 +6,7 @@ import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
 import useCalendar from '@hooks/useCalendar';
-import useToggle from '@hooks/useToggle';
+import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
@@ -21,7 +21,7 @@ const Reservation = () => {
     isOpen: isOpenTimeList,
     openElement: openTimeList,
     closeElement: closeTimeList,
-  } = useToggle();
+  } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { year, month } = monthYear;
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({

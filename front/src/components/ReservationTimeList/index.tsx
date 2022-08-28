@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
-import useToggle from '@hooks/useToggle';
+import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
@@ -21,7 +21,7 @@ interface ReservationTimeListProps {
 const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTimeListProps) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
-  const { isOpen: isOpenModal, openElement: openModal, closeElement: closeModal } = useToggle();
+  const { isOpen: isOpenModal, openElement: openModal, closeElement: closeModal } = useBoolean();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [reservationId, setReservationId] = useState<number | null>(null);
 

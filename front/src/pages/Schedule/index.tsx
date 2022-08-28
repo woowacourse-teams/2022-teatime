@@ -5,7 +5,7 @@ import Calendar from '@components/Calendar';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import useCalendar from '@hooks/useCalendar';
-import useToggle from '@hooks/useToggle';
+import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate } from '@utils/date';
@@ -47,7 +47,7 @@ const Schedule = () => {
     isOpen: isOpenTimeList,
     openElement: openTimeList,
     closeElement: closeTimeList,
-  } = useToggle();
+  } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [schedule, setSchedule] = useState<ScheduleInfo>({
