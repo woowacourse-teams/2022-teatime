@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
-import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_승인한다;
-import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_한다;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class CoachAcceptanceV2Test extends AcceptanceTest {
+class CoachAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private ScheduleService scheduleService;

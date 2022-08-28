@@ -1,9 +1,9 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
-import static com.woowacourse.teatime.teatime.acceptance.CoachAcceptanceV2Test.코치의_면담목록을_불러온다;
-import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_승인한다;
-import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_완료한다;
-import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceV2Test.예약을_한다;
+import static com.woowacourse.teatime.teatime.acceptance.CoachAcceptanceTest.코치의_면담목록을_불러온다;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_완료한다;
+import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class CrewAcceptanceV2Test extends AcceptanceTest {
+class CrewAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private CoachRepository coachRepository;
