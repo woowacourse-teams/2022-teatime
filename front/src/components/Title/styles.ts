@@ -14,7 +14,7 @@ const Title = styled.h1`
   font-size: 24px;
   color: ${({ theme }) => theme.colors.GREEN_900};
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     font-size: 16px;
   }
 `;

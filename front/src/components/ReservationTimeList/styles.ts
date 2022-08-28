@@ -18,7 +18,7 @@ const TimeListContainer = styled.div`
   }
   animation: ${FadeIn} 0.8s;
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -55,7 +55,7 @@ const TimeBox = styled.div<{ isPossible?: boolean }>`
       pointer-events: none;
     `}
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     width: 100px;
   }
 `;
@@ -92,7 +92,7 @@ const ReserveButtonWrapper = styled.div`
     cursor: pointer;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     div {
       display: none;
     }

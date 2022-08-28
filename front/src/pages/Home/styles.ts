@@ -53,7 +53,7 @@ const MainSection = styled.section`
     bottom: 100px;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     padding-top: 0px;
     padding: 10%;
   }
@@ -72,7 +72,7 @@ const Description = styled.div`
     padding-top: 15px;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     padding-left: 0;
 
     p {
@@ -103,7 +103,7 @@ const OverlapContent = styled.div`
     animation: ${Flow} 4s ease-in-out infinite;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     padding-top: 50px;
 
     h2 {
@@ -145,7 +145,7 @@ const ButtonContainer = styled.div`
     margin-right: 15px;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     padding-left: 0%;
     margin-top: 100px;
 

@@ -12,11 +12,15 @@ const CardListContainer = styled.div`
   grid-template-columns: repeat(4, 250px);
   gap: 40px;
 
-  @media all and (max-width: 768px) {
-    grid-template-columns: repeat(2, 250px);
+  @media all and (${({ theme }) => theme.devices.laptop}) {
+    grid-template-columns: repeat(4, 200px);
   }
 
-  @media all and (max-width: 480px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
+    grid-template-columns: repeat(2, 220px);
+  }
+
+  @media all and (${({ theme }) => theme.devices.mobileXL}) {
     grid-template-columns: repeat(2, 150px);
   }
 `;

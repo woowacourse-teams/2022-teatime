@@ -4,7 +4,7 @@ const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     align-items: center;
   }
 `;
@@ -14,7 +14,7 @@ const DateGrid = styled.div`
   gap: 10px;
   grid-template-columns: repeat(7, 50px);
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     grid-template-columns: repeat(7, 40px);
   }
 `;
@@ -29,7 +29,7 @@ const DayOfWeekBox = styled.div`
   font-weight: bolder;
   font-size: 20px;
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     width: 40px;
     height: 40px;
   }
@@ -57,7 +57,7 @@ const YearMonthContainer = styled.div`
     cursor: pointer;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (${({ theme }) => theme.devices.tablet}) {
     width: 100%;
     justify-content: center;
 

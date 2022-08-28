@@ -4,7 +4,7 @@ const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 250px;
+  width: 100%;
   height: 350px;
   padding: 35px 16px;
   border-radius: 20px;
@@ -53,8 +53,21 @@ const CardContainer = styled.div`
     transform: scale(1.03);
   }
 
-  @media all and (max-width: 480px) {
-    width: 150px;
+  @media all and (${({ theme }) => theme.devices.tablet}) {
+    height: 250px;
+    padding: 20px 10px;
+
+    img {
+      width: 70px;
+      height: 70px;
+    }
+
+    p {
+      display: none;
+    }
+  }
+
+  @media all and (${({ theme }) => theme.devices.mobileXL}) {
     height: 200px;
     padding: 20px 10px;
 
@@ -65,6 +78,10 @@ const CardContainer = styled.div`
 
     p {
       display: none;
+    }
+
+    button {
+      font-size: 14px;
     }
   }
 `;
