@@ -6,6 +6,7 @@ import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
 import useSnackbar from '@hooks/useSnackbar';
+import useWindowFocus from '@hooks/useWindowFocus';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
@@ -31,6 +32,7 @@ interface BoardItem {
 const Coach = () => {
   const navigate = useNavigate();
   const showSnackbar = useSnackbar();
+  const isWindowFocused = useWindowFocus();
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
@@ -234,7 +236,7 @@ const Coach = () => {
   };
 
   useEffect(() => {
-    (async () => {
+    const getReservationList = async () => {
       try {
         const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations', {
           headers: {
@@ -253,8 +255,10 @@ const Coach = () => {
           alert(error);
         }
       }
-    })();
-  }, []);
+    };
+
+    isWindowFocused && getReservationList();
+  }, [isWindowFocused]);
 
   return (
     <S.Layout>
