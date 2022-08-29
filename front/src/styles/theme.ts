@@ -39,14 +39,14 @@ const theme = {
     BLACK: '#000000',
   },
   devices: {
-    mobileS: `(max-width: ${size.mobileS})`,
-    mobileM: `(max-width: ${size.mobileM})`,
-    mobileL: `(max-width: ${size.mobileL})`,
-    mobileXL: `(max-width: ${size.mobileXL})`,
-    tablet: `(max-width: ${size.tablet})`,
-    laptop: `(max-width: ${size.laptop})`,
-    laptopL: `(max-width: ${size.laptopL})`,
-    desktop: `(max-width: ${size.desktop})`,
+    mobileS: `max-width: ${size.mobileS}`,
+    mobileM: `max-width: ${size.mobileM}`,
+    mobileL: `max-width: ${size.mobileL}`,
+    mobileXL: `max-width: ${size.mobileXL}`,
+    tablet: `max-width: ${size.tablet}`,
+    laptop: `max-width: ${size.laptop}`,
+    laptopL: `max-width: ${size.laptopL}`,
+    desktop: `max-width: ${size.desktop}`,
   },
 };
 
