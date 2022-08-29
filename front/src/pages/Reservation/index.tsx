@@ -5,8 +5,8 @@ import ReservationTimeList from '@components/ReservationTimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
-import useTimeList from '@hooks/useTimeList';
 import useCalendar from '@hooks/useCalendar';
+import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
@@ -17,7 +17,11 @@ import * as S from '@styles/common';
 const Reservation = () => {
   const { id: coachId } = useParams();
   const { userData } = useContext(UserStateContext);
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const {
+    isOpen: isOpenTimeList,
+    openElement: openTimeList,
+    closeElement: closeTimeList,
+  } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { year, month } = monthYear;
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
@@ -50,7 +54,7 @@ const Reservation = () => {
     });
   };
 
-  const handleReservateTime = (scheduleId: number) => {
+  const handleReservationTime = (scheduleId: number) => {
     setSchedule((allSchedules) => {
       const newDaySchedule = schedule.daySchedule.map((time) => {
         if (time.id === scheduleId) {
@@ -120,7 +124,7 @@ const Reservation = () => {
           {isOpenTimeList && (
             <ReservationTimeList
               daySchedule={schedule.daySchedule}
-              onReservateTime={handleReservateTime}
+              onReservationTime={handleReservationTime}
             />
           )}
         </S.CalendarContainer>

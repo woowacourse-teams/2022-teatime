@@ -4,8 +4,8 @@ import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
-import useTimeList from '@hooks/useTimeList';
 import useCalendar from '@hooks/useCalendar';
+import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { getFormatDate } from '@utils/date';
@@ -43,7 +43,11 @@ const getAllTime = (date: string) => {
 
 const Schedule = () => {
   const { userData } = useContext(UserStateContext);
-  const { isOpenTimeList, openTimeList, closeTimeList } = useTimeList();
+  const {
+    isOpen: isOpenTimeList,
+    openElement: openTimeList,
+    closeElement: closeTimeList,
+  } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [schedule, setSchedule] = useState<ScheduleInfo>({
