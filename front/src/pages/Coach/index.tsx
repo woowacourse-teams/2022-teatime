@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
+import useWindowFocus from '@hooks/useWindowFocus';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
@@ -30,6 +31,7 @@ interface BoardItem {
 
 const Coach = () => {
   const navigate = useNavigate();
+  const isWindowFocused = useWindowFocus();
   const showSnackbar = useContext(SnackbarContext);
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
@@ -234,7 +236,7 @@ const Coach = () => {
   };
 
   useEffect(() => {
-    (async () => {
+    const getReservationList = async () => {
       try {
         const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations', {
           headers: {
@@ -253,8 +255,10 @@ const Coach = () => {
           alert(error);
         }
       }
-    })();
-  }, []);
+    };
+
+    isWindowFocused && getReservationList();
+  }, [isWindowFocused]);
 
   return (
     <S.Layout>
