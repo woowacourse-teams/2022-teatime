@@ -54,7 +54,7 @@ const MainSection = styled.section`
   }
 
   @media all and (${({ theme }) => theme.devices.tablet}) {
-    padding-top: 0px;
+    padding-top: 0;
     padding: 10%;
   }
 `;
@@ -146,7 +146,7 @@ const ButtonContainer = styled.div`
   }
 
   @media all and (${({ theme }) => theme.devices.tablet}) {
-    padding-left: 0%;
+    padding-left: 0;
     margin-top: 100px;
 
     button {
