@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <S.HeaderContainer>
       <S.LogoLink to={userData ? `/${userData.role.toLowerCase()}` : ROUTES.HOME}>
-        <S.LogoImage src={LogoIcon} />
+        <S.LogoImage src={LogoIcon} alt="티타임 로고" />
         <h1>티타임</h1>
       </S.LogoLink>
       {userData && (

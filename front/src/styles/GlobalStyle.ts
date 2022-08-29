@@ -15,7 +15,6 @@ const GlobalStyle = createGlobalStyle`
       max-width: 100%;
       overflow-x: hidden;
     }
- 
 `;
 
 export default GlobalStyle;

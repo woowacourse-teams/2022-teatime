@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
-import useSnackbar from '@hooks/useSnackbar';
 import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES } from '@constants/index';
 import type { Coach } from '@typings/domain';
 import api from '@api/index';
@@ -12,7 +12,7 @@ import * as S from './styles';
 
 const Crew = () => {
   const navigate = useNavigate();
-  const showSnackbar = useSnackbar();
+  const showSnackbar = useContext(SnackbarContext);
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const [coaches, setCoaches] = useState<Coach[]>();

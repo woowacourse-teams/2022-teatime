@@ -9,8 +9,20 @@ const Layout = styled.div`
 
 const CardListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 250px);
   gap: 40px;
+
+  @media screen and (${({ theme }) => theme.devices.laptop}) {
+    grid-template-columns: repeat(4, 200px);
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    grid-template-columns: repeat(2, 220px);
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    grid-template-columns: repeat(2, 150px);
+  }
 `;
 
 export { CardListContainer, Layout };

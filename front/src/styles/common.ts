@@ -15,6 +15,11 @@ const CalendarContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const InfoContainer = styled.div`

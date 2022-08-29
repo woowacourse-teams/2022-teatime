@@ -5,16 +5,16 @@ import { AxiosError } from 'axios';
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
-import useSnackbar from '@hooks/useSnackbar';
 import useWindowFocus from '@hooks/useWindowFocus';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
 import api from '@api/index';
-
-import ScheduleIcon from '@assets/schedule-white.svg';
 import theme from '@styles/theme';
 import * as S from './styles';
+
+import ScheduleIcon from '@assets/schedule-white.svg';
 
 interface BoardItemValue {
   title: string;
@@ -31,8 +31,8 @@ interface BoardItem {
 
 const Coach = () => {
   const navigate = useNavigate();
-  const showSnackbar = useSnackbar();
   const isWindowFocused = useWindowFocus();
+  const showSnackbar = useContext(SnackbarContext);
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
