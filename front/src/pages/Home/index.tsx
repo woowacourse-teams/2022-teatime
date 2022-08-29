@@ -38,7 +38,7 @@ const Home = () => {
         </S.Description>
         <S.ButtonContainer>
           <S.SlackButton onClick={handleLogin}>
-            <img src={SlackIcon} />
+            <img src={SlackIcon} alt="슬랙 아이콘" />
             <span>Slack으로 로그인</span>
           </S.SlackButton>
           <S.TeamIntroButton onClick={() => alert('준비중입니다.')}>

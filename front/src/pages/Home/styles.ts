@@ -52,6 +52,11 @@ const MainSection = styled.section`
     transform: translateX(-60%) scale(4);
     bottom: 100px;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    padding-top: 0;
+    padding: 10%;
+  }
 `;
 
 const Description = styled.div`
@@ -65,6 +70,14 @@ const Description = styled.div`
     z-index: 1;
     font-size: 25px;
     padding-top: 15px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    padding-left: 0;
+
+    p {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -89,17 +102,23 @@ const OverlapContent = styled.div`
     color: ${({ theme }) => theme.colors.BLUE_600};
     animation: ${Flow} 4s ease-in-out infinite;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    padding-top: 50px;
+
+    h2 {
+      left: 10%;
+      font-size: 40px;
+    }
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: center;
   z-index: 1;
-  position: absolute;
-  bottom: 20%;
-  left: 20%;
-  gap: 20px;
+  padding-left: 20%;
   margin-top: 200px;
+  gap: 20px;
 
   button {
     display: flex;
@@ -113,6 +132,7 @@ const ButtonContainer = styled.div`
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 
     &:hover {
       transition: 0.2s;
@@ -123,6 +143,22 @@ const ButtonContainer = styled.div`
     width: 30px;
     height: 30px;
     margin-right: 15px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    padding-left: 0;
+    margin-top: 100px;
+
+    button {
+      width: 150px;
+      font-size: 16px;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
   }
 `;
 

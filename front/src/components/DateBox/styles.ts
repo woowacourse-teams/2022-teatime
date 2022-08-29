@@ -57,6 +57,11 @@ const DateContainer = styled.div<{
       pointer-events: none;
       border: none;
     `}
+
+   @media screen and   (${({ theme }) => theme.devices.tablet}) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 export { DateContainer, TodayIndicator };
