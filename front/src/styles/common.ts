@@ -16,7 +16,7 @@ const CalendarContainer = styled.div`
     display: none;
   }
 
-  @media all and (${({ theme }) => theme.devices.tablet}) {
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
     display: flex;
     flex-direction: column;
   }

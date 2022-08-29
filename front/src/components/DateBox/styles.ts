@@ -58,7 +58,7 @@ const DateContainer = styled.div<{
       border: none;
     `}
 
-  @media all and (${({ theme }) => theme.devices.tablet}) {
+   @media screen and   (${({ theme }) => theme.devices.tablet}) {
     width: 40px;
     height: 40px;
   }

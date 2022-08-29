@@ -53,7 +53,7 @@ const CardContainer = styled.div`
     transform: scale(1.03);
   }
 
-  @media all and (${({ theme }) => theme.devices.tablet}) {
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
     height: 250px;
     padding: 20px 10px;
 
@@ -67,7 +67,7 @@ const CardContainer = styled.div`
     }
   }
 
-  @media all and (${({ theme }) => theme.devices.mobileXL}) {
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
     height: 200px;
     padding: 20px 10px;
 

@@ -12,15 +12,15 @@ const CardListContainer = styled.div`
   grid-template-columns: repeat(4, 250px);
   gap: 40px;
 
-  @media all and (${({ theme }) => theme.devices.laptop}) {
+  @media screen and (${({ theme }) => theme.devices.laptop}) {
     grid-template-columns: repeat(4, 200px);
   }
 
-  @media all and (${({ theme }) => theme.devices.tablet}) {
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
     grid-template-columns: repeat(2, 220px);
   }
 
-  @media all and (${({ theme }) => theme.devices.mobileXL}) {
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
     grid-template-columns: repeat(2, 150px);
   }
 `;
