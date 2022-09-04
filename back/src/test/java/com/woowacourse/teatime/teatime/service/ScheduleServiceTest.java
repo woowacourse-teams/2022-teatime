@@ -104,7 +104,8 @@ class ScheduleServiceTest {
         LocalDate date = LocalDate.now();
         Schedule schedule = scheduleRepository.save(new Schedule(coach, Date.findFirstTime(date)));
         Crew crew = crewRepository.save(CREW);
-        reservationService.save(new ReservationReserveRequest(crew.getId(), coach.getId(), schedule.getId()));
+        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
+        reservationService.save(crew.getId(), reservationReserveRequest);
 
         ScheduleUpdateRequest scheduleUpdateRequest = new ScheduleUpdateRequest(date,
                 List.of(Date.findFirstTime(date)));
@@ -120,7 +121,8 @@ class ScheduleServiceTest {
         LocalDateTime notReservedTime = Date.findLastTime(LocalDate.now()).minusHours(1);
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
         Crew crew = crewRepository.save(CREW);
-        reservationService.save(new ReservationReserveRequest(crew.getId(), coach.getId(), schedule1.getId()));
+        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule1.getId());
+        reservationService.save(crew.getId(), reservationReserveRequest);
         scheduleRepository.save(new Schedule(coach, notReservedTime));
 
         ScheduleUpdateRequest scheduleUpdateRequest

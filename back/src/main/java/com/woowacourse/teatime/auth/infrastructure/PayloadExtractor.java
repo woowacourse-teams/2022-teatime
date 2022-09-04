@@ -1,7 +1,6 @@
 package com.woowacourse.teatime.auth.infrastructure;
 
 import com.woowacourse.teatime.util.AuthorizationExtractor;
-import io.jsonwebtoken.Claims;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ public class PayloadExtractor {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public Claims extract(NativeWebRequest webRequest) {
+    public PayloadDto extract(NativeWebRequest webRequest) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String token = AuthorizationExtractor.extract(request);
         return jwtTokenProvider.getPayload(token);

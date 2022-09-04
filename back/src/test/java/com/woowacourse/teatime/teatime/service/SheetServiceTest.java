@@ -80,7 +80,7 @@ class SheetServiceTest {
     @DisplayName("코치의 질문만큼의 시트를 만든 뒤 개수를 반환한다.")
     @Test
     void saveNewSheets() {
-        int savedSheetCount = sheetService.save(coach.getId(), reservation.getId());
+        int savedSheetCount = sheetService.save(reservation.getId());
 
         assertThat(savedSheetCount).isEqualTo(3);
     }
@@ -88,9 +88,9 @@ class SheetServiceTest {
     @DisplayName("크루가 자신의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
     @Test
     void findOwnSheetByCrew() {
-        int expected = sheetService.save(coach.getId(), reservation.getId());
+        int expected = sheetService.save(reservation.getId());
 
-        CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(reservation.getId());
+        CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();
 
         assertThat(sheets).hasSize(expected);
@@ -99,18 +99,18 @@ class SheetServiceTest {
     @DisplayName("크루가 자신의 면담 시트 조회 - 존재하지 않는 면담 아이디로 조회하면 예외를 반환한다.")
     @Test
     void findOwnSheetByCrew_notFoundReservation() {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         long 존재하지_않는_아이디 = reservation.getId() + 100L;
 
-        assertThatThrownBy(() -> sheetService.findOwnSheetByCrew(존재하지_않는_아이디))
+        assertThatThrownBy(() -> sheetService.findOwnSheetByCrew(crew.getId(), 존재하지_않는_아이디))
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
     @DisplayName("코치가 크루의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
     @Test
     void findCrewSheetByCoach() {
-        int expected = sheetService.save(coach.getId(), reservation.getId());
+        int expected = sheetService.save(reservation.getId());
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();
@@ -121,7 +121,7 @@ class SheetServiceTest {
     @DisplayName("코치가 크루의 면담 시트 조회 - 존재하지 않는 크루 아이디로 조회하면 예외를 반환한다.")
     @Test
     void findCrewSheetByCoach_notFoundCrew() {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         long 존재하지_않는_아이디 = crew.getId() + 100L;
 
@@ -132,7 +132,7 @@ class SheetServiceTest {
     @DisplayName("코치가 크루의 면담 시트 조회 - 존재하지 않는 면담 아이디로 조회하면 예외를 반환한다.")
     @Test
     void findCrewSheetByCoach_notFoundReservation() {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         long 존재하지_않는_아이디 = reservation.getId() + 100L;
 
@@ -143,14 +143,14 @@ class SheetServiceTest {
     @DisplayName("면담 시트의 답변을 임시저장한다.")
     @Test
     void modifyAnswer_write() {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
                 SHEET_ANSWER_UPDATE_REQUEST_TWO,
                 SHEET_ANSWER_UPDATE_REQUEST_ONE,
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
-        sheetService.updateAnswer(reservation.getId(), request);
+        sheetService.updateAnswer(crew.getId(), reservation.getId(), request);
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();
@@ -164,14 +164,14 @@ class SheetServiceTest {
     @DisplayName("면담 시트의 답변을 제출한다.")
     @Test
     void modifyAnswer_submit() {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
                 SHEET_ANSWER_UPDATE_REQUEST_TWO,
                 SHEET_ANSWER_UPDATE_REQUEST_ONE,
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
-        sheetService.updateAnswer(reservation.getId(), request);
+        sheetService.updateAnswer(crew.getId(), reservation.getId(), request);
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();
@@ -186,7 +186,7 @@ class SheetServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " "})
     void modifyAnswer_submit_blankException(String answer) {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
                 new SheetAnswerUpdateDto(2, "당신의 별자리는?", answer),
@@ -194,14 +194,14 @@ class SheetServiceTest {
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
 
-        assertThatThrownBy(() -> sheetService.updateAnswer(reservation.getId(), request))
+        assertThatThrownBy(() -> sheetService.updateAnswer(crew.getId(), reservation.getId(), request))
                 .isInstanceOf(CannotSubmitBlankException.class);
     }
 
     @DisplayName("면담 시트의 답변 제출에 실패한다. - 공백을 포함하는 답변이 있는 경우")
     @Test
     void modifyAnswer_submit_nullException() {
-        sheetService.save(coach.getId(), reservation.getId());
+        sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
                 new SheetAnswerUpdateDto(2, "당신의 별자리는?", null),
@@ -209,7 +209,7 @@ class SheetServiceTest {
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
 
-        assertThatThrownBy(() -> sheetService.updateAnswer(reservation.getId(), request))
+        assertThatThrownBy(() -> sheetService.updateAnswer(crew.getId(), reservation.getId(), request))
                 .isInstanceOf(CannotSubmitBlankException.class);
     }
 }

@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
-import static com.woowacourse.teatime.teatime.acceptance.CoachAcceptanceTest.코치를_저장한다;
 import static com.woowacourse.teatime.teatime.acceptance.CoachAcceptanceTest.코치의_면담목록을_불러온다;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
@@ -11,6 +10,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
@@ -25,47 +25,56 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-public class ReservationAcceptanceTest extends AcceptanceTest {
+class ReservationAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private ScheduleService scheduleService;
+
     @Autowired
     private CrewService crewService;
 
+    @Autowired
+    private CoachService coachService;
+
     private Long coachId;
-    private Long scheduleId;
+    private String coachToken;
     private Long crewId;
+    private String crewToken;
+    private Long scheduleId;
 
-    public static Long 예약을_한다(Object object) {
-        ExtractableResponse<Response> response = post("/api/reservations", object);
-
-        return Long.parseLong(response.header("Location").split("/")[5]);
+    public static Long 예약을_한다(ReservationReserveRequest request, String crewToken) {
+        ExtractableResponse<Response> response = postV2("/api/v2/reservations", request, crewToken);
+        return Long.parseLong(response.header("Location").split("/reservations/")[1]);
     }
 
-    public static void 예약을_승인한다(Long reservationId, Object object) {
+    public static void 예약을_승인한다(Long reservationId, ReservationApproveRequest request, String coachToken) {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
-                .body(object)
-                .when().post("/api/reservations/{reservationId}")
+                .header("Authorization", "Bearer " + coachToken)
+                .body(request)
+                .when().post("/api/v2/reservations/{reservationId}")
                 .then().log().all()
                 .extract();
     }
 
-    public static void 예약을_완료한다(Long reservationId) {
+    public static void 예약을_완료한다(Long reservationId, String coachToken) {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
-                .when().put("/api/reservations/{reservationId}")
+                .header("Authorization", "Bearer " + coachToken)
+                .when().put("/api/v2/reservations/{reservationId}")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @BeforeEach
     void setUp() {
-        coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST);
-        scheduleId = scheduleService.save(coachId, DATE_TIME);
         crewId = crewService.save(CREW_SAVE_REQUEST);
+        coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
+        crewToken = 크루의_토큰을_발급한다(crewId);
+        coachToken = 코치의_토큰을_발급한다(coachId);
+        scheduleId = scheduleService.save(coachId, DATE_TIME);
     }
 
     @DisplayName("예약한다.")
@@ -73,13 +82,12 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     void reserve() {
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ReservationReserveRequest(crewId, coachId, scheduleId))
+                .header("Authorization", "Bearer " + crewToken)
+                .body(new ReservationReserveRequest(scheduleId))
                 .filter(document("reserve", requestFields(
-                        fieldWithPath("crewId").description("크루 아이디"),
-                        fieldWithPath("coachId").description("코치 아이디"),
                         fieldWithPath("scheduleId").description("스케줄 아이디")
                 )))
-                .when().post("/api/reservations")
+                .when().post("/api/v2/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
     }
@@ -88,36 +96,49 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void approve(boolean isApprove) {
-        Long reservationId = ReservationAcceptanceTest.예약을_한다(
-                new ReservationReserveRequest(crewId, coachId, scheduleId));
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
-                .body(new ReservationApproveRequest(coachId, isApprove))
+                .header("Authorization", "Bearer " + coachToken)
+                .body(new ReservationApproveRequest(isApprove))
                 .filter(document("reserve-approve", requestFields(
-                        fieldWithPath("coachId").description("코치 아이디"),
                         fieldWithPath("isApproved").description("승인 여부")
                 )))
-                .when().post("/api/reservations/{reservationId}")
+                .when().post("/api/v2/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }
 
-    @DisplayName("코치 및 크루가 예약을 취소할 수 있다.")
-    @ParameterizedTest
-    @ValueSource(strings = {"COACH", "CREW"})
-    void cancel(String role) {
-        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
-        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
+    @DisplayName("코치가 예약을 취소할 수 있다.")
+    @Test
+    void cancel_by_coach() {
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
-                .header("applicantId", coachId)
-                .header("role", role)
+                .header("Authorization", "Bearer " + coachToken)
                 .filter(document("reserve-cancel"))
-                .when().delete("/api/reservations/{reservationId}")
+                .when().delete("/api/v2/reservations/{reservationId}")
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @DisplayName("크루가 예약을 취소할 수 있다.")
+    @Test
+    void cancel_by_crew() {
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
+
+        RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("reservationId", reservationId)
+                .header("Authorization", "Bearer " + crewToken)
+                .filter(document("reserve-cancel"))
+                .when().delete("/api/v2/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
@@ -125,16 +146,18 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("진행중인 일정을 완료한다.")
     @Test
     void finish() {
-        Long reservationId = 예약을_한다(new ReservationReserveRequest(crewId, coachId, scheduleId));
-        예약을_승인한다(reservationId, new ReservationApproveRequest(coachId, true));
-        코치의_면담목록을_불러온다(coachId);
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
+        코치의_면담목록을_불러온다(coachToken);
 
         RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
+                .header("Authorization", "Bearer " + coachToken)
                 .filter(document("reserve-finish"))
-                .when().put("/api/reservations/{reservationId}")
+                .when().put("/api/v2/reservations/{reservationId}")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
+
 }

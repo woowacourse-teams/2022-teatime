@@ -14,13 +14,5 @@ public class ReservationReserveRequest {
 
     @NotNull
     @Min(1)
-    private Long crewId;
-
-    @NotNull
-    @Min(1)
-    private Long coachId;
-
-    @NotNull
-    @Min(1)
     private Long scheduleId;
 }

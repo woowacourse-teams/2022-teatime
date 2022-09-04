@@ -33,19 +33,7 @@ public class SheetService {
     private final ReservationRepository reservationRepository;
     private final CrewRepository crewRepository;
 
-    public int save(Long coachId, Long reservationId) {
-        List<Question> questions = questionRepository.findByCoachId(coachId);
-        Reservation reservation = findReservation(reservationId);
-
-        List<Sheet> sheets = questions.stream()
-                .map(question -> new Sheet(reservation, question.getNumber(), question.getContent()))
-                .collect(Collectors.toList());
-
-        List<Sheet> savedSheets = sheetRepository.saveAll(sheets);
-        return savedSheets.size();
-    }
-
-    public int saveV2(Long reservationId) {
+    public int save(Long reservationId) {
         Reservation reservation = findReservation(reservationId);
         Coach coach = reservation.getCoach();
         List<Question> questions = questionRepository.findByCoachId(coach.getId());
@@ -58,13 +46,7 @@ public class SheetService {
         return savedSheets.size();
     }
 
-    public CrewFindOwnSheetResponse findOwnSheetByCrew(Long reservationId) {
-        Reservation reservation = findReservation(reservationId);
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
-        return CrewFindOwnSheetResponse.of(reservation, sheets);
-    }
-
-    public CrewFindOwnSheetResponse findOwnSheetByCrewV2(Long crewId, Long reservationId) {
+    public CrewFindOwnSheetResponse findOwnSheetByCrew(Long crewId, Long reservationId) {
         Reservation reservation = findReservation(reservationId);
         validateAuthorization(crewId, reservation);
         List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
@@ -89,21 +71,7 @@ public class SheetService {
                 .orElseThrow(NotFoundCrewException::new);
     }
 
-    public void updateAnswer(Long reservationId, SheetAnswerUpdateRequest request) {
-        validateReservation(reservationId);
-        SheetStatus status = request.getStatus();
-        List<SheetAnswerUpdateDto> sheetDtos = request.getSheets();
-        if (SheetStatus.SUBMITTED.equals(status)) {
-            validateAnswer(sheetDtos);
-        }
-
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
-        for (Sheet sheet : sheets) {
-            modifyAnswer(sheetDtos, sheet);
-        }
-    }
-
-    public void updateAnswerV2(Long crewId, Long reservationId, SheetAnswerUpdateRequest request) {
+    public void updateAnswer(Long crewId, Long reservationId, SheetAnswerUpdateRequest request) {
         validateAuthorization(crewId, findReservation(reservationId));
         SheetStatus status = request.getStatus();
         List<SheetAnswerUpdateDto> sheetDtos = request.getSheets();
@@ -119,11 +87,6 @@ public class SheetService {
 
     private Reservation findReservation(Long reservationId) {
         return reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-    }
-
-    private void validateReservation(Long reservationId) {
-        reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
     }
 
