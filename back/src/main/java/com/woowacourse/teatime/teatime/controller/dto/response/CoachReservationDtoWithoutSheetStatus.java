@@ -2,7 +2,6 @@ package com.woowacourse.teatime.teatime.controller.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.teatime.domain.Reservation;
-import com.woowacourse.teatime.teatime.domain.SheetStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CoachApprovedReservationDto {
+public class CoachReservationDtoWithoutSheetStatus {
 
     private Long reservationId;
 
@@ -27,22 +26,19 @@ public class CoachApprovedReservationDto {
 
     private String crewImage;
 
-    private SheetStatus sheetStatus;
-
-    public static List<CoachApprovedReservationDto> from(List<Reservation> reservations) {
+    public static List<CoachReservationDtoWithoutSheetStatus> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(CoachApprovedReservationDto::from)
+                .map(CoachReservationDtoWithoutSheetStatus::from)
                 .collect(Collectors.toList());
     }
 
-    private static CoachApprovedReservationDto from(Reservation reservation) {
-        return new CoachApprovedReservationDto(
+    private static CoachReservationDtoWithoutSheetStatus from(Reservation reservation) {
+        return new CoachReservationDtoWithoutSheetStatus(
                 reservation.getId(),
                 reservation.getScheduleDateTime(),
                 reservation.getCrew().getId(),
                 reservation.getCrew().getName(),
-                reservation.getCrew().getImage(),
-                reservation.getSheetStatus()
+                reservation.getCrew().getImage()
         );
     }
 }
