@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import Dotenv from 'dotenv-webpack';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -71,6 +72,7 @@ const config: webpack.Configuration = {
       analyzerMode: 'static',
       openAnalyzer: false,
     }),
+    new Dotenv(),
   ],
   devServer: {
     historyApiFallback: true,

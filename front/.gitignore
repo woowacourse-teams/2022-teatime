@@ -6,5 +6,5 @@
 
 key-teatime.cer
 
-# url
+# local env files
 .env
