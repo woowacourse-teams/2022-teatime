@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CoachReservationsResponse {
 
-    private List<CoachReservationDto> beforeApproved;
-    private List<CoachApprovedReservationDto> approved;
-    private List<CoachReservationDto> inProgress;
+    private List<CoachReservationDtoWithSheetStatus> beforeApproved;
+    private List<CoachReservationDtoWithSheetStatus> approved;
+    private List<CoachReservationDtoWithoutSheetStatus> inProgress;
 
     public static CoachReservationsResponse of(List<Reservation> beforeApproved, List<Reservation> approved,
                                                List<Reservation> inProgress) {
-        List<CoachReservationDto> beforeApprovedDtos = CoachReservationDto.from(beforeApproved);
-        List<CoachApprovedReservationDto> approvedDtos = CoachApprovedReservationDto.from(approved);
-        List<CoachReservationDto> inProgressDtos = CoachReservationDto.from(inProgress);
+        List<CoachReservationDtoWithSheetStatus> beforeApprovedDtos = CoachReservationDtoWithSheetStatus.from(beforeApproved);
+        List<CoachReservationDtoWithSheetStatus> approvedDtos = CoachReservationDtoWithSheetStatus.from(approved);
+        List<CoachReservationDtoWithoutSheetStatus> inProgressDtos = CoachReservationDtoWithoutSheetStatus.from(inProgress);
 
         return new CoachReservationsResponse(beforeApprovedDtos, approvedDtos, inProgressDtos);
     }
