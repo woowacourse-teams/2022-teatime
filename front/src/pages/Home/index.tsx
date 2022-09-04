@@ -12,7 +12,7 @@ const Home = () => {
 
   const handleLogin = () => {
     location.href =
-      'https://slack.com/openid/connect/authorize?response_type=code&scope=openid%20profile%20email&client_id=3853132979991.3908459157459&redirect_uri=https://teatime.pe.kr/certification';
+      'https://slack.com/openid/connect/authorize?response_type=code&scope=openid%20profile%20email&client_id=3853132979991.3908459157459&redirect_uri=https://dev.teatime.pe.kr/certification';
   };
 
   useEffect(() => {
