@@ -25,6 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                         "http://localhost:8080",
+                        "https://dev.teatime.pe.kr",
                         "https://teatime.pe.kr",
                         "http://teatime.pe.kr"
                 )
