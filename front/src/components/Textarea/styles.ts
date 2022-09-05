@@ -16,9 +16,8 @@ const Textarea = styled.textarea<{ isFocus: boolean }>`
   padding: 10px;
   border: 1px solid
     ${({ theme, isFocus }) => (isFocus ? theme.colors.RED_600 : theme.colors.GRAY_500)};
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 15px;
-  word-spacing: -3px;
   resize: vertical;
 `;
 

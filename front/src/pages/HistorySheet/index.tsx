@@ -61,9 +61,9 @@ const HistorySheet = () => {
             />
           );
         })}
-        <BackButton />
       </S.InfoContainer>
       <Sheet title="작성한 면담 내용" sheets={historyList[historyIndex].sheets} isView />
+      <BackButton />
     </Frame>
   );
 };

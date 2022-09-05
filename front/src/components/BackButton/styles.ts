@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 const ArrowIcon = styled.img`
   position: absolute;
-  left: -10px;
-  bottom: 10px;
-  width: 50px;
-  height: 50px;
+  left: 20px;
+  bottom: 20px;
+  width: 45px;
+  height: 45px;
   padding: 10px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.BLUE_800};

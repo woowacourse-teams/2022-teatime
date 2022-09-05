@@ -3,14 +3,13 @@ import styled from 'styled-components';
 const Item = styled.div<{ isSelected: boolean }>`
   margin: 0 16px 10px 0;
   padding: 8px 12px;
-  background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.GRAY_200 : theme.colors.GRAY_100};
+  background-color: ${({ theme, isSelected }) => isSelected && theme.colors.GRAY_200};
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors.GRAY_100};
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_300};
   cursor: pointer;
 
   :hover {
-    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
+    border: 2px solid ${({ theme }) => theme.colors.GRAY_500};
   }
 `;
 
