@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import Textarea from '@components/Textarea';
 import { Sheets } from '@typings/domain';
+import { SHEET_MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
 
 interface SheetProps {
@@ -16,6 +17,10 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
   const handleChangeContent = (index: number) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length > SHEET_MAX_LENGTH) {
+      alert('더 이상 작성할 수 없습니다.');
+      e.target.value = e.target.value.substring(0, SHEET_MAX_LENGTH);
+    }
     setContents((prevContent) => {
       const newContent = [...prevContent];
       newContent[index].answerContent = e.target.value;
