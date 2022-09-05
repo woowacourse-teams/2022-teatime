@@ -16,4 +16,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(Long crewId,
                                                                                        ReservationStatus status);
+
+    List<Reservation> findAllByReservationStatus(ReservationStatus status);
 }

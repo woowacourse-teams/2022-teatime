@@ -119,14 +119,7 @@ public class ReservationService {
         validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId,
                 DONE);
-        updateReservationStatusToInProgress(reservations);
         return classifyReservationsAndReturnDto(reservations);
-    }
-
-    private void updateReservationStatusToInProgress(List<Reservation> reservations) {
-        for (Reservation reservation : reservations) {
-            reservation.updateReservationStatusToInProgress();
-        }
     }
 
     private void validateCoachId(Long coachId) {

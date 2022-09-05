@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.repository;
 
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
@@ -68,4 +69,29 @@ class ReservationRepositoryTest {
 
         assertThat(reservations).hasSize(2);
     }
+
+    @DisplayName("승인된 예약들을 모두 조회한다.")
+    @Test
+    void findAllByReservationStatus() {
+        // given
+        Coach jason = coachRepository.save(getCoachJason());
+        Schedule jasonSchedule1 = scheduleRepository.save(new Schedule(jason, DomainFixture.DATE_TIME));
+        Schedule brownSchedule2 = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME.plusDays(1)));
+
+        Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
+        Reservation reservation2 = reservationRepository.save(new Reservation(jasonSchedule1, crew));
+        reservationRepository.save(new Reservation(brownSchedule2, crew));
+
+        boolean isApproved = true;
+        reservation1.confirm(isApproved);
+        reservation2.confirm(isApproved);
+
+        // when
+        List<Reservation> approvedReservations
+                = reservationRepository.findAllByReservationStatus(ReservationStatus.APPROVED);
+
+        // then
+        assertThat(approvedReservations).hasSize(2);
+    }
+
 }
