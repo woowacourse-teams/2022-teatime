@@ -94,7 +94,7 @@ tasks.named('test') {
 
 processResources.dependsOn('copySecret', 'copyDevSecret', 'copyProdSecret', 'copyTestSecret', 'copySlackWebHook')
 
-task copyDevSecret(type: Copy) {
+task copySecret(type: Copy) {
     from '../config/application.yml'
     into 'src/main/resources'
 }
