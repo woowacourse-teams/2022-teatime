@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,19 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
         scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
-        ExtractableResponse<Response> response = 크루가_코치스케쥴_조회_요청됨(coachId, YEAR, MONTH, crewToken);
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("coachId", coachId)
+                .queryParam("year", YEAR)
+                .queryParam("month", MONTH)
+                .header("Authorization", "Bearer " + crewToken)
+                .filter(document("find-schedules", responseFields(
+                        subsectionWithPath("[].day").description("날짜"),
+                        subsectionWithPath("[].schedules").description("스케줄")
+                )))
+                .when().get("/api/v2/coaches/{coachId}/schedules")
+                .then().log().all()
+                .extract();
         List<ScheduleFindResponse> result = response.jsonPath().getList(".", ScheduleFindResponse.class);
 
         if (IS_LAST_DAY_OF_MONTH) {
@@ -114,7 +127,17 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
         ScheduleUpdateRequest request = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of(localDateTime));
 
-        ExtractableResponse<Response> updateResponse = 스케쥴_수정_요청됨(request, coachToken);
+        ExtractableResponse<Response> updateResponse = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + coachToken)
+                .body(request)
+                .filter(document("update-schedule", requestFields(
+                        fieldWithPath("date").description("날짜"),
+                        fieldWithPath("schedules").description("스케줄")
+                )))
+                .when().put("/api/v2/coaches/me/schedules")
+                .then().log().all()
+                .extract();
 
         ExtractableResponse<Response> findResponse = 코치가_자신의_스케쥴_조회_요청됨(YEAR, MONTH, coachToken);
         List<ScheduleFindResponse> result = findResponse.jsonPath().getList(".", ScheduleFindResponse.class);
@@ -134,34 +157,22 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private ExtractableResponse<Response> 스케쥴_수정_요청됨(ScheduleUpdateRequest request, String coachToken) {
-        return RestAssured.given(super.spec).log().all()
+    public static void 스케쥴_수정_요청됨(ScheduleUpdateRequest request, String coachToken) {
+        RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + coachToken)
                 .body(request)
-                .filter(document("update-schedule", requestFields(
-                        fieldWithPath("date").description("날짜"),
-                        fieldWithPath("schedules").description("스케줄")
-                )))
                 .when().put("/api/v2/coaches/me/schedules")
                 .then().log().all()
                 .extract();
     }
 
-    private ExtractableResponse<Response> 크루가_코치스케쥴_조회_요청됨(Long coachId, int year, int month, String crewToken) {
-        return RestAssured.given(super.spec).log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("coachId", coachId)
-                .queryParam("year", year)
-                .queryParam("month", month)
-                .header("Authorization", "Bearer " + crewToken)
-                .filter(document("find-schedules", responseFields(
-                        subsectionWithPath("[].day").description("날짜"),
-                        subsectionWithPath("[].schedules").description("스케줄")
-                )))
-                .when().get("/api/v2/coaches/{coachId}/schedules")
-                .then().log().all()
-                .extract();
+    public static List<ScheduleFindResponse> 크루가_코치의_스케줄_조회_요청됨(Long coachId, int year, int month, String crewToken) {
+        String url = "/api/v2/coaches/{coachId}/schedules";
+        Map<String, Object> pathParams = Map.of("coachId", coachId);
+        Map<String, Object> queryParams = Map.of("year", year, "month", month);
+        ExtractableResponse<Response> response = getV2(url, crewToken, pathParams, queryParams);
+        return response.jsonPath().getList(".", ScheduleFindResponse.class);
     }
 
     private ExtractableResponse<Response> 코치가_자신의_스케쥴_조회_요청됨(int year, int month, String coachToken) {

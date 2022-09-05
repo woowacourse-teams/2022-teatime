@@ -116,6 +116,27 @@ class CoachAcceptanceTest extends AcceptanceTest {
         Long scheduleId3 = scheduleService.save(coachId, LocalDateTime.now().plusDays(2));
         Long scheduleId4 = scheduleService.save(coachId, LocalDateTime.now().plusDays(3));
 
+//        LocalDate date = LocalDate.now();
+//        스케쥴_수정_요청됨(new ScheduleUpdateRequest(date, List.of(LocalDateTime.of(date, LocalTime.MIN))), coachToken);
+//        스케쥴_수정_요청됨(new ScheduleUpdateRequest(date, List.of(LocalDateTime.of(date.plusDays(1), LocalTime.MIN))),
+//                coachToken);
+//        스케쥴_수정_요청됨(new ScheduleUpdateRequest(date, List.of(LocalDateTime.of(date.plusDays(2), LocalTime.MIN))),
+//                coachToken);
+//        스케쥴_수정_요청됨(new ScheduleUpdateRequest(date, List.of(LocalDateTime.of(date.plusDays(3), LocalTime.MIN))),
+//                coachToken);
+
+//        List<ScheduleFindResponse> scheduleFindResponses = 크루가_코치의_스케줄_조회_요청됨(coachId, date.getYear(),
+//                date.getMonthValue(), crewToken);
+//
+//        List<ScheduleDto> schedules = scheduleFindResponses.stream()
+//                .filter(response -> response.getDay() == date.getDayOfMonth())
+//                .map(ScheduleFindResponse::getSchedules)
+//                .findFirst()
+//                .orElseThrow();
+//        List<Long> reservationIds = schedules.stream()
+//                .map(ScheduleDto::getId)
+//                .collect(Collectors.toList());
+
         예약을_한다(new ReservationReserveRequest(scheduleId3), crewToken);
         예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
 

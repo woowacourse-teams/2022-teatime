@@ -55,16 +55,6 @@ public class AcceptanceTest {
         databaseCleaner.execute();
     }
 
-    protected static ExtractableResponse<Response> post(String uri, Object body) {
-        return RestAssured.given().log().all()
-                .body(body)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .post(uri)
-                .then().log().all()
-                .extract();
-    }
-
     protected static ExtractableResponse<Response> postV2(String uri, Object body, String token) {
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + token)
@@ -76,8 +66,9 @@ public class AcceptanceTest {
                 .extract();
     }
 
-    protected static ExtractableResponse<Response> get(String uri) {
+    protected static ExtractableResponse<Response> getV2(String uri, String token) {
         return RestAssured.given().log().all()
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get(uri)
@@ -85,10 +76,12 @@ public class AcceptanceTest {
                 .extract();
     }
 
-    protected static ExtractableResponse<Response> getV2(String uri, String token) {
+    protected static ExtractableResponse<Response> getV2(String uri, String token, Map<String, Object> pathParams, Map<String, Object> queryParams) {
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .pathParams(pathParams)
+                .queryParams(queryParams)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get(uri)
                 .then().log().all()
