@@ -5,6 +5,7 @@ import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
 import { UserStateContext } from '@context/UserProvider';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import { Reservation, Sheets } from '@typings/domain';
 import { ROUTES } from '@constants/index';
 import api from '@api/index';
@@ -12,6 +13,7 @@ import * as S from '@styles/common';
 
 const CrewSheet = () => {
   const { userData } = useContext(UserStateContext);
+  const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
   const { id: reservationId } = useParams();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
@@ -32,8 +34,8 @@ const CrewSheet = () => {
           },
         }
       );
-      alert('제출 되었습니다✅');
-      navigate(ROUTES.CREW);
+      showSnackbar({ message: isSubmitted ? '제출되었습니다. 💌' : '임시 저장되었습니다. 🎁' });
+      navigate(ROUTES.CREW_HISTORY);
     } catch (error) {
       alert('제출 실패🚫');
     }
