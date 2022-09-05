@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
+import BackButton from '@components/BackButton';
 import { UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { Reservation, Sheets } from '@typings/domain';
@@ -65,7 +66,6 @@ const CrewSheet = () => {
           image={reservationInfo.coachImage}
           name={reservationInfo.coachName}
           dateTime={reservationInfo.dateTime}
-          isView={isView}
         />
       </S.InfoContainer>
       <Sheet
@@ -74,6 +74,7 @@ const CrewSheet = () => {
         onSubmit={handleSubmit}
         isView={isView}
       />
+      {isView && <BackButton />}
     </Frame>
   );
 };

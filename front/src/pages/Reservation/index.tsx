@@ -10,7 +10,6 @@ import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
-
 import theme from '@styles/theme';
 import * as S from '@styles/common';
 
