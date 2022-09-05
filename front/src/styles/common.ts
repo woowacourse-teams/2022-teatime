@@ -23,7 +23,6 @@ const CalendarContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  position: relative;
   width: 30%;
   margin-right: 50px;
   border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};

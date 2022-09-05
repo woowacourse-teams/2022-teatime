@@ -4,6 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
+import BackButton from '@components/BackButton';
 import { UserStateContext } from '@context/UserProvider';
 import { Reservation } from '@typings/domain';
 import api from '@api/index';
@@ -39,10 +40,10 @@ const CoachSheet = () => {
           image={reservationInfo.coachImage}
           name={reservationInfo.coachName}
           dateTime={reservationInfo.dateTime}
-          isView
         />
       </S.InfoContainer>
       <Sheet title="작성한 면담 내용" sheets={reservationInfo.sheets} isView />
+      <BackButton />
     </Frame>
   );
 };
