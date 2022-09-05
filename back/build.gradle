@@ -92,10 +92,15 @@ tasks.named('test') {
     finalizedBy 'jacocoTestReport'
 }
 
-processResources.dependsOn('copySecret', 'copyTestSecret', 'copySlackWebHook')
+processResources.dependsOn('copyDevSecret', 'copyProdSecret', 'copyTestSecret', 'copySlackWebHook')
 
-task copySecret(type: Copy) {
-    from '../config/application.yml'
+task copyDevSecret(type: Copy) {
+    from '../config/application-dev.yml'
+    into 'src/main/resources'
+}
+
+task copyProdSecret(type: Copy) {
+    from '../config/application-prod.yml'
     into 'src/main/resources'
 }
 
