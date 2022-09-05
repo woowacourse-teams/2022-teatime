@@ -37,4 +37,8 @@ public class DomainFixture {
     public static Crew getCrew() {
         return new Crew("마루", "maru@email.com", "image");
     }
+
+    public static LocalDateTime getNextDayFirstTime() {
+        return DATE_TIME.plusDays(1);
+    }
 }
