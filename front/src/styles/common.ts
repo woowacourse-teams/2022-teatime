@@ -28,6 +28,10 @@ const InfoContainer = styled.div`
   margin-right: 50px;
   border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
   font-weight: bold;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export { ScheduleContainer, CalendarContainer, InfoContainer };

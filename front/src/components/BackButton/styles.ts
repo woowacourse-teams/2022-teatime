@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ArrowIcon = styled.img`
-  position: absolute;
+  position: sticky;
   left: -10px;
   bottom: 10px;
   width: 50px;
