@@ -85,7 +85,7 @@ const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTime
           content="면담 내용을 지금 작성 하시겠습니까?"
           firstButtonName="나중에"
           secondButtonName="작성하기"
-          onClickFirstButton={() => navigate(ROUTES.CREW)}
+          onClickFirstButton={() => navigate(ROUTES.CREW_HISTORY)}
           onClickSecondButton={() => navigate(`${ROUTES.CREW_SHEET}/${reservationId}`)}
           closeModal={closeModal}
         />

@@ -25,6 +25,7 @@ const TableRow = ({
   const { reservationId, status, coachName, coachImage, dateTime } = history;
   const date = getMonthDate(dateTime);
   const time = getHourMinutes(dateTime);
+  const isEditStatus = status === 'BEFORE_APPROVED' || status === 'APPROVED';
 
   return (
     <tr>
@@ -47,7 +48,7 @@ const TableRow = ({
           alt="스캐줄 아이콘"
           onClick={() => onClickSheet(reservationId)}
         />
-        {status !== 'DONE' && (
+        {isEditStatus && (
           <S.Icon
             src={TrashIcon}
             alt="휴지통 아이콘"
