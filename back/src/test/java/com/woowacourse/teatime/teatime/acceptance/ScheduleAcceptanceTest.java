@@ -71,10 +71,7 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
                 .queryParam("year", YEAR)
                 .queryParam("month", MONTH)
                 .header("Authorization", "Bearer " + crewToken)
-                .filter(document("find-schedules", responseFields(
-                        subsectionWithPath("[].day").description("날짜"),
-                        subsectionWithPath("[].schedules").description("스케줄")
-                )))
+                .filter(document("find-coach-schedules"))
                 .when().get("/api/v2/coaches/{coachId}/schedules")
                 .then().log().all()
                 .extract();
@@ -181,7 +178,7 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
                 .queryParam("year", year)
                 .queryParam("month", month)
                 .header("Authorization", "Bearer " + coachToken)
-                .filter(document("find-schedules", responseFields(
+                .filter(document("find-own-schedules", responseFields(
                         subsectionWithPath("[].day").description("날짜"),
                         subsectionWithPath("[].schedules").description("스케줄")
                 )))
