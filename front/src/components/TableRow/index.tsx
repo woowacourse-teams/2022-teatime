@@ -33,7 +33,8 @@ const TableRow = ({
 }: TableRowProps) => {
   const date = getMonthDate(dateTime);
   const time = getHourMinutes(dateTime);
-  const isEditStatus = status === 'BEFORE_APPROVED' || status === 'APPROVED';
+  const isEditStatus =
+    status === 'BEFORE_APPROVED' || status === 'APPROVED' || status === 'CANCELED';
 
   return (
     <tr>
