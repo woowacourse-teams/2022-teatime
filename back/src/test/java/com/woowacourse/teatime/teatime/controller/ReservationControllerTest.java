@@ -13,7 +13,7 @@ import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserve
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
-import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -154,7 +154,7 @@ class ReservationControllerTest extends ControllerTest {
         String token = "나 크루다";
         크루의_토큰을_검증한다(token);
 
-        doThrow(new UnCancellableReservationException()).when(reservationService)
+        doThrow(new UnableToCancelReservationException()).when(reservationService)
                 .cancel(anyLong(), any(UserRoleDto.class));
 
         mockMvc.perform(delete("/api/v2/reservations/1")

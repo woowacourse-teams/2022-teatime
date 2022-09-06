@@ -26,7 +26,7 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
-import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
@@ -195,7 +195,7 @@ class ReservationServiceTest {
 
         assertThatThrownBy(
                 () -> reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), "COACH")))
-                .isInstanceOf(UnCancellableReservationException.class);
+                .isInstanceOf(UnableToCancelReservationException.class);
     }
 
     @DisplayName("면담 예약을 취소할 때, 예약이 없다면 에러가 발생한다.")

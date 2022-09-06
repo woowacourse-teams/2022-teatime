@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.teatime.domain;
 
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
-import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToDoneReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToInProgressReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
@@ -64,13 +64,15 @@ public class Reservation {
             reservationStatus = ReservationStatus.APPROVED;
             return;
         }
+        reservationStatus = ReservationStatus.CANCELED;
         schedule.init();
     }
 
     public void cancel(Role role) {
         if (isCancelBeforeApprovedByCoach(role) || isCancelInProgressByCrew(role)) {
-            throw new UnCancellableReservationException();
+            throw new UnableToCancelReservationException();
         }
+        reservationStatus = ReservationStatus.CANCELED;
         schedule.init();
     }
 
