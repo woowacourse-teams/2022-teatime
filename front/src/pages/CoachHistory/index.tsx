@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import TableRow from '@components/TableRow';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
-import { HistoryCoach } from '@typings/domain';
+import { CoachHistory as CoachHistoryType } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
@@ -28,7 +28,7 @@ const historyStatus: HistoryStatus = {
 
 const CoachHistory = () => {
   const { userData } = useContext(UserStateContext);
-  const [historyList, setHistoryList] = useState<HistoryCoach[]>([]);
+  const [historyList, setHistoryList] = useState<CoachHistoryType[]>([]);
 
   useEffect(() => {
     (async () => {

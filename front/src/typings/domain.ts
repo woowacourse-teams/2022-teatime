@@ -39,7 +39,7 @@ interface Reservation {
   sheets: Sheets[];
 }
 
-interface HistoryCrew {
+interface CrewHistory {
   reservationId: number;
   coachName: string;
   coachImage: string;
@@ -47,7 +47,7 @@ interface HistoryCrew {
   status: string;
 }
 
-interface HistoryCoach {
+interface CoachHistory {
   reservationId: number;
   crewName: string;
   crewImage: string;
@@ -104,7 +104,7 @@ export {
   MonthScheduleMap,
   CrewListMap,
   Sheets,
-  HistoryCrew,
+  CrewHistory,
   HistoryList,
-  HistoryCoach,
+  CoachHistory,
 };
