@@ -2,7 +2,6 @@ import { useContext, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import Dropdown from '@components/Dropdown';
-import Conditional from '@components/Conditional/index';
 import useOutsideClick from '@hooks/useOutsideClick';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { ROUTES } from '@constants/index';
@@ -38,19 +37,12 @@ const Header = () => {
             <span>{userData.name}</span>
             <img src={userData.image} alt="프로필 이미지" />
           </S.ProfileWrapper>
-          <Conditional condition={userData.role === 'CREW'}>
-            <Dropdown isActive={isActive}>
-              <Link to={ROUTES.CREW_HISTORY}>
-                <li>히스토리</li>
-              </Link>
-              <li onClick={handleLogout}>로그아웃</li>
-            </Dropdown>
-          </Conditional>
-          <Conditional condition={userData.role === 'COACH'}>
-            <Dropdown isActive={isActive}>
-              <li onClick={handleLogout}>로그아웃</li>
-            </Dropdown>
-          </Conditional>
+          <Dropdown isActive={isActive}>
+            <Link to={userData.role === 'CREW' ? ROUTES.CREW_HISTORY : ROUTES.COACH_HISTORY}>
+              <li>히스토리</li>
+            </Link>
+            <li onClick={handleLogout}>로그아웃</li>
+          </Dropdown>
         </S.ProfileContainer>
       )}
     </S.HeaderContainer>

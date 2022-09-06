@@ -1,31 +1,40 @@
 import { getMonthDate, getHourMinutes } from '@utils/date';
-import { History } from '@typings/domain';
 import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
 import TrashIcon from '@assets/trash.svg';
 
 interface TableRowProps {
-  history: History;
+  id: number;
+  status: string;
+  name: string;
+  image: string;
+  dateTime: string;
   statusName: string;
   color: string;
   bgColor: string;
-  onClickSheet: (reservationId: number) => void;
-  onClickDelete: (reservationId: number) => void;
+  onClickSheet?: (reservationId: number) => void;
+  onClickDelete?: (reservationId: number) => void;
+  isCrew?: boolean;
 }
 
 const TableRow = ({
-  history,
+  id,
+  status,
+  name,
+  image,
+  dateTime,
   statusName,
   color,
   bgColor,
   onClickSheet,
   onClickDelete,
+  isCrew,
 }: TableRowProps) => {
-  const { reservationId, status, coachName, coachImage, dateTime } = history;
   const date = getMonthDate(dateTime);
   const time = getHourMinutes(dateTime);
-  const isEditStatus = status === 'BEFORE_APPROVED' || status === 'APPROVED';
+  const isEditStatus =
+    status === 'BEFORE_APPROVED' || status === 'APPROVED' || status === 'CANCELED';
 
   return (
     <tr>
@@ -36,24 +45,18 @@ const TableRow = ({
       </td>
       <td>
         <S.Profile>
-          <img src={coachImage} alt="코치 프로필 이미지" />
-          <span>{coachName}</span>
+          <img src={image} alt="코치 프로필 이미지" />
+          <span>{name}</span>
         </S.Profile>
       </td>
       <td>{date}</td>
       <td>{time}</td>
       <td>
-        <S.Icon
-          src={ScheduleIcon}
-          alt="스캐줄 아이콘"
-          onClick={() => onClickSheet(reservationId)}
-        />
+        {isCrew && (
+          <S.Icon src={ScheduleIcon} alt="스캐줄 아이콘" onClick={() => onClickSheet?.(id)} />
+        )}
         {isEditStatus && (
-          <S.Icon
-            src={TrashIcon}
-            alt="휴지통 아이콘"
-            onClick={() => onClickDelete(reservationId)}
-          />
+          <S.Icon src={TrashIcon} alt="휴지통 아이콘" onClick={() => onClickDelete?.(id)} />
         )}
       </td>
     </tr>
