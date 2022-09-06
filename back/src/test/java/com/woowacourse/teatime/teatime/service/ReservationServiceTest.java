@@ -226,7 +226,6 @@ class ReservationServiceTest {
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         Long reservationId = reservationService.save(crew.getId(), reservationReserveRequest);
         예약_승인을_확정한다(reservationId, true);
-        reservationService.findByCoachId(coach.getId());
         승인된_예약을_진행중인_예약으로_변경한다();
         reservationService.updateReservationStatusToDone(reservationId);
 
@@ -274,7 +273,6 @@ class ReservationServiceTest {
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         reservation.confirm(true);
-        reservationService.findByCoachId(coach.getId());
         승인된_예약을_진행중인_예약으로_변경한다();
 
         reservationService.updateReservationStatusToDone(reservation.getId());
