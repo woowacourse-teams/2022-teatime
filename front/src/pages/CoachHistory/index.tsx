@@ -33,7 +33,7 @@ const CoachHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/coachs/me/history', {
+        const { data } = await api.get('/api/v2/coaches/me/history', {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
@@ -47,7 +47,6 @@ const CoachHistory = () => {
 
   return (
     <S.Table>
-      <caption>마이 페이지</caption>
       <S.Thead>
         <tr>
           <td>진행 상태</td>

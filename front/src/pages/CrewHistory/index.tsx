@@ -89,7 +89,6 @@ const CrewHistory = () => {
 
   return (
     <S.Table>
-      <caption>마이 페이지</caption>
       <S.Thead>
         <tr>
           <td>진행 상태</td>
