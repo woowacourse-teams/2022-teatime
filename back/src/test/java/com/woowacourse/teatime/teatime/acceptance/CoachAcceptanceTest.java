@@ -181,4 +181,8 @@ class CoachAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = postV2("/api/v2/coaches", request, token);
         return Long.parseLong(response.header("Location").split("/coaches/")[1]);
     }
+
+    public static void 코치의_면담목록을_불러온다(String token) {
+        getV2("/api/v2/coaches/me/reservations", token);
+    }
 }
