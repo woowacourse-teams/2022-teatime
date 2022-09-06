@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.controller;
 import com.woowacourse.teatime.auth.support.CoachAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.service.CoachService;
@@ -48,6 +49,13 @@ public class CoachController {
     public ResponseEntity<CoachReservationsResponse> findCoachReservations(
             @CoachAuthenticationPrincipal Long coachId) {
         CoachReservationsResponse response = reservationService.findByCoachId(coachId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me/history")
+    public ResponseEntity<List<CoachFindOwnHistoryResponse>> findCoachHistory(
+            @CoachAuthenticationPrincipal Long coachId) {
+        List<CoachFindOwnHistoryResponse> response = reservationService.findOwnHistoryByCoach(coachId);
         return ResponseEntity.ok(response);
     }
 }

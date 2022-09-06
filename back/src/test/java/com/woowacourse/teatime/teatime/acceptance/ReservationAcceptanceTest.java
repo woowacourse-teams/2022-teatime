@@ -9,7 +9,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
-import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
@@ -39,9 +38,6 @@ class ReservationAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private CoachService coachService;
-
-    @Autowired
-    private Scheduler scheduler;
 
     private Long coachId;
     private String coachToken;
