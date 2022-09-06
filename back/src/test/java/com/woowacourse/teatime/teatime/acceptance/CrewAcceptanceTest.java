@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
-import static com.woowacourse.teatime.teatime.acceptance.CoachAcceptanceTest.코치의_면담목록을_불러온다;
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_완료한다;
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
@@ -32,9 +31,9 @@ import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.QuestionRepository;
-import com.woowacourse.teatime.teatime.scheduler.SchedulerService;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
+import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -59,7 +58,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
     @Autowired
     private CrewService crewService;
     @Autowired
-    private SchedulerService schedulerService;
+    private ReservationService reservationService;
     @Autowired
     private QuestionRepository questionRepository;
 
@@ -126,7 +125,6 @@ class CrewAcceptanceTest extends AcceptanceTest {
         questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
         예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
-        코치의_면담목록을_불러온다(coachToken);
         승인된_예약을_진행중인_예약으로_변경한다();
         예약을_완료한다(reservationId, coachToken);
 
@@ -320,6 +318,6 @@ class CrewAcceptanceTest extends AcceptanceTest {
     }
 
     private void 승인된_예약을_진행중인_예약으로_변경한다() {
-        schedulerService.updateReservationStatusToInProgress();
+        reservationService.updateReservationStatusToInProgress();
     }
 }
