@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.teatime.scheduler;
+package com.woowacourse.teatime.teatime.infrastructure;
 
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
@@ -26,10 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class SchedulerServiceTest {
+class SchedulerTest {
 
     @Autowired
-    private SchedulerService schedulerService;
+    private Scheduler scheduler;
 
     @Autowired
     private CoachRepository coachRepository;
@@ -61,7 +61,7 @@ class SchedulerServiceTest {
         reservation.confirm(true);
 
         // when
-        schedulerService.updateReservationStatusToInProgress();
+        scheduler.updateReservationStatusToInProgress();
 
         // then
         Reservation savedReservation = reservationRepository.findById(reservation.getId())
@@ -83,7 +83,7 @@ class SchedulerServiceTest {
         reservation1.updateSheetStatusToSubmitted();
 
         // when
-        schedulerService.cancelReservationNotSubmitted();
+        scheduler.cancelReservationNotSubmitted();
 
         // then
         List<Reservation> reservations = reservationRepository.findAll();

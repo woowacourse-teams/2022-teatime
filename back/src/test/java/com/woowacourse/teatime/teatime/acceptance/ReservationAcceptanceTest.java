@@ -10,9 +10,10 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
-import com.woowacourse.teatime.teatime.scheduler.SchedulerService;
+import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
+import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -32,13 +33,16 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     private ScheduleService scheduleService;
 
     @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
     private CrewService crewService;
 
     @Autowired
     private CoachService coachService;
 
     @Autowired
-    private SchedulerService schedulerService;
+    private Scheduler scheduler;
 
     private Long coachId;
     private String coachToken;
@@ -166,7 +170,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     }
 
     private void 승인된_예약을_진행중인_예약으로_변경한다() {
-        schedulerService.updateReservationStatusToInProgress();
+        reservationService.updateReservationStatusToInProgress();
     }
 
 }

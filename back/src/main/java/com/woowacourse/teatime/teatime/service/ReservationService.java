@@ -29,6 +29,9 @@ import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.SheetRepository;
+import com.woowacourse.teatime.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -180,6 +183,29 @@ public class ReservationService {
     private void validateCoachAuthorization(Long coachId, Reservation reservation) {
         if (!reservation.isSameCoach(coachId)) {
             throw new UnAuthorizedException();
+        }
+    }
+
+    public void updateReservationStatusToInProgress() {
+        List<Reservation> reservations
+                = reservationRepository.findAllByReservationStatus(ReservationStatus.APPROVED);
+
+        for (Reservation reservation : reservations) {
+            reservation.updateReservationStatusToInProgress();
+        }
+    }
+
+    public void cancelReservationNotSubmitted() {
+        LocalDate today = LocalDateTime.now().toLocalDate();
+        LocalDateTime firstTime = Date.findFirstTime(today);
+        LocalDateTime lastTime = Date.findLastTime(today);
+
+        List<Reservation> reservations
+                = reservationRepository.findAllShouldBeCanceled(firstTime, lastTime);
+
+        for (Reservation reservation : reservations) {
+            reservation.cancel(Role.COACH);
+            reservationRepository.delete(reservation);
         }
     }
 }
