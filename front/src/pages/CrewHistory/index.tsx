@@ -93,16 +93,22 @@ const CrewHistory = () => {
       </S.Thead>
       <S.Tbody>
         {historyList.map((history) => {
+          const { reservationId, status, coachName, coachImage, dateTime } = history;
           const { statusName, color, backgroundColor } = historyStatus[history.status];
           return (
             <TableRow
               key={history.reservationId}
-              history={history}
+              id={reservationId}
+              status={status}
+              name={coachName}
+              image={coachImage}
+              dateTime={dateTime}
               statusName={statusName}
               color={color}
               bgColor={backgroundColor}
               onClickSheet={moveReservationSheet}
               onClickDelete={deleteReservation}
+              isCrew
             />
           );
         })}
