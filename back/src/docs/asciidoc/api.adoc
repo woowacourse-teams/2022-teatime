@@ -29,6 +29,12 @@ include::{snippets}/find-coach-reservations/http-request.adoc[]
 ==== response
 include::{snippets}/find-coach-reservations/http-response.adoc[]
 
+=== 코치 히스토리 조회
+==== request
+include::{snippets}/find-own-history/http-request.adoc[]
+==== response
+include::{snippets}/find-own-history/http-response.adoc[]
+
 == 스케줄 API
 
 === 스케줄 업데이트
