@@ -229,7 +229,7 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
         );
     }
 
-    @DisplayName("크루가 자신의 면담 시트 답변을 임시저장한다.")
+    @DisplayName("크루가 자신의 면담 시트 답변을 임시 저장한다.")
     @Test
     void updateAnswer_notSubmit() {
         Coach coach = coachRepository.findById(coachId)
@@ -273,7 +273,7 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
         );
     }
 
-    @DisplayName("크루가 자신의 면담 시트 답변을 임시저장한다.")
+    @DisplayName("크루가 자신의 면담 시트 답변을 최종 제출한다.")
     @Test
     void updateAnswer_submit() {
         Coach coach = coachRepository.findById(coachId)

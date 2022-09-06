@@ -3,7 +3,6 @@ package com.woowacourse.teatime.teatime.repository;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
@@ -12,7 +11,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     void deleteAllByCoachIdAndLocalDateTimeBetween(Long coachId, LocalDateTime start, LocalDateTime end);
 
-    void deleteAllByCoachIdAndLocalDateTimeBetweenAndIsPossibleNot(Long coachId, LocalDateTime start, LocalDateTime end, boolean isPossible);
-
-    Optional<Schedule> findByIdAndCoachId(Long scheduleId, Long coachId);
+    void deleteAllByCoachIdAndLocalDateTimeBetweenAndIsPossibleNot(Long coachId, LocalDateTime start, LocalDateTime end,
+                                                                   boolean isPossible);
 }

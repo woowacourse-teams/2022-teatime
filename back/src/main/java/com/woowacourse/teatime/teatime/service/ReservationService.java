@@ -2,6 +2,7 @@ package com.woowacourse.teatime.teatime.service;
 
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
@@ -11,6 +12,7 @@ import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.domain.Crew;
@@ -66,9 +68,6 @@ public class ReservationService {
         validateIsSameCoach(coachId, reservation);
 
         reservation.confirm(reservationApproveRequest.getIsApproved());
-        if (!reservationApproveRequest.getIsApproved()) {
-            reservationRepository.delete(reservation);
-        }
     }
 
     public void cancel(Long reservationId, UserRoleDto userRoleDto) {
@@ -78,7 +77,6 @@ public class ReservationService {
         Role role = Role.search(userRoleDto.getRole());
         validateAuthorization(userRoleDto.getId(), role, reservation);
         reservation.cancel(role);
-        reservationRepository.delete(reservation);
     }
 
     private void validateAuthorization(Long applicantId, Role role,
@@ -120,8 +118,8 @@ public class ReservationService {
 
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId,
-                DONE);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(coachId,
+                List.of(DONE, CANCELED));
         return classifyReservationsAndReturnDto(reservations);
     }
 
@@ -205,8 +203,14 @@ public class ReservationService {
 
         for (Reservation reservation : reservations) {
             reservation.cancel(Role.COACH);
-            reservationRepository.delete(reservation);
         }
+    }
+
+    public List<CoachFindOwnHistoryResponse> findOwnHistoryByCoach(Long coachId) {
+        validateCoachId(coachId);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                coachId, List.of(DONE, CANCELED));
+        return CoachFindOwnHistoryResponse.from(reservations);
     }
 }
 

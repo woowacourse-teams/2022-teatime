@@ -5,7 +5,8 @@ import TableRow from '@components/TableRow';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
-import { History } from '@typings/domain';
+import { CrewHistory as CrewHistoryType } from '@typings/domain';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -36,12 +37,18 @@ const historyStatus: HistoryStatus = {
     color: theme.colors.GRAY_500,
     backgroundColor: theme.colors.GRAY_200,
   },
+  CANCELED: {
+    statusName: '면담취소',
+    color: theme.colors.RED_400,
+    backgroundColor: theme.colors.RED_100,
+  },
 };
 
 const CrewHistory = () => {
   const { userData } = useContext(UserStateContext);
+  const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
-  const [historyList, setHistoryList] = useState<History[]>([]);
+  const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
 
   const moveReservationSheet = (reservationId: number) => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
@@ -59,6 +66,7 @@ const CrewHistory = () => {
       setHistoryList((prevHistory) => {
         return prevHistory.filter((history) => history.reservationId !== reservationId);
       });
+      showSnackbar({ message: '삭제되었습니다. 🗑' });
     } catch (error) {
       console.log(error);
     }
@@ -93,16 +101,22 @@ const CrewHistory = () => {
       </S.Thead>
       <S.Tbody>
         {historyList.map((history) => {
+          const { reservationId, status, coachName, coachImage, dateTime } = history;
           const { statusName, color, backgroundColor } = historyStatus[history.status];
           return (
             <TableRow
               key={history.reservationId}
-              history={history}
+              id={reservationId}
+              status={status}
+              name={coachName}
+              image={coachImage}
+              dateTime={dateTime}
               statusName={statusName}
               color={color}
               bgColor={backgroundColor}
               onClickSheet={moveReservationSheet}
               onClickDelete={deleteReservation}
+              isCrew
             />
           );
         })}
