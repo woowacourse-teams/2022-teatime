@@ -68,12 +68,7 @@ class CoachAcceptanceTest extends AcceptanceTestSupporter {
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
-                .filter(document("find-all-coaches", responseFields(
-                        fieldWithPath("[].id").description("id"),
-                        fieldWithPath("[].name").description("이름"),
-                        fieldWithPath("[].description").description("소개"),
-                        fieldWithPath("[].image").description("이미지")
-                )))
+                .filter(document("find-all-coaches"))
                 .when().get("/api/v2/coaches")
                 .then().log().all()
                 .extract();
@@ -135,13 +130,7 @@ class CoachAcceptanceTest extends AcceptanceTestSupporter {
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + coachToken)
-                .filter(document("find-own-history", responseFields(
-                        fieldWithPath("[].reservationId").description("면담 아이디"),
-                        fieldWithPath("[].crewName").description("크루 이름"),
-                        fieldWithPath("[].crewImage").description("크루 이미지"),
-                        fieldWithPath("[].dateTime").description("날짜"),
-                        fieldWithPath("[].status").description("상태")
-                )))
+                .filter(document("find-own-history"))
                 .when().get("/api/v2/coaches/me/history")
                 .then().log().all()
                 .extract();

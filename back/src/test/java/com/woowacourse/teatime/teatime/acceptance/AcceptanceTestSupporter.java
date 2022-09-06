@@ -2,7 +2,11 @@ package com.woowacourse.teatime.teatime.acceptance;
 
 import static com.woowacourse.teatime.teatime.domain.Role.COACH;
 import static com.woowacourse.teatime.teatime.domain.Role.CREW;
+import static org.springframework.restdocs.http.HttpDocumentation.httpRequest;
+import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
@@ -32,13 +36,34 @@ public class AcceptanceTestSupporter extends DatabaseSupporter {
     int port;
 
     @BeforeEach
-    public void setUp(RestDocumentationContextProvider restDocumentation) {
+    public void setUp(RestDocumentationContextProvider contextProvider) {
         RestAssured.port = port;
-        this.spec = new RequestSpecBuilder().addFilter(documentationConfiguration(restDocumentation)
-                        .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
-                .build();
+        setRestDocsSpec(contextProvider);
+    }
+
+    private void setRestDocsSpec(final RestDocumentationContextProvider contextProvider) {
+        this.spec = new RequestSpecBuilder()
+                .addFilter(
+                        documentationConfiguration(contextProvider)
+                                .snippets()
+                                .withDefaults(httpRequest(), httpResponse())
+                                .and()
+                                .operationPreprocessors()
+                                .withRequestDefaults(
+                                        modifyUris()
+                                                .scheme("https")
+                                                .host("api.teatime.pe.kr")
+                                                .removePort(),
+                                        prettyPrint()
+                                ).withResponseDefaults(
+                                removeHeaders(
+                                        "Transfer-Encoding",
+                                        "Date",
+                                        "Keep-Alive",
+                                        "Connection"),
+                                prettyPrint()
+                        )
+                ).build();
     }
 
     protected static ExtractableResponse<Response> get(String uri, String token) {
