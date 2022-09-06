@@ -1,0 +1,12 @@
+= 티타임 API 명세서
+:toc: left
+:toclevels: 2
+:sectlinks:
+:source-highlighter: highlightjs
+
+== API Documents
+
+* link:coach.html[Coach]
+* link:schedule.html[Schedule]
+* link:reservation.html[Reservation]
+* link:crew.html[Crew]
