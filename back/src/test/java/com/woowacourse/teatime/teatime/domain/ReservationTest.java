@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
-import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToDoneReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToInProgressReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
@@ -86,7 +86,7 @@ class ReservationTest {
     @Test
     void cancel_invalidCancelException() {
         assertThatThrownBy(() -> reservation.cancel(Role.COACH))
-                .isInstanceOf(UnCancellableReservationException.class);
+                .isInstanceOf(UnableToCancelReservationException.class);
 
     }
 
@@ -110,7 +110,7 @@ class ReservationTest {
         reservation.updateReservationStatusToInProgress();
 
         assertThatThrownBy(() -> reservation.cancel(Role.CREW))
-                .isInstanceOf(UnCancellableReservationException.class);
+                .isInstanceOf(UnableToCancelReservationException.class);
     }
 
     @DisplayName("예약 시간이 되면 승인된 면담이 진행중인 상태로 업데이트 된다.")

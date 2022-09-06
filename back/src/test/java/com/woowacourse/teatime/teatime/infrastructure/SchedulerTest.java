@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.infrastructure;
 
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.*;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
@@ -67,7 +68,7 @@ class SchedulerTest {
         Reservation savedReservation = reservationRepository.findById(reservation.getId())
                 .orElseThrow();
         ReservationStatus actual = savedReservation.getReservationStatus();
-        assertThat(actual).isEqualTo(ReservationStatus.IN_PROGRESS);
+        assertThat(actual).isEqualTo(IN_PROGRESS);
     }
 
     @DisplayName("승인된 면담 중 전날까지 작성하지 않은 면담을 모두 취소한다.")
@@ -86,10 +87,11 @@ class SchedulerTest {
         scheduler.cancelReservationNotSubmitted();
 
         // then
-        List<Reservation> reservations = reservationRepository.findAll();
         assertAll(
-                () -> assertThat(reservations).hasSize(1),
-                () -> assertThat(reservations.get(0)).isEqualTo(reservation1)
+                () -> assertThat(reservationRepository.findAll()).hasSize(2),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(APPROVED)).hasSize(1),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1)
+
         );
     }
 }

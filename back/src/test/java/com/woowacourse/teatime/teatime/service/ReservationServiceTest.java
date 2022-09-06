@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.teatime.service;
 
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
@@ -26,7 +28,7 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
-import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
@@ -129,7 +131,8 @@ class ReservationServiceTest {
         예약_승인을_확정한다(reservationId, false);
 
         assertAll(
-                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(reservationRepository.findAll()).hasSize(1),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -144,7 +147,8 @@ class ReservationServiceTest {
         reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), "COACH"));
 
         assertAll(
-                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(reservationRepository.findAll()).hasSize(1),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -158,7 +162,8 @@ class ReservationServiceTest {
         reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW"));
 
         assertAll(
-                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(reservationRepository.findAll()).hasSize(1),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -171,7 +176,7 @@ class ReservationServiceTest {
         reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW"));
 
         assertAll(
-                () -> assertThat(reservationRepository.findById(reservationId)).isEmpty(),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).isNotEmpty(),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -195,7 +200,7 @@ class ReservationServiceTest {
 
         assertThatThrownBy(
                 () -> reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), "COACH")))
-                .isInstanceOf(UnCancellableReservationException.class);
+                .isInstanceOf(UnableToCancelReservationException.class);
     }
 
     @DisplayName("면담 예약을 취소할 때, 예약이 없다면 에러가 발생한다.")
@@ -354,10 +359,10 @@ class ReservationServiceTest {
         reservationService.cancelReservationNotSubmitted();
 
         // then
-        List<Reservation> reservations = reservationRepository.findAll();
         assertAll(
-                () -> assertThat(reservations).hasSize(1),
-                () -> assertThat(reservations.get(0)).isEqualTo(reservation1)
+                () -> assertThat(reservationRepository.findAll()).hasSize(2),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(APPROVED)).hasSize(1),
+                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1)
         );
     }
 
