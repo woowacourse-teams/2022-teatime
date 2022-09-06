@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class CoachAcceptanceTest extends AcceptanceTest {
+class CoachAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
     private ScheduleService scheduleService;
@@ -59,10 +59,12 @@ class CoachAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치 목록을 조회한다.")
     @Test
     void findAll() {
+        //given
         coachService.save(COACH_JUNE_SAVE_REQUEST);
-
         Long crewId = crewService.save(CREW_SAVE_REQUEST);
         String crewToken = 크루의_토큰을_발급한다(crewId);
+
+        //when
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
@@ -75,9 +77,9 @@ class CoachAcceptanceTest extends AcceptanceTest {
                 .when().get("/api/v2/coaches")
                 .then().log().all()
                 .extract();
-
         List<CoachFindResponse> result = response.jsonPath().getList(".", CoachFindResponse.class);
 
+        //then
         assertAll(
                 () -> assertThat(result).hasSize(2),
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
@@ -89,6 +91,8 @@ class CoachAcceptanceTest extends AcceptanceTest {
     void save() {
         Long crewId = crewService.save(CREW_SAVE_REQUEST);
         String crewToken = 크루의_토큰을_발급한다(crewId);
+
+        //when
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
@@ -103,6 +107,7 @@ class CoachAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
 
+        //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
@@ -163,11 +168,11 @@ class CoachAcceptanceTest extends AcceptanceTest {
     }
 
     public static Long 코치를_저장한다(CoachSaveRequest request, String token) {
-        ExtractableResponse<Response> response = postV2("/api/v2/coaches", request, token);
+        ExtractableResponse<Response> response = post("/api/v2/coaches", request, token);
         return Long.parseLong(response.header("Location").split("/coaches/")[1]);
     }
 
     public static void 코치의_면담목록을_불러온다(String token) {
-        getV2("/api/v2/coaches/me/reservations", token);
+        get("/api/v2/coaches/me/reservations", token);
     }
 }

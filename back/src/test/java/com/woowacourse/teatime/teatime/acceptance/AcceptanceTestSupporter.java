@@ -6,33 +6,24 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
+import com.woowacourse.teatime.teatime.support.AcceptanceTest;
+import com.woowacourse.teatime.teatime.support.DatabaseSupporter;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import java.util.Map;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-@ActiveProfiles("test")
-public class AcceptanceTest {
+@AcceptanceTest
+public class AcceptanceTestSupporter extends DatabaseSupporter {
 
     protected RequestSpecification spec;
-
-    @Autowired
-    private DatabaseCleaner databaseCleaner;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -50,23 +41,7 @@ public class AcceptanceTest {
                 .build();
     }
 
-    @AfterEach
-    public void tearDown() {
-        databaseCleaner.execute();
-    }
-
-    protected static ExtractableResponse<Response> postV2(String uri, Object body, String token) {
-        return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + token)
-                .body(body)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .post(uri)
-                .then().log().all()
-                .extract();
-    }
-
-    protected static ExtractableResponse<Response> getV2(String uri, String token) {
+    protected static ExtractableResponse<Response> get(String uri, String token) {
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -76,7 +51,7 @@ public class AcceptanceTest {
                 .extract();
     }
 
-    protected static ExtractableResponse<Response> getV2(String uri, String token, Map<String, Object> pathParams, Map<String, Object> queryParams) {
+    protected static ExtractableResponse<Response> get(String uri, String token, Map<String, Object> pathParams, Map<String, Object> queryParams) {
         return RestAssured.given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .pathParams(pathParams)
@@ -84,6 +59,17 @@ public class AcceptanceTest {
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get(uri)
+                .then().log().all()
+                .extract();
+    }
+
+    protected static ExtractableResponse<Response> post(String uri, Object body, String token) {
+        return RestAssured.given().log().all()
+                .header("Authorization", "Bearer " + token)
+                .body(body)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .post(uri)
                 .then().log().all()
                 .extract();
     }

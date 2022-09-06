@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class ReservationAcceptanceTest extends AcceptanceTest {
+class ReservationAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
     private ScheduleService scheduleService;
@@ -50,7 +50,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     private Long scheduleId;
 
     public static Long 예약을_한다(ReservationReserveRequest request, String crewToken) {
-        ExtractableResponse<Response> response = postV2("/api/v2/reservations", request, crewToken);
+        ExtractableResponse<Response> response = post("/api/v2/reservations", request, crewToken);
         return Long.parseLong(response.header("Location").split("/reservations/")[1]);
     }
 

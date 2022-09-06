@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class ScheduleAcceptanceTest extends AcceptanceTest {
+class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
 
     private static final LocalDate NOW = LocalDate.now();
     private static final LocalDate LAST_DATE_OF_MONTH = NOW.withDayOfMonth(NOW.lengthOfMonth());
@@ -171,7 +171,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         String url = "/api/v2/coaches/{coachId}/schedules";
         Map<String, Object> pathParams = Map.of("coachId", coachId);
         Map<String, Object> queryParams = Map.of("year", year, "month", month);
-        ExtractableResponse<Response> response = getV2(url, crewToken, pathParams, queryParams);
+        ExtractableResponse<Response> response = get(url, crewToken, pathParams, queryParams);
         return response.jsonPath().getList(".", ScheduleFindResponse.class);
     }
 
