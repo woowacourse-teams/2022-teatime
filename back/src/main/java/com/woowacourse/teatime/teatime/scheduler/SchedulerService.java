@@ -34,15 +34,14 @@ public class SchedulerService {
         }
     }
 
-    @Scheduled(cron = "59 59 23 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void cancelReservationNotSubmitted() {
         LocalDateTime now = LocalDateTime.now();
         log.info("{}, 전날까지 면담내용을 제출하지 않았다면 면담을 취소하는 스케쥴러 실행", now);
 
-        LocalDate nowDate = now.toLocalDate();
-        LocalDate nextDay = nowDate.plusDays(ONE_DAY);
-        LocalDateTime firstTime = Date.findFirstTime(nextDay);
-        LocalDateTime lastTime = Date.findLastTime(nextDay);
+        LocalDate today = now.toLocalDate();
+        LocalDateTime firstTime = Date.findFirstTime(today);
+        LocalDateTime lastTime = Date.findLastTime(today);
 
         List<Reservation> reservations
                 = reservationRepository.findAllShouldBeCanceled(firstTime, lastTime);

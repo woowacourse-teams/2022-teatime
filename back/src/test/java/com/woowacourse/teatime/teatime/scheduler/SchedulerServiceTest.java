@@ -1,8 +1,8 @@
 package com.woowacourse.teatime.teatime.scheduler;
 
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getNextDayFirstTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -74,8 +74,8 @@ class SchedulerServiceTest {
     @Test
     void cancelReservationNotSubmitted() {
         // given
-        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, getNextDayFirstTime()));
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, getNextDayFirstTime().plusHours(1)));
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.plusHours(1)));
         Reservation reservation1 = reservationRepository.save(new Reservation(schedule1, crew));
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
         reservation1.confirm(true);
