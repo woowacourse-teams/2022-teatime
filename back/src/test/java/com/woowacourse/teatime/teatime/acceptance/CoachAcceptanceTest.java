@@ -2,6 +2,7 @@ package com.woowacourse.teatime.teatime.acceptance;
 
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
@@ -16,6 +17,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
@@ -141,12 +143,42 @@ class CoachAcceptanceTest extends AcceptanceTest {
                 .statusCode(HttpStatus.OK.value());
     }
 
+    @DisplayName("코치가 자신의 히스토리를 조회한다.")
+    @Test
+    void findOwnReservations() {
+        Long schedule1Id = scheduleService.save(coachId, DATE_TIME);
+        Long reservation1Id = 예약을_한다(new ReservationReserveRequest(schedule1Id), crewToken);
+        예약을_승인한다(reservation1Id, new ReservationApproveRequest(true), coachToken);
+
+        Long schedule2Id = scheduleService.save(coachId, DATE_TIME.minusMinutes(1));
+        Long reservation2Id = 예약을_한다(new ReservationReserveRequest(schedule2Id), crewToken);
+        예약을_승인한다(reservation2Id, new ReservationApproveRequest(false), coachToken);
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + coachToken)
+                .filter(document("find-own-history", responseFields(
+                        fieldWithPath("[].reservationId").description("면담 아이디"),
+                        fieldWithPath("[].crewName").description("크루 이름"),
+                        fieldWithPath("[].crewImage").description("크루 이미지"),
+                        fieldWithPath("[].dateTime").description("날짜"),
+                        fieldWithPath("[].status").description("상태")
+                )))
+                .when().get("/api/v2/coaches/me/history")
+                .then().log().all()
+                .extract();
+
+        List<CoachFindOwnHistoryResponse> result = response.jsonPath()
+                .getList(".", CoachFindOwnHistoryResponse.class);
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(result).hasSize(1)
+        );
+    }
+
     public static Long 코치를_저장한다(CoachSaveRequest request, String token) {
         ExtractableResponse<Response> response = postV2("/api/v2/coaches", request, token);
         return Long.parseLong(response.header("Location").split("/coaches/")[1]);
-    }
-
-    public static void 코치의_면담목록을_불러온다(String token) {
-        getV2("/api/v2/coaches/me/reservations", token);
     }
 }

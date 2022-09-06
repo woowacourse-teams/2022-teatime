@@ -12,6 +12,7 @@ import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.domain.Crew;
@@ -203,6 +204,13 @@ public class ReservationService {
         for (Reservation reservation : reservations) {
             reservation.cancel(Role.COACH);
         }
+    }
+
+    public List<CoachFindOwnHistoryResponse> findOwnHistoryByCoach(Long coachId) {
+        validateCoachId(coachId);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                coachId, List.of(DONE, CANCELED));
+        return CoachFindOwnHistoryResponse.from(reservations);
     }
 }
 

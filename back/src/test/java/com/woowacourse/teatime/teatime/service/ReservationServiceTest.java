@@ -16,6 +16,7 @@ import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
@@ -364,6 +365,30 @@ class ReservationServiceTest {
                 () -> assertThat(reservationRepository.findAllByReservationStatus(APPROVED)).hasSize(1),
                 () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1)
         );
+    }
+
+    @DisplayName("코치가 자신에 해당되는 취소, 완료 상태의 면담 예약 목록을 조회한다.")
+    @Test
+    void findOwnHistoryByCoach() {
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
+        reservationService.save(crew.getId(), new ReservationReserveRequest(schedule1.getId()));
+
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.minusDays(1)));
+        Long reservation2Id = reservationService.save(crew.getId(), new ReservationReserveRequest(schedule2.getId()));
+        Reservation reservation2 = reservationRepository.findById(reservation2Id).get();
+        reservation2.confirm(false);
+
+        Schedule schedule3 = scheduleRepository.save(new Schedule(coach, DATE_TIME.minusDays(2)));
+        Long reservation3Id = reservationService.save(crew.getId(), new ReservationReserveRequest(schedule3.getId()));
+        Reservation reservation3 = reservationRepository.findById(reservation3Id).get();
+        reservation3.confirm(true);
+        reservation3.updateSheetStatusToSubmitted();
+        reservation3.updateReservationStatusToInProgress();
+        reservation3.updateReservationStatusToDone();
+
+        List<CoachFindOwnHistoryResponse> history = reservationService.findOwnHistoryByCoach(coach.getId());
+
+        assertThat(history).hasSize(2);
     }
 
     private Long 예약에_성공한다() {
