@@ -6,6 +6,7 @@ import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { HistoryCrew } from '@typings/domain';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -36,10 +37,16 @@ const historyStatus: HistoryStatus = {
     color: theme.colors.GRAY_500,
     backgroundColor: theme.colors.GRAY_200,
   },
+  CANCELED: {
+    statusName: '면담취소',
+    color: theme.colors.RED_400,
+    backgroundColor: theme.colors.RED_100,
+  },
 };
 
 const CrewHistory = () => {
   const { userData } = useContext(UserStateContext);
+  const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<HistoryCrew[]>([]);
 
@@ -59,6 +66,7 @@ const CrewHistory = () => {
       setHistoryList((prevHistory) => {
         return prevHistory.filter((history) => history.reservationId !== reservationId);
       });
+      showSnackbar({ message: '삭제되었습니다. 🗑' });
     } catch (error) {
       console.log(error);
     }
