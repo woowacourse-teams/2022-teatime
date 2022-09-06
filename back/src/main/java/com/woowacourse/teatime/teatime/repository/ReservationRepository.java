@@ -21,6 +21,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findAllByReservationStatus(ReservationStatus status);
 
+    List<Reservation> findByScheduleCoachIdAndReservationStatusIn(Long coachId, List<ReservationStatus> statuses);
+
     @Query("SELECT r FROM Reservation AS r "
             + "WHERE r.reservationStatus = 'APPROVED' "
             + "AND r.sheetStatus = 'WRITING' "

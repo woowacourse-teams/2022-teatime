@@ -6,6 +6,7 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
@@ -144,5 +145,28 @@ class ReservationRepositoryTest {
 
         // then
         assertThat(reservations).hasSize(2);
+    }
+
+    @DisplayName("코치에 해당하는 취소, 완료 상태의 면담 목록을 조회한다.")
+    @Test
+    void findByCoachIdAndReservationStatusInCanceledAndDone() {
+        Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
+        Reservation reservation2 = reservationRepository.save(new Reservation(schedule, crew));
+
+        reservation1.confirm(true);
+        reservation1.updateSheetStatusToSubmitted();
+        reservation1.updateReservationStatusToInProgress();
+        reservation1.updateReservationStatusToDone();
+
+        reservation2.confirm(false);
+
+        assertAll(
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(coach.getId(),
+                        List.of(DONE, CANCELED))).hasSize(2),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(coach.getId(),
+                        List.of(DONE))).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(coach.getId(),
+                        List.of(CANCELED))).hasSize(1)
+        );
     }
 }
