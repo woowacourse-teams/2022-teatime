@@ -67,9 +67,6 @@ public class ReservationService {
         validateIsSameCoach(coachId, reservation);
 
         reservation.confirm(reservationApproveRequest.getIsApproved());
-        if (!reservationApproveRequest.getIsApproved()) {
-            reservationRepository.delete(reservation);
-        }
     }
 
     public void cancel(Long reservationId, UserRoleDto userRoleDto) {
@@ -79,7 +76,6 @@ public class ReservationService {
         Role role = Role.search(userRoleDto.getRole());
         validateAuthorization(userRoleDto.getId(), role, reservation);
         reservation.cancel(role);
-        reservationRepository.delete(reservation);
     }
 
     private void validateAuthorization(Long applicantId, Role role,
@@ -206,7 +202,6 @@ public class ReservationService {
 
         for (Reservation reservation : reservations) {
             reservation.cancel(Role.COACH);
-            reservationRepository.delete(reservation);
         }
     }
 }
