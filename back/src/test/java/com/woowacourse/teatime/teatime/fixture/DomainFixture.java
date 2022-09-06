@@ -29,4 +29,12 @@ public class DomainFixture {
     public static Question getQuestion3(Coach coach) {
         return new Question(coach, 3, "mbti는 뭔가요?");
     }
+
+    public static Coach getCoachJason() {
+        return new Coach("제이슨", "jason@email.com", "i am legend", "image");
+    }
+
+    public static Crew getCrew() {
+        return new Crew("마루", "maru@email.com", "image");
+    }
 }

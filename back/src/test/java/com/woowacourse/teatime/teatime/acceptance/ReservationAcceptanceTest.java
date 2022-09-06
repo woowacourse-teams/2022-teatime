@@ -10,6 +10,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.teatime.scheduler.SchedulerService;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
@@ -35,6 +36,9 @@ class ReservationAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private CoachService coachService;
+
+    @Autowired
+    private SchedulerService schedulerService;
 
     private Long coachId;
     private String coachToken;
@@ -148,6 +152,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     void finish() {
         Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
         예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
+        승인된_예약을_진행중인_예약으로_변경한다();
         코치의_면담목록을_불러온다(coachToken);
 
         RestAssured.given(super.spec).log().all()
@@ -158,6 +163,10 @@ class ReservationAcceptanceTest extends AcceptanceTest {
                 .when().put("/api/v2/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    private void 승인된_예약을_진행중인_예약으로_변경한다() {
+        schedulerService.updateReservationStatusToInProgress();
     }
 
 }
