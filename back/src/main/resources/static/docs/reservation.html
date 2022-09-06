@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Schedule</title>
+<title>Reservation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,7 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Schedule</h1>
+<h1>Reservation</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
@@ -446,22 +446,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#home">home</a></li>
-<li><a href="#_크루가_코치의_스케쥴_조회">크루가 코치의 스케쥴 조회</a>
+<li><a href="#find-all-coaches">예약하기</a>
 <ul class="sectlevel2">
-<li><a href="#_크루가_코치의_스케쥴_조회_성공">크루가 코치의 스케쥴 조회 성공</a></li>
-<li><a href="#_크루가_코치의_스케쥴_조회_실패">크루가 코치의 스케쥴 조회 실패</a></li>
+<li><a href="#_예약하기_성공">예약하기 성공</a></li>
+<li><a href="#_예약하기_실패">예약하기 실패</a></li>
+<li><a href="#_스케쥴_아이디가_존재하지_않는_경우_404">스케쥴 아이디가 존재하지 않는 경우 404</a></li>
 </ul>
 </li>
-<li><a href="#_코치가_자신의_스케줄_조회">코치가 자신의 스케줄 조회</a>
+<li><a href="#_예약_승인_및_거절">예약 승인 및 거절</a>
 <ul class="sectlevel2">
-<li><a href="#_코치가_자신의_스케쥴_조회_성공">코치가 자신의 스케쥴 조회 성공</a></li>
-<li><a href="#_코치가_자신의_스케쥴_조회_실패">코치가 자신의 스케쥴 조회 실패</a></li>
+<li><a href="#_예약_승인_및_거절_성공">예약 승인 및 거절 성공</a></li>
+<li><a href="#_예약_승인_및_거절_실패">예약 승인 및 거절 실패</a></li>
 </ul>
 </li>
-<li><a href="#_스케줄_업데이트">스케줄 업데이트</a>
+<li><a href="#_예약_취소">예약 취소</a>
 <ul class="sectlevel2">
-<li><a href="#_스케쥴_업데이트_성공">스케쥴 업데이트 성공</a></li>
-<li><a href="#_스케쥴_업데이트_실패">스케쥴 업데이트 실패</a></li>
+<li><a href="#_예약_취소_성공">예약 취소 성공</a></li>
+<li><a href="#_예약_취소_실패">예약 취소 실패</a></li>
+</ul>
+</li>
+<li><a href="#_예약_완료">예약 완료</a>
+<ul class="sectlevel2">
+<li><a href="#_예약_완료_성공">예약 완료 성공</a></li>
+<li><a href="#_예약_완료_실패">예약 완료 실패</a></li>
 </ul>
 </li>
 </ul>
@@ -481,55 +488,99 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_크루가_코치의_스케쥴_조회"><a class="link" href="#_크루가_코치의_스케쥴_조회">크루가 코치의 스케쥴 조회</a></h2>
+<h2 id="find-all-coaches"><a class="link" href="#find-all-coaches">예약하기</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_크루가_코치의_스케쥴_조회_성공"><a class="link" href="#_크루가_코치의_스케쥴_조회_성공">크루가 코치의 스케쥴 조회 성공</a></h3>
+<h3 id="_예약하기_성공"><a class="link" href="#_예약하기_성공">예약하기 성공</a></h3>
 <div class="sect3">
-<h4 id="_크루가_코치의_스케쥴_조회_성공_http_request"><a class="link" href="#_크루가_코치의_스케쥴_조회_성공_http_request">HTTP request</a></h4>
+<h4 id="_예약하기_성공_http_request"><a class="link" href="#_예약하기_성공_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v2/coaches/1/schedules?year=2022&amp;month=9 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v2/reservations HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ1JFVyIsImlkIjoxLCJpYXQiOjE2NjI1MDU2NDYsImV4cCI6MTY2MjUxMjg0Nn0.f0hI_08oWwKJA9m9flsvyCn2ILPmqmAdXWv1rFfrqLA
 Content-Type: application/json
-Host: api.teatime.pe.kr</code></pre>
+Host: api.teatime.pe.kr
+Content-Length: 22
+
+{
+  "scheduleId" : 1
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_크루가_코치의_스케쥴_조회_성공_http_response"><a class="link" href="#_크루가_코치의_스케쥴_조회_성공_http_response">HTTP response</a></h4>
+<h4 id="_예약하기_성공_http_response"><a class="link" href="#_예약하기_성공_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Location: http://localhost:52138/api/v2/reservations/1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_예약하기_실패"><a class="link" href="#_예약하기_실패">예약하기 실패</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_스케쥴_아이디가_존재하지_않는_경우_404"><a class="link" href="#_스케쥴_아이디가_존재하지_않는_경우_404">스케쥴 아이디가 존재하지 않는 경우 404</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 59
+
+{
+  "message" : "존재하지 않는 스케줄입니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_예약_승인_및_거절"><a class="link" href="#_예약_승인_및_거절">예약 승인 및 거절</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_예약_승인_및_거절_성공"><a class="link" href="#_예약_승인_및_거절_성공">예약 승인 및 거절 성공</a></h3>
+<div class="sect3">
+<h4 id="_예약_승인_및_거절_성공_http_request"><a class="link" href="#_예약_승인_및_거절_성공_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v2/reservations/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ09BQ0giLCJpZCI6MSwiaWF0IjoxNjYyNTA1NjQ2LCJleHAiOjE2NjI1MTI4NDZ9.piF-reDfZ3HZtPHjJWyEwRQvXWcW-21_jJf2GksHfXc
+Content-Type: application/json
+Host: api.teatime.pe.kr
+Content-Length: 26
+
+{
+  "isApproved" : false
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_예약_승인_및_거절_성공_http_response"><a class="link" href="#_예약_승인_및_거절_성공_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 257
-
-[ {
-  "day" : 7,
-  "schedules" : [ {
-    "id" : 1,
-    "dateTime" : "2022-09-07T00:00:00.000Z",
-    "isPossible" : true
-  } ]
-}, {
-  "day" : 30,
-  "schedules" : [ {
-    "id" : 2,
-    "dateTime" : "2022-09-30T23:59:00.000Z",
-    "isPossible" : true
-  } ]
-} ]</code></pre>
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_크루가_코치의_스케쥴_조회_실패"><a class="link" href="#_크루가_코치의_스케쥴_조회_실패">크루가 코치의 스케쥴 조회 실패</a></h3>
+<h3 id="_예약_승인_및_거절_실패"><a class="link" href="#_예약_승인_및_거절_실패">예약 승인 및 거절 실패</a></h3>
 <div class="sect3">
-<h4 id="_코치_아이디가_존재하지_없는_경우_404"><a class="link" href="#_코치_아이디가_존재하지_없는_경우_404">코치 아이디가 존재하지 없는 경우 404</a></h4>
+<h4 id="_면담_아이디가_존재하지_않는_경우_404"><a class="link" href="#_면담_아이디가_존재하지_않는_경우_404">면담 아이디가 존재하지 않는 경우 404</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
@@ -540,191 +591,13 @@ Content-Type: application/json
 Content-Length: 56
 
 {
-  "message" : "존재하지 않는 코치입니다."
+  "message" : "존재하지 않는 예약입니다."
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_년도가_2022년_전인_경우_400"><a class="link" href="#_년도가_2022년_전인_경우_400">년도가 2022년 전인 경우 400</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_월이_유효하지_않은_경우_400"><a class="link" href="#_월이_유효하지_않은_경우_400">월이 유효하지 않은 경우 400</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_코치가_자신의_스케줄_조회"><a class="link" href="#_코치가_자신의_스케줄_조회">코치가 자신의 스케줄 조회</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_코치가_자신의_스케쥴_조회_성공"><a class="link" href="#_코치가_자신의_스케쥴_조회_성공">코치가 자신의 스케쥴 조회 성공</a></h3>
-<div class="sect3">
-<h4 id="_코치가_자신의_스케쥴_조회_성공_http_request"><a class="link" href="#_코치가_자신의_스케쥴_조회_성공_http_request">HTTP request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v2/coaches/me/schedules?year=2022&amp;month=9 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ09BQ0giLCJpZCI6MSwiaWF0IjoxNjYyNTA1NjQ3LCJleHAiOjE2NjI1MTI4NDd9.York13esEuEIyoVN5YrQ_sxHDnl8jP9bDCMDeVX9bsg
-Content-Type: application/json
-Host: api.teatime.pe.kr</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_코치가_자신의_스케쥴_조회_성공_http_response"><a class="link" href="#_코치가_자신의_스케쥴_조회_성공_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 257
-
-[ {
-  "day" : 7,
-  "schedules" : [ {
-    "id" : 1,
-    "dateTime" : "2022-09-07T00:00:00.000Z",
-    "isPossible" : true
-  } ]
-}, {
-  "day" : 30,
-  "schedules" : [ {
-    "id" : 2,
-    "dateTime" : "2022-09-30T23:59:00.000Z",
-    "isPossible" : true
-  } ]
-} ]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_코치가_자신의_스케쥴_조회_성공_response_fields"><a class="link" href="#_코치가_자신의_스케쥴_조회_성공_response_fields">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].day</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">날짜</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].schedules</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스케줄</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_코치가_자신의_스케쥴_조회_실패"><a class="link" href="#_코치가_자신의_스케쥴_조회_실패">코치가 자신의 스케쥴 조회 실패</a></h3>
-<div class="sect3">
-<h4 id="_년도가_2022년_전인_경우_400_2"><a class="link" href="#_년도가_2022년_전인_경우_400_2">년도가 2022년 전인 경우 400</a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="_월이_유효하지_않은_경우_400_2"><a class="link" href="#_월이_유효하지_않은_경우_400_2">월이 유효하지 않은 경우 400</a></h4>
-
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_스케줄_업데이트"><a class="link" href="#_스케줄_업데이트">스케줄 업데이트</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_스케쥴_업데이트_성공"><a class="link" href="#_스케쥴_업데이트_성공">스케쥴 업데이트 성공</a></h3>
-<div class="sect3">
-<h4 id="_스케쥴_업데이트_성공_http_request"><a class="link" href="#_스케쥴_업데이트_성공_http_request">HTTP request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v2/coaches/me/schedules HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ09BQ0giLCJpZCI6MSwiaWF0IjoxNjYyNTA1NjQ3LCJleHAiOjE2NjI1MTI4NDd9.York13esEuEIyoVN5YrQ_sxHDnl8jP9bDCMDeVX9bsg
-Content-Type: application/json
-Host: api.teatime.pe.kr
-Content-Length: 75
-
-{
-  "date" : "2022-09-30",
-  "schedules" : [ "2022-09-30T23:59:00.000Z" ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_스케쥴_업데이트_성공_http_response"><a class="link" href="#_스케쥴_업데이트_성공_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_스케쥴_업데이트_성공_request_fields"><a class="link" href="#_스케쥴_업데이트_성공_request_fields">Request fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">날짜</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>schedules</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스케줄</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_스케쥴_업데이트_실패"><a class="link" href="#_스케쥴_업데이트_실패">스케쥴 업데이트 실패</a></h3>
-<div class="sect3">
-<h4 id="_이미_예약된_스케쥴인_경우_400"><a class="link" href="#_이미_예약된_스케쥴인_경우_400">이미 예약된 스케쥴인 경우 400</a></h4>
+<h4 id="_이미_승인된_면담인_경우_400"><a class="link" href="#_이미_승인된_면담인_경우_400">이미 승인된 면담인 경우 400</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
@@ -735,7 +608,113 @@ Content-Type: application/json
 Content-Length: 57
 
 {
-  "message" : "일정을 수정할 수 없습니다."
+  "message" : "이미 승인이 되어 있습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_예약_취소"><a class="link" href="#_예약_취소">예약 취소</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_예약_취소_성공"><a class="link" href="#_예약_취소_성공">예약 취소 성공</a></h3>
+<div class="sect3">
+<h4 id="_예약_취소_성공_http_request"><a class="link" href="#_예약_취소_성공_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v2/reservations/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ1JFVyIsImlkIjoxLCJpYXQiOjE2NjI1MDU2NDYsImV4cCI6MTY2MjUxMjg0Nn0.f0hI_08oWwKJA9m9flsvyCn2ILPmqmAdXWv1rFfrqLA
+Content-Type: application/json
+Host: api.teatime.pe.kr</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_예약_취소_성공_http_response"><a class="link" href="#_예약_취소_성공_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_예약_취소_실패"><a class="link" href="#_예약_취소_실패">예약 취소 실패</a></h3>
+<div class="sect3">
+<h4 id="_면담_아이디가_존재하지_않는_경우_404_2"><a class="link" href="#_면담_아이디가_존재하지_않는_경우_404_2">면담 아이디가 존재하지 않는 경우 404</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 56
+
+{
+  "message" : "존재하지 않는 예약입니다."
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_크루가_진행_중인_면담을_취소하는_경우_400"><a class="link" href="#_크루가_진행_중인_면담을_취소하는_경우_400">크루가 진행 중인 면담을 취소하는 경우 400</a></h4>
+<div class="paragraph">
+<p>Unresolved directive in reservation.adoc - include::/Users/youngwooyoo/Desktop/2022-teatime/back/build/generated-snippets/reserve-approve-crewCancelInProgress/http-response.adoc[]</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_예약_완료"><a class="link" href="#_예약_완료">예약 완료</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_예약_완료_성공"><a class="link" href="#_예약_완료_성공">예약 완료 성공</a></h3>
+<div class="sect3">
+<h4 id="_예약_완료_성공_http_request"><a class="link" href="#_예약_완료_성공_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v2/reservations/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ09BQ0giLCJpZCI6MSwiaWF0IjoxNjYyNTA1NjQ2LCJleHAiOjE2NjI1MTI4NDZ9.piF-reDfZ3HZtPHjJWyEwRQvXWcW-21_jJf2GksHfXc
+Content-Type: application/json
+Host: api.teatime.pe.kr</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_예약_완료_성공_http_response"><a class="link" href="#_예약_완료_성공_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_예약_완료_실패"><a class="link" href="#_예약_완료_실패">예약 완료 실패</a></h3>
+<div class="sect3">
+<h4 id="_면담_아이디가_존재하지_않는_경우_404_3"><a class="link" href="#_면담_아이디가_존재하지_않는_경우_404_3">면담 아이디가 존재하지 않는 경우 404</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 56
+
+{
+  "message" : "존재하지 않는 예약입니다."
 }</code></pre>
 </div>
 </div>
@@ -747,7 +726,7 @@ Content-Length: 57
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-09-07 07:34:52 +0900
+Last updated 2022-09-07 08:06:57 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

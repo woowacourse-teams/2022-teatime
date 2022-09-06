@@ -87,9 +87,7 @@ class ReservationAcceptanceTest extends AcceptanceTestSupporter {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
                 .body(new ReservationReserveRequest(scheduleId))
-                .filter(document("reserve", requestFields(
-                        fieldWithPath("scheduleId").description("스케줄 아이디")
-                )))
+                .filter(document("reserve"))
                 .when().post("/api/v2/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
@@ -106,9 +104,7 @@ class ReservationAcceptanceTest extends AcceptanceTestSupporter {
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + coachToken)
                 .body(new ReservationApproveRequest(isApprove))
-                .filter(document("reserve-approve", requestFields(
-                        fieldWithPath("isApproved").description("승인 여부")
-                )))
+                .filter(document("reserve-approve"))
                 .when().post("/api/v2/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
