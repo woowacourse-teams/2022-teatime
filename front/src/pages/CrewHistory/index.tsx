@@ -5,7 +5,7 @@ import TableRow from '@components/TableRow';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
-import { History } from '@typings/domain';
+import { HistoryCrew } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -41,7 +41,7 @@ const historyStatus: HistoryStatus = {
 const CrewHistory = () => {
   const { userData } = useContext(UserStateContext);
   const navigate = useNavigate();
-  const [historyList, setHistoryList] = useState<History[]>([]);
+  const [historyList, setHistoryList] = useState<HistoryCrew[]>([]);
 
   const moveReservationSheet = (reservationId: number) => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
