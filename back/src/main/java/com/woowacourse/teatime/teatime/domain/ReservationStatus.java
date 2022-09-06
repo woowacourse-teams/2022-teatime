@@ -10,7 +10,8 @@ public enum ReservationStatus {
     BEFORE_APPROVED(() -> Comparator.comparing(Reservation::getId)),
     APPROVED(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
     IN_PROGRESS(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
-    DONE(() -> Comparator.comparing(Reservation::getScheduleDateTime));
+    DONE(() -> Comparator.comparing(Reservation::getScheduleDateTime)),
+    CANCELED(() -> Comparator.comparing(Reservation::getScheduleDateTime));
 
     private final Supplier<Comparator<Reservation>> comparator;
 
