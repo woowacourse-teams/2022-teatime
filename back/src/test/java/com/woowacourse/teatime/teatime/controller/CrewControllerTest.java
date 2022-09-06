@@ -16,7 +16,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CrewControllerTest extends ControllerTest {
+class CrewControllerTest extends ControllerTestSupporter {
 
     @DisplayName("크루가 자신의 면담 목록 조회에 성공한다.")
     @Test

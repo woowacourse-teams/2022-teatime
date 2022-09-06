@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class ReservationControllerTest extends ControllerTest {
+class ReservationControllerTest extends ControllerTestSupporter {
 
     @DisplayName("예약에 성공한다.")
     @Test

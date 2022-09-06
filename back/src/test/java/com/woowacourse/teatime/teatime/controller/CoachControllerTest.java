@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CoachControllerTest extends ControllerTest {
+class CoachControllerTest extends ControllerTestSupporter {
 
     @DisplayName("크루가 코치 목록 조회에 성공한다.")
     @Test

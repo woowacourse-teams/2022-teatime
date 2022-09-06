@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class ScheduleControllerTest extends ControllerTest {
+class ScheduleControllerTest extends ControllerTestSupporter {
 
     @DisplayName("크루가 코치 스케줄 조회에 성공한다.")
     @Test

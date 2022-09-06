@@ -86,33 +86,10 @@ class CoachAcceptanceTest extends AcceptanceTestSupporter {
         );
     }
 
-    @DisplayName("코치를 생성한다.")
-    @Test
-    void save() {
-        Long crewId = crewService.save(CREW_SAVE_REQUEST);
-        String crewToken = 크루의_토큰을_발급한다(crewId);
-        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + crewToken)
-                .body(COACH_BROWN_SAVE_REQUEST)
-                .filter(document("create-coach", requestFields(
-                        fieldWithPath("name").description("이름"),
-                        fieldWithPath("email").description("이메일"),
-                        fieldWithPath("description").description("소개"),
-                        fieldWithPath("image").description("이미지")
-                )))
-                .when().post("/api/v2/coaches")
-                .then().log().all()
-                .extract();
-
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-    }
-
     @DisplayName("코치의 면담 목록을 불러온다.")
     @Test
     void findReservations() {
-        Long coachId = 코치를_저장한다(COACH_BROWN_SAVE_REQUEST, coachToken);
-
+        Long coachId = coachService.save(COACH_BROWN_SAVE_REQUEST);
 
         Long scheduleId = scheduleService.save(coachId, LocalDateTime.now());
         Long scheduleId2 = scheduleService.save(coachId, LocalDateTime.now().plusDays(1));
