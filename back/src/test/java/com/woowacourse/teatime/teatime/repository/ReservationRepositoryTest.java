@@ -39,7 +39,7 @@ class ReservationRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        crew = crewRepository.save(DomainFixture.CREW);
+        crew = crewRepository.save(DomainFixture.CREW1);
         coach = coachRepository.save(DomainFixture.COACH_BROWN);
         schedule = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME));
     }

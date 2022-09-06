@@ -10,14 +10,13 @@
 
 [[find-all-coaches]]
 == 코치 목록 조회
-
 === 코치 목록 조회 성공
 operation::find-all-coaches[]
-=== 코치 목록 조회 예외
-==== 토큰이 없는 경우
-//include::{snippets}/find-all-coaches/http-request.adoc[]
-
 
 == 코치 면담 목록 조회
+=== 코치 면담 목록 조회 성공
+operation::find-all-me-reservations[]
 
 == 코치 히스토리 조회
+=== 코치 히스토리 조회 성공
+operation::find-all-me-history[]

@@ -12,7 +12,7 @@ class SheetTest {
     @Test
     void modifyAnswer_correctNumber() {
         Schedule schedule = new Schedule(DomainFixture.COACH_BROWN, DomainFixture.DATE_TIME);
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         Sheet sheet = new Sheet(reservation, 1, "이름이 뭔가요?");
 
         String expected = "야호입니다.";
@@ -25,7 +25,7 @@ class SheetTest {
     @Test
     void modifyAnswer_incorrectNumber() {
         Schedule schedule = new Schedule(DomainFixture.COACH_BROWN, DomainFixture.DATE_TIME);
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         Sheet sheet = new Sheet(reservation, 1, "이름이 뭔가요?");
 
         String expected = "야호입니다.";
