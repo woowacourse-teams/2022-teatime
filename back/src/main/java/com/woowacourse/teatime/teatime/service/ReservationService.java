@@ -2,6 +2,7 @@ package com.woowacourse.teatime.teatime.service;
 
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
@@ -117,8 +118,8 @@ public class ReservationService {
 
     public CoachReservationsResponse findByCoachId(Long coachId) {
         validateCoachId(coachId);
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(coachId,
-                DONE);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(coachId,
+                List.of(DONE, CANCELED));
         return classifyReservationsAndReturnDto(reservations);
     }
 

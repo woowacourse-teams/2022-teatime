@@ -1,12 +1,15 @@
 package com.woowacourse.teatime.teatime.repository;
 
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.BEFORE_APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
-import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
 import java.time.LocalDateTime;
@@ -49,14 +52,14 @@ class ReservationRepositoryTest {
 
         List<Reservation> reservations =
                 reservationRepository.findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(crew.getId(),
-                        ReservationStatus.BEFORE_APPROVED);
+                        BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
     }
 
     @DisplayName("코치의 한 달 면담 목록을 조회한다.")
     @Test
-    void findByCoachIdExceptDone() {
+    void findByCoachIdExceptDoneAndCanceled() {
         Coach newCoach = coachRepository.save(DomainFixture.COACH_JASON);
         Schedule newCoachSchedule = scheduleRepository.save(new Schedule(newCoach, DomainFixture.DATE_TIME));
         Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME.plusDays(1)));
@@ -65,10 +68,37 @@ class ReservationRepositoryTest {
         reservationRepository.save(new Reservation(schedule2, crew));
         reservationRepository.save(new Reservation(newCoachSchedule, crew));
 
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNot(
-                coach.getId(), ReservationStatus.DONE);
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
+                coach.getId(), List.of(DONE, CANCELED));
 
         assertThat(reservations).hasSize(2);
+    }
+
+    @DisplayName("코치의 한 달 면담 목록을 조회한다. - 종료된 예약만 있는 경우")
+    @Test
+    void findByCoachIdExceptDoneAndCanceled_done() {
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(true);
+        reservation.updateReservationStatusToInProgress();
+        reservation.updateSheetStatusToSubmitted();
+        reservation.updateReservationStatusToDone();
+
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
+                coach.getId(), List.of(DONE, CANCELED));
+
+        assertThat(reservations).hasSize(0);
+    }
+
+    @DisplayName("코치의 한 달 면담 목록을 조회한다. - 취소된 예약만 있는 경우")
+    @Test
+    void findByCoachIdExceptDoneAndCanceled_canceled() {
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(false);
+
+        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
+                coach.getId(), List.of(DONE, CANCELED));
+
+        assertThat(reservations).hasSize(0);
     }
 
     @DisplayName("승인된 예약들을 모두 조회한다.")
@@ -89,7 +119,7 @@ class ReservationRepositoryTest {
 
         // when
         List<Reservation> approvedReservations
-                = reservationRepository.findAllByReservationStatus(ReservationStatus.APPROVED);
+                = reservationRepository.findAllByReservationStatus(APPROVED);
 
         // then
         assertThat(approvedReservations).hasSize(2);
