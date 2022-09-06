@@ -32,6 +32,7 @@ import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,8 @@ class ReservationServiceTest {
     private CoachRepository coachRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    private Scheduler scheduler;
 
     @BeforeEach
     void setUp() {
@@ -223,7 +226,7 @@ class ReservationServiceTest {
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         Long reservationId = reservationService.save(crew.getId(), reservationReserveRequest);
         예약_승인을_확정한다(reservationId, true);
-        reservationService.findByCoachId(coach.getId());
+        승인된_예약을_진행중인_예약으로_변경한다();
         reservationService.updateReservationStatusToDone(reservationId);
 
         List<CoachFindCrewHistoryResponse> reservations = reservationService.findCrewHistoryByCoach(crew.getId());
@@ -264,34 +267,13 @@ class ReservationServiceTest {
         );
     }
 
-    @DisplayName("코치에 해당되는 면담 목록을 조회할 때 승인된 일정은 면담이 시작되면 진행중으로 바뀐다.")
-    @Test
-    void findByCoachStatusUpdate() {
-        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.now().plusDays(1)));
-        Reservation reservation = new Reservation(schedule, crew);
-        Reservation reservation2 = new Reservation(schedule2, crew);
-        reservationRepository.save(reservation);
-        reservationRepository.save(reservation2);
-        reservation.confirm(true);
-        reservation2.confirm(true);
-
-        CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
-
-        assertAll(
-                () -> assertThat(response.getBeforeApproved()).hasSize(0),
-                () -> assertThat(response.getApproved()).hasSize(1),
-                () -> assertThat(response.getInProgress()).hasSize(1)
-        );
-    }
-
     @DisplayName("진행중인 면담을 완료하면 완료된 상태로 바뀐다.")
     @Test
     void updateReservationStatusToDone() {
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         reservation.confirm(true);
-        reservationService.findByCoachId(coach.getId());
+        승인된_예약을_진행중인_예약으로_변경한다();
 
         reservationService.updateReservationStatusToDone(reservation.getId());
         CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
@@ -338,6 +320,47 @@ class ReservationServiceTest {
                 .isInstanceOf(UnableToSubmitSheetException.class);
     }
 
+    @DisplayName("승인된 예약을 진행중인 예약으로 변경한다.")
+    @Test
+    void updateReservationStatusToInProgress() {
+        // given
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm(true);
+
+        // when
+        승인된_예약을_진행중인_예약으로_변경한다();
+
+        // then
+        Reservation savedReservation = reservationRepository.findById(reservation.getId())
+                .orElseThrow();
+        ReservationStatus actual = savedReservation.getReservationStatus();
+        assertThat(actual).isEqualTo(ReservationStatus.IN_PROGRESS);
+    }
+
+    @DisplayName("승인된 면담 중 전날까지 작성하지 않은 면담을 모두 취소한다.")
+    @Test
+    void cancelReservationNotSubmitted() {
+        // given
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.plusHours(1)));
+        Reservation reservation1 = reservationRepository.save(new Reservation(schedule1, crew));
+        Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
+        reservation1.confirm(true);
+        reservation2.confirm(true);
+        reservation1.updateSheetStatusToSubmitted();
+
+        // when
+        reservationService.cancelReservationNotSubmitted();
+
+        // then
+        List<Reservation> reservations = reservationRepository.findAll();
+        assertAll(
+                () -> assertThat(reservations).hasSize(1),
+                () -> assertThat(reservations.get(0)).isEqualTo(reservation1)
+        );
+    }
+
     private Long 예약에_성공한다() {
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         return reservationService.save(crew.getId(), reservationReserveRequest);
@@ -345,5 +368,9 @@ class ReservationServiceTest {
 
     private void 예약_승인을_확정한다(Long reservationId, boolean isApproved) {
         reservationService.approve(coach.getId(), reservationId, new ReservationApproveRequest(isApproved));
+    }
+
+    private void 승인된_예약을_진행중인_예약으로_변경한다() {
+        reservationService.updateReservationStatusToInProgress();
     }
 }

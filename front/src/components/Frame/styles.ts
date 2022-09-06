@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   width: 1000px;

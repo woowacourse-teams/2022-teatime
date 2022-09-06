@@ -1,4 +1,3 @@
-import BackButton from '@components/BackButton';
 import { getHourMinutes, getMonthDate } from '@utils/date';
 import * as S from './styles';
 
@@ -9,10 +8,9 @@ interface ReservationInfoProps {
   image?: string;
   name?: string;
   dateTime?: string;
-  isView: boolean;
 }
 
-const ReservationInfo = ({ image, name, dateTime, isView }: ReservationInfoProps) => {
+const ReservationInfo = ({ image, name, dateTime }: ReservationInfoProps) => {
   return (
     <>
       <S.Image src={image} alt="프로필 이미지" />
@@ -25,7 +23,6 @@ const ReservationInfo = ({ image, name, dateTime, isView }: ReservationInfoProps
         <img src={ClockIcon} alt="시계 아이콘" />
         <span>{getHourMinutes(dateTime as string)}</span>
       </S.DateWrapper>
-      {isView && <BackButton />}
     </>
   );
 };

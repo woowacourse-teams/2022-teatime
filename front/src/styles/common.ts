@@ -23,11 +23,14 @@ const CalendarContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  position: relative;
   width: 30%;
   margin-right: 50px;
   border-right: 1px solid ${({ theme }) => theme.colors.GRAY_200};
   font-weight: bold;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export { ScheduleContainer, CalendarContainer, InfoContainer };
