@@ -28,44 +28,22 @@ const historyStatus: HistoryStatus = {
 
 const CoachHistory = () => {
   const { userData } = useContext(UserStateContext);
-  const [historyList, setHistoryList] = useState<HistoryCoach[]>([
-    {
-      reservationId: 1,
-      crewName: '아키',
-      crewImage: 'https://avatars.githubusercontent.com/u/50367798?v=4',
-      dateTime: '2022-07-01T01:00:00.000Z',
-      status: 'CANCELED',
-    },
-    {
-      reservationId: 2,
-      crewName: '야호',
-      crewImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
-      dateTime: '2022-07-01T01:00:00.000Z',
-      status: 'CANCELED',
-    },
-    {
-      reservationId: 3,
-      crewName: '마루',
-      crewImage: 'https://avatars.githubusercontent.com/u/81607552?v=4',
-      dateTime: '2022-07-01T01:00:00.000Z',
-      status: 'DONE',
-    },
-  ]);
+  const [historyList, setHistoryList] = useState<HistoryCoach[]>([]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const { data } = await api.get('/api/v2/coachs/me/history', {
-  //         headers: {
-  //           Authorization: `Bearer ${userData?.token}`,
-  //         },
-  //       });
-  //       setHistoryList(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get('/api/v2/coachs/me/history', {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        });
+        setHistoryList(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   return (
     <S.Table>
