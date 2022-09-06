@@ -33,17 +33,6 @@ public class CoachController {
         return ResponseEntity.ok(responses);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody CoachSaveRequest request) {
-        Long coachId = coachService.save(request);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(coachId)
-                .toUri();
-        return ResponseEntity.created(location).build();
-    }
-
     @GetMapping("/me/reservations")
     public ResponseEntity<CoachReservationsResponse> findCoachReservations(
             @CoachAuthenticationPrincipal Long coachId) {
