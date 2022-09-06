@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToDoneReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToInProgressReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
 import java.time.LocalDateTime;
@@ -128,9 +129,8 @@ class ReservationTest {
     void updateReservationStatusToInProgress_unapprovedReservation() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
 
-        reservation.updateReservationStatusToInProgress();
-
-        assertThat(reservation.isReservationStatus(IN_PROGRESS)).isFalse();
+        assertThatThrownBy(reservation::updateReservationStatusToInProgress)
+                .isInstanceOf(UnableToInProgressReservationException.class);
     }
 
     @DisplayName("승인된 면담이 아직 시간이 안됐으면 진행중인 상태로 업데이트 되지 않는다.")
@@ -140,9 +140,8 @@ class ReservationTest {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
         reservation.confirm(승인을_한다);
 
-        reservation.updateReservationStatusToInProgress();
-
-        assertThat(reservation.isReservationStatus(IN_PROGRESS)).isFalse();
+        assertThatThrownBy(reservation::updateReservationStatusToInProgress)
+                .isInstanceOf(UnableToInProgressReservationException.class);
     }
 
     @DisplayName("진행중인 면담을 종료하면 완료된 상태로 업데이트 된다.")

@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.domain;
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToDoneReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToInProgressReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -25,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Entity
 public class Reservation {
+
+    private static final String NOT_COME_RESERVATION_TIME_MESSAGE = "면담 시간이 아직 되지 않아 진행중으로 상태를 변경할 수 없습니다.";
+    private static final String NOT_APPROVED_ERROR_MESSAGE = "승인된 상태가 아니기에 진행중으로 상태를 변경할 수 없습니다.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,14 +91,21 @@ public class Reservation {
     }
 
     public void updateReservationStatusToInProgress() {
-        if (isReservationStatus(ReservationStatus.APPROVED) && isTimePassed()) {
-            reservationStatus = ReservationStatus.IN_PROGRESS;
+        validateCanUpdateToInProgress();
+        reservationStatus = ReservationStatus.IN_PROGRESS;
+    }
+
+    private void validateCanUpdateToInProgress() {
+        if (isBefore()) {
+            throw new UnableToInProgressReservationException(NOT_COME_RESERVATION_TIME_MESSAGE);
+        }
+        if (!isReservationStatus(ReservationStatus.APPROVED)) {
+            throw new UnableToInProgressReservationException(NOT_APPROVED_ERROR_MESSAGE);
         }
     }
 
-    private boolean isTimePassed() {
-        log.info(LocalDateTime.now().toString());
-        return LocalDateTime.now().isAfter(getScheduleDateTime());
+    private boolean isBefore() {
+        return LocalDateTime.now().isBefore(getScheduleDateTime());
     }
 
     public void updateReservationStatusToDone() {
