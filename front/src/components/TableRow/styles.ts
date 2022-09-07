@@ -8,9 +8,8 @@ const Span = styled.span<{ color: string; bgColor: string }>`
   color: ${({ color }) => color};
 `;
 
-const Profile = styled.div`
+const Profile = styled.td`
   display: flex;
-  justify-content: center;
   align-items: center;
 
   img {
@@ -26,7 +25,7 @@ const Profile = styled.div`
 const Icon = styled.img`
   width: 24px;
   height: 24px;
-  margin-left: 10px;
+  margin-left: 12px;
   cursor: pointer;
   :hover {
     transform: scale(1.1);
