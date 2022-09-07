@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
@@ -180,8 +181,10 @@ const Schedule = () => {
         );
         createScheduleMap(coachSchedules);
       } catch (error) {
-        alert(error);
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, [monthYear]);

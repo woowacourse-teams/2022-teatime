@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
 import Sheet from '@components/Sheet';
@@ -32,7 +33,10 @@ const HistorySheet = () => {
         });
         setHistoryList(data);
       } catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, []);

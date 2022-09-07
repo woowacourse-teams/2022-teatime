@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
@@ -61,7 +62,10 @@ const CoachSheet = () => {
         });
         setReservationInfo(data);
       } catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, []);

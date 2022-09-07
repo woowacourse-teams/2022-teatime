@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
@@ -48,8 +49,10 @@ const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTime
       onReservationTime(scheduleId);
       openModal();
     } catch (error) {
-      alert(error);
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
