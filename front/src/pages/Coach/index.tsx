@@ -100,8 +100,10 @@ const Coach = () => {
       sortBoardItemByTime('approved');
       showSnackbar({ message: '승인되었습니다. ✅' });
     } catch (error) {
-      alert('승인 에러');
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -132,8 +134,10 @@ const Coach = () => {
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
-      alert('거절 기능 에러');
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -151,8 +155,10 @@ const Coach = () => {
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
-      alert('취소 에러');
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -173,8 +179,10 @@ const Coach = () => {
       deleteBoardItem('inProgress', index);
       showSnackbar({ message: '완료되었습니다. ✅' });
     } catch (error) {
-      alert(error);
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 

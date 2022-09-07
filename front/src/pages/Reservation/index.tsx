@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import ReservationTimeList from '@components/ReservationTimeList';
 import Calendar from '@components/Calendar';
@@ -96,8 +97,10 @@ const Reservation = () => {
         );
         createScheduleMap(coachSchedules);
       } catch (error) {
-        alert(error);
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, [monthYear]);

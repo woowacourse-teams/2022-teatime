@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
@@ -38,7 +39,10 @@ const CrewSheet = () => {
       showSnackbar({ message: isSubmitted ? '제출되었습니다. 💌' : '임시 저장되었습니다. 🎁' });
       navigate(ROUTES.CREW_HISTORY);
     } catch (error) {
-      alert('제출 실패🚫');
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -52,7 +56,10 @@ const CrewSheet = () => {
         });
         setReservationInfo(data);
       } catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, []);

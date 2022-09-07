@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import { UserStateContext } from '@context/UserProvider';
@@ -40,7 +41,10 @@ const CoachHistory = () => {
         });
         setHistoryList(data);
       } catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, []);

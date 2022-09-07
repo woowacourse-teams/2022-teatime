@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { AxiosError } from 'axios';
 
 import Conditional from '@components/Conditional';
 import { UserStateContext } from '@context/UserProvider';
@@ -59,8 +60,10 @@ const ScheduleTimeList = ({
       onUpdateSchedule(selectedTimes);
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
-      alert(error);
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
