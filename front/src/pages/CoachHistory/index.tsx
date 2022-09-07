@@ -17,7 +17,7 @@ interface HistoryStatus {
 const historyStatus: HistoryStatus = {
   CANCELED: {
     statusName: '면담취소',
-    color: theme.colors.RED_400,
+    color: theme.colors.RED_500,
     backgroundColor: theme.colors.RED_100,
   },
   DONE: {

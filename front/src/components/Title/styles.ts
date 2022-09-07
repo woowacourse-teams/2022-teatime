@@ -21,7 +21,7 @@ const Title = styled.h1`
 
 const HighLightText = styled(Title)<{ hightlightColor?: string }>`
   margin: 0 10px;
-  border-bottom: 4px solid ${(props) => props.hightlightColor};
+  background: linear-gradient(to top, #ffe400 50%, transparent 50%);
 `;
 
 export { TitleWrapper, Title, HighLightText };
