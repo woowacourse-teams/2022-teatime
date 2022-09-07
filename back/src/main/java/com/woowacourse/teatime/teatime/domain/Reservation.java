@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.teatime.domain;
 
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
-import com.woowacourse.teatime.teatime.exception.UnCancellableReservationException;
+import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToDoneReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToInProgressReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
@@ -64,13 +64,15 @@ public class Reservation {
             reservationStatus = ReservationStatus.APPROVED;
             return;
         }
+        reservationStatus = ReservationStatus.CANCELED;
         schedule.init();
     }
 
     public void cancel(Role role) {
         if (isCancelBeforeApprovedByCoach(role) || isCancelInProgressByCrew(role)) {
-            throw new UnCancellableReservationException();
+            throw new UnableToCancelReservationException();
         }
+        reservationStatus = ReservationStatus.CANCELED;
         schedule.init();
     }
 
@@ -96,7 +98,7 @@ public class Reservation {
     }
 
     private void validateCanUpdateToInProgress() {
-        if (isBefore()) {
+        if (!isBeforeFromNow()) {
             throw new UnableToInProgressReservationException(NOT_COME_RESERVATION_TIME_MESSAGE);
         }
         if (!isReservationStatus(ReservationStatus.APPROVED)) {
@@ -104,8 +106,8 @@ public class Reservation {
         }
     }
 
-    private boolean isBefore() {
-        return LocalDateTime.now().isBefore(getScheduleDateTime());
+    public boolean isBeforeFromNow() {
+        return getScheduleDateTime().isBefore(LocalDateTime.now());
     }
 
     public void updateReservationStatusToDone() {

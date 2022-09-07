@@ -1,5 +1,8 @@
-package com.woowacourse.teatime.teatime.scheduler;
+package com.woowacourse.teatime.teatime.infrastructure;
 
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
@@ -26,10 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class SchedulerServiceTest {
+class SchedulerTest {
 
     @Autowired
-    private SchedulerService schedulerService;
+    private Scheduler scheduler;
 
     @Autowired
     private CoachRepository coachRepository;
@@ -61,13 +64,13 @@ class SchedulerServiceTest {
         reservation.confirm(true);
 
         // when
-        schedulerService.updateReservationStatusToInProgress();
+        scheduler.updateReservationStatusToInProgress();
 
         // then
         Reservation savedReservation = reservationRepository.findById(reservation.getId())
                 .orElseThrow();
         ReservationStatus actual = savedReservation.getReservationStatus();
-        assertThat(actual).isEqualTo(ReservationStatus.IN_PROGRESS);
+        assertThat(actual).isEqualTo(IN_PROGRESS);
     }
 
     @DisplayName("승인된 면담 중 전날까지 작성하지 않은 면담을 모두 취소한다.")
@@ -83,13 +86,16 @@ class SchedulerServiceTest {
         reservation1.updateSheetStatusToSubmitted();
 
         // when
-        schedulerService.cancelReservationNotSubmitted();
+        scheduler.cancelReservationNotSubmitted();
 
         // then
-        List<Reservation> reservations = reservationRepository.findAll();
         assertAll(
-                () -> assertThat(reservations).hasSize(1),
-                () -> assertThat(reservations.get(0)).isEqualTo(reservation1)
+                () -> assertThat(reservationRepository.findAll()).hasSize(2),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(APPROVED))).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).hasSize(1)
+
         );
     }
 }

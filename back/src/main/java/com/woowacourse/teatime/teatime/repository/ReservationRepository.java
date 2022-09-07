@@ -14,13 +14,23 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByCrewIdOrderByScheduleLocalDateTimeDesc(Long crewId);
 
-    List<Reservation> findByScheduleCoachIdAndReservationStatusNot(Long coachId, ReservationStatus status);
+    List<Reservation> findByScheduleCoachIdAndReservationStatusNotIn(Long coachId, List<ReservationStatus> statuses);
 
     List<Reservation> findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(Long crewId,
                                                                                        ReservationStatus status);
 
-    List<Reservation> findAllByReservationStatus(ReservationStatus status);
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.reservationStatus = 'APPROVED' "
+            + "AND r.schedule.localDateTime >= :startTime "
+            + "AND r.schedule.localDateTime < :endTime")
+    List<Reservation> findAllApprovedReservationsBetween(LocalDateTime startTime, LocalDateTime endTime);
 
-    @Query("SELECT r FROM Reservation AS r WHERE r.reservationStatus = 'APPROVED' AND r.sheetStatus = 'WRITING' AND r.schedule.localDateTime >= :startTime AND r.schedule.localDateTime < :endTime")
+    List<Reservation> findByScheduleCoachIdAndReservationStatusIn(Long coachId, List<ReservationStatus> statuses);
+
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.reservationStatus = 'APPROVED' "
+            + "AND r.sheetStatus = 'WRITING' "
+            + "AND r.schedule.localDateTime >= :startTime "
+            + "AND r.schedule.localDateTime < :endTime")
     List<Reservation> findAllShouldBeCanceled(LocalDateTime startTime, LocalDateTime endTime);
 }

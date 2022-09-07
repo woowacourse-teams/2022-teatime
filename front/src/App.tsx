@@ -11,6 +11,7 @@ import CrewSheet from '@pages/CrewSheet';
 import CoachSheet from '@pages/CoachSheet';
 import HistorySheet from '@pages/HistorySheet';
 import CrewHistory from '@pages/CrewHistory';
+import CoachHistory from '@pages/CoachHistory';
 import Header from '@components/Header';
 import SnackbarProvider from '@context/SnackbarProvider';
 import UserProvider from '@context/UserProvider';
@@ -28,13 +29,14 @@ const App = () => {
           <Route path="/*" element={<NotFound />} />
           <Route element={<AuthRoute role="CREW" />}>
             <Route path={ROUTES.CREW} element={<Crew />} />
+            <Route path={ROUTES.CREW_HISTORY} element={<CrewHistory />} />
             <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
             <Route path={`${ROUTES.CREW_SHEET}/:id`} element={<CrewSheet />} />
-            <Route path={ROUTES.CREW_HISTORY} element={<CrewHistory />} />
           </Route>
           <Route element={<AuthRoute role="COACH" />}>
             <Route path={ROUTES.COACH} element={<Coach />} />
             <Route path={ROUTES.SCHEDULE} element={<Schedule />} />
+            <Route path={ROUTES.COACH_HISTORY} element={<CoachHistory />} />
             <Route path={`${ROUTES.COACH_SHEET}/:id`} element={<CoachSheet />} />
             <Route path={`${ROUTES.HISTORY_SHEET}/:id`} element={<HistorySheet />} />
           </Route>
