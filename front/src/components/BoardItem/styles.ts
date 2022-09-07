@@ -98,7 +98,7 @@ const BottomSection = styled.div`
   }
 `;
 
-const MenuButton = styled.button<{ color: string; buttonDisabled?: boolean }>`
+const MenuButton = styled.button<{ color: string; isButtonDisabled?: boolean }>`
   width: 100px;
   height: 25px;
   border: none;
@@ -114,7 +114,7 @@ const MenuButton = styled.button<{ color: string; buttonDisabled?: boolean }>`
   }
 
   ${(props) =>
-    props.buttonDisabled === true &&
+    props.isButtonDisabled === true &&
     css`
       background-color: ${({ theme }) => theme.colors.GRAY_200};
       color: ${({ theme }) => theme.colors.GRAY_500};
