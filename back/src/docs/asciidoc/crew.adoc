@@ -8,13 +8,36 @@
 == home
 * link:index.html[목록으로 가기]
 
-[[find-all-coaches]]
 == 크루가 자신의 히스토리 조회
+=== 크루가 자신의 히스토리 조회 성공
+operation::find-own-reservations[]
+=== 크루가 자신의 히스토리 조회 실패
 
 == 크루가 자신의 면담시트 조회
+=== 크루가 자신의 면담시트 조회 성공
+operation::find-own-sheets[]
+=== 크루가 자신의 면담시트 조회 실패
+==== 면담 아이디가 존재하지 않는 경우 404
+include::{snippets}/find-own-sheets-notFoundReservation/http-response.adoc[]
 
 == 크루가 자신의 면담시트 답변 수정
+=== 크루가 자신의 면담시트 답변 수정 성공
+operation::update-sheet-answer-notSubmit[]
+operation::update-sheet-answer-submit[]
+=== 크루가 자신의 면담시트 답변 수정 실패
 
 == 코치가 크루의 히스토리 조회
+=== 코치가 크루의 히스토리 조회 성공
+operation::find-crew-sheets[]
+=== 코치가 크루의 히스토리 조회 실패
+==== 크루 아이디가 존재하지 않는 경우 404
+include::{snippets}/find-crew-sheets-notFoundCrew/http-response.adoc[]
 
 == 코치가 크루의 면담시트 조회
+=== 코치가 크루의 면담시트 조회 성공
+operation::find-crew-reservations[]
+=== 코치가 크루의 면담시트 조회 실패
+==== 존재하지 않는 크루 아이디 404
+include::{snippets}/find-crew-reservations-notFoundCrew/http-response.adoc[]
+==== 존재하지 않는 면담 아이디 404
+include::{snippets}/find-crew-reservations-notFoundReservation/http-response.adoc[]

@@ -497,7 +497,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v2/reservations HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ1JFVyIsImlkIjoxLCJpYXQiOjE2NjI1MDU2NDYsImV4cCI6MTY2MjUxMjg0Nn0.f0hI_08oWwKJA9m9flsvyCn2ILPmqmAdXWv1rFfrqLA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwicm9sZSI6IkNSRVciLCJpYXQiOjE2NjI1MDg3NTQsImV4cCI6MTY2MjUxNTk1NH0.Wf5WmPp2hLYJwZfI2ZWy8hSt8ifGxnCsoJVk-xNjBKs
 Content-Type: application/json
 Host: api.teatime.pe.kr
 Content-Length: 22
@@ -516,7 +516,7 @@ Content-Length: 22
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Location: http://localhost:52138/api/v2/reservations/1</code></pre>
+Location: http://localhost:62416/api/v2/reservations/1</code></pre>
 </div>
 </div>
 </div>
@@ -554,7 +554,7 @@ Content-Length: 59
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v2/reservations/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ09BQ0giLCJpZCI6MSwiaWF0IjoxNjYyNTA1NjQ2LCJleHAiOjE2NjI1MTI4NDZ9.piF-reDfZ3HZtPHjJWyEwRQvXWcW-21_jJf2GksHfXc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwicm9sZSI6IkNPQUNIIiwiaWF0IjoxNjYyNTA4NzU0LCJleHAiOjE2NjI1MTU5NTR9.BlUWZPuQ-0U36MxRiIF9m-hOdf7wlLnXsxeK_W29YSg
 Content-Type: application/json
 Host: api.teatime.pe.kr
 Content-Length: 26
@@ -626,7 +626,7 @@ Content-Length: 57
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v2/reservations/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ1JFVyIsImlkIjoxLCJpYXQiOjE2NjI1MDU2NDYsImV4cCI6MTY2MjUxMjg0Nn0.f0hI_08oWwKJA9m9flsvyCn2ILPmqmAdXWv1rFfrqLA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwicm9sZSI6IkNSRVciLCJpYXQiOjE2NjI1MDg3NTQsImV4cCI6MTY2MjUxNTk1NH0.Wf5WmPp2hLYJwZfI2ZWy8hSt8ifGxnCsoJVk-xNjBKs
 Content-Type: application/json
 Host: api.teatime.pe.kr</code></pre>
 </div>
@@ -665,8 +665,19 @@ Content-Length: 56
 </div>
 <div class="sect3">
 <h4 id="_크루가_진행_중인_면담을_취소하는_경우_400"><a class="link" href="#_크루가_진행_중인_면담을_취소하는_경우_400">크루가 진행 중인 면담을 취소하는 경우 400</a></h4>
-<div class="paragraph">
-<p>Unresolved directive in reservation.adoc - include::/Users/youngwooyoo/Desktop/2022-teatime/back/build/generated-snippets/reserve-approve-crewCancelInProgress/http-response.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 57
+
+{
+  "message" : "예약을 취소할 수 없습니다."
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -682,7 +693,7 @@ Content-Length: 56
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v2/reservations/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ09BQ0giLCJpZCI6MSwiaWF0IjoxNjYyNTA1NjQ2LCJleHAiOjE2NjI1MTI4NDZ9.piF-reDfZ3HZtPHjJWyEwRQvXWcW-21_jJf2GksHfXc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwicm9sZSI6IkNPQUNIIiwiaWF0IjoxNjYyNTA4NzUzLCJleHAiOjE2NjI1MTU5NTN9.KCQYxtK4DZluJIlXSRYrhUntXOL3rbHDgUehXzFzykE
 Content-Type: application/json
 Host: api.teatime.pe.kr</code></pre>
 </div>
@@ -726,7 +737,7 @@ Content-Length: 56
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-09-07 08:06:57 +0900
+Last updated 2022-09-07 08:08:33 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
