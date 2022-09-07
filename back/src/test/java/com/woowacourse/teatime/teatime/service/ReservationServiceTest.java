@@ -31,11 +31,11 @@ import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
+import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
-import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -133,7 +133,8 @@ class ReservationServiceTest {
 
         assertAll(
                 () -> assertThat(reservationRepository.findAll()).hasSize(1),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).hasSize(1),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -149,7 +150,8 @@ class ReservationServiceTest {
 
         assertAll(
                 () -> assertThat(reservationRepository.findAll()).hasSize(1),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).hasSize(1),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -164,7 +166,8 @@ class ReservationServiceTest {
 
         assertAll(
                 () -> assertThat(reservationRepository.findAll()).hasSize(1),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).hasSize(1),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -177,7 +180,8 @@ class ReservationServiceTest {
         reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW"));
 
         assertAll(
-                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).isNotEmpty(),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).isNotEmpty(),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -362,8 +366,10 @@ class ReservationServiceTest {
         // then
         assertAll(
                 () -> assertThat(reservationRepository.findAll()).hasSize(2),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(APPROVED)).hasSize(1),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1)
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(APPROVED))).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).hasSize(1)
         );
     }
 

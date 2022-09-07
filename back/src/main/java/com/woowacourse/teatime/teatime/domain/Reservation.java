@@ -98,7 +98,7 @@ public class Reservation {
     }
 
     private void validateCanUpdateToInProgress() {
-        if (isBefore()) {
+        if (!isBeforeFromNow()) {
             throw new UnableToInProgressReservationException(NOT_COME_RESERVATION_TIME_MESSAGE);
         }
         if (!isReservationStatus(ReservationStatus.APPROVED)) {
@@ -106,8 +106,8 @@ public class Reservation {
         }
     }
 
-    private boolean isBefore() {
-        return LocalDateTime.now().isBefore(getScheduleDateTime());
+    public boolean isBeforeFromNow() {
+        return getScheduleDateTime().isBefore(LocalDateTime.now());
     }
 
     public void updateReservationStatusToDone() {
