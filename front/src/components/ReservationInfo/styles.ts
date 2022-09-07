@@ -7,8 +7,8 @@ const Name = styled.p`
 const Image = styled.img`
   width: 50px;
   height: 50px;
-  border-radius: 50%;
   margin-bottom: 6px;
+  border-radius: 50%;
   border: 2px solid white;
   box-shadow: 3px 2px 3px rgb(190, 190, 190);
 `;
