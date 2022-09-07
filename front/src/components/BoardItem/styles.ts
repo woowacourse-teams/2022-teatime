@@ -81,16 +81,24 @@ const BottomSection = styled.div`
   div {
     display: flex;
     align-items: center;
+    width: calc(100% - 100px);
+    padding-right: 5px;
     cursor: pointer;
-
-    :hover {
-      opacity: 0.6;
+    
+    &:hover {
+      opacity: 0.5;
       transition: ease-in-out 0.2s;
+    }
+
+    span {
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 `;
 
-const MenuButton = styled.button<{ color: string; buttonDisabled?: boolean }>`
+const MenuButton = styled.button<{ color: string; isButtonDisabled?: boolean }>`
   width: 100px;
   height: 25px;
   border: none;
@@ -101,12 +109,12 @@ const MenuButton = styled.button<{ color: string; buttonDisabled?: boolean }>`
   cursor: pointer;
 
   &:hover {
-    opacity: 0.6;
+    opacity: 0.5;
     transition: ease-in-out 0.2s;
   }
 
   ${(props) =>
-    props.buttonDisabled === true &&
+    props.isButtonDisabled === true &&
     css`
       background-color: ${({ theme }) => theme.colors.GRAY_200};
       color: ${({ theme }) => theme.colors.GRAY_500};

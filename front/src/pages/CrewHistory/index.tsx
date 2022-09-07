@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import { UserStateContext } from '@context/UserProvider';
@@ -73,7 +74,10 @@ const CrewHistory = () => {
       });
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -87,7 +91,10 @@ const CrewHistory = () => {
         });
         setHistoryList(data);
       } catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, []);

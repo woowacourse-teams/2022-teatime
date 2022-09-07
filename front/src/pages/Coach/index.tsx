@@ -100,13 +100,21 @@ const Coach = () => {
       sortBoardItemByTime('approved');
       showSnackbar({ message: '승인되었습니다. ✅' });
     } catch (error) {
-      alert('승인 에러');
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
-  const handleShowContents = (index: number, reservationId: number, crewId?: number) => {
-    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: crewId });
+  const handleShowApprovedContents = (index: number, reservationId: number, crewId?: number) => {
+    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: { crewId } });
+  };
+
+  const handleShowInProgressContents = (index: number, reservationId: number, crewId?: number) => {
+    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, {
+      state: { crewId, hasCompleteButton: true },
+    });
   };
 
   const handleClickProfile = (crewId: number) => {
@@ -132,8 +140,10 @@ const Coach = () => {
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
-      alert('거절 기능 에러');
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -151,30 +161,10 @@ const Coach = () => {
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
-      alert('취소 에러');
-      console.log(error);
-    }
-  };
-
-  const handleFinish = async (index: number, reservationId: number) => {
-    if (!confirm('면담을 완료하시겠습니까?')) return;
-
-    try {
-      await api.put(
-        `/api/v2/reservations/${reservationId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        }
-      );
-
-      deleteBoardItem('inProgress', index);
-      showSnackbar({ message: '완료되었습니다. ✅' });
-    } catch (error) {
-      alert(error);
-      console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
     }
   };
 
@@ -222,15 +212,15 @@ const Coach = () => {
       buttonName: '내용보기',
       color: theme.colors.PURPLE_300,
       draggedColor: theme.colors.PURPLE_100,
-      handleClickMenuButton: handleShowContents,
+      handleClickMenuButton: handleShowApprovedContents,
       handleClickCancelButton: handleCancel,
     },
     inProgress: {
       title: '진행중인 일정',
-      buttonName: '면담완료',
+      buttonName: '내용보기',
       color: theme.colors.GREEN_700,
       draggedColor: theme.colors.GREEN_100,
-      handleClickMenuButton: handleFinish,
+      handleClickMenuButton: handleShowInProgressContents,
       handleClickCancelButton: handleCancel,
     },
   };
@@ -295,7 +285,7 @@ const Coach = () => {
                   image={crew.crewImage}
                   personName={crew.crewName}
                   buttonName={buttonName}
-                  buttonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
+                  isButtonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
                   color={color}
                   draggedColor={draggedColor}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}

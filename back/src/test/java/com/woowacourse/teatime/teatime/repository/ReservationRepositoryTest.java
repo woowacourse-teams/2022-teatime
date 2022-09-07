@@ -1,9 +1,10 @@
 package com.woowacourse.teatime.teatime.repository;
 
-import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.BEFORE_APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.LOCAL_DATE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,6 +14,7 @@ import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
+import com.woowacourse.teatime.util.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,16 +104,16 @@ class ReservationRepositoryTest {
         assertThat(reservations).hasSize(0);
     }
 
-    @DisplayName("승인된 예약들을 모두 조회한다.")
+    @DisplayName("오늘에 해당하는 승인된 예약들을 모두 조회한다.")
     @Test
-    void findAllByReservationStatus() {
+    void findAllApprovedReservationsBetween() {
         // given
         Coach jason = coachRepository.save(getCoachJason());
         Schedule jasonSchedule1 = scheduleRepository.save(new Schedule(jason, DomainFixture.DATE_TIME));
         Schedule brownSchedule2 = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME.plusDays(1)));
 
-        Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
-        Reservation reservation2 = reservationRepository.save(new Reservation(jasonSchedule1, crew));
+        Reservation reservation1 = reservationRepository.save(new Reservation(jasonSchedule1, crew));
+        Reservation reservation2 = reservationRepository.save(new Reservation(brownSchedule2, crew));
         reservationRepository.save(new Reservation(brownSchedule2, crew));
 
         boolean isApproved = true;
@@ -120,10 +122,10 @@ class ReservationRepositoryTest {
 
         // when
         List<Reservation> approvedReservations
-                = reservationRepository.findAllByReservationStatus(APPROVED);
+                = reservationRepository.findAllApprovedReservationsBetween(DATE_TIME, Date.findLastTime(LOCAL_DATE));
 
         // then
-        assertThat(approvedReservations).hasSize(2);
+        assertThat(approvedReservations).hasSize(1);
     }
 
     @DisplayName("해당 시간대 사이의 조건에 맞는 모든 면담을 조회한다. - 면담 상태 : APPROVED, 시트 상태 : WRITING")

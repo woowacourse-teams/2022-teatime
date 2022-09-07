@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Loading from '@components/Loading';
 import { UserDispatchContext } from '@context/UserProvider';
@@ -23,7 +24,10 @@ const Certification = () => {
         showSnackbar({ message: '로그인되었습니다. ✅' });
         navigate(`/${userData.role.toLowerCase()}`, { replace: true });
       } catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
       }
     })();
   }, []);
