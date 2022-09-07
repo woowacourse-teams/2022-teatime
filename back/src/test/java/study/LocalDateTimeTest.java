@@ -14,6 +14,7 @@ public class LocalDateTimeTest {
     @ParameterizedTest
     @CsvSource({"2022, 13, 1", "2022, 1, 500"})
     void validate(int year, int month, int dayOfMonth) {
+
         assertThatThrownBy(() -> LocalDateTime.of(year, month, dayOfMonth, 1, 1))
                 .isInstanceOf(DateTimeException.class);
     }
