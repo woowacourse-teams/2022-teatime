@@ -82,6 +82,11 @@ const BottomSection = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
+
+    :hover {
+      opacity: 0.6;
+      transition: ease-in-out 0.2s;
+    }
   }
 `;
 
