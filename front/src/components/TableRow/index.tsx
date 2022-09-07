@@ -2,7 +2,7 @@ import { getMonthDate, getHourMinutes } from '@utils/date';
 import * as S from './styles';
 
 import ScheduleIcon from '@assets/schedule.svg';
-import TrashIcon from '@assets/trash.svg';
+import CancelIcon from '@assets/cancel.svg';
 
 interface TableRowProps {
   id: number;
@@ -50,14 +50,14 @@ const TableRow = ({
       </td>
       <td>{date}</td>
       <td>{time}</td>
-      <td>
-        {isCrew && (
+      {isCrew && (
+        <td>
           <S.Icon src={ScheduleIcon} alt="스캐줄 아이콘" onClick={() => onClickSheet?.(id)} />
-        )}
-        {isEditStatus && (
-          <S.Icon src={TrashIcon} alt="휴지통 아이콘" onClick={() => onClickDelete?.(id)} />
-        )}
-      </td>
+          {isEditStatus && (
+            <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickDelete?.(id)} />
+          )}
+        </td>
+      )}
     </tr>
   );
 };

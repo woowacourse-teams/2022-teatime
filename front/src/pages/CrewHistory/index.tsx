@@ -56,7 +56,7 @@ const CrewHistory = () => {
   };
 
   const deleteReservation = async (reservationId: number) => {
-    if (!confirm('면담을 삭제하시겠습니까?')) return;
+    if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
       await api.delete(`/api/v2/reservations/${reservationId}`, {
@@ -65,9 +65,14 @@ const CrewHistory = () => {
         },
       });
       setHistoryList((prevHistory) => {
-        return prevHistory.filter((history) => history.reservationId !== reservationId);
+        return prevHistory.map((history) => {
+          if (history.reservationId === reservationId) {
+            history.status = 'CANCELED';
+          }
+          return history;
+        });
       });
-      showSnackbar({ message: '삭제되었습니다. 🗑' });
+      showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);

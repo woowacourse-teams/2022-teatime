@@ -7,10 +7,10 @@ const Name = styled.p`
 const Image = styled.img`
   width: 50px;
   height: 50px;
-  border-radius: 8px;
   margin-bottom: 6px;
+  border-radius: 50%;
   border: 2px solid white;
-  box-shadow: 0 0 10px rgb(190, 190, 190);
+  box-shadow: 3px 2px 3px rgb(190, 190, 190);
 `;
 
 const DateWrapper = styled.div`
