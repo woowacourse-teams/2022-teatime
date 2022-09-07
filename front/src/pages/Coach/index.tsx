@@ -1,23 +1,27 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
+import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
+import useWindowFocus from '@hooks/useWindowFocus';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import type { CrewListMap } from '@typings/domain';
 import { ROUTES } from '@constants/index';
+import { getDateTime } from '@utils/date';
 import api from '@api/index';
-
-import ScheduleIcon from '@assets/schedule-white.svg';
 import theme from '@styles/theme';
 import * as S from './styles';
+
+import ScheduleIcon from '@assets/schedule-white.svg';
 
 interface BoardItemValue {
   title: string;
   buttonName: string;
   color: string;
   draggedColor: string;
-  handleClickMenuButton: (index: number, id: number) => void;
+  handleClickMenuButton: (index: number, reservationId: number, crewId?: number) => void;
   handleClickCancelButton: (status: string, index: number, id: number) => void;
 }
 
@@ -26,8 +30,11 @@ interface BoardItem {
 }
 
 const Coach = () => {
-  const { id: coachId } = useParams();
   const navigate = useNavigate();
+  const isWindowFocused = useWindowFocus();
+  const showSnackbar = useContext(SnackbarContext);
+  const { userData } = useContext(UserStateContext);
+  const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -65,7 +72,7 @@ const Coach = () => {
   const sortBoardItemByTime = (boardName: string) => {
     setCrews((allBoards) => {
       const copyBoard = [...allBoards[boardName]];
-      copyBoard.sort((a, b) => Number(dayjs.tz(a.dateTime)) - Number(dayjs.tz(b.dateTime)));
+      copyBoard.sort((a, b) => Number(new Date(a.dateTime)) - Number(new Date(b.dateTime)));
 
       return {
         ...allBoards,
@@ -76,33 +83,54 @@ const Coach = () => {
 
   const handleApprove = async (index: number, reservationId: number) => {
     try {
-      await api.post(`/api/reservations/${reservationId}`, {
-        coachId,
-        isApproved: true,
-      });
+      await api.post(
+        `/api/v2/reservations/${reservationId}`,
+        {
+          isApproved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        }
+      );
 
+      showSnackbar({ message: '승인되었습니다. ✅' });
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
+      showSnackbar({ message: '승인되었습니다. ✅' });
     } catch (error) {
       alert('승인 에러');
       console.log(error);
     }
   };
 
-  const handleShowContents = (index: number, reservationId: number) => {
-    navigate(`${ROUTES.VIEW_SHEET}/${reservationId}`);
+  const handleShowContents = (index: number, reservationId: number, crewId?: number) => {
+    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: crewId });
+  };
+
+  const handleClickProfile = (crewId: number) => {
+    navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`);
   };
 
   const handleReject = async (status: string, index: number, reservationId: number) => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
-      await api.post(`/api/reservations/${reservationId}`, {
-        coachId,
-        isApproved: false,
-      });
+      await api.post(
+        `/api/v2/reservations/${reservationId}`,
+        {
+          isApproved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        }
+      );
 
       deleteBoardItem(status, index);
+      showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
       alert('거절 기능 에러');
       console.log(error);
@@ -114,16 +142,38 @@ const Coach = () => {
       return;
 
     try {
-      await api.delete(`/api/reservations/${reservationId}`, {
+      await api.delete(`/api/v2/reservations/${reservationId}`, {
         headers: {
-          applicantId: Number(coachId),
-          role: 'COACH',
+          Authorization: `Bearer ${userData?.token}`,
         },
       });
 
       deleteBoardItem(status, index);
+      showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
       alert('취소 에러');
+      console.log(error);
+    }
+  };
+
+  const handleFinish = async (index: number, reservationId: number) => {
+    if (!confirm('면담을 완료하시겠습니까?')) return;
+
+    try {
+      await api.put(
+        `/api/v2/reservations/${reservationId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        }
+      );
+
+      deleteBoardItem('inProgress', index);
+      showSnackbar({ message: '완료되었습니다. ✅' });
+    } catch (error) {
+      alert(error);
       console.log(error);
     }
   };
@@ -146,11 +196,11 @@ const Coach = () => {
     if (from === to) return;
     if (from === 'inProgress' || to === 'beforeApproved') return;
     if (from === 'beforeApproved' && to === 'inProgress') return;
-    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) > dayjs()) {
+    if (to === 'inProgress' && getDateTime(draggedItem.dateTime) > new Date()) {
       alert('아직 옮길 수 없어요.');
       return;
     }
-    if (to === 'inProgress' && dayjs.tz(draggedItem.dateTime) < dayjs()) {
+    if (to === 'inProgress' && getDateTime(draggedItem.dateTime) < new Date()) {
       moveBoardItem(from, to, itemId);
       return;
     }
@@ -177,34 +227,44 @@ const Coach = () => {
     },
     inProgress: {
       title: '진행중인 일정',
-      buttonName: '이력작성',
+      buttonName: '면담완료',
       color: theme.colors.GREEN_700,
       draggedColor: theme.colors.GREEN_100,
-      handleClickMenuButton: () => console.log('이력작성'),
+      handleClickMenuButton: handleFinish,
       handleClickCancelButton: handleCancel,
     },
   };
 
   useEffect(() => {
-    (async () => {
+    const getReservationList = async () => {
       try {
-        const { data: crewListMap } = await api.get('/api/coaches/me/reservations', {
-          headers: { coachId: Number(coachId) },
+        const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations', {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
         });
-
         setCrews(crewListMap);
       } catch (error) {
-        alert('크루 목록 get 에러');
-        console.log(error);
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch({ type: 'DELETE_USER' });
+            showSnackbar({ message: '토큰이 만료되었습니다. 다시 로그인해주세요.' });
+            navigate(ROUTES.HOME);
+            return;
+          }
+          alert(error);
+        }
       }
-    })();
-  }, []);
+    };
+
+    isWindowFocused && getReservationList();
+  }, [isWindowFocused]);
 
   return (
     <S.Layout>
       <S.BoardListHeader>
-        <S.AddScheduleButton onClick={() => navigate(`/schedule/41`)}>
-          <img src={ScheduleIcon} alt="캘린더 아이콘" />
+        <S.AddScheduleButton onClick={() => navigate(ROUTES.SCHEDULE)}>
+          <img src={ScheduleIcon} alt="일정 아이콘" />
           <span>캘린더 관리</span>
         </S.AddScheduleButton>
       </S.BoardListHeader>
@@ -235,9 +295,11 @@ const Coach = () => {
                   image={crew.crewImage}
                   personName={crew.crewName}
                   buttonName={buttonName}
+                  buttonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
                   color={color}
                   draggedColor={draggedColor}
-                  onClickMenu={() => handleClickMenuButton(index, crew.reservationId)}
+                  onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}
+                  onClickProfile={() => handleClickProfile(crew.crewId)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
                   onDragStart={(e) => handleDragStart(e, index)}
                 />

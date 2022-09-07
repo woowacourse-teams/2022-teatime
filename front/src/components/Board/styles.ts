@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const BoardContainer = styled.div`
+const BoardContainer = styled.div<{ isDraggingOver: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,6 +9,12 @@ const BoardContainer = styled.div`
   padding: 15px;
   background-color: ${({ theme }) => theme.colors.GRAY_100};
   border-radius: 10px;
+
+  ${(props) =>
+    props.isDraggingOver &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GRAY_150};
+    `}
 `;
 
 const TitleCircle = styled.div``;
@@ -39,9 +45,10 @@ const TitleContainer = styled.div<{ color: string }>`
     align-items: center;
     justify-content: center;
     margin-left: 15px;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-weight: bold;
     background-color: ${({ theme }) => theme.colors.GRAY_200};
     color: ${({ theme }) => theme.colors.GRAY_600};
   }

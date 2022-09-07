@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import dayjs from 'dayjs';
 
+import { getHourMinutes, getMonthDate } from '@utils/date';
 import ClockIcon from '@assets/clock.svg';
 import CloseIcon from '@assets/close.svg';
 import ScheduleIcon from '@assets/schedule.svg';
@@ -11,9 +11,11 @@ interface BoardItemProps {
   image: string;
   personName: string;
   buttonName: string;
+  buttonDisabled?: boolean;
   color: string;
   draggedColor: string;
   onClickMenu: () => void;
+  onClickProfile: () => void;
   onClickCancel: () => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
 }
@@ -23,21 +25,23 @@ const BoardItem = ({
   image,
   personName,
   buttonName,
+  buttonDisabled,
   color,
   draggedColor,
   onClickMenu,
+  onClickProfile,
   onClickCancel,
   onDragStart,
 }: BoardItemProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const date = dayjs.tz(dateTime).format('MM월 DD일');
-  const time = dayjs.tz(dateTime).format('HH:mm');
+  const date = getMonthDate(dateTime);
+  const time = getHourMinutes(dateTime);
 
-  const onDrag = () => {
+  const handleDrag = () => {
     setIsDragging(true);
   };
 
-  const onDragEnd = () => {
+  const handleDragEnd = () => {
     setIsDragging(false);
   };
 
@@ -47,8 +51,8 @@ const BoardItem = ({
       color={color}
       draggedColor={draggedColor}
       onDragStart={onDragStart}
-      onDrag={onDrag}
-      onDragEnd={onDragEnd}
+      onDrag={handleDrag}
+      onDragEnd={handleDragEnd}
       isDragging={isDragging}
     >
       <S.TopSection>
@@ -66,12 +70,14 @@ const BoardItem = ({
           <img src={CloseIcon} alt="취소 아이콘" onClick={onClickCancel} />
         </S.CloseIconWrapper>
       </S.TopSection>
-      <S.BottomSection color={color}>
-        <div>
+      <S.BottomSection>
+        <div onClick={onClickProfile}>
           <S.ProfileImage src={image} alt={`${personName} 이미지`} />
           <span>{personName}</span>
         </div>
-        <button onClick={onClickMenu}>{buttonName}</button>
+        <S.MenuButton onClick={onClickMenu} buttonDisabled={buttonDisabled} color={color}>
+          {buttonName}
+        </S.MenuButton>
       </S.BottomSection>
     </S.BoardItemContainer>
   );

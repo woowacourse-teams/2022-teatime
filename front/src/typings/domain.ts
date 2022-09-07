@@ -1,11 +1,20 @@
-import dayjs from 'dayjs';
+type UserRole = 'CREW' | 'COACH';
 
+type SheetStatus = 'WRITING' | 'SUBMITTED';
+
+interface UserInfo {
+  image: string;
+  name: string;
+  role: UserRole;
+  token: string;
+}
 interface Crew {
   reservationId: number;
   crewId: number;
   crewName: string;
   crewImage: string;
   dateTime: string;
+  sheetStatus?: SheetStatus;
 }
 interface Coach {
   id: number;
@@ -15,31 +24,87 @@ interface Coach {
 }
 
 interface MonthYear {
-  startDate: dayjs.Dayjs;
-  firstDOW: number; // 0 === Sunday
-  lastDate: number;
   month: string;
   year: string;
+  startDate: Date;
+  firstDOW: number;
+  lastDate: number;
 }
 
-interface Schedule {
+interface Reservation {
+  dateTime: string;
+  coachName: string;
+  coachImage: string;
+  status: string;
+  sheets: Sheets[];
+}
+
+interface CrewHistory {
+  reservationId: number;
+  coachName: string;
+  coachImage: string;
+  dateTime: string;
+  status: string;
+}
+
+interface CoachHistory {
+  reservationId: number;
+  crewName: string;
+  crewImage: string;
+  dateTime: string;
+  status: string;
+}
+
+interface HistoryList {
+  reservationId: number;
+  coachName: string;
+  coachImage: string;
+  dateTime: string;
+  sheets: Sheets[];
+}
+
+interface Sheets {
+  questionNumber: number;
+  questionContent: string;
+  answerContent: string;
+}
+
+interface TimeSchedule {
   id: number;
   dateTime: string;
   isPossible?: boolean;
   isSelected?: boolean;
 }
 
-interface ReservationInfo {
-  dateTime: string;
-  coachName: string;
-  coachImage: string;
-  sheets: Sheets[];
+interface DaySchedule {
+  day: number;
+  schedules: TimeSchedule[];
 }
 
-type Sheets = { questionNumber: number; questionContent: string; answerContent: string };
+interface ScheduleInfo {
+  monthSchedule: MonthScheduleMap;
+  daySchedule: TimeSchedule[];
+  date: string;
+}
 
-type DaySchedule = { day: number; schedules: Schedule[] };
+type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
 
-export { Crew, Coach, MonthYear, Schedule, DaySchedule, ReservationInfo, CrewListMap, Sheets };
+export {
+  UserInfo,
+  UserRole,
+  Crew,
+  Coach,
+  MonthYear,
+  ScheduleInfo,
+  DaySchedule,
+  TimeSchedule,
+  Reservation,
+  MonthScheduleMap,
+  CrewListMap,
+  Sheets,
+  CrewHistory,
+  HistoryList,
+  CoachHistory,
+};

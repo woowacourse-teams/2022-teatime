@@ -4,8 +4,8 @@ const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 250px;
-  height: 320px;
+  width: 100%;
+  height: 350px;
   padding: 35px 16px;
   border-radius: 20px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
@@ -51,6 +51,38 @@ const CardContainer = styled.div`
 
   &:hover {
     transform: scale(1.03);
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    height: 250px;
+    padding: 20px 10px;
+
+    img {
+      width: 70px;
+      height: 70px;
+    }
+
+    p {
+      display: none;
+    }
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    height: 200px;
+    padding: 20px 10px;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    p {
+      display: none;
+    }
+
+    button {
+      font-size: 14px;
+    }
   }
 `;
 
