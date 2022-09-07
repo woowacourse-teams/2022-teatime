@@ -20,6 +20,7 @@ const theme = {
     GRAY_600: '#4b5563',
     GRAY_800: '#333333',
     RED_300: '#e6aca8',
+    RED_400: '#e5837c',
     RED_600: '#eb0202',
     GREEN_100: '#eaf0da',
     GREEN_300: '#cce6ba',
