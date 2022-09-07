@@ -11,7 +11,7 @@ interface BoardItemProps {
   image: string;
   personName: string;
   buttonName: string;
-  buttonDisabled?: boolean;
+  isButtonDisabled?: boolean;
   color: string;
   draggedColor: string;
   onClickMenu: () => void;
@@ -25,7 +25,7 @@ const BoardItem = ({
   image,
   personName,
   buttonName,
-  buttonDisabled,
+  isButtonDisabled,
   color,
   draggedColor,
   onClickMenu,
@@ -75,7 +75,7 @@ const BoardItem = ({
           <S.ProfileImage src={image} alt={`${personName} 이미지`} />
           <span>{personName}</span>
         </div>
-        <S.MenuButton onClick={onClickMenu} buttonDisabled={buttonDisabled} color={color}>
+        <S.MenuButton onClick={onClickMenu} isButtonDisabled={isButtonDisabled} color={color}>
           {buttonName}
         </S.MenuButton>
       </S.BottomSection>
