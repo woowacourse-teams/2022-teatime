@@ -1,6 +1,8 @@
 package com.woowacourse.teatime.teatime.infrastructure;
 
-import static com.woowacourse.teatime.teatime.domain.ReservationStatus.*;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
+import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
@@ -89,8 +91,10 @@ class SchedulerTest {
         // then
         assertAll(
                 () -> assertThat(reservationRepository.findAll()).hasSize(2),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(APPROVED)).hasSize(1),
-                () -> assertThat(reservationRepository.findAllByReservationStatus(CANCELED)).hasSize(1)
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(APPROVED))).hasSize(1),
+                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
+                        coach.getId(), List.of(CANCELED))).hasSize(1)
 
         );
     }

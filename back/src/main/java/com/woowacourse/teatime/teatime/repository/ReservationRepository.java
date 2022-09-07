@@ -19,7 +19,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(Long crewId,
                                                                                        ReservationStatus status);
 
-    List<Reservation> findAllByReservationStatus(ReservationStatus status);
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.reservationStatus = 'APPROVED' "
+            + "AND r.schedule.localDateTime >= :startTime "
+            + "AND r.schedule.localDateTime < :endTime")
+    List<Reservation> findAllApprovedReservationsBetween(LocalDateTime startTime, LocalDateTime endTime);
 
     List<Reservation> findByScheduleCoachIdAndReservationStatusIn(Long coachId, List<ReservationStatus> statuses);
 
