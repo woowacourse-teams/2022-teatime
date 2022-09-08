@@ -14,7 +14,7 @@ const Container = styled.div<{ width?: string; height?: string }>`
 
   span {
     margin: 15px 0;
-    color: ${({ theme }) => theme.colors.GRAY_500};
+    color: ${({ theme }) => theme.colors.GRAY_300};
   }
 `;
 
