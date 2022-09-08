@@ -9,7 +9,6 @@ const Image = styled.img`
   height: 50px;
   margin-bottom: 6px;
   border-radius: 50%;
-  border: 2px solid white;
 `;
 
 const DateWrapper = styled.div`
