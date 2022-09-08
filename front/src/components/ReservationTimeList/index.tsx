@@ -75,7 +75,6 @@ const ReservationTimeList = ({
             <Conditional condition={selectedTimeId !== schedule.id}>
               <S.TimeBox
                 isPossible={schedule.isPossible}
-                aria-disabled={schedule.isPossible}
                 onClick={() => onClickTime(schedule.id)}
               >
                 {time}

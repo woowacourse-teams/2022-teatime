@@ -50,6 +50,7 @@ const Schedule = () => {
   } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
+  const [isSelectedAll, setIsSelectedAll] = useState(false);
   const [schedule, setSchedule] = useState<ScheduleInfo>({
     monthSchedule: {},
     daySchedule: [],
@@ -116,6 +117,7 @@ const Schedule = () => {
     openTimeList();
     selectDaySchedule(day);
     setSelectedDay(day);
+    setIsSelectedAll(false);
   };
 
   const handleClickTime = (dateTime: string) => {
@@ -131,7 +133,8 @@ const Schedule = () => {
     });
   };
 
-  const handleSelectAll = (isSelectedAll: boolean) => {
+  const handleSelectAll = () => {
+    setIsSelectedAll((prev) => !prev);
     setSchedule((allSchedules) => {
       const newSchedules = schedule.daySchedule.map((schedule) => {
         if (schedule.isPossible !== false) {
@@ -167,6 +170,22 @@ const Schedule = () => {
       };
     });
   };
+
+  useEffect(() => {
+    const initSelectedTime = () => {
+      setSchedule((allSchedules) => {
+        const newDaySchedule = [...schedule.daySchedule];
+        newDaySchedule.forEach((time) => (time.isSelected = time.isPossible));
+
+        return {
+          ...allSchedules,
+          daySchedule: newDaySchedule,
+        };
+      });
+    };
+
+    initSelectedTime();
+  }, [schedule.date]);
 
   useEffect(() => {
     (async () => {
@@ -210,6 +229,7 @@ const Schedule = () => {
           />
           {isOpenTimeList && (
             <ScheduleTimeList
+              isSelectedAll={isSelectedAll}
               date={schedule.date}
               daySchedule={schedule.daySchedule}
               onClickTime={handleClickTime}
