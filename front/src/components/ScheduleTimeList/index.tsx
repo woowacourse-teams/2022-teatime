@@ -28,6 +28,8 @@ const ScheduleTimeList = ({
   const showSnackbar = useContext(SnackbarContext);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
 
+  console.log('daySchedule', daySchedule);
+
   const getSelectedTimes = () => {
     return daySchedule.reduce((newArray, { isSelected, dateTime }) => {
       if (isSelected) {
@@ -87,14 +89,12 @@ const ScheduleTimeList = ({
         })}
       </S.ScrollContainer>
 
-      <Conditional condition={daySchedule.length !== 0}>
-        <S.ButtonContainer>
-          <S.CheckButton onClick={handleSelectAll}>
-            {isSelectedAll ? '전체 해제' : '전체 선택'}
-          </S.CheckButton>
-          <S.ConfirmButton onClick={handleUpdateDaySchedule}>확인</S.ConfirmButton>
-        </S.ButtonContainer>
-      </Conditional>
+      <S.ButtonContainer>
+        <S.CheckButton onClick={handleSelectAll}>
+          {isSelectedAll ? '전체 해제' : '전체 선택'}
+        </S.CheckButton>
+        <S.ConfirmButton onClick={handleUpdateDaySchedule}>확인</S.ConfirmButton>
+      </S.ButtonContainer>
     </S.TimeListContainer>
   );
 };
