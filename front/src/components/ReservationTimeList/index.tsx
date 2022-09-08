@@ -73,10 +73,7 @@ const ReservationTimeList = ({
             </Conditional>
 
             <Conditional condition={selectedTimeId !== schedule.id}>
-              <S.TimeBox
-                isPossible={schedule.isPossible}
-                onClick={() => onClickTime(schedule.id)}
-              >
+              <S.TimeBox isPossible={schedule.isPossible} onClick={() => onClickTime(schedule.id)}>
                 {time}
               </S.TimeBox>
             </Conditional>

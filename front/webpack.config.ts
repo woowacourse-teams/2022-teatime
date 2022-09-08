@@ -32,7 +32,7 @@ const config: webpack.Configuration = {
     publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
-    assetModuleFilename: 'images/[hash][ext][query]',
+    assetModuleFilename: 'images/[name].[hash][ext][query]',
     clean: true,
   },
   module: {
