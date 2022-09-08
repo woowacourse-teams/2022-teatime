@@ -1,3 +1,4 @@
+import Empty from '@components/Empty';
 import { useState } from 'react';
 import * as S from './styles';
 
@@ -40,7 +41,10 @@ const Board = ({ children, title, color, length, status, onDrop }: BoardProps) =
         <span>{title}</span>
         <div>{length}</div>
       </S.TitleContainer>
-      <S.ScrollContainer>{children}</S.ScrollContainer>
+      <S.ScrollContainer>
+        {!length && <Empty text={`아직 ${title}이 없어요.`} />}
+        {children}
+      </S.ScrollContainer>
     </S.BoardContainer>
   );
 };
