@@ -14,8 +14,6 @@ import api from '@api/index';
 import theme from '@styles/theme';
 import * as S from './styles';
 
-import ScheduleIcon from '@assets/schedule-white.svg';
-
 interface BoardItemValue {
   title: string;
   buttonName: string;
@@ -138,7 +136,7 @@ const Coach = () => {
       );
 
       deleteBoardItem(status, index);
-      showSnackbar({ message: '취소되었습니다. ✅' });
+      showSnackbar({ message: '거절되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
@@ -148,8 +146,7 @@ const Coach = () => {
   };
 
   const handleCancel = async (status: string, index: number, reservationId: number) => {
-    if (!confirm(status === 'approved' ? '예약을 취소하시겠습니까?' : '정말 삭제하시겠습니까?'))
-      return;
+    if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
       await api.delete(`/api/v2/reservations/${reservationId}`, {
@@ -187,7 +184,7 @@ const Coach = () => {
     if (from === 'inProgress' || to === 'beforeApproved') return;
     if (from === 'beforeApproved' && to === 'inProgress') return;
     if (to === 'inProgress' && getDateTime(draggedItem.dateTime) > new Date()) {
-      alert('아직 옮길 수 없어요.');
+      showSnackbar({ message: '진행 가능한 시간이 아닙니다. 🚫' });
       return;
     }
     if (to === 'inProgress' && getDateTime(draggedItem.dateTime) < new Date()) {
@@ -252,12 +249,6 @@ const Coach = () => {
 
   return (
     <S.Layout>
-      <S.BoardListHeader>
-        <S.AddScheduleButton onClick={() => navigate(ROUTES.SCHEDULE)}>
-          <img src={ScheduleIcon} alt="일정 아이콘" />
-          <span>캘린더 관리</span>
-        </S.AddScheduleButton>
-      </S.BoardListHeader>
       <S.BoardListContainer>
         {Object.keys(crews).map((status) => {
           const {

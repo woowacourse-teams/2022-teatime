@@ -5,7 +5,7 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -19,7 +19,6 @@ import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,7 @@ class SchedulerTest {
     @BeforeEach
     void setUp() {
         coach = coachRepository.save(getCoachJason());
-        crew = crewRepository.save(getCrew());
+        crew = crewRepository.save(getCrew1());
     }
 
     @DisplayName("승인된 예약을 진행중인 예약으로 변경한다.")

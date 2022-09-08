@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 
-import Crew from '@pages/Crew';
+import Crew from '@pages/CrewMain';
 import Reservation from '@pages/Reservation';
 import Home from '@pages/Home';
 import Certification from '@pages/Certification';
 import Schedule from '@pages/Schedule';
-import Coach from '@pages/Coach';
+import Coach from '@pages/CoachMain';
 import NotFound from '@pages/NotFound';
 import CrewSheet from '@pages/CrewSheet';
 import CoachSheet from '@pages/CoachSheet';
