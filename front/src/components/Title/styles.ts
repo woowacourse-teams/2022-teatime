@@ -5,7 +5,7 @@ const TitleWrapper = styled.div`
   justify-content: center;
   width: 100%;
   padding: 15px;
-  border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
+  background-color: ${({ theme }) => theme.colors.GRAY_100};
   border-radius: 10px;
 `;
 
@@ -21,7 +21,8 @@ const Title = styled.h1`
 
 const HighLightText = styled(Title)<{ hightlightColor?: string }>`
   margin: 0 10px;
-  background: linear-gradient(to top, #ffe400 50%, transparent 50%);
+  background: ${({ theme }) =>
+    `linear-gradient(to top, ${theme.colors.YELLOW_400} 50%, transparent 50%)`};
 `;
 
 export { TitleWrapper, Title, HighLightText };

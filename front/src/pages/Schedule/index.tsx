@@ -193,7 +193,7 @@ const Schedule = () => {
     <Frame>
       <S.ScheduleContainer>
         <Title
-          text="등록 가능한"
+          text="예약 가능한"
           highlightText={isOpenTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
