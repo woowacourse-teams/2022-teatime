@@ -3,7 +3,7 @@ package com.woowacourse.teatime.teatime.service;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_THREE;
@@ -69,7 +69,7 @@ class SheetServiceTest {
 
     @BeforeEach
     void setUp() {
-        crew = crewRepository.save(CREW);
+        crew = crewRepository.save(CREW1);
         coach = coachRepository.save(COACH_BROWN);
         schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
         reservation = reservationRepository.save(new Reservation(schedule, crew));

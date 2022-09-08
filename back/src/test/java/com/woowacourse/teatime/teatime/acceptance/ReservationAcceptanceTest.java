@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class ReservationAcceptanceTest extends AcceptanceTest {
+class ReservationAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
     private ScheduleService scheduleService;
@@ -46,7 +46,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     private Long scheduleId;
 
     public static Long 예약을_한다(ReservationReserveRequest request, String crewToken) {
-        ExtractableResponse<Response> response = postV2("/api/v2/reservations", request, crewToken);
+        ExtractableResponse<Response> response = post("/api/v2/reservations", request, crewToken);
         return Long.parseLong(response.header("Location").split("/reservations/")[1]);
     }
 
@@ -87,9 +87,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
                 .body(new ReservationReserveRequest(scheduleId))
-                .filter(document("reserve", requestFields(
-                        fieldWithPath("scheduleId").description("스케줄 아이디")
-                )))
+                .filter(document("reserve"))
                 .when().post("/api/v2/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
@@ -106,9 +104,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + coachToken)
                 .body(new ReservationApproveRequest(isApprove))
-                .filter(document("reserve-approve", requestFields(
-                        fieldWithPath("isApproved").description("승인 여부")
-                )))
+                .filter(document("reserve-approve"))
                 .when().post("/api/v2/reservations/{reservationId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());

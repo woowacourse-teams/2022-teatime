@@ -1,0 +1,42 @@
+= Reservation
+:toc: left
+:toclevels: 2
+:sectlinks:
+:source-highlighter: highlightjs
+
+[[home]]
+== home
+* link:index.html[목록으로 가기]
+
+[[find-all-coaches]]
+== 예약하기
+=== 예약하기 성공
+operation::reserve[]
+=== 예약하기 실패
+=== 스케쥴 아이디가 존재하지 않는 경우 404
+include::{snippets}/reserve-notFoundSchedule/http-response.adoc[]
+
+== 예약 승인 및 거절
+=== 예약 승인 및 거절 성공
+operation::reserve-approve[]
+=== 예약 승인 및 거절 실패
+==== 면담 아이디가 존재하지 않는 경우 404
+include::{snippets}/reserve-approve-notFoundReservation/http-response.adoc[]
+==== 이미 승인된 면담인 경우 400
+include::{snippets}/reserve-approve-alreadyApproved/http-response.adoc[]
+
+== 예약 취소
+=== 예약 취소 성공
+operation::reserve-cancel[]
+=== 예약 취소 실패
+==== 면담 아이디가 존재하지 않는 경우 404
+include::{snippets}/reserve-cancel-notFoundReservation/http-response.adoc[]
+==== 크루가 진행 중인 면담을 취소하는 경우 400
+include::{snippets}/reserve-cancel-crewCancelInProgress/http-response.adoc[]
+
+== 예약 완료
+=== 예약 완료 성공
+operation::reserve-finish[]
+=== 예약 완료 실패
+==== 면담 아이디가 존재하지 않는 경우 404
+include::{snippets}/reserve-finish-notFoundReservation/http-response.adoc[]
