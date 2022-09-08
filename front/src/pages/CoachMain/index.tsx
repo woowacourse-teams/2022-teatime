@@ -14,8 +14,6 @@ import api from '@api/index';
 import theme from '@styles/theme';
 import * as S from './styles';
 
-import ScheduleIcon from '@assets/schedule-white.svg';
-
 interface BoardItemValue {
   title: string;
   buttonName: string;
@@ -251,12 +249,6 @@ const Coach = () => {
 
   return (
     <S.Layout>
-      <S.BoardListHeader>
-        <S.AddScheduleButton onClick={() => navigate(ROUTES.SCHEDULE)}>
-          <img src={ScheduleIcon} alt="일정 아이콘" />
-          <span>캘린더 관리</span>
-        </S.AddScheduleButton>
-      </S.BoardListHeader>
       <S.BoardListContainer>
         {Object.keys(crews).map((status) => {
           const {
