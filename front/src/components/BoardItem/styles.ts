@@ -84,7 +84,7 @@ const BottomSection = styled.div`
     width: calc(100% - 100px);
     padding-right: 5px;
     cursor: pointer;
-    
+
     &:hover {
       opacity: 0.5;
       transition: ease-in-out 0.2s;
