@@ -50,15 +50,7 @@ const config: webpack.Configuration = {
         exclude: path.join(__dirname, 'node_modules'),
       },
       {
-        test: /\.css?$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.(png|svg|gif)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        test: /\.(png|svg|gif|woff)$/i,
         type: 'asset/resource',
       },
     ],
