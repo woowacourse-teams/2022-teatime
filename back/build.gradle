@@ -15,7 +15,12 @@ ext {
     snippetsDir = file('build/generated-snippets')
 }
 
+test {
+    outputs.dir snippetsDir
+}
+
 configurations {
+    asciidoctorExtensions
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -46,7 +51,9 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '12.0'
 
     //rest docs
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     //slack
     implementation 'com.slack.api:bolt:1.24.0'
@@ -68,13 +75,15 @@ dependencies {
     implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
 }
 
-asciidoctor {
-    dependsOn test
-    inputs.dir snippetsDir
-}
-
 asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
+}
+
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+    baseDirFollowsSourceFile()
+    dependsOn test
+    inputs.dir snippetsDir
 }
 
 task copyDocument(type: Copy) {
@@ -83,8 +92,14 @@ task copyDocument(type: Copy) {
     into file("src/main/resources/static/docs")
 }
 
-build {
+task buildDocument(type: Copy) {
     dependsOn copyDocument
+    from file("src/main/resources/static/docs")
+    into file("build/resources/main/static/docs")
+}
+
+bootJar {
+    dependsOn buildDocument
 }
 
 tasks.named('test') {
@@ -137,7 +152,7 @@ jacocoTestReport {
 sonarqube {
     properties {
         property "sonar.projectKey", "woowacourse-teams_2022-teatime_AYKcUDmP-LXZxO6IpXaj"
-        property "sonar.projectName" , "teatime-sonarqube"
+        property "sonar.projectName", "teatime-sonarqube"
         property "sonar.sources", "src" // 소스 경로
         property "sonar.language", "java" // 언어
         property "sonar.sourceEncoding", "UTF-8"

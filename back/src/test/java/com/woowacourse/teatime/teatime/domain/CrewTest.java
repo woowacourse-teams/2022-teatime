@@ -14,5 +14,4 @@ class CrewTest {
 
         assertThat(crew.getId()).isNull();
     }
-
 }

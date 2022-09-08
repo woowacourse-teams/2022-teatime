@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-class CrewAcceptanceTest extends AcceptanceTest {
+class CrewAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
     private CoachRepository coachRepository;
@@ -95,13 +95,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + crewToken)
-                .filter(document("find-own-reservations", responseFields(
-                        fieldWithPath("[].reservationId").description("면담 아이디"),
-                        fieldWithPath("[].coachName").description("코치 이름"),
-                        fieldWithPath("[].coachImage").description("코치 이미지"),
-                        fieldWithPath("[].dateTime").description("날짜"),
-                        fieldWithPath("[].status").description("상태")
-                )))
+                .filter(document("find-own-reservations"))
                 .when().get("/api/v2/crews/me/reservations")
                 .then().log().all()
                 .extract();
@@ -132,15 +126,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("crewId", crewId)
                 .header("Authorization", "Bearer " + coachToken)
-                .filter(document("find-crew-reservations", responseFields(
-                        fieldWithPath("[].reservationId").description("면담 아이디"),
-                        fieldWithPath("[].coachName").description("코치 이름"),
-                        fieldWithPath("[].coachImage").description("코치 이미지"),
-                        fieldWithPath("[].dateTime").description("날짜"),
-                        fieldWithPath("[].sheets[].questionNumber").description("질문 번호"),
-                        fieldWithPath("[].sheets[].questionContent").description("질문 내용"),
-                        fieldWithPath("[].sheets[].answerContent").description("답변 내용")
-                )))
+                .filter(document("find-crew-reservations"))
                 .when().get("/api/v2/crews/{crewId}/reservations")
                 .then().log().all()
                 .extract();
@@ -169,15 +155,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + crewToken)
-                .filter(document("find-own-sheets", responseFields(
-                        fieldWithPath("dateTime").description("날짜"),
-                        fieldWithPath("coachName").description("코치 이름"),
-                        fieldWithPath("coachImage").description("코치 이미지"),
-                        fieldWithPath("status").description("시트 상태"),
-                        fieldWithPath("sheets[].questionNumber").description("질문 번호"),
-                        fieldWithPath("sheets[].questionContent").description("질문 내용"),
-                        fieldWithPath("sheets[].answerContent").description("답변 내용")
-                )))
+                .filter(document("find-own-sheets"))
                 .when().get("/api/v2/crews/me/reservations/{reservationId}")
                 .then().log().all()
                 .extract();
@@ -206,15 +184,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
                 .pathParam("crewId", crewId)
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + coachToken)
-                .filter(document("find-crew-sheets", responseFields(
-                        fieldWithPath("dateTime").description("날짜"),
-                        fieldWithPath("coachName").description("코치 이름"),
-                        fieldWithPath("coachImage").description("코치 이미지"),
-                        fieldWithPath("status").description("시트 상태"),
-                        fieldWithPath("sheets[].questionNumber").description("질문 번호"),
-                        fieldWithPath("sheets[].questionContent").description("질문 내용"),
-                        fieldWithPath("sheets[].answerContent").description("답변 내용")
-                )))
+                .filter(document("find-crew-sheets"))
                 .when().get("/api/v2/crews/{crewId}/reservations/{reservationId}")
                 .then().log().all()
                 .extract();
@@ -251,7 +221,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + crewToken)
                 .body(request)
-                .filter(document("update-sheet-answer"))
+                .filter(document("update-sheet-answer-notSubmit"))
                 .when().put("/api/v2/crews/me/reservations/{reservationId}")
                 .then().log().all()
                 .extract();
@@ -295,7 +265,7 @@ class CrewAcceptanceTest extends AcceptanceTest {
                 .pathParam("reservationId", reservationId)
                 .header("Authorization", "Bearer " + crewToken)
                 .body(request)
-                .filter(document("update-sheet-answer"))
+                .filter(document("update-sheet-answer-submit"))
                 .when().put("/api/v2/crews/me/reservations/{reservationId}")
                 .then().log().all()
                 .extract();

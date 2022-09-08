@@ -28,7 +28,7 @@ class ReservationTest {
     @BeforeEach
     void setUp() {
         schedule = new Schedule(DomainFixture.COACH_BROWN, DomainFixture.DATE_TIME);
-        this.reservation = new Reservation(schedule, DomainFixture.CREW);
+        this.reservation = new Reservation(schedule, DomainFixture.CREW1);
     }
 
     @DisplayName("면담을 승인한다.")
@@ -93,7 +93,7 @@ class ReservationTest {
     @DisplayName("코치가 진행 중인 면담을 취소할 수 있다.")
     @Test
     void cancel_byCoach_inProgressReservation() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
         reservation.updateReservationStatusToInProgress();
 
@@ -105,7 +105,7 @@ class ReservationTest {
     @DisplayName("크루가 진행 중인 면담을 취소할 수 없다.")
     @Test
     void cancel_byCrew_inProgressReservation() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
         reservation.updateReservationStatusToInProgress();
 
@@ -116,7 +116,7 @@ class ReservationTest {
     @DisplayName("예약 시간이 되면 승인된 면담이 진행중인 상태로 업데이트 된다.")
     @Test
     void updateReservationStatusToInProgress() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
 
         reservation.updateReservationStatusToInProgress();
@@ -127,7 +127,7 @@ class ReservationTest {
     @DisplayName("예약 시간이 되어도 승인되지 않은 면담은 진행중인 상태로 업데이트 되지 않는다.")
     @Test
     void updateReservationStatusToInProgress_unapprovedReservation() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
 
         assertThatThrownBy(reservation::updateReservationStatusToInProgress)
                 .isInstanceOf(UnableToInProgressReservationException.class);
@@ -137,7 +137,7 @@ class ReservationTest {
     @Test
     void updateReservationStatusToInProgress_noTimeYet() {
         Schedule schedule = new Schedule(DomainFixture.COACH_BROWN, LocalDateTime.now().plusDays(1L));
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
 
         assertThatThrownBy(reservation::updateReservationStatusToInProgress)
@@ -147,7 +147,7 @@ class ReservationTest {
     @DisplayName("진행중인 면담을 종료하면 완료된 상태로 업데이트 된다.")
     @Test
     void updateReservationStatusToDone() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
         reservation.updateReservationStatusToInProgress();
 
@@ -159,7 +159,7 @@ class ReservationTest {
     @DisplayName("승인되지 않은 면담을 종료하면 예외가 발생한다.")
     @Test
     void updateReservationStatusToDone_unableToDoneException_unapproved() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
 
         assertThatThrownBy(reservation::updateReservationStatusToDone)
                 .isInstanceOf(UnableToDoneReservationException.class);
@@ -168,7 +168,7 @@ class ReservationTest {
     @DisplayName("승인되었지만 진행중이지 않은 면담을 종료하면 예외가 발생한다.")
     @Test
     void updateReservationStatusToDone_unableToDoneException_approved() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
 
         assertThatThrownBy(reservation::updateReservationStatusToDone)
@@ -178,7 +178,7 @@ class ReservationTest {
     @DisplayName("이미 종료된 면담을 종료하면 예외가 발생한다.")
     @Test
     void updateReservationStatusToDone_unableToDoneException_done() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.confirm(승인을_한다);
         reservation.updateReservationStatusToInProgress();
         reservation.updateReservationStatusToDone();
@@ -190,7 +190,7 @@ class ReservationTest {
     @DisplayName("이미 제출된 면담 시트를 제출하면 예외를 반환한다.")
     @Test
     void updateSheetStatusToSubmitted_alreadySubmitted() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
         reservation.updateSheetStatusToSubmitted();
 
         assertThatThrownBy(reservation::updateSheetStatusToSubmitted)
@@ -200,7 +200,7 @@ class ReservationTest {
     @DisplayName("면담 시트를 제출된 상태로 변경한다.")
     @Test
     void updateSheetStatusToSubmitted() {
-        Reservation reservation = new Reservation(schedule, DomainFixture.CREW);
+        Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
 
         reservation.updateSheetStatusToSubmitted();
 

@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.teatime.acceptance;
+package com.woowacourse.teatime.teatime.support;
 
 import com.google.common.base.CaseFormat;
 import java.sql.Connection;
