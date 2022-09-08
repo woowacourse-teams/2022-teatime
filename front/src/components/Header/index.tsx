@@ -8,6 +8,7 @@ import { ROUTES } from '@constants/index';
 import * as S from './styles';
 
 import LogoIcon from '@assets/logo.svg';
+import Conditional from '@components/Conditional';
 
 const Header = () => {
   const { userData } = useContext(UserStateContext);
@@ -15,7 +16,6 @@ const Header = () => {
   const navigate = useNavigate();
   const profileRef = useRef(null);
   const [isActive, setIsActive] = useOutsideClick(profileRef, false);
-  const isCoach = userData?.role === 'COACH';
 
   const handleLogout = () => {
     dispatch({ type: 'DELETE_USER' });
@@ -39,15 +39,22 @@ const Header = () => {
             <img src={userData.image} alt="프로필 이미지" />
           </S.ProfileWrapper>
           <Dropdown isActive={isActive}>
-            <Link to={isCoach ? ROUTES.COACH_HISTORY : ROUTES.CREW_HISTORY}>
-              <li>히스토리</li>
-            </Link>
-            {isCoach && (
+            <Conditional condition={userData.role === 'COACH'}>
+              <Link to={ROUTES.COACH_HISTORY}>
+                <li>히스토리</li>
+              </Link>
               <Link to={ROUTES.SCHEDULE}>
                 <li>스케줄 관리</li>
               </Link>
-            )}
-            <li onClick={handleLogout}>로그아웃</li>
+              <li onClick={handleLogout}>로그아웃</li>
+            </Conditional>
+
+            <Conditional condition={userData.role === 'CREW'}>
+              <Link to={ROUTES.CREW_HISTORY}>
+                <li>히스토리</li>
+              </Link>
+              <li onClick={handleLogout}>로그아웃</li>
+            </Conditional>
           </Dropdown>
         </S.ProfileContainer>
       )}
