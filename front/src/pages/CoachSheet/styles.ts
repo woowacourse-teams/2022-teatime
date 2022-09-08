@@ -19,6 +19,11 @@ const CompleteButtonWrapper = styled.div`
     cursor: pointer;
     margin-top: 10px;
     bottom: 20px;
+
+    :hover {
+      opacity: 0.7;
+      transition: ease-in-out 0.2s;
+    }
   }
 `;
 

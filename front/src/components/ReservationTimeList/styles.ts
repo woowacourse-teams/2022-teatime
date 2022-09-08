@@ -77,7 +77,6 @@ const ReserveButtonWrapper = styled.div`
     border-radius: 4px;
     font-size: 18px;
     font-weight: bold;
-    cursor: pointer;
   }
 
   button {
