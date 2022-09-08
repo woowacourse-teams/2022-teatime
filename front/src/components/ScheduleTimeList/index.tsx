@@ -1,7 +1,6 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AxiosError } from 'axios';
 
-import Conditional from '@components/Conditional';
 import { UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import api from '@api/index';
@@ -11,14 +10,16 @@ import * as S from './styles';
 
 interface ScheduleTimeListProps {
   date: string;
+  isSelectedAll: boolean;
   daySchedule: TimeSchedule[];
   onClickTime: (dateTime: string) => void;
-  onSelectAll: (isSelected: boolean) => void;
+  onSelectAll: () => void;
   onUpdateSchedule: (selectedTimes: string[]) => void;
 }
 
 const ScheduleTimeList = ({
   date,
+  isSelectedAll,
   daySchedule,
   onClickTime,
   onSelectAll,
@@ -26,9 +27,6 @@ const ScheduleTimeList = ({
 }: ScheduleTimeListProps) => {
   const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
-  const [isSelectedAll, setIsSelectedAll] = useState(false);
-
-  console.log('daySchedule', daySchedule);
 
   const getSelectedTimes = () => {
     return daySchedule.reduce((newArray, { isSelected, dateTime }) => {
@@ -37,11 +35,6 @@ const ScheduleTimeList = ({
       }
       return newArray;
     }, [] as string[]);
-  };
-
-  const handleSelectAll = () => {
-    setIsSelectedAll((prev) => !prev);
-    onSelectAll(isSelectedAll);
   };
 
   const handleUpdateDaySchedule = async () => {
@@ -59,6 +52,7 @@ const ScheduleTimeList = ({
           },
         }
       );
+
       onUpdateSchedule(selectedTimes);
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
@@ -79,7 +73,6 @@ const ScheduleTimeList = ({
             <S.TimeBox
               key={schedule.id}
               isPossible={schedule.isPossible}
-              aria-disabled={schedule.isPossible}
               selected={schedule.isSelected ? true : false}
               onClick={() => onClickTime(schedule.dateTime)}
             >
@@ -90,7 +83,7 @@ const ScheduleTimeList = ({
       </S.ScrollContainer>
 
       <S.ButtonContainer>
-        <S.CheckButton onClick={handleSelectAll}>
+        <S.CheckButton onClick={onSelectAll}>
           {isSelectedAll ? '전체 해제' : '전체 선택'}
         </S.CheckButton>
         <S.ConfirmButton onClick={handleUpdateDaySchedule}>확인</S.ConfirmButton>

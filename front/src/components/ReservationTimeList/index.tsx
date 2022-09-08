@@ -69,10 +69,10 @@ const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTime
                 <button onClick={() => handleClickReservation(schedule.id)}>예약하기</button>
               </S.ReserveButtonWrapper>
             </Conditional>
+
             <Conditional condition={selectedTimeId !== schedule.id}>
               <S.TimeBox
                 isPossible={schedule.isPossible}
-                aria-disabled={schedule.isPossible}
                 onClick={() => handleClickTime(schedule.id)}
               >
                 {time}
