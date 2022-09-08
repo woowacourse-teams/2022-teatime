@@ -61,7 +61,6 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     void findByCoachIdAndDate() {
         Long crewId = crewService.save(CREW_SAVE_REQUEST);
         String crewToken = 크루의_토큰을_발급한다(crewId);
-        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
         scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
         ExtractableResponse<Response> response = 크루가_코치스케쥴_조회_요청됨(coachId, YEAR, MONTH, crewToken);
@@ -76,7 +75,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
 
         if (!IS_LAST_DAY_OF_MONTH) {
             assertAll(
-                    () -> assertThat(result).hasSize(2),
+                    () -> assertThat(result).hasSize(1),
                     () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
             );
         }
@@ -85,7 +84,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치가 자신의 스케줄을 조회한다.")
     @Test
     void findOwnSchedules() {
-        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
+        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH).plusHours(1));
         scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
         ExtractableResponse<Response> response = 코치가_자신의_스케쥴_조회_요청됨(YEAR, MONTH, coachToken);
@@ -109,7 +108,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void updateByCoachAndDate() {
-        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH));
+        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH).plusHours(1));
 
         LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
         ScheduleUpdateRequest request = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of(localDateTime));
