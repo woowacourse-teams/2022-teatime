@@ -66,7 +66,7 @@ interface HistoryList {
 interface Sheets {
   questionNumber: number;
   questionContent: string;
-  answerContent: string;
+  answerContent: string | null;
 }
 
 interface TimeSchedule {

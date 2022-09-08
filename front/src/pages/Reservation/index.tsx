@@ -17,13 +17,14 @@ import * as S from '@styles/common';
 const Reservation = () => {
   const { id: coachId } = useParams();
   const { userData } = useContext(UserStateContext);
+  const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const {
     isOpen: isOpenTimeList,
     openElement: openTimeList,
     closeElement: closeTimeList,
   } = useBoolean();
-  const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
-  const { year, month } = monthYear;
+
+  const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
     monthSchedule: {},
     daySchedule: [],
@@ -82,13 +83,18 @@ const Reservation = () => {
     openTimeList();
     selectDaySchedule(day);
     setSelectedDay(day);
+    setSelectedTimeId(null);
+  };
+
+  const handleClickTime = (id: number | null) => {
+    setSelectedTimeId(id);
   };
 
   useEffect(() => {
     (async () => {
       try {
         const { data: coachSchedules } = await api.get<DaySchedule[]>(
-          `/api/v2/coaches/${coachId}/schedules?year=${year}&month=${month}`,
+          `/api/v2/coaches/${coachId}/schedules?year=${monthYear.year}&month=${monthYear.month}`,
           {
             headers: {
               Authorization: `Bearer ${userData?.token}`,
@@ -127,6 +133,8 @@ const Reservation = () => {
             <ReservationTimeList
               daySchedule={schedule.daySchedule}
               onReservationTime={handleReservationTime}
+              selectedTimeId={selectedTimeId}
+              onClickTime={handleClickTime}
             />
           )}
         </S.CalendarContainer>

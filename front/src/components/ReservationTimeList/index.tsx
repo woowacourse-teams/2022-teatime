@@ -17,18 +17,20 @@ import CheckCircle from '@assets/check-circle.svg';
 interface ReservationTimeListProps {
   daySchedule: TimeSchedule[];
   onReservationTime: (scheduleId: number) => void;
+  selectedTimeId: number | null;
+  onClickTime: (id: number | null) => void;
 }
 
-const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTimeListProps) => {
+const ReservationTimeList = ({
+  daySchedule,
+  onReservationTime,
+  selectedTimeId,
+  onClickTime,
+}: ReservationTimeListProps) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
   const { isOpen: isOpenModal, openElement: openModal, closeElement: closeModal } = useBoolean();
-  const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [reservationId, setReservationId] = useState<number | null>(null);
-
-  const handleClickTime = (id: number) => {
-    setSelectedTimeId(id);
-  };
 
   const handleClickReservation = async (scheduleId: number) => {
     try {
@@ -45,7 +47,7 @@ const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTime
       );
       const location = data.headers.location.split('/').pop();
       setReservationId(Number(location));
-      setSelectedTimeId(null);
+      onClickTime(null);
       onReservationTime(scheduleId);
       openModal();
     } catch (error) {
@@ -69,11 +71,11 @@ const ReservationTimeList = ({ daySchedule, onReservationTime }: ReservationTime
                 <button onClick={() => handleClickReservation(schedule.id)}>예약하기</button>
               </S.ReserveButtonWrapper>
             </Conditional>
+
             <Conditional condition={selectedTimeId !== schedule.id}>
               <S.TimeBox
                 isPossible={schedule.isPossible}
-                aria-disabled={schedule.isPossible}
-                onClick={() => handleClickTime(schedule.id)}
+                onClick={() => onClickTime(schedule.id)}
               >
                 {time}
               </S.TimeBox>

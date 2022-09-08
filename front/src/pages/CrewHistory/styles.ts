@@ -23,7 +23,7 @@ const Tbody = styled.tbody`
   }
 
   td {
-    padding: 12px 34px;
+    padding: 18px 34px;
     color: ${({ theme }) => theme.colors.BLUE_700};
     font-size: 18px;
     font-weight: bold;

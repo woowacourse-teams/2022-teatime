@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.teatime.service;
 
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -105,7 +105,7 @@ class ScheduleServiceTest {
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();
         Schedule schedule = scheduleRepository.save(new Schedule(coach, Date.findFirstTime(date)));
-        Crew crew = crewRepository.save(CREW);
+        Crew crew = crewRepository.save(CREW1);
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
 
@@ -122,7 +122,7 @@ class ScheduleServiceTest {
         LocalDateTime reservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 58));
         LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
-        Crew crew = crewRepository.save(CREW);
+        Crew crew = crewRepository.save(CREW1);
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule1.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
         scheduleRepository.save(new Schedule(coach, notReservedTime));

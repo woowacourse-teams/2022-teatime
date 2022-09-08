@@ -33,7 +33,7 @@ class SheetRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Crew crew = crewRepository.save(DomainFixture.CREW);
+        Crew crew = crewRepository.save(DomainFixture.CREW1);
         Coach coach = coachRepository.save(DomainFixture.COACH_BROWN);
         Schedule schedule = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME));
         reservation = reservationRepository.save(new Reservation(schedule, crew));

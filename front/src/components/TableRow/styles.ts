@@ -8,9 +8,10 @@ const Span = styled.span<{ color: string; bgColor: string }>`
   color: ${({ color }) => color};
 `;
 
-const Profile = styled.td`
+const Profile = styled.div`
   display: flex;
   align-items: center;
+  padding: 0 18px;
 
   img {
     width: 48px;

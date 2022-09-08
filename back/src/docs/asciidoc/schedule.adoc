@@ -1,0 +1,39 @@
+= Schedule
+:toc: left
+:toclevels: 2
+:sectlinks:
+:source-highlighter: highlightjs
+
+[[home]]
+== home
+* link:index.html[목록으로 가기]
+
+== 크루가 코치의 스케쥴 조회
+=== 크루가 코치의 스케쥴 조회 성공
+operation::find-coach-schedules[]
+=== 크루가 코치의 스케쥴 조회 실패
+==== 코치 아이디가 존재하지 없는 경우 404
+include::{snippets}/find-coach-schedules-notFoundCoach/http-response.adoc[]
+==== 년도가 2022년 전인 경우 400
+include::{snippets}/find-coach-schedules-invalidYear/http-response.adoc[]
+==== 월이 유효하지 않은 경우 400
+include::{snippets}/find-coach-schedules-invalidMonth/http-response.adoc[]
+
+== 코치가 자신의 스케줄 조회
+=== 코치가 자신의 스케쥴 조회 성공
+operation::find-own-schedules[]
+=== 코치가 자신의 스케쥴 조회 실패
+==== 년도가 2022년 전인 경우 400
+==== 월이 유효하지 않은 경우 400
+
+== 스케줄 업데이트
+=== 스케쥴 업데이트 성공
+operation::update-schedule[]
+=== 스케쥴 업데이트 실패
+==== 이미 예약된 스케쥴인 경우 400
+include::{snippets}/update-schedule-alreadyReserved/http-response.adoc[]
+
+
+
+
+

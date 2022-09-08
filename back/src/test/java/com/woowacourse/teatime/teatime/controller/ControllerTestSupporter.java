@@ -7,31 +7,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.PayloadDto;
+import com.woowacourse.teatime.auth.infrastructure.PayloadExtractor;
+import com.woowacourse.teatime.auth.service.AuthService;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import com.woowacourse.teatime.teatime.service.SheetService;
+import com.woowacourse.teatime.teatime.support.ControllerTest;
+import com.woowacourse.teatime.teatime.support.RestDocsSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ControllerTest {
-
-    @Autowired
-    protected MockMvc mockMvc;
+@ControllerTest
+public class ControllerTestSupporter extends RestDocsSupporter {
 
     @Autowired
     protected ObjectMapper objectMapper;
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private PayloadExtractor payloadExtractor;
 
     @MockBean
     protected ScheduleService scheduleService;
@@ -44,6 +44,9 @@ public class ControllerTest {
 
     @MockBean
     protected CoachService coachService;
+
+    @MockBean
+    protected AuthService authService;
 
     protected MockHttpServletRequestBuilder get(String url) {
         return MockMvcRequestBuilders.get(url)
@@ -90,14 +93,15 @@ public class ControllerTest {
     protected void 크루의_토큰을_검증한다(String token) {
         given(jwtTokenProvider.validateToken(token))
                 .willReturn(true);
-        given(jwtTokenProvider.getPayload(any()))
+        given(payloadExtractor.extract(any()))
                 .willReturn(new PayloadDto("CREW", 1L));
     }
 
     protected void 코치의_토큰을_검증한다(String token) {
         given(jwtTokenProvider.validateToken(token))
                 .willReturn(true);
-        given(jwtTokenProvider.getPayload(any()))
+        given(payloadExtractor.extract(any()))
                 .willReturn(new PayloadDto("COACH", 1L));
     }
 }
+
