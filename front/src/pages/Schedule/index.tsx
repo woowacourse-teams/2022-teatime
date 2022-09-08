@@ -43,11 +43,7 @@ const getAllTime = (date: string) => {
 
 const Schedule = () => {
   const { userData } = useContext(UserStateContext);
-  const {
-    isOpen: isOpenTimeList,
-    openElement: openTimeList,
-    closeElement: closeTimeList,
-  } = useBoolean();
+  const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [isSelectedAll, setIsSelectedAll] = useState(false);
