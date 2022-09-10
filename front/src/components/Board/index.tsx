@@ -1,4 +1,6 @@
 import { useState } from 'react';
+
+import EmptyContent from '@components/EmptyContent';
 import * as S from './styles';
 
 interface BoardProps {
@@ -40,7 +42,10 @@ const Board = ({ children, title, color, length, status, onDrop }: BoardProps) =
         <span>{title}</span>
         <div>{length}</div>
       </S.TitleContainer>
-      <S.ScrollContainer>{children}</S.ScrollContainer>
+      <S.ScrollContainer>
+        {!length && <EmptyContent text={`아직 ${title}이 없습니다.`} />}
+        {children}
+      </S.ScrollContainer>
     </S.BoardContainer>
   );
 };
