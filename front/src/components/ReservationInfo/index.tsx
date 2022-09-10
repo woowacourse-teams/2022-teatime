@@ -13,7 +13,7 @@ interface ReservationInfoProps {
 const ReservationInfo = ({ image, name, dateTime }: ReservationInfoProps) => {
   return (
     <>
-      <S.Image src={image} alt="프로필 이미지" />
+      <S.Image src={image} alt={`${name} 프로필 이미지`} />
       <S.Name>{name}</S.Name>
       <S.DateWrapper>
         <img src={ScheduleIcon} alt="일정 아이콘" />

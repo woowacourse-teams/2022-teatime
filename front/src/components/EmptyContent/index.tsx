@@ -8,7 +8,7 @@ interface EmptyContentProps {
 const EmptyContent = ({ text }: EmptyContentProps) => {
   return (
     <S.Container>
-      <img src={EmptyImage} draggable={false} />
+      <img src={EmptyImage} draggable={false} alt="내용 없음" />
       <span>{text}</span>
     </S.Container>
   );

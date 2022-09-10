@@ -20,7 +20,7 @@ const HistoryItem = ({ index, image, name, dateTime, onClick, historyIndex }: Hi
         <span>{getMonthDate(dateTime as string)}</span>
       </S.Date>
       <S.Profile>
-        <img src={image} alt="코치 프로필 이미지" />
+        <img src={image} alt={`${name} 프로필 이미지`} />
         <span>{name}</span>
       </S.Profile>
     </S.Item>
