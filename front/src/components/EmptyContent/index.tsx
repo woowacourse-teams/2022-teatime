@@ -1,11 +1,11 @@
 import * as S from './styles';
 import EmptyImage from '@assets/empty.svg';
 
-interface EmptyProps {
+interface EmptyContentProps {
   text: string;
 }
 
-const Empty = ({ text }: EmptyProps) => {
+const EmptyContent = ({ text }: EmptyContentProps) => {
   return (
     <S.Container>
       <img src={EmptyImage} draggable={false} />
@@ -14,4 +14,4 @@ const Empty = ({ text }: EmptyProps) => {
   );
 };
 
-export default Empty;
+export default EmptyContent;
