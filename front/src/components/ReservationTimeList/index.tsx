@@ -29,7 +29,7 @@ const ReservationTimeList = ({
 }: ReservationTimeListProps) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
-  const { isOpen: isOpenModal, openElement: openModal, closeElement: closeModal } = useBoolean();
+  const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [reservationId, setReservationId] = useState<number | null>(null);
 
   const handleClickReservation = async (scheduleId: number) => {
@@ -73,10 +73,7 @@ const ReservationTimeList = ({
             </Conditional>
 
             <Conditional condition={selectedTimeId !== schedule.id}>
-              <S.TimeBox
-                isPossible={schedule.isPossible}
-                onClick={() => onClickTime(schedule.id)}
-              >
+              <S.TimeBox isPossible={schedule.isPossible} onClick={() => onClickTime(schedule.id)}>
                 {time}
               </S.TimeBox>
             </Conditional>

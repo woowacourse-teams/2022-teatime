@@ -52,7 +52,7 @@ const TableRow = ({
       <td>{time}</td>
       {isCrew && (
         <td>
-          <S.Icon src={ScheduleIcon} alt="스캐줄 아이콘" onClick={() => onClickSheet?.(id)} />
+          <S.Icon src={ScheduleIcon} alt="스케줄 아이콘" onClick={() => onClickSheet?.(id)} />
           {isEditStatus && (
             <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickDelete?.(id)} />
           )}

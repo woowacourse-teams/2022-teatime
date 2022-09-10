@@ -58,9 +58,15 @@ const ScrollContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 10px;
-  overflow: scroll;
+  overflow-y: scroll;
+
   ::-webkit-scrollbar {
-    display: none;
+    background-color: transparent;
+    width: 5px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.GRAY_500};
+    border-radius: 5px;
   }
 `;
 

@@ -17,13 +17,8 @@ import * as S from '@styles/common';
 const Reservation = () => {
   const { id: coachId } = useParams();
   const { userData } = useContext(UserStateContext);
+  const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
-  const {
-    isOpen: isOpenTimeList,
-    openElement: openTimeList,
-    closeElement: closeTimeList,
-  } = useBoolean();
-
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
     monthSchedule: {},

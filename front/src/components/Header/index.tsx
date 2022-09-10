@@ -2,18 +2,18 @@ import { useContext, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import Dropdown from '@components/Dropdown';
+import Conditional from '@components/Conditional';
 import useOutsideClick from '@hooks/useOutsideClick';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { ROUTES } from '@constants/index';
 import * as S from './styles';
 
 import LogoIcon from '@assets/logo.svg';
-import Conditional from '@components/Conditional';
 
 const Header = () => {
+  const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
-  const navigate = useNavigate();
   const profileRef = useRef(null);
   const [isActive, setIsActive] = useOutsideClick(profileRef, false);
 

@@ -1,16 +1,16 @@
 import { useState } from 'react';
 
 const useBoolean = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [value, setValue] = useState(false);
 
-  const openElement = () => {
-    setIsOpen(true);
+  const setTrue = () => {
+    setValue(true);
   };
 
-  const closeElement = () => {
-    setIsOpen(false);
+  const setFalse = () => {
+    setValue(false);
   };
 
-  return { isOpen, openElement, closeElement };
+  return { value, setTrue, setFalse };
 };
 export default useBoolean;
