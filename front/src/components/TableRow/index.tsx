@@ -44,7 +44,7 @@ const TableRow = ({
       </td>
       <td>
         <S.Profile>
-          <img src={image} alt="코치 프로필 이미지" />
+          <img src={image} alt={`${name} 프로필 이미지`} />
           <span>{name}</span>
         </S.Profile>
       </td>

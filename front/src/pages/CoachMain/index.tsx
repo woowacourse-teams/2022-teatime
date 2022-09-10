@@ -93,7 +93,6 @@ const Coach = () => {
         }
       );
 
-      showSnackbar({ message: '승인되었습니다. ✅' });
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
       showSnackbar({ message: '승인되었습니다. ✅' });
