@@ -44,7 +44,7 @@ const Header = () => {
                 <li>히스토리</li>
               </Link>
               <Link to={ROUTES.SCHEDULE}>
-                <li>스케쥴 관리</li>
+                <li>스케줄 관리</li>
               </Link>
               <li onClick={handleLogout}>로그아웃</li>
             </Conditional>
