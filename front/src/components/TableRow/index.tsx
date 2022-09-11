@@ -36,7 +36,7 @@ const TableRow = ({
   const isEditStatus = status === 'BEFORE_APPROVED' || status === 'APPROVED';
 
   return (
-    <tr>
+    <S.TbodyRow>
       <td>
         <S.Span bgColor={bgColor} color={color}>
           {statusName}
@@ -58,7 +58,7 @@ const TableRow = ({
           )}
         </td>
       )}
-    </tr>
+    </S.TbodyRow>
   );
 };
 
