@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
+import EmptyContent from '@components/EmptyContent';
 import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
@@ -101,16 +102,17 @@ const CrewHistory = () => {
 
   return (
     <S.Table>
-      <S.Thead>
-        <tr>
+      <thead>
+        <S.TheadRow>
           <td>진행 상태</td>
           <td>코치</td>
           <td>날짜</td>
           <td>시간</td>
           <td />
-        </tr>
-      </S.Thead>
-      <S.Tbody>
+        </S.TheadRow>
+      </thead>
+      <tbody>
+        {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
         {historyList.map((history) => {
           const { reservationId, status, coachName, coachImage, dateTime } = history;
           const { statusName, color, backgroundColor } = historyStatus[history.status];
@@ -131,7 +133,7 @@ const CrewHistory = () => {
             />
           );
         })}
-      </S.Tbody>
+      </tbody>
     </S.Table>
   );
 };
