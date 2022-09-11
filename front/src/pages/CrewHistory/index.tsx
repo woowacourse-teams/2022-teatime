@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
-import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { CrewHistory as CrewHistoryType } from '@typings/domain';
@@ -46,24 +45,19 @@ const historyStatus: HistoryStatus = {
 };
 
 const CrewHistory = () => {
-  const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
 
-  const moveReservationSheet = (reservationId: number) => {
+  const handleShowSheet = (reservationId: number) => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
-  const deleteReservation = async (reservationId: number) => {
+  const handleDeleteReservation = async (reservationId: number) => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
-      await api.delete(`/api/v2/reservations/${reservationId}`, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
-        },
-      });
+      await api.delete(`/api/v2/reservations/${reservationId}`);
       setHistoryList((prevHistory) => {
         return prevHistory.map((history) => {
           if (history.reservationId === reservationId) {
@@ -84,11 +78,7 @@ const CrewHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/crews/me/reservations', {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await api.get('/api/v2/crews/me/reservations');
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -125,8 +115,8 @@ const CrewHistory = () => {
               statusName={statusName}
               color={color}
               bgColor={backgroundColor}
-              onClickSheet={moveReservationSheet}
-              onClickDelete={deleteReservation}
+              onClickSheet={handleShowSheet}
+              onClickDelete={handleDeleteReservation}
               isCrew
             />
           );

@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
-import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import { CoachHistory as CoachHistoryType } from '@typings/domain';
 import theme from '@styles/theme';
@@ -28,17 +27,12 @@ const historyStatus: HistoryStatus = {
 };
 
 const CoachHistory = () => {
-  const { userData } = useContext(UserStateContext);
   const [historyList, setHistoryList] = useState<CoachHistoryType[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/coaches/me/history', {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await api.get('/api/v2/coaches/me/history');
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {

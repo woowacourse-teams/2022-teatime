@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
-import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
+import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES } from '@constants/index';
 import type { Coach } from '@typings/domain';
@@ -13,7 +13,6 @@ import * as S from './styles';
 const Crew = () => {
   const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
-  const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const [coaches, setCoaches] = useState<Coach[]>();
 
@@ -24,11 +23,7 @@ const Crew = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/coaches`, {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await api.get(`/api/v2/coaches`);
         setCoaches(data);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -39,6 +34,7 @@ const Crew = () => {
             return;
           }
           alert(error);
+          console.log(error);
         }
       }
     })();

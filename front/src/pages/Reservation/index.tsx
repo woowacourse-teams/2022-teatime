@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
@@ -8,7 +8,6 @@ import Frame from '@components/Frame';
 import Title from '@components/Title';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
-import { UserStateContext } from '@context/UserProvider';
 import api from '@api/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import theme from '@styles/theme';
@@ -16,7 +15,6 @@ import * as S from '@styles/common';
 
 const Reservation = () => {
   const { id: coachId } = useParams();
-  const { userData } = useContext(UserStateContext);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
@@ -89,12 +87,7 @@ const Reservation = () => {
     (async () => {
       try {
         const { data: coachSchedules } = await api.get<DaySchedule[]>(
-          `/api/v2/coaches/${coachId}/schedules?year=${monthYear.year}&month=${monthYear.month}`,
-          {
-            headers: {
-              Authorization: `Bearer ${userData?.token}`,
-            },
-          }
+          `/api/v2/coaches/${coachId}/schedules?year=${monthYear.year}&month=${monthYear.month}`
         );
         createScheduleMap(coachSchedules);
       } catch (error) {

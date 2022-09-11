@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
@@ -6,7 +6,6 @@ import Frame from '@components/Frame';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import HistoryItem from '@components/HistoryItem';
-import { UserStateContext } from '@context/UserProvider';
 import { HistoryList } from '@typings/domain';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
@@ -15,7 +14,6 @@ import * as S from '@styles/common';
 const HistorySheet = () => {
   const navigate = useNavigate();
   const { id: crewId } = useParams();
-  const { userData } = useContext(UserStateContext);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [historyList, setHistoryList] = useState<HistoryList[]>();
 
@@ -26,11 +24,7 @@ const HistorySheet = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/crews/${crewId}/reservations`, {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await api.get(`/api/v2/crews/${crewId}/reservations`);
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
