@@ -101,40 +101,42 @@ const CrewHistory = () => {
   }, []);
 
   return (
-    <S.Table>
-      <thead>
-        <S.TheadRow>
-          <td>진행 상태</td>
-          <td>코치</td>
-          <td>날짜</td>
-          <td>시간</td>
-          <td />
-        </S.TheadRow>
-      </thead>
-      <tbody>
-        {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
-        {historyList.map((history) => {
-          const { reservationId, status, coachName, coachImage, dateTime } = history;
-          const { statusName, color, backgroundColor } = historyStatus[history.status];
-          return (
-            <TableRow
-              key={history.reservationId}
-              id={reservationId}
-              status={status}
-              name={coachName}
-              image={coachImage}
-              dateTime={dateTime}
-              statusName={statusName}
-              color={color}
-              bgColor={backgroundColor}
-              onClickSheet={moveReservationSheet}
-              onClickDelete={deleteReservation}
-              isCrew
-            />
-          );
-        })}
-      </tbody>
-    </S.Table>
+    <>
+      <S.Table>
+        <thead>
+          <S.TheadRow>
+            <td>진행 상태</td>
+            <td>코치</td>
+            <td>날짜</td>
+            <td>시간</td>
+            <td />
+          </S.TheadRow>
+        </thead>
+        <tbody>
+          {historyList.map((history) => {
+            const { reservationId, status, coachName, coachImage, dateTime } = history;
+            const { statusName, color, backgroundColor } = historyStatus[history.status];
+            return (
+              <TableRow
+                key={history.reservationId}
+                id={reservationId}
+                status={status}
+                name={coachName}
+                image={coachImage}
+                dateTime={dateTime}
+                statusName={statusName}
+                color={color}
+                bgColor={backgroundColor}
+                onClickSheet={moveReservationSheet}
+                onClickDelete={deleteReservation}
+                isCrew
+              />
+            );
+          })}
+        </tbody>
+      </S.Table>
+      {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
+    </>
   );
 };
 
