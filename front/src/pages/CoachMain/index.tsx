@@ -8,7 +8,7 @@ import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import type { CrewListMap } from '@typings/domain';
-import { confirmReservation, deleteReservation, rejectReservation } from '@api/reservation';
+import { confirmReservation, cancelReservation, rejectReservation } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
@@ -126,7 +126,7 @@ const Coach = () => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
-      await deleteReservation(reservationId);
+      await cancelReservation(reservationId);
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {

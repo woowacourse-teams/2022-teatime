@@ -8,7 +8,16 @@ const confirmReservation = (reservationId: number) =>
 const rejectReservation = (reservationId: number) =>
   api.post(`/api/v2/reservations/${reservationId}`, { isApproved: false });
 
-const deleteReservation = (reservationId: number) =>
+const completeReservation = (reservationId: string) =>
+  api.put(`/api/v2/reservations/${reservationId}`);
+
+const cancelReservation = (reservationId: number) =>
   api.delete(`/api/v2/reservations/${reservationId}`);
 
-export { createReservation, confirmReservation, rejectReservation, deleteReservation };
+export {
+  createReservation,
+  confirmReservation,
+  rejectReservation,
+  completeReservation,
+  cancelReservation,
+};

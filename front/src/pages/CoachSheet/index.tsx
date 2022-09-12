@@ -8,7 +8,8 @@ import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { Reservation } from '@typings/domain';
-import api from '@api/index';
+import { completeReservation } from '@api/reservation';
+import { getCrewReservationByCoach } from '@api/crew';
 import { ROUTES } from '@constants/index';
 import * as S from '@styles/common';
 import * as Styled from './styles';
@@ -33,7 +34,7 @@ const CoachSheet = () => {
     if (!confirm('면담을 완료하시겠습니까?')) return;
 
     try {
-      await api.put(`/api/v2/reservations/${reservationId}`);
+      await completeReservation(reservationId as string);
       showSnackbar({ message: '완료되었습니다. ✅' });
       navigate(ROUTES.COACH, { replace: true });
     } catch (error) {
@@ -45,7 +46,7 @@ const CoachSheet = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
+        const { data } = await getCrewReservationByCoach(crewId, reservationId as string);
         setReservationInfo(data);
       } catch (error) {
         if (error instanceof AxiosError) {

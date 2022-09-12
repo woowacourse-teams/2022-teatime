@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
+import { SnackbarContext } from '@context/SnackbarProvider';
+import { getCrewHistoriesByMe } from '@api/crew';
+import { cancelReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
 import { CrewHistory as CrewHistoryType } from '@typings/domain';
-import { SnackbarContext } from '@context/SnackbarProvider';
-import { getCrewHistories } from '@api/crew';
 
 import theme from '@styles/theme';
 import * as S from './styles';
-import api from '@api/index';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };
 
@@ -70,7 +70,7 @@ const CrewHistory = () => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
-      await api.delete(`/api/v2/reservations/${reservationId}`);
+      await cancelReservation(reservationId);
       changeHistoryStatus(reservationId, 'CANCELED');
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
@@ -84,7 +84,7 @@ const CrewHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await getCrewHistories();
+        const { data } = await getCrewHistoriesByMe();
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {

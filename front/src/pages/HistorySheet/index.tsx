@@ -10,6 +10,7 @@ import { HistoryList } from '@typings/domain';
 import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import * as S from '@styles/common';
+import { getCrewHistoriesByCoach } from '@api/crew';
 
 const HistorySheet = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const HistorySheet = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/crews/${crewId}/reservations`);
+        const { data } = await getCrewHistoriesByCoach(crewId as string);
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
