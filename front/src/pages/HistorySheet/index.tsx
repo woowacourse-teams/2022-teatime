@@ -6,11 +6,10 @@ import Frame from '@components/Frame';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import HistoryItem from '@components/HistoryItem';
-import { HistoryList } from '@typings/domain';
-import api from '@api/index';
-import { ROUTES } from '@constants/index';
-import * as S from '@styles/common';
 import { getCrewHistoriesByCoach } from '@api/crew';
+import { ROUTES } from '@constants/index';
+import { HistoryList } from '@typings/domain';
+import * as S from '@styles/common';
 
 const HistorySheet = () => {
   const navigate = useNavigate();
