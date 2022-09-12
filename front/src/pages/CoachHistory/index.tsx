@@ -3,15 +3,15 @@ import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import { getCoachHistories } from '@api/coach';
-import type { CoachHistory as CoachHistoryType } from '@typings/domain';
+import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };
 
-interface HistoryStatus {
-  [key: string]: StatusValue;
-}
+type HistoryStatus = {
+  [key in CoachHistoryStatus]: StatusValue;
+};
 
 const historyStatus: HistoryStatus = {
   CANCELED: {

@@ -7,16 +7,16 @@ import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
-import type { CrewHistory as CrewHistoryType } from '@typings/domain';
+import type { CrewHistory as CrewHistoryType, CrewHistoryStatus } from '@typings/domain';
 
 import theme from '@styles/theme';
 import * as S from './styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };
 
-interface HistoryStatus {
-  [key: string]: StatusValue;
-}
+type HistoryStatus = {
+  [key in CrewHistoryStatus]: StatusValue;
+};
 
 const historyStatus: HistoryStatus = {
   BEFORE_APPROVED: {
@@ -51,7 +51,7 @@ const CrewHistory = () => {
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
 
-  const changeHistoryStatus = (reservationId: number, status: string) => {
+  const changeHistoryStatus = (reservationId: number, status: CrewHistoryStatus) => {
     setHistoryList((prevHistory) => {
       return prevHistory.map((history) => {
         if (history.reservationId === reservationId) {
