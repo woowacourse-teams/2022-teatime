@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
-import api from '@api/index';
 import { CoachHistory as CoachHistoryType } from '@typings/domain';
+import { getCoachHistories } from '@api/coach';
 import theme from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
@@ -32,7 +32,7 @@ const CoachHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/coaches/me/history');
+        const { data } = await getCoachHistories();
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {

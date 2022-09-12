@@ -7,7 +7,7 @@ import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES } from '@constants/index';
 import type { Coach } from '@typings/domain';
-import api from '@api/index';
+import { getCoaches } from '@api/coach';
 import * as S from './styles';
 
 const Crew = () => {
@@ -23,7 +23,7 @@ const Crew = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/coaches`);
+        const { data } = await getCoaches();
         setCoaches(data);
       } catch (error) {
         if (error instanceof AxiosError) {

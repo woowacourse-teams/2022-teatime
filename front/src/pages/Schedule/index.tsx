@@ -7,7 +7,7 @@ import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
-import api from '@api/index';
+import { getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
 import type { DaySchedule, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
@@ -184,9 +184,7 @@ const Schedule = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: coachSchedules } = await api.get<DaySchedule[]>(
-          `/api/v2/coaches/me/schedules?year=${year}&month=${month}`
-        );
+        const { data: coachSchedules } = await getCoachSchedulesByMe(year, month);
         createScheduleMap(coachSchedules);
       } catch (error) {
         if (error instanceof AxiosError) {

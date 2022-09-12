@@ -8,7 +8,7 @@ import Frame from '@components/Frame';
 import Title from '@components/Title';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
-import api from '@api/index';
+import { getCoachSchedulesByCrew } from '@api/coach';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '@styles/common';
@@ -86,8 +86,10 @@ const Reservation = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: coachSchedules } = await api.get<DaySchedule[]>(
-          `/api/v2/coaches/${coachId}/schedules?year=${monthYear.year}&month=${monthYear.month}`
+        const { data: coachSchedules } = await getCoachSchedulesByCrew(
+          coachId as string,
+          monthYear.year,
+          monthYear.month
         );
         createScheduleMap(coachSchedules);
       } catch (error) {

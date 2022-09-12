@@ -9,7 +9,7 @@ import useWindowFocus from '@hooks/useWindowFocus';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import type { CrewListMap } from '@typings/domain';
 import { confirmReservation, deleteReservation, rejectReservation } from '@api/reservation';
-import api from '@api/index';
+import { getCoachReservations } from '@api/coach';
 import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
 import theme from '@styles/theme';
@@ -197,7 +197,7 @@ const Coach = () => {
   useEffect(() => {
     const getReservationList = async () => {
       try {
-        const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations');
+        const { data: crewListMap } = await getCoachReservations();
         setCrews(crewListMap);
       } catch (error) {
         if (error instanceof AxiosError) {
