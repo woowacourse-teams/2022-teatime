@@ -46,15 +46,15 @@ const Header = () => {
               <Link to={ROUTES.SCHEDULE}>
                 <li>스케줄 관리</li>
               </Link>
-              <li onClick={handleLogout}>로그아웃</li>
             </Conditional>
 
             <Conditional condition={userData.role === 'CREW'}>
               <Link to={ROUTES.CREW_HISTORY}>
                 <li>히스토리</li>
               </Link>
-              <li onClick={handleLogout}>로그아웃</li>
             </Conditional>
+
+            <li onClick={handleLogout}>로그아웃</li>
           </Dropdown>
         </S.ProfileContainer>
       )}
