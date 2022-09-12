@@ -5,8 +5,8 @@ import { AxiosError } from 'axios';
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useBoolean from '@hooks/useBoolean';
-import api from '@api/index';
 import { ROUTES } from '@constants/index';
+import { createReservation } from '@api/reservation';
 import { getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
@@ -32,9 +32,7 @@ const ReservationTimeList = ({
 
   const handleClickReservation = async (scheduleId: number) => {
     try {
-      const data = await api.post(`/api/v2/reservations`, {
-        scheduleId,
-      });
+      const data = await createReservation(scheduleId);
       const location = data.headers.location.split('/').pop();
       setReservationId(Number(location));
       onClickTime(null);

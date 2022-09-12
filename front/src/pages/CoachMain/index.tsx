@@ -8,9 +8,10 @@ import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import type { CrewListMap } from '@typings/domain';
+import { confirmReservation, deleteReservation, rejectReservation } from '@api/reservation';
+import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
-import api from '@api/index';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -80,10 +81,7 @@ const Coach = () => {
 
   const handleApprove = async (index: number, reservationId: number) => {
     try {
-      await api.post(`/api/v2/reservations/${reservationId}`, {
-        isApproved: true,
-      });
-
+      await confirmReservation(reservationId);
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
       showSnackbar({ message: '승인되었습니다. ✅' });
@@ -113,10 +111,7 @@ const Coach = () => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
-      await api.post(`/api/v2/reservations/${reservationId}`, {
-        isApproved: false,
-      });
-
+      await rejectReservation(reservationId);
       deleteBoardItem(status, index);
       showSnackbar({ message: '거절되었습니다. ✅' });
     } catch (error) {
@@ -131,7 +126,7 @@ const Coach = () => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
-      await api.delete(`/api/v2/reservations/${reservationId}`);
+      await deleteReservation(reservationId);
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
