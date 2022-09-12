@@ -7,10 +7,10 @@ import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { Reservation } from '@typings/domain';
 import { completeReservation } from '@api/reservation';
 import { getCrewReservationByCoach } from '@api/crew';
 import { ROUTES } from '@constants/index';
+import type { Reservation } from '@typings/domain';
 import * as S from '@styles/common';
 import * as Styled from './styles';
 

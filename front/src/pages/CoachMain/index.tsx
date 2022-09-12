@@ -7,11 +7,11 @@ import BoardItem from '@components/BoardItem';
 import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import type { CrewListMap } from '@typings/domain';
 import { confirmReservation, cancelReservation, rejectReservation } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
-import { ROUTES } from '@constants/index';
 import { getDateTime } from '@utils/date';
+import { ROUTES } from '@constants/index';
+import type { CrewListMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from './styles';
 

@@ -9,7 +9,7 @@ import BackButton from '@components/BackButton';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCrewReservation, getCrewReservationByMe } from '@api/crew';
 import { ROUTES } from '@constants/index';
-import { Reservation, Sheets } from '@typings/domain';
+import type { Reservation, Sheets } from '@typings/domain';
 import * as S from '@styles/common';
 
 const CrewSheet = () => {

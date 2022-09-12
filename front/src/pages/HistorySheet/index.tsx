@@ -8,7 +8,7 @@ import BackButton from '@components/BackButton';
 import HistoryItem from '@components/HistoryItem';
 import { getCrewHistoriesByCoach } from '@api/crew';
 import { ROUTES } from '@constants/index';
-import { HistoryList } from '@typings/domain';
+import type { HistoryList } from '@typings/domain';
 import * as S from '@styles/common';
 
 const HistorySheet = () => {

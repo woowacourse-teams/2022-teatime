@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
-import { CoachHistory as CoachHistoryType } from '@typings/domain';
 import { getCoachHistories } from '@api/coach';
+import type { CoachHistory as CoachHistoryType } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 

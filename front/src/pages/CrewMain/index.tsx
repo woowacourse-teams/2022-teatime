@@ -6,8 +6,8 @@ import Card from '@components/Card';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES } from '@constants/index';
-import type { Coach } from '@typings/domain';
 import { getCoaches } from '@api/coach';
+import type { Coach } from '@typings/domain';
 import * as S from './styles';
 
 const Crew = () => {

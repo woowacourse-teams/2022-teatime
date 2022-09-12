@@ -7,7 +7,7 @@ import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
-import { CrewHistory as CrewHistoryType } from '@typings/domain';
+import type { CrewHistory as CrewHistoryType } from '@typings/domain';
 
 import theme from '@styles/theme';
 import * as S from './styles';
