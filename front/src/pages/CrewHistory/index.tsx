@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
-import api from '@api/index';
 import { ROUTES } from '@constants/index';
 import { CrewHistory as CrewHistoryType } from '@typings/domain';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { getCrewHistories } from '@api/crew';
+
 import theme from '@styles/theme';
 import * as S from './styles';
+import api from '@api/index';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };
 
@@ -49,23 +51,27 @@ const CrewHistory = () => {
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
 
+  const changeHistoryStatus = (reservationId: number, status: string) => {
+    setHistoryList((prevHistory) => {
+      return prevHistory.map((history) => {
+        if (history.reservationId === reservationId) {
+          history.status = status;
+        }
+        return history;
+      });
+    });
+  };
+
   const handleShowSheet = (reservationId: number) => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
-  const handleDeleteReservation = async (reservationId: number) => {
+  const handleCancelReservation = async (reservationId: number) => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
       await api.delete(`/api/v2/reservations/${reservationId}`);
-      setHistoryList((prevHistory) => {
-        return prevHistory.map((history) => {
-          if (history.reservationId === reservationId) {
-            history.status = 'CANCELED';
-          }
-          return history;
-        });
-      });
+      changeHistoryStatus(reservationId, 'CANCELED');
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -78,7 +84,7 @@ const CrewHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/crews/me/reservations');
+        const { data } = await getCrewHistories();
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -116,7 +122,7 @@ const CrewHistory = () => {
               color={color}
               bgColor={backgroundColor}
               onClickSheet={handleShowSheet}
-              onClickDelete={handleDeleteReservation}
+              onClickCancel={handleCancelReservation}
               isCrew
             />
           );
