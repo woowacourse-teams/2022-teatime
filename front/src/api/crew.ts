@@ -1,5 +1,5 @@
 import api from '@api/index';
-import { CrewHistory, HistoryList, Sheets } from '@typings/domain';
+import { CrewHistory, HistoryList, Reservation, Sheets } from '@typings/domain';
 
 const getCrewHistoriesByMe = () => api.get<CrewHistory[]>('/api/v2/crews/me/reservations');
 
@@ -7,10 +7,10 @@ const getCrewHistoriesByCoach = (crewId: string) =>
   api.get<HistoryList[]>(`/api/v2/crews/${crewId}/reservations`);
 
 const getCrewReservationByMe = (reservationId: string) =>
-  api.get(`/api/v2/crews/me/reservations/${reservationId}`);
+  api.get<Reservation>(`/api/v2/crews/me/reservations/${reservationId}`);
 
 const getCrewReservationByCoach = (crewId: number, reservationId: string) =>
-  api.get(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
+  api.get<Reservation>(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
 
 const editCrewReservation = (reservationId: string, isSubmitted: boolean, sheets: Sheets[]) =>
   api.put(`/api/v2/crews/me/reservations/${reservationId}`, {
