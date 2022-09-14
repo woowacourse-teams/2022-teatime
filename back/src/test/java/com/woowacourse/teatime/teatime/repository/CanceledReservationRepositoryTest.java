@@ -29,6 +29,8 @@ public class CanceledReservationRepositoryTest {
     private CoachRepository coachRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +42,7 @@ public class CanceledReservationRepositoryTest {
     @DisplayName("코치의 취소된 예약 목록을 조회한다.")
     @Test
     void findAllByCoachId() {
-        Reservation reservation = new Reservation(schedule, crew);
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         canceledReservationRepository.save(CanceledReservation.from(reservation));
 
         assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1);

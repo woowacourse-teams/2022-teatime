@@ -27,6 +27,9 @@ public class CanceledReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long originId;
+
     @ManyToOne
     @JoinColumn(name = "coach_id")
     private Coach coach;
@@ -42,7 +45,8 @@ public class CanceledReservation {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    private CanceledReservation(Coach coach, Crew crew, LocalDateTime scheduledAt) {
+    private CanceledReservation(Long originId, Coach coach, Crew crew, LocalDateTime scheduledAt) {
+        this.originId = originId;
         this.coach = coach;
         this.crew = crew;
         this.scheduledAt = scheduledAt;
@@ -50,6 +54,6 @@ public class CanceledReservation {
 
     public static CanceledReservation from(Reservation reservation) {
         return new CanceledReservation(
-                reservation.getCoach(), reservation.getCrew(), reservation.getScheduleDateTime());
+                reservation.getId(), reservation.getCoach(), reservation.getCrew(), reservation.getScheduleDateTime());
     }
 }
