@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.domain;
 
+import com.woowacourse.teatime.teatime.exception.InvalidProfileInfoException;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,6 +51,13 @@ public class Coach {
         if (slackId == null || slackId.isBlank()) {
             this.slackId = slackId;
         }
+    }
+
+    public void modifyName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new InvalidProfileInfoException();
+        }
+        this.name = name.trim();
     }
 
     @Override
