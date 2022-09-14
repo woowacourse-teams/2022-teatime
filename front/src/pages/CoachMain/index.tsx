@@ -4,13 +4,14 @@ import { AxiosError } from 'axios';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
-import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
+import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import type { CrewListMap } from '@typings/domain';
-import { ROUTES } from '@constants/index';
+import { confirmReservation, cancelReservation, rejectReservation } from '@api/reservation';
+import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import api from '@api/index';
+import { ROUTES } from '@constants/index';
+import type { CrewListMap } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from './styles';
 
@@ -31,7 +32,6 @@ const Coach = () => {
   const navigate = useNavigate();
   const isWindowFocused = useWindowFocus();
   const showSnackbar = useContext(SnackbarContext);
-  const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
@@ -81,18 +81,7 @@ const Coach = () => {
 
   const handleApprove = async (index: number, reservationId: number) => {
     try {
-      await api.post(
-        `/api/v2/reservations/${reservationId}`,
-        {
-          isApproved: true,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        }
-      );
-
+      await confirmReservation(reservationId);
       moveBoardItem('beforeApproved', 'approved', index);
       sortBoardItemByTime('approved');
       showSnackbar({ message: '승인되었습니다. ✅' });
@@ -122,18 +111,7 @@ const Coach = () => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
-      await api.post(
-        `/api/v2/reservations/${reservationId}`,
-        {
-          isApproved: false,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        }
-      );
-
+      await rejectReservation(reservationId);
       deleteBoardItem(status, index);
       showSnackbar({ message: '거절되었습니다. ✅' });
     } catch (error) {
@@ -148,12 +126,7 @@ const Coach = () => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
-      await api.delete(`/api/v2/reservations/${reservationId}`, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
-        },
-      });
-
+      await cancelReservation(reservationId);
       deleteBoardItem(status, index);
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
@@ -224,11 +197,7 @@ const Coach = () => {
   useEffect(() => {
     const getReservationList = async () => {
       try {
-        const { data: crewListMap } = await api.get('/api/v2/coaches/me/reservations', {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data: crewListMap } = await getCoachReservations();
         setCrews(crewListMap);
       } catch (error) {
         if (error instanceof AxiosError) {
