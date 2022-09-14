@@ -7,11 +7,11 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.LOCAL_DATE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
+import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
 import com.woowacourse.teatime.util.Date;
@@ -91,22 +91,10 @@ class ReservationRepositoryTest {
     @Test
     void findByCoachIdExceptDoneAndCanceled_done() {
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        reservation.confirm(true);
+        reservation.confirm();
         reservation.updateReservationStatusToInProgress();
         reservation.updateSheetStatusToSubmitted();
         reservation.updateReservationStatusToDone();
-
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
-                coach.getId(), List.of(DONE, CANCELED));
-
-        assertThat(reservations).hasSize(0);
-    }
-
-    @DisplayName("코치의 한 달 면담 목록을 조회한다. - 취소된 예약만 있는 경우")
-    @Test
-    void findByCoachIdExceptDoneAndCanceled_canceled() {
-        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        reservation.confirm(false);
 
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
                 coach.getId(), List.of(DONE, CANCELED));
@@ -126,9 +114,8 @@ class ReservationRepositoryTest {
         Reservation reservation2 = reservationRepository.save(new Reservation(brownSchedule2, crew));
         reservationRepository.save(new Reservation(brownSchedule2, crew));
 
-        boolean isApproved = true;
-        reservation1.confirm(isApproved);
-        reservation2.confirm(isApproved);
+        reservation1.confirm();
+        reservation2.confirm();
 
         // when
         List<Reservation> approvedReservations
@@ -147,9 +134,8 @@ class ReservationRepositoryTest {
         Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
 
-        boolean isApproved = true;
-        reservation1.confirm(isApproved);
-        reservation2.confirm(isApproved);
+        reservation1.confirm();
+        reservation2.confirm();
 
         // when
         List<Reservation> reservations
@@ -159,26 +145,19 @@ class ReservationRepositoryTest {
         assertThat(reservations).hasSize(2);
     }
 
-    @DisplayName("코치에 해당하는 취소, 완료 상태의 면담 목록을 조회한다.")
+    @DisplayName("코치에 해당하는 완료 상태의 면담 목록을 조회한다.")
     @Test
     void findByCoachIdAndReservationStatusInCanceledAndDone() {
         Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule, crew));
 
-        reservation1.confirm(true);
+        reservation1.confirm();
         reservation1.updateSheetStatusToSubmitted();
         reservation1.updateReservationStatusToInProgress();
         reservation1.updateReservationStatusToDone();
 
-        reservation2.confirm(false);
+        reservation2.cancel(Role.COACH);
 
-        assertAll(
-                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(coach.getId(),
-                        List.of(DONE, CANCELED))).hasSize(2),
-                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(coach.getId(),
-                        List.of(DONE))).hasSize(1),
-                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(coach.getId(),
-                        List.of(CANCELED))).hasSize(1)
-        );
+        assertThat(reservationRepository.findAllByCoachIdAndStatus(coach.getId(), DONE)).hasSize(1);
     }
 }

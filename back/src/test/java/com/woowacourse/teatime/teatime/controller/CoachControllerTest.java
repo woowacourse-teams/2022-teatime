@@ -2,20 +2,13 @@ package com.woowacourse.teatime.teatime.controller;
 
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_JASON;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.RESERVATION1;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.RESERVATION2;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.RESERVATION3;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
-import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
-import com.woowacourse.teatime.teatime.domain.Reservation;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +31,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -53,7 +46,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -73,18 +66,9 @@ class CoachControllerTest extends ControllerTestSupporter {
         String token = "나 코치다.";
         코치의_토큰을_검증한다(token);
 
-        List<Reservation> reservations = List.of(RESERVATION1);
-
-        given(reservationService.findByCoachId(anyLong()))
-                .willReturn(CoachReservationsResponse.of(
-                        List.of(RESERVATION1),
-                        List.of(RESERVATION2),
-                        List.of(RESERVATION3)
-                ));
-
         // when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -97,7 +81,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         String token = "나 잘못된 토큰";
 
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
         //then
         perform.andExpectAll(
@@ -116,14 +100,9 @@ class CoachControllerTest extends ControllerTestSupporter {
         String token = "나 코치다.";
         코치의_토큰을_검증한다(token);
 
-        given(reservationService.findOwnHistoryByCoach(anyLong()))
-                .willReturn(CoachFindOwnHistoryResponse.from(
-                        List.of(RESERVATION1, RESERVATION2, RESERVATION3))
-                );
-
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/history")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -136,7 +115,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         String token = "나 잘못된 토큰.";
 
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/history")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
 

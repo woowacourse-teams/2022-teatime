@@ -25,7 +25,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             + "AND r.schedule.localDateTime < :endTime")
     List<Reservation> findAllApprovedReservationsBetween(LocalDateTime startTime, LocalDateTime endTime);
 
-    List<Reservation> findByScheduleCoachIdAndReservationStatusIn(Long coachId, List<ReservationStatus> statuses);
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.schedule.coach.id = :coachId "
+            + "AND r.reservationStatus = :status")
+    List<Reservation> findAllByCoachIdAndStatus(Long coachId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
             + "WHERE r.reservationStatus = 'APPROVED' "

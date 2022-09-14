@@ -42,9 +42,14 @@ public class CanceledReservation {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public CanceledReservation(Coach coach, Crew crew, LocalDateTime scheduledAt) {
+    private CanceledReservation(Coach coach, Crew crew, LocalDateTime scheduledAt) {
         this.coach = coach;
         this.crew = crew;
         this.scheduledAt = scheduledAt;
+    }
+
+    public static CanceledReservation from(Reservation reservation) {
+        return new CanceledReservation(
+                reservation.getCoach(), reservation.getCrew(), reservation.getScheduleDateTime());
     }
 }

@@ -64,28 +64,18 @@ public class Reservation {
         this.sheetStatus = SheetStatus.WRITING;
     }
 
-    public void confirm(boolean isApproved) {
+    public void confirm() {
         if (!isReservationStatus(ReservationStatus.BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
-        if (isApproved) {
-            reservationStatus = ReservationStatus.APPROVED;
-            return;
-        }
-        reservationStatus = ReservationStatus.CANCELED;
-        schedule.init();
+        reservationStatus = ReservationStatus.APPROVED;
     }
 
     public void cancel(Role role) {
-        if (isCancelBeforeApprovedByCoach(role) || isCancelInProgressByCrew(role)) {
+        if (isCancelInProgressByCrew(role)) {
             throw new UnableToCancelReservationException();
         }
-        reservationStatus = ReservationStatus.CANCELED;
         schedule.init();
-    }
-
-    private boolean isCancelBeforeApprovedByCoach(Role role) {
-        return role.isCoach() && isReservationStatus(ReservationStatus.BEFORE_APPROVED);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {

@@ -1,7 +1,6 @@
 package com.woowacourse.teatime.teatime.infrastructure;
 
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
-import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
@@ -14,12 +13,12 @@ import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Schedule;
+import com.woowacourse.teatime.teatime.repository.CanceledReservationRepository;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +45,9 @@ class SchedulerTest {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private CanceledReservationRepository canceledReservationRepository;
+
     private Coach coach;
     private Crew crew;
 
@@ -61,7 +63,7 @@ class SchedulerTest {
         // given
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        reservation.confirm(true);
+        reservation.confirm();
 
         // when
         scheduler.updateReservationStatusToInProgress();
@@ -81,8 +83,8 @@ class SchedulerTest {
         Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.plusHours(1)));
         Reservation reservation1 = reservationRepository.save(new Reservation(schedule1, crew));
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
-        reservation1.confirm(true);
-        reservation2.confirm(true);
+        reservation1.confirm();
+        reservation2.confirm();
         reservation1.updateSheetStatusToSubmitted();
 
         // when
@@ -90,12 +92,8 @@ class SchedulerTest {
 
         // then
         assertAll(
-                () -> assertThat(reservationRepository.findAll()).hasSize(2),
-                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
-                        coach.getId(), List.of(APPROVED))).hasSize(1),
-                () -> assertThat(reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
-                        coach.getId(), List.of(CANCELED))).hasSize(1)
-
+                () -> assertThat(reservationRepository.findAllByCoachIdAndStatus(coach.getId(), APPROVED)).hasSize(1),
+                () -> assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1)
         );
     }
 }
