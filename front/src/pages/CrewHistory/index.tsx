@@ -62,6 +62,14 @@ const CrewHistory = () => {
     });
   };
 
+  const changeHistoryIndex = (reservationId: number) => {
+    const copyHistoryList = historyList;
+    const index = copyHistoryList.findIndex((history) => history.reservationId === reservationId);
+    const changedHistory = copyHistoryList.splice(index, 1);
+    copyHistoryList.splice(0, 0, changedHistory[0]);
+    setHistoryList(copyHistoryList);
+  };
+
   const handleShowSheet = (reservationId: number) => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
@@ -72,6 +80,7 @@ const CrewHistory = () => {
     try {
       await cancelReservation(reservationId);
       changeHistoryStatus(reservationId, 'CANCELED');
+      changeHistoryIndex(reservationId);
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
       if (error instanceof AxiosError) {
