@@ -1,13 +1,6 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-const FadeIn = keyframes`
-  from {
-    opacity: 0
-  }
-  to {
-    opacity: 1
-  }
-`;
+import { FadeIn } from '@styles/common';
 
 const Background = styled.div`
   height: 100%;

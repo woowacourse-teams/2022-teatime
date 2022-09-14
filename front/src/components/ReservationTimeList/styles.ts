@@ -1,13 +1,5 @@
-import styled, { css, keyframes } from 'styled-components';
-
-const FadeIn = keyframes`
- from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+import styled, { css } from 'styled-components';
+import { FadeIn } from '@styles/common';
 
 const TimeListContainer = styled.div`
   width: 250px;
