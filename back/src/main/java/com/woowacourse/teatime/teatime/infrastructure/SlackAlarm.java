@@ -5,6 +5,7 @@ import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,12 @@ public class SlackAlarm implements Alarm {
         } catch (IOException | SlackApiException e) {
             log.warn("send message request error : " + e.getMessage());
             throw new SlackAlarmException();
+        }
+    }
+
+    public void sendMessages(List<String> userIds, String message) {
+        for (String userId : userIds) {
+            sendMessage(userId, message);
         }
     }
 }

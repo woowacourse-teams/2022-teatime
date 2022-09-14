@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.infrastructure;
 
+import com.woowacourse.teatime.teatime.service.AlarmService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Scheduler {
 
     private final ReservationService reservationService;
+    private final AlarmService alarmService;
 
     @Scheduled(cron = "0 0/30 10-18 * * *")
     public void updateReservationStatusToInProgress() {
@@ -26,5 +28,11 @@ public class Scheduler {
     public void cancelReservationNotSubmitted() {
         log.info("{}, 전날까지 면담내용을 제출하지 않았다면 면담을 취소하는 스케쥴러 실행", LocalDateTime.now());
         reservationService.cancelReservationNotSubmitted();
+    }
+
+    @Scheduled(cron = "0 0 13 * * *")
+    public void remindReservation() {
+        log.info("{}, 다음날 면담을 리마인드 해주는스케쥴러 실행", LocalDateTime.now());
+        alarmService.remindReservation();
     }
 }

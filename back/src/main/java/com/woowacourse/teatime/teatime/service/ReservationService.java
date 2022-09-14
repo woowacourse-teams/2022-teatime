@@ -6,6 +6,9 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
+import static com.woowacourse.teatime.teatime.service.AlarmMessage.APPLY;
+import static com.woowacourse.teatime.teatime.service.AlarmMessage.CANCEL;
+import static com.woowacourse.teatime.teatime.service.AlarmMessage.CONFIRM;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.exception.UnAuthorizedException;
@@ -15,6 +18,7 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHist
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
+import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
@@ -26,6 +30,7 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
+import com.woowacourse.teatime.teatime.infrastructure.Alarm;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
@@ -45,6 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReservationService {
 
+    private final Alarm alarm;
     private final ReservationRepository reservationRepository;
     private final CrewRepository crewRepository;
     private final ScheduleRepository scheduleRepository;
@@ -59,6 +65,11 @@ public class ReservationService {
 
         schedule.reserve();
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+
+        Coach coach = schedule.getCoach();
+        String message = APPLY.getMessage(crew.getName(), coach.getName(), schedule.getLocalDateTime());
+        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
+
         return reservation.getId();
     }
 
@@ -67,7 +78,18 @@ public class ReservationService {
                 .orElseThrow(NotFoundReservationException::new);
         validateIsSameCoach(coachId, reservation);
 
-        reservation.confirm(reservationApproveRequest.getIsApproved());
+        Boolean isApproved = reservationApproveRequest.getIsApproved();
+        reservation.confirm(isApproved);
+
+        Crew crew = reservation.getCrew();
+        Coach coach = reservation.getCoach();
+
+        String message = CONFIRM.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+        if (!isApproved) {
+            message = CANCEL.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+        }
+
+        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
     }
 
     public void cancel(Long reservationId, UserRoleDto userRoleDto) {
@@ -77,6 +99,11 @@ public class ReservationService {
         Role role = Role.search(userRoleDto.getRole());
         validateAuthorization(userRoleDto.getId(), role, reservation);
         reservation.cancel(role);
+
+        Crew crew = reservation.getCrew();
+        Coach coach = reservation.getCoach();
+        String message = CANCEL.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
     }
 
     private void validateAuthorization(Long applicantId, Role role,
@@ -210,6 +237,11 @@ public class ReservationService {
 
         for (Reservation reservation : reservations) {
             reservation.cancel(Role.COACH);
+
+            Crew crew = reservation.getCrew();
+            Coach coach = reservation.getCoach();
+            String message = CANCEL.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+            alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
         }
     }
 
