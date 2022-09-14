@@ -70,8 +70,9 @@ const CrewHistory = () => {
     setHistoryList(copyHistoryList);
   };
 
-  const handleShowSheet = (reservationId: number) => {
-    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
+  const handleShowSheet = (reservationId: number, status: string) => {
+    const isCanceled = status === 'CANCELED';
+    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`, { state: isCanceled });
   };
 
   const handleCancelReservation = async (reservationId: number) => {
