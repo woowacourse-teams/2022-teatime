@@ -8,14 +8,14 @@ import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdat
 public class DtoFixture {
 
     public static final CoachSaveRequest COACH_BROWN_SAVE_REQUEST
-            = new CoachSaveRequest("brown", "brown@email.com", "i am legend", "image");
+            = new CoachSaveRequest("brown","brown", "brown@email.com", "i am legend", "image");
     public static final CoachSaveRequest COACH_JUNE_SAVE_REQUEST
-            = new CoachSaveRequest("june", "june@email.com", "i am legend", "image");
+            = new CoachSaveRequest("june","june", "june@email.com", "i am legend", "image");
     public static final CoachSaveRequest COACH_WOOWAHAN_SAVE_REQUEST
-            = new CoachSaveRequest("john", "john@woowahan.com", "i am legend", "image");
+            = new CoachSaveRequest("john","john", "john@woowahan.com", "i am legend", "image");
 
     public static final CrewSaveRequest CREW_SAVE_REQUEST
-            = new CrewSaveRequest("maru", "maru@email.com", "image");
+            = new CrewSaveRequest("maru","maru", "maru@email.com", "image");
 
     public static final SheetAnswerUpdateDto SHEET_ANSWER_UPDATE_REQUEST_ONE
             = new SheetAnswerUpdateDto(1, "당신의 혈액형은?", "B형");

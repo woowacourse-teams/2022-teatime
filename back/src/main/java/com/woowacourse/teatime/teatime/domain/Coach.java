@@ -20,6 +20,9 @@ public class Coach {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String slackId;
+
     @Column(nullable = false, length = 80)
     private String name;
 
@@ -31,15 +34,22 @@ public class Coach {
 
     private String image;
 
-    public Coach(String name, String email, String image) {
-        this(name, email, "안녕하세요~ " + name + "입니다:)", image);
+    public Coach(String slackId, String name, String email, String image) {
+        this(slackId, name, email, "안녕하세요~ " + name + "입니다:)", image);
     }
 
-    public Coach(String name, String email, String description, String image) {
+    public Coach(String slackId, String name, String email, String description, String image) {
+        this.slackId = slackId;
         this.name = name;
         this.email = email;
         this.description = description;
         this.image = image;
+    }
+
+    public void setSlackId(String slackId) {
+        if (slackId == null || slackId.isBlank()) {
+            this.slackId = slackId;
+        }
     }
 
     @Override
@@ -51,13 +61,13 @@ public class Coach {
             return false;
         }
         Coach coach = (Coach) o;
-        return Objects.equals(getName(), coach.getName()) && Objects.equals(getEmail(), coach.getEmail())
-                && Objects.equals(getDescription(), coach.getDescription()) && Objects.equals(getImage(),
-                coach.getImage());
+        return Objects.equals(slackId, coach.slackId) && Objects.equals(name, coach.name)
+                && Objects.equals(email, coach.email) && Objects.equals(description, coach.description)
+                && Objects.equals(image, coach.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getEmail(), getDescription(), getImage());
+        return Objects.hash(slackId, name, email, description, image);
     }
 }

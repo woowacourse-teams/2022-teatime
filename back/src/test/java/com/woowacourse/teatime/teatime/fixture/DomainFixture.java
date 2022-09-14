@@ -11,8 +11,8 @@ import java.time.LocalTime;
 
 public class DomainFixture {
 
-    public static final Coach COACH_BROWN = new Coach("브라운", "brown@email.com", "i am legend", "image");
-    public static final Coach COACH_JASON = new Coach("제이슨", "jason@email.com", "i am legend", "image");
+    public static final Coach COACH_BROWN = new Coach("브라운", "브라운", "brown@email.com", "i am legend", "image");
+    public static final Coach COACH_JASON = new Coach("제이슨", "제이슨", "jason@email.com", "i am legend", "image");
 
     public static final LocalDate LOCAL_DATE = LocalDate.now();
     public static final LocalTime LOCAL_TIME = LocalTime.MIN;
@@ -22,9 +22,9 @@ public class DomainFixture {
     public static final Schedule SCHEDULE2 = new Schedule(COACH_BROWN, DATE_TIME.plusDays(1));
     public static final Schedule SCHEDULE3 = new Schedule(COACH_BROWN, DATE_TIME.plusDays(2));
 
-    public static final Crew CREW1 = new Crew("마루", "maru@email.com", "image");
-    public static final Crew CREW2 = new Crew("아키", "aki@email.com", "image");
-    public static final Crew CREW3 = new Crew("야호", "yaho@email.com", "image");
+    public static final Crew CREW1 = new Crew("마루", "마루", "maru@email.com", "image");
+    public static final Crew CREW2 = new Crew("아키", "아키", "aki@email.com", "image");
+    public static final Crew CREW3 = new Crew("야호", "야호", "yaho@email.com", "image");
 
     public static final Reservation RESERVATION1 = new Reservation(SCHEDULE1, CREW1);
     public static final Reservation RESERVATION2 = new Reservation(SCHEDULE2, CREW2);
@@ -43,10 +43,10 @@ public class DomainFixture {
     }
 
     public static Coach getCoachJason() {
-        return new Coach("제이슨", "jason@email.com", "i am legend", "image");
+        return new Coach("제이슨", "제이슨", "jason@email.com", "i am legend", "image");
     }
 
     public static Crew getCrew1() {
-        return new Crew("마루", "maru@email.com", "image");
+        return new Crew("마루", "마루", "maru@email.com", "image");
     }
 }
