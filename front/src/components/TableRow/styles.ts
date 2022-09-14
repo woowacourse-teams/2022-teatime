@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const TbodyRow = styled.tr`
   display: grid;
-  place-items: center;
+  align-items: center;
   grid-template-columns: 1fr 2fr repeat(3, 1fr);
   grid-auto-rows: 96px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.GRAY_300};
@@ -20,6 +20,7 @@ const Span = styled.span<{ color: string; bgColor: string }>`
 const Profile = styled.div`
   display: flex;
   align-items: center;
+  padding-left: 54px;
 
   img {
     width: 48px;
