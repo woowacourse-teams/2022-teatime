@@ -18,10 +18,13 @@ const editCrewReservation = (reservationId: string, isSubmitted: boolean, sheets
     sheets,
   });
 
+const editCrewNickName = (name: string) => api.put(`/api/v2/crews/me/profile`, { name });
+
 export {
   getCrewHistoriesByMe,
   getCrewHistoriesByCoach,
   getCrewReservationByMe,
   getCrewReservationByCoach,
   editCrewReservation,
+  editCrewNickName,
 };
