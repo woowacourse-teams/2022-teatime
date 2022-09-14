@@ -2,6 +2,10 @@ type UserRole = 'CREW' | 'COACH';
 
 type SheetStatus = 'WRITING' | 'SUBMITTED';
 
+type CrewHistoryStatus = 'BEFORE_APPROVED' | 'APPROVED' | 'IN_PROGRESS' | 'DONE' | 'CANCELED';
+
+type CoachHistoryStatus = 'DONE' | 'CANCELED';
+
 interface UserInfo {
   image: string;
   name: string;
@@ -44,7 +48,7 @@ interface CrewHistory {
   coachName: string;
   coachImage: string;
   dateTime: string;
-  status: string;
+  status: CrewHistoryStatus;
 }
 
 interface CoachHistory {
@@ -52,7 +56,7 @@ interface CoachHistory {
   crewName: string;
   crewImage: string;
   dateTime: string;
-  status: string;
+  status: CoachHistoryStatus;
 }
 
 interface HistoryList {
@@ -107,4 +111,6 @@ export {
   CrewHistory,
   HistoryList,
   CoachHistory,
+  CrewHistoryStatus,
+  CoachHistoryStatus,
 };

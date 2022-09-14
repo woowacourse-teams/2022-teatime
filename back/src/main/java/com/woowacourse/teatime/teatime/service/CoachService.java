@@ -26,7 +26,7 @@ public class CoachService {
     }
 
     public Long save(CoachSaveRequest request) {
-        Coach coach = new Coach(request.getName(), request.getDescription(), request.getImage());
+        Coach coach = new Coach(request.getSlackId(), request.getName(), request.getDescription(), request.getImage());
         return coachRepository.save(coach).getId();
     }
 }

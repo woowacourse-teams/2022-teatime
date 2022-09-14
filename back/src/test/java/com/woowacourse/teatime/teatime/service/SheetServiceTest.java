@@ -55,6 +55,8 @@ class SheetServiceTest {
     @Autowired
     private SheetService sheetService;
     @Autowired
+    private ReservationService reservationService;
+    @Autowired
     private CoachRepository coachRepository;
     @Autowired
     private CrewRepository crewRepository;
@@ -140,9 +142,9 @@ class SheetServiceTest {
                 .isInstanceOf(NotFoundReservationException.class);
     }
 
-    @DisplayName("면담 시트의 답변을 임시저장한다.")
+    @DisplayName("면담 시트의 답변을 임시저장한다. - 코치가 조회하면 답변이 null")
     @Test
-    void modifyAnswer_write() {
+    void modifyAnswer_write_findByCoach() {
         sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
@@ -153,6 +155,27 @@ class SheetServiceTest {
         sheetService.updateAnswer(crew.getId(), reservation.getId(), request);
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
+        List<SheetDto> sheets = response.getSheets();
+        assertAll(
+                () -> assertThat(sheets.get(0).getAnswerContent()).isNull(),
+                () -> assertThat(sheets.get(1).getAnswerContent()).isNull(),
+                () -> assertThat(sheets.get(2).getAnswerContent()).isNull()
+        );
+    }
+
+    @DisplayName("면담 시트의 답변을 임시저장한다. - 크루가 조회하면 답변이 보임")
+    @Test
+    void modifyAnswer_write_findByCrew() {
+        sheetService.save(reservation.getId());
+
+        List<SheetAnswerUpdateDto> updateDtos = List.of(
+                SHEET_ANSWER_UPDATE_REQUEST_TWO,
+                SHEET_ANSWER_UPDATE_REQUEST_ONE,
+                SHEET_ANSWER_UPDATE_REQUEST_THREE);
+        SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
+        sheetService.updateAnswer(crew.getId(), reservation.getId(), request);
+
+        CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();
         assertAll(
                 () -> assertThat(sheets.get(0).getAnswerContent()).isEqualTo("B형"),
@@ -172,6 +195,7 @@ class SheetServiceTest {
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
         sheetService.updateAnswer(crew.getId(), reservation.getId(), request);
+        reservationService.updateSheetStatusToSubmitted(crew.getId(), reservation.getId(), request.getStatus());
 
         CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
         List<SheetDto> sheets = response.getSheets();

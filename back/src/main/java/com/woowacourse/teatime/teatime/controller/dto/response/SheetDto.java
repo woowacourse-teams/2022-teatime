@@ -39,4 +39,11 @@ public class SheetDto {
                 .map(SheetDto::new)
                 .collect(Collectors.toList());
     }
+
+    public static List<SheetDto> generateEmptySheet(List<Sheet> sheets) {
+        return sheets.stream()
+                .map(sheet -> new Sheet(sheet.getReservation(), sheet.getNumber(), sheet.getQuestionContent()))
+                .map(SheetDto::new)
+                .collect(Collectors.toList());
+    }
 }

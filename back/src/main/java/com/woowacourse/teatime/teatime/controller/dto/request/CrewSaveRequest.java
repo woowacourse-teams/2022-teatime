@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 public class CrewSaveRequest {
 
     @NotBlank
+    private String slackId;
+
+    @NotBlank
     private String name;
 
     @NotBlank

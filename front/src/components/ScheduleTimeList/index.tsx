@@ -1,10 +1,9 @@
 import { useContext } from 'react';
 import { AxiosError } from 'axios';
 
-import { UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import api from '@api/index';
 import { getHourMinutes } from '@utils/date';
+import { editCoachSchedule } from '@api/coach';
 import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
 
@@ -25,7 +24,6 @@ const ScheduleTimeList = ({
   onSelectAll,
   onUpdateSchedule,
 }: ScheduleTimeListProps) => {
-  const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
 
   const getSelectedTimes = () => {
@@ -40,19 +38,7 @@ const ScheduleTimeList = ({
   const handleUpdateDaySchedule = async () => {
     const selectedTimes = getSelectedTimes();
     try {
-      await api.put(
-        `/api/v2/coaches/me/schedules`,
-        {
-          date,
-          schedules: selectedTimes,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        }
-      );
-
+      await editCoachSchedule(date, selectedTimes);
       onUpdateSchedule(selectedTimes);
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {

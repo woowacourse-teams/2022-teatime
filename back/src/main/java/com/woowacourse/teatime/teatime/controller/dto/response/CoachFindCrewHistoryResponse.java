@@ -1,5 +1,7 @@
 package com.woowacourse.teatime.teatime.controller.dto.response;
 
+import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Reservation;
@@ -31,6 +33,10 @@ public class CoachFindCrewHistoryResponse {
     public static CoachFindCrewHistoryResponse from(Reservation reservation, List<Sheet> sheets) {
         Schedule schedule = reservation.getSchedule();
         Coach coach = schedule.getCoach();
+        if (WRITING.equals(reservation.getSheetStatus())) {
+            return new CoachFindCrewHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
+                    schedule.getLocalDateTime(), SheetDto.generateEmptySheet(sheets));
+        }
         return new CoachFindCrewHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
                 schedule.getLocalDateTime(), SheetDto.from(sheets));
     }

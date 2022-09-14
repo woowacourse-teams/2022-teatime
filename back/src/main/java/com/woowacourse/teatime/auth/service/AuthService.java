@@ -59,6 +59,8 @@ public class AuthService {
     private LoginResponse getCoachLoginResponse(UserInfoDto userInfo) {
         Coach coach = coachRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> saveCoachAndDefaultQuestions(userInfo));
+        coach.setSlackId(userInfo.getSlackId());
+
         Map<String, Object> claims = Map.of("id", coach.getId(), "role", COACH);
         String token = jwtTokenProvider.createToken(claims);
         return new LoginResponse(token, COACH, coach.getImage(), coach.getName());
@@ -67,6 +69,7 @@ public class AuthService {
     @NotNull
     private Coach saveCoachAndDefaultQuestions(UserInfoDto userInfo) {
         Coach coach = coachRepository.save(new Coach(
+                userInfo.getSlackId(),
                 userInfo.getName(),
                 userInfo.getEmail(),
                 userInfo.getImage()));
@@ -83,6 +86,8 @@ public class AuthService {
     private LoginResponse getCrewLoginResponse(UserInfoDto userInfo) {
         Crew crew = crewRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> saveCrew(userInfo));
+        crew.setSlackId(userInfo.getSlackId());
+
         Map<String, Object> claims = Map.of("id", crew.getId(), "role", CREW);
         String token = jwtTokenProvider.createToken(claims);
         return new LoginResponse(token, CREW, crew.getImage(), crew.getName());
@@ -91,6 +96,7 @@ public class AuthService {
     @NotNull
     private Crew saveCrew(UserInfoDto userInfo) {
         Crew newCrew = new Crew(
+                userInfo.getSlackId(),
                 userInfo.getName(),
                 userInfo.getEmail(),
                 userInfo.getImage());
