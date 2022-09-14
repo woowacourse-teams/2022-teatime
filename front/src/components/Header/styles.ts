@@ -58,4 +58,27 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper };
+const Input = styled.input`
+  width: 170px;
+  height: 34px;
+  text-align: center;
+  border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
+  border-radius: 20px;
+  font-size: 16px;
+`;
+
+const Button = styled.button`
+  width: 40px;
+  height: 30px;
+  margin-left: 6px;
+  background-color: ${({ theme }) => theme.colors.GRAY_200};
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
+export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper, Input, Button };
