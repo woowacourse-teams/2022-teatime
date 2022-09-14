@@ -67,6 +67,7 @@ public class AuthService {
     @NotNull
     private Coach saveCoachAndDefaultQuestions(UserInfoDto userInfo) {
         Coach coach = coachRepository.save(new Coach(
+                userInfo.getSlackId(),
                 userInfo.getName(),
                 userInfo.getEmail(),
                 userInfo.getImage()));
@@ -91,6 +92,7 @@ public class AuthService {
     @NotNull
     private Crew saveCrew(UserInfoDto userInfo) {
         Crew newCrew = new Crew(
+                userInfo.getSlackId(),
                 userInfo.getName(),
                 userInfo.getEmail(),
                 userInfo.getImage());

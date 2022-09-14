@@ -18,6 +18,9 @@ public class Crew {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String slackId;
+
     @Column(nullable = false, length = 80)
     private String name;
 
@@ -26,7 +29,8 @@ public class Crew {
 
     private String image;
 
-    public Crew(String name, String email, String image) {
+    public Crew(String slackId, String name, String email, String image) {
+        this.slackId = slackId;
         this.name = name;
         this.email = email;
         this.image = image;
