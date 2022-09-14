@@ -1,5 +1,16 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const FadeIn = keyframes`
+  from {
+    transform: translateX(10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -58,27 +69,36 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const Input = styled.input`
-  width: 170px;
-  height: 34px;
-  text-align: center;
-  border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
-  border-radius: 20px;
-  font-size: 16px;
-`;
+const Form = styled.form`
+  animation: ${FadeIn} 0.8s;
 
-const Button = styled.button`
-  width: 40px;
-  height: 30px;
-  margin-left: 6px;
-  background-color: ${({ theme }) => theme.colors.GRAY_200};
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
+  input {
+    width: 170px;
+    height: 34px;
+    text-align: center;
+    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
+    border-radius: 20px;
+    font-size: 16px;
 
-  :hover {
-    opacity: 0.7;
+    ::placeholder {
+      color: ${({ theme }) => theme.colors.GRAY_500};
+      font-size: 14px;
+    }
+  }
+
+  button {
+    width: 40px;
+    height: 30px;
+    margin-left: 6px;
+    background-color: ${({ theme }) => theme.colors.GRAY_200};
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+
+    :hover {
+      opacity: 0.7;
+    }
   }
 `;
 
-export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper, Input, Button };
+export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper, Form };
