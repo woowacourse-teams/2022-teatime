@@ -17,10 +17,12 @@ import com.woowacourse.teatime.teatime.support.ControllerTest;
 import com.woowacourse.teatime.teatime.support.RestDocsSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+@MockBean(JpaMetamodelMappingContext.class)
 @ControllerTest
 public class ControllerTestSupporter extends RestDocsSupporter {
 

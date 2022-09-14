@@ -46,6 +46,16 @@ class ReservationRepositoryTest {
         schedule = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME));
     }
 
+    @DisplayName("면담을 생성할 때 updatedAt에 생성시간이 저장된다.")
+    @Test
+    void save() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Reservation savedReservation = reservationRepository.save(new Reservation(schedule, crew));
+
+        assertThat(savedReservation.getUpdatedAt()).isAfter(now);
+    }
+
     @DisplayName("크루에 해당하는 면담 목록을 조회한다. - 면담 상태 : BEFORE_APPROVED")
     @Test
     void findByCrewId() {

@@ -8,6 +8,7 @@ import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -48,6 +52,10 @@ public class Reservation {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SheetStatus sheetStatus;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
