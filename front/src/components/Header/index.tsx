@@ -1,12 +1,16 @@
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import Dropdown from '@components/Dropdown';
 import Conditional from '@components/Conditional';
 import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
+import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES } from '@constants/index';
+import { editCoachNickName } from '@api/coach';
+import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
 
 import LogoIcon from '@assets/logo.svg';
@@ -15,9 +19,11 @@ const Header = () => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
+  const showSnackbar = useContext(SnackbarContext);
   const profileRef = useRef(null);
   const [isActive, setIsActive] = useOutsideClick(profileRef, false);
   const { value: isOpenInput, setTrue: openInput, setFalse: closeInput } = useBoolean();
+  const [nickName, setNickName] = useState('');
 
   const handleLogout = () => {
     dispatch({ type: 'DELETE_USER' });
@@ -28,10 +34,27 @@ const Header = () => {
     setIsActive(!isActive);
   };
 
-  const handleModifyNickname = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleModifyNickname = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    closeInput();
+    try {
+      userData?.role === 'COACH'
+        ? await editCoachNickName(nickName)
+        : await editCrewNickName(nickName);
+
+      showSnackbar({ message: '변경되었습니다. ✅' });
+      setNickName('');
+      closeInput();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
+  };
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickName(e.target.value);
   };
 
   return (
@@ -42,12 +65,17 @@ const Header = () => {
       </S.LogoLink>
       {userData && (
         <S.ProfileContainer>
-          {!isOpenInput ? (
-            <form onSubmit={(e) => handleModifyNickname(e)}>
-              <S.Input type="text" />
-              <S.Button>수정</S.Button>
-              <S.Button onClick={() => closeInput()}>취소</S.Button>
-            </form>
+          {isOpenInput ? (
+            <S.Form onSubmit={(e) => handleModifyNickname(e)}>
+              <input
+                type="text"
+                placeholder="ex) 닉네임(이름)"
+                value={nickName}
+                onChange={(e) => handleChangeInput(e)}
+              />
+              <button>수정</button>
+              <button onClick={() => closeInput()}>취소</button>
+            </S.Form>
           ) : (
             <S.ProfileWrapper ref={profileRef} onClick={toggleDropdown}>
               <span>{userData.name}</span>
