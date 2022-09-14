@@ -94,7 +94,7 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
     @DisplayName("코치가 자신의 스케줄을 조회한다.")
     @Test
     void findOwnSchedules() {
-        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH).plusHours(1));
+        scheduleService.save(coachId, Date.findFirstDateTime(YEAR, MONTH).plusHours(1));
         scheduleService.save(coachId, LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)));
 
         ExtractableResponse<Response> response = 코치가_자신의_스케쥴_조회_요청됨(YEAR, MONTH, coachToken);
@@ -118,7 +118,7 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void updateByCoachAndDate() {
-        scheduleService.save(coachId, Date.findFirstDay(YEAR, MONTH).plusHours(1));
+        scheduleService.save(coachId, Date.findFirstDateTime(YEAR, MONTH).plusHours(1));
 
         LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
         ScheduleUpdateRequest request = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of(localDateTime));
