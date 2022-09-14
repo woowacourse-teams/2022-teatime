@@ -28,7 +28,7 @@ interface BoardItem {
   [key: string]: BoardItemValue;
 }
 
-const Coach = () => {
+const CoachMain = () => {
   const navigate = useNavigate();
   const isWindowFocused = useWindowFocus();
   const showSnackbar = useContext(SnackbarContext);
@@ -261,4 +261,4 @@ const Coach = () => {
   );
 };
 
-export default Coach;
+export default CoachMain;
