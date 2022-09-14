@@ -33,17 +33,17 @@ public class CanceledSheet {
     @Lob
     private String answerContent;
 
-    public CanceledSheet(CanceledReservation reservation, Integer number, String questionContent,
-                         String answerContent) {
+    private CanceledSheet(CanceledReservation reservation, Integer number, String questionContent,
+                          String answerContent) {
         this.reservation = reservation;
         this.number = number;
         this.questionContent = questionContent;
         this.answerContent = answerContent;
     }
 
-    public static CanceledSheet from(Sheet sheet) {
+    public static CanceledSheet from(CanceledReservation canceledReservation, Sheet sheet) {
         return new CanceledSheet(
-                CanceledReservation.from(sheet.getReservation()),
+                canceledReservation,
                 sheet.getNumber(),
                 sheet.getQuestionContent(),
                 sheet.getAnswerContent());

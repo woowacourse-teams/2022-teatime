@@ -92,11 +92,11 @@ public class ReservationService {
 
     private void cancelReservation(Reservation reservation, Role role) {
         CanceledReservation canceledReservation = CanceledReservation.from(reservation);
+        CanceledReservation savedCanceledReservation = canceledReservationRepository.save(canceledReservation);
         List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
         List<CanceledSheet> canceledSheets = sheets.stream()
-                .map(CanceledSheet::from)
+                .map(sheet -> CanceledSheet.from(savedCanceledReservation, sheet))
                 .collect(Collectors.toList());
-        canceledReservationRepository.save(canceledReservation);
         canceledSheetRepository.saveAll(canceledSheets);
 
         reservation.cancel(role);
