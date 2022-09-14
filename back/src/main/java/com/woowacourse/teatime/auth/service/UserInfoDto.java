@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserInfoDto {
 
+    private final String slackId;
     private final String name;
     private final String email;
     private final String image;

@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 class ScheduleServiceTest {
 
     private static final LocalDate NOW = LocalDate.now();
+    private static final LocalDate LAST_DATE_OF_MONTH = NOW.withDayOfMonth(NOW.lengthOfMonth());
     private static final int YEAR = NOW.getYear();
     private static final int MONTH = NOW.getMonthValue();
     private static final ScheduleFindRequest REQUEST = new ScheduleFindRequest(YEAR, MONTH);
@@ -89,7 +90,8 @@ class ScheduleServiceTest {
     void update() {
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();
-        ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date, List.of(Date.findFirstTime(date)));
+        ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
+                List.of(LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59))));
         scheduleService.update(coach.getId(), updateRequest);
 
         ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
@@ -117,8 +119,8 @@ class ScheduleServiceTest {
     @Test
     void update_if_reservation_exist() {
         Coach coach = coachRepository.save(COACH_BROWN);
-        LocalDateTime reservedTime = Date.findFirstTime(LocalDate.now());
-        LocalDateTime notReservedTime = Date.findLastTime(LocalDate.now()).minusHours(1);
+        LocalDateTime reservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 58));
+        LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
         Crew crew = crewRepository.save(CREW1);
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule1.getId());
@@ -126,10 +128,12 @@ class ScheduleServiceTest {
         scheduleRepository.save(new Schedule(coach, notReservedTime));
 
         ScheduleUpdateRequest scheduleUpdateRequest
-                = new ScheduleUpdateRequest(reservedTime.toLocalDate(), List.of(reservedTime.plusHours(1), reservedTime.plusHours(2)));
+                = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH,
+                List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2)));
         scheduleService.update(coach.getId(), scheduleUpdateRequest);
         List<ScheduleFindResponse> responses
-                = scheduleService.find(coach.getId(), new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
+                = scheduleService.find(coach.getId(),
+                new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
         List<ScheduleDto> schedules = responses.get(0).getSchedules();
 
         assertThat(schedules).hasSize(3);

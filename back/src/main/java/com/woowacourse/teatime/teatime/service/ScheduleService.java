@@ -37,7 +37,7 @@ public class ScheduleService {
     public List<ScheduleFindResponse> find(Long coachId, ScheduleFindRequest request) {
         findCoach(coachId);
 
-        LocalDateTime start = Date.findFirstDay(request.getYear(), request.getMonth());
+        LocalDateTime start = Date.findFirstDateTime(request.getYear(), request.getMonth());
         LocalDateTime end = Date.findLastDay(request.getYear(), request.getMonth());
         List<Schedule> schedules
                 = scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(coachId, start, end);

@@ -6,12 +6,13 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 
 public class Date {
-    public static LocalDateTime findFirstDay(int year, int month) {
+
+    public static LocalDateTime findFirstDateTime(int year, int month) {
         LocalDate today = LocalDate.now();
         validateYearAndMonth(year, month, today);
         LocalDate startDate = LocalDate.of(year, month, 1);
         if (year == today.getYear() && month == today.getMonthValue()) {
-            startDate = LocalDate.now();
+            return LocalDateTime.of(LocalDate.now(), LocalTime.now());
         }
         return LocalDateTime.of(startDate, LocalTime.MIN);
     }

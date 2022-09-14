@@ -1,19 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import EmptyContent from '@components/EmptyContent';
-import { UserStateContext } from '@context/UserProvider';
-import api from '@api/index';
-import { CoachHistory as CoachHistoryType } from '@typings/domain';
+import { getCoachHistories } from '@api/coach';
+import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
 import theme from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };
 
-interface HistoryStatus {
-  [key: string]: StatusValue;
-}
+type HistoryStatus = {
+  [key in CoachHistoryStatus]: StatusValue;
+};
 
 const historyStatus: HistoryStatus = {
   CANCELED: {
@@ -29,17 +28,12 @@ const historyStatus: HistoryStatus = {
 };
 
 const CoachHistory = () => {
-  const { userData } = useContext(UserStateContext);
   const [historyList, setHistoryList] = useState<CoachHistoryType[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/coaches/me/history', {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await getCoachHistories();
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
