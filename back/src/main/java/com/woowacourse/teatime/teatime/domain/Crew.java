@@ -35,4 +35,10 @@ public class Crew {
         this.email = email;
         this.image = image;
     }
+
+    public void setSlackId(String slackId) {
+        if (slackId == null || slackId.isBlank()) {
+            this.slackId = slackId;
+        }
+    }
 }

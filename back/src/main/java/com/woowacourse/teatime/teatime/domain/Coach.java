@@ -46,6 +46,12 @@ public class Coach {
         this.image = image;
     }
 
+    public void setSlackId(String slackId) {
+        if (slackId == null || slackId.isBlank()) {
+            this.slackId = slackId;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
