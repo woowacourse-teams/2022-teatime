@@ -44,4 +44,4 @@ include::{snippets}/find-own-history-tokenException/http-response.adoc[]
 
 === 코치 프로필 수정 성공
 
-operation::update-profile[]
+operation::coach-update-profile[]

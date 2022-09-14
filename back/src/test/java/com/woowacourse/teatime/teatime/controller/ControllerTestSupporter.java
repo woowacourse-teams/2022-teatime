@@ -10,6 +10,7 @@ import com.woowacourse.teatime.auth.infrastructure.PayloadDto;
 import com.woowacourse.teatime.auth.infrastructure.PayloadExtractor;
 import com.woowacourse.teatime.auth.service.AuthService;
 import com.woowacourse.teatime.teatime.service.CoachService;
+import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import com.woowacourse.teatime.teatime.service.SheetService;
@@ -44,6 +45,9 @@ public class ControllerTestSupporter extends RestDocsSupporter {
 
     @MockBean
     protected CoachService coachService;
+
+    @MockBean
+    protected CrewService crewService;
 
     @MockBean
     protected AuthService authService;

@@ -20,6 +20,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
@@ -285,6 +287,23 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 () -> assertThat(answers.get(1)).isEqualTo("물고기 자리"),
                 () -> assertThat(answers.get(2)).isEqualTo("entp")
         );
+    }
+
+    @DisplayName("크루가 자신의 프로필을 수정한다.")
+    @Test
+    void updateProfile() {
+        //given, when
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + crewToken)
+                .body(new CrewUpdateProfileRequest("쿄"))
+                .filter(document("crew-update-profile"))
+                .when().put("/api/v2/crews/me/profile")
+                .then().log().all()
+                .extract();
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     private void 승인된_예약을_진행중인_예약으로_변경한다() {

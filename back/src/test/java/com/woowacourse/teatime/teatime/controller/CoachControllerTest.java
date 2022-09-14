@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
@@ -161,8 +162,8 @@ class CoachControllerTest extends ControllerTestSupporter {
         코치의_토큰을_검증한다(token);
 
         //when
-        String name = "제이슨";
-        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", name)
+        CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨");
+        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", request)
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
@@ -179,7 +180,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         코치의_토큰을_검증한다(token);
 
         //when
-        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", name)
+        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name))
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 

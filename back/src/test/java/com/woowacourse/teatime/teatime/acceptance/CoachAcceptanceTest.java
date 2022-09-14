@@ -150,7 +150,7 @@ class CoachAcceptanceTest extends AcceptanceTestSupporter {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + coachToken)
                 .body(new CoachUpdateProfileRequest("재성이형"))
-                .filter(document("update-profile"))
+                .filter(document("coach-update-profile"))
                 .when().put("/api/v2/coaches/me/profile")
                 .then().log().all()
                 .extract();
