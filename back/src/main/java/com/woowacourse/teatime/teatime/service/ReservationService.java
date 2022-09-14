@@ -135,13 +135,7 @@ public class ReservationService {
                 ReservationStatus.classifyReservations(IN_PROGRESS, reservations));
     }
 
-    public void updateReservationStatusToDone(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-        reservation.updateReservationStatusToDone();
-    }
-
-    public void updateReservationStatusToDoneV2(Long coachId, Long reservationId) {
+    public void updateReservationStatusToDone(Long coachId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
         validateCoachAuthorization(coachId, reservation);
