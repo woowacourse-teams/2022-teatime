@@ -9,6 +9,9 @@ const getCrewHistoriesByCoach = (crewId: string) =>
 const getCrewReservationByMe = (reservationId: string) =>
   api.get<Reservation>(`/api/v2/crews/me/reservations/${reservationId}`);
 
+const getCrewCanceledReservation = (reservationId: string) =>
+  api.get<Reservation>(`/api/v2/crews/me/canceled-reservations/${reservationId}`);
+
 const getCrewReservationByCoach = (crewId: number, reservationId: string) =>
   api.get<Reservation>(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
 
@@ -24,6 +27,7 @@ export {
   getCrewHistoriesByMe,
   getCrewHistoriesByCoach,
   getCrewReservationByMe,
+  getCrewCanceledReservation,
   getCrewReservationByCoach,
   editCrewReservation,
   editCrewNickName,
