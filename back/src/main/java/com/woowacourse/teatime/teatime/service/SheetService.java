@@ -4,7 +4,10 @@ import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewSheetResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnCanceledSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnSheetResponse;
+import com.woowacourse.teatime.teatime.domain.CanceledReservation;
+import com.woowacourse.teatime.teatime.domain.CanceledSheet;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.domain.Reservation;
@@ -13,6 +16,8 @@ import com.woowacourse.teatime.teatime.domain.SheetStatus;
 import com.woowacourse.teatime.teatime.exception.CannotSubmitBlankException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
+import com.woowacourse.teatime.teatime.repository.CanceledReservationRepository;
+import com.woowacourse.teatime.teatime.repository.CanceledSheetRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
@@ -31,6 +36,8 @@ public class SheetService {
     private final SheetRepository sheetRepository;
     private final QuestionRepository questionRepository;
     private final ReservationRepository reservationRepository;
+    private final CanceledReservationRepository canceledReservationRepository;
+    private final CanceledSheetRepository canceledSheetRepository;
     private final CrewRepository crewRepository;
 
     public int save(Long reservationId) {
@@ -51,6 +58,24 @@ public class SheetService {
         validateAuthorization(crewId, reservation);
         List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
         return CrewFindOwnSheetResponse.of(reservation, sheets);
+    }
+
+    public CrewFindOwnCanceledSheetResponse findOwnCanceledSheetByCrew(Long crewId, Long originId) {
+        CanceledReservation reservation = findCanceledReservation(originId);
+        validateAuthorization(crewId, reservation);
+        List<CanceledSheet> sheets = canceledSheetRepository.findByOriginId(originId);
+        return CrewFindOwnCanceledSheetResponse.of(reservation, sheets);
+    }
+
+    private void validateAuthorization(Long crewId, CanceledReservation reservation) {
+        if (!reservation.isSameCrew(crewId)) {
+            throw new UnAuthorizedException();
+        }
+    }
+
+    private CanceledReservation findCanceledReservation(Long originId) {
+        return canceledReservationRepository.findByOriginId(originId)
+                .orElseThrow(NotFoundReservationException::new);
     }
 
     private void validateAuthorization(Long crewId, Reservation reservation) {

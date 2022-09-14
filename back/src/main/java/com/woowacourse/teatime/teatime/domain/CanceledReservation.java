@@ -27,7 +27,7 @@ public class CanceledReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long originId;
 
     @ManyToOne
@@ -55,5 +55,9 @@ public class CanceledReservation {
     public static CanceledReservation from(Reservation reservation) {
         return new CanceledReservation(
                 reservation.getId(), reservation.getCoach(), reservation.getCrew(), reservation.getScheduleDateTime());
+    }
+
+    public boolean isSameCrew(Long crewId) {
+        return crew.getId().equals(crewId);
     }
 }
