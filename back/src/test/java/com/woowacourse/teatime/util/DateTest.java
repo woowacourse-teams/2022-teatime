@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.util;
 
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -32,7 +33,7 @@ class DateTest {
     void findFirstDay_thisMonth() {
         LocalDate now = LocalDate.now();
         LocalDateTime firstDay = Date.findFirstDay(now.getYear(), now.getMonthValue());
-        assertThat(firstDay).isEqualTo(LocalDateTime.of(now, LocalTime.MIN));
+        assertThat(firstDay.toLocalDate()).isEqualTo(DATE_TIME.toLocalDate());
     }
 
     @DisplayName("다음 달을 입력하면 다음 달의 첫날을 반환한다.")
