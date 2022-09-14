@@ -31,7 +31,6 @@ import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
-import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
@@ -66,8 +65,6 @@ class ReservationServiceTest {
     private CoachRepository coachRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
-    @Autowired
-    private Scheduler scheduler;
 
     @BeforeEach
     void setUp() {
