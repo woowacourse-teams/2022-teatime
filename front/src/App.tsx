@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 
-import Crew from '@pages/CrewMain';
+import CrewMain from '@pages/CrewMain';
 import Reservation from '@pages/Reservation';
 import Home from '@pages/Home';
 import Certification from '@pages/Certification';
 import Schedule from '@pages/Schedule';
-import Coach from '@pages/CoachMain';
+import CoachMain from '@pages/CoachMain';
 import NotFound from '@pages/NotFound';
 import CrewSheet from '@pages/CrewSheet';
 import CoachSheet from '@pages/CoachSheet';
@@ -28,13 +28,13 @@ const App = () => {
           <Route path={ROUTES.CERTIFICATION} element={<Certification />} />
           <Route path="/*" element={<NotFound />} />
           <Route element={<AuthRoute role="CREW" />}>
-            <Route path={ROUTES.CREW} element={<Crew />} />
+            <Route path={ROUTES.CREW} element={<CrewMain />} />
             <Route path={ROUTES.CREW_HISTORY} element={<CrewHistory />} />
             <Route path={`${ROUTES.RESERVATION}/:id`} element={<Reservation />} />
             <Route path={`${ROUTES.CREW_SHEET}/:id`} element={<CrewSheet />} />
           </Route>
           <Route element={<AuthRoute role="COACH" />}>
-            <Route path={ROUTES.COACH} element={<Coach />} />
+            <Route path={ROUTES.COACH} element={<CoachMain />} />
             <Route path={ROUTES.SCHEDULE} element={<Schedule />} />
             <Route path={ROUTES.COACH_HISTORY} element={<CoachHistory />} />
             <Route path={`${ROUTES.COACH_SHEET}/:id`} element={<CoachSheet />} />
