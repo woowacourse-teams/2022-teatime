@@ -6,9 +6,9 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
-import static com.woowacourse.teatime.teatime.service.AlarmMessage.APPLY;
-import static com.woowacourse.teatime.teatime.service.AlarmMessage.CANCEL;
-import static com.woowacourse.teatime.teatime.service.AlarmMessage.CONFIRM;
+import static com.woowacourse.teatime.teatime.service.AlarmTitle.APPLY;
+import static com.woowacourse.teatime.teatime.service.AlarmTitle.CANCEL;
+import static com.woowacourse.teatime.teatime.service.AlarmTitle.CONFIRM;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.exception.UnAuthorizedException;
@@ -39,6 +39,7 @@ import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +68,8 @@ public class ReservationService {
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
 
         Coach coach = schedule.getCoach();
-        String message = APPLY.getMessage(crew.getName(), coach.getName(), schedule.getLocalDateTime());
-        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
+        String message = getMessage(crew.getName(), coach.getName(), schedule.getLocalDateTime());
+        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), APPLY.getTitle(), message);
 
         return reservation.getId();
     }
@@ -84,12 +85,12 @@ public class ReservationService {
         Crew crew = reservation.getCrew();
         Coach coach = reservation.getCoach();
 
-        String message = CONFIRM.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+        String message = getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
         if (!isApproved) {
-            message = CANCEL.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+            alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), CANCEL.getTitle(), message);
+            return;
         }
-
-        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
+        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), CONFIRM.getTitle(), message);
     }
 
     public void cancel(Long reservationId, UserRoleDto userRoleDto) {
@@ -102,8 +103,8 @@ public class ReservationService {
 
         Crew crew = reservation.getCrew();
         Coach coach = reservation.getCoach();
-        String message = CANCEL.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
-        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
+        String message = getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+        alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), CANCEL.getTitle(), message);
     }
 
     private void validateAuthorization(Long applicantId, Role role,
@@ -240,8 +241,8 @@ public class ReservationService {
 
             Crew crew = reservation.getCrew();
             Coach coach = reservation.getCoach();
-            String message = CANCEL.getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
-            alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), message);
+            String message = getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+            alarm.sendMessages(List.of(crew.getSlackId(), coach.getSlackId()), CANCEL.getTitle(), message);
         }
     }
 
@@ -250,6 +251,14 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusIn(
                 coachId, List.of(DONE, CANCELED));
         return CoachFindOwnHistoryResponse.from(reservations);
+    }
+
+    private String getMessage(String crewName, String coachName, LocalDateTime dateTime) {
+        return String.join("\r\n",
+                "크루: " + crewName,
+                "코치: " + coachName,
+                "티타임: " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(dateTime)
+        );
     }
 }
 

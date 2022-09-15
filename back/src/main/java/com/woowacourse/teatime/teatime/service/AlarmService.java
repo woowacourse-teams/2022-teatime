@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.teatime.service;
 
-import static com.woowacourse.teatime.teatime.service.AlarmMessage.REMIND_COACH;
-import static com.woowacourse.teatime.teatime.service.AlarmMessage.REMIND_CREW;
+import static com.woowacourse.teatime.teatime.service.AlarmTitle.REMIND_COACH;
+import static com.woowacourse.teatime.teatime.service.AlarmTitle.REMIND_CREW;
 import static com.woowacourse.teatime.util.Date.findFirstTime;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
@@ -11,6 +11,8 @@ import com.woowacourse.teatime.teatime.infrastructure.Alarm;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,13 +35,17 @@ public class AlarmService {
             Coach coach = reservation.getCoach();
             Crew crew = reservation.getCrew();
 
-            String coachMessage = REMIND_COACH.getMessage(crew.getName(), coach.getName(),
-                    reservation.getScheduleDateTime());
-            alarm.sendMessage(coach.getSlackId(), coachMessage);
-
-            String crewMessage = REMIND_CREW.getMessage(crew.getName(), coach.getName(),
-                    reservation.getScheduleDateTime());
-            alarm.sendMessage(crew.getSlackId(), crewMessage);
+            String message = getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
+            alarm.sendMessage(coach.getSlackId(), REMIND_COACH.getTitle(), message);
+            alarm.sendMessage(crew.getSlackId(), REMIND_CREW.getTitle(), message);
         }
+    }
+
+    private String getMessage(String crewName, String coachName, LocalDateTime dateTime) {
+        return String.join("\r\n",
+                "크루: " + crewName,
+                "코치: " + coachName,
+                "티타임: " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(dateTime)
+        );
     }
 }
