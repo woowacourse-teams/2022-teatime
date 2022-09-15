@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 
 import Dropdown from '@components/Dropdown';
 import Conditional from '@components/Conditional';
+import Modal from '@components/Modal';
 import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
@@ -22,7 +23,7 @@ const Header = () => {
   const showSnackbar = useContext(SnackbarContext);
   const profileRef = useRef(null);
   const [isActive, setIsActive] = useOutsideClick(profileRef, false);
-  const { value: isOpenInput, setTrue: openInput, setFalse: closeInput } = useBoolean();
+  const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [nickName, setNickName] = useState('');
 
   const handleLogout = () => {
@@ -34,22 +35,26 @@ const Header = () => {
     setIsActive(!isActive);
   };
 
-  const handleModifyNickname = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleModifyNickname = async () => {
     try {
+      if (nickName.trim() === '') throw new Error('닉네임을 작성해 주세요!');
+      if (nickName.length > 20) throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
+
       userData?.role === 'COACH'
         ? await editCoachNickName(nickName)
         : await editCrewNickName(nickName);
 
       showSnackbar({ message: '변경되었습니다. ✅' });
-      setNickName('');
-      closeInput();
+      closeModal();
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
         console.log(error);
+        return;
       }
+      if (error instanceof Error) alert(error.message);
+    } finally {
+      setNickName('');
     }
   };
 
@@ -65,23 +70,10 @@ const Header = () => {
       </S.LogoLink>
       {userData && (
         <S.ProfileContainer>
-          {isOpenInput ? (
-            <S.Form onSubmit={(e) => handleModifyNickname(e)}>
-              <input
-                type="text"
-                placeholder="ex) 닉네임(이름)"
-                value={nickName}
-                onChange={(e) => handleChangeInput(e)}
-              />
-              <button>수정</button>
-              <button onClick={() => closeInput()}>취소</button>
-            </S.Form>
-          ) : (
-            <S.ProfileWrapper ref={profileRef} onClick={toggleDropdown}>
-              <span>{userData.name}</span>
-              <img src={userData.image} alt="프로필 이미지" />
-            </S.ProfileWrapper>
-          )}
+          <S.ProfileWrapper ref={profileRef} onClick={toggleDropdown}>
+            <span>{userData.name}</span>
+            <img src={userData.image} alt="프로필 이미지" />
+          </S.ProfileWrapper>
           <Dropdown isActive={isActive}>
             <Conditional condition={userData.role === 'COACH'}>
               <Link to={ROUTES.COACH_HISTORY}>
@@ -98,10 +90,27 @@ const Header = () => {
               </Link>
             </Conditional>
 
-            <li onClick={() => openInput()}>닉네임 변경</li>
+            <li onClick={() => openModal()}>닉네임 수정</li>
             <li onClick={handleLogout}>로그아웃</li>
           </Dropdown>
         </S.ProfileContainer>
+      )}
+      {isOpenModal && (
+        <Modal
+          title="닉네임 수정"
+          firstButtonName="취소하기"
+          secondButtonName="수정하기"
+          onClickFirstButton={() => closeModal()}
+          onClickSecondButton={handleModifyNickname}
+          closeModal={closeModal}
+        >
+          <S.Input
+            type="text"
+            placeholder="ex) 닉네임(이름)"
+            value={nickName}
+            onChange={(e) => handleChangeInput(e)}
+          />
+        </Modal>
       )}
     </S.HeaderContainer>
   );

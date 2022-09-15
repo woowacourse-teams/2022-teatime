@@ -1,16 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
-
-const FadeIn = keyframes`
-  from {
-    transform: translateX(10%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-`;
+import styled from 'styled-components';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -69,36 +58,19 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const Form = styled.form`
-  animation: ${FadeIn} 0.8s;
+const Input = styled.input`
+  width: 100%;
+  height: 45px;
+  margin: 15px 0;
+  text-align: center;
+  border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
+  border-radius: 20px;
+  font-size: 16px;
 
-  input {
-    width: 170px;
-    height: 34px;
-    text-align: center;
-    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
-    border-radius: 20px;
-    font-size: 16px;
-
-    ::placeholder {
-      color: ${({ theme }) => theme.colors.GRAY_500};
-      font-size: 14px;
-    }
-  }
-
-  button {
-    width: 40px;
-    height: 30px;
-    margin-left: 6px;
-    background-color: ${({ theme }) => theme.colors.GRAY_200};
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-
-    :hover {
-      opacity: 0.7;
-    }
+  ::placeholder {
+    color: ${({ theme }) => theme.colors.GRAY_500};
+    font-size: 14px;
   }
 `;
 
-export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper, Form };
+export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper, Input };
