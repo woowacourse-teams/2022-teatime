@@ -24,11 +24,12 @@ public class SlackAlarm implements Alarm {
 
     @Override
     public void sendMessage(String userId, String title, String message) {
+        String barColor = "#99b387";
         try {
             List<Attachment> attachments = List.of(
                     Attachment.builder()
                             .text(message)
-                            .color("#99b387")
+                            .color(barColor)
                             .build());
 
             slackClient.chatPostMessage(ChatPostMessageRequest.builder()

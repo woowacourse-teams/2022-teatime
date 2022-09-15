@@ -14,6 +14,7 @@ import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserve
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
+import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,6 +79,25 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //docs
         perform.andDo(document("reserve-notFoundSchedule"));
+    }
+
+    @DisplayName("예약에 성공한다. - 슬렉 알람 예외가 발생했을 때, 로그만 남기고 예약은 성공시킨다.")
+    @Test
+    void reserve_slackException() throws Exception {
+        //given
+        String token = "나 크루다.";
+        크루의_토큰을_검증한다(token);
+
+        doThrow(new SlackAlarmException()).when(reservationService)
+                .save(anyLong(), any(ReservationReserveRequest.class));
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(1L))
+                .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isOk());
     }
 
     @DisplayName("코치가 면담 승인에 성공한다.")
