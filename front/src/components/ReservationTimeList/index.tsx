@@ -1,13 +1,12 @@
-import React, { useContext, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Conditional from '@components/Conditional';
 import Modal from '@components/Modal';
 import useBoolean from '@hooks/useBoolean';
-import { UserStateContext } from '@context/UserProvider';
-import api from '@api/index';
 import { ROUTES } from '@constants/index';
+import { createReservation } from '@api/reservation';
 import { getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
@@ -28,23 +27,12 @@ const ReservationTimeList = ({
   onClickTime,
 }: ReservationTimeListProps) => {
   const navigate = useNavigate();
-  const { userData } = useContext(UserStateContext);
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [reservationId, setReservationId] = useState<number | null>(null);
 
   const handleClickReservation = async (scheduleId: number) => {
     try {
-      const data = await api.post(
-        `/api/v2/reservations`,
-        {
-          scheduleId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        }
-      );
+      const data = await createReservation(scheduleId);
       const location = data.headers.location.split('/').pop();
       setReservationId(Number(location));
       onClickTime(null);
@@ -64,7 +52,7 @@ const ReservationTimeList = ({
         const time = getHourMinutes(schedule.dateTime);
 
         return (
-          <React.Fragment key={schedule.id}>
+          <Fragment key={schedule.id}>
             <Conditional condition={selectedTimeId === schedule.id}>
               <S.ReserveButtonWrapper>
                 <div>{time}</div>
@@ -77,7 +65,7 @@ const ReservationTimeList = ({
                 {time}
               </S.TimeBox>
             </Conditional>
-          </React.Fragment>
+          </Fragment>
         );
       })}
       {isOpenModal && (

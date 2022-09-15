@@ -1,8 +1,10 @@
 package com.woowacourse.teatime.teatime.service;
 
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
+import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,5 +30,11 @@ public class CoachService {
     public Long save(CoachSaveRequest request) {
         Coach coach = new Coach(request.getSlackId(), request.getName(), request.getDescription(), request.getImage());
         return coachRepository.save(coach).getId();
+    }
+
+    public void updateProfile(Long coachId, CoachUpdateProfileRequest request) {
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+        coach.modifyName(request.getName());
     }
 }

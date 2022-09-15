@@ -6,11 +6,11 @@ import Frame from '@components/Frame';
 import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
-import { UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { Reservation } from '@typings/domain';
-import api from '@api/index';
+import { completeReservation } from '@api/reservation';
+import { getCrewReservationByCoach } from '@api/crew';
 import { ROUTES } from '@constants/index';
+import type { Reservation } from '@typings/domain';
 import * as S from '@styles/common';
 import * as Styled from './styles';
 
@@ -23,7 +23,6 @@ interface LocationState {
 
 const CoachSheet = () => {
   const navigate = useNavigate();
-  const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
   const { id: reservationId } = useParams();
   const {
@@ -35,15 +34,7 @@ const CoachSheet = () => {
     if (!confirm('면담을 완료하시겠습니까?')) return;
 
     try {
-      await api.put(
-        `/api/v2/reservations/${reservationId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        }
-      );
+      await completeReservation(reservationId as string);
       showSnackbar({ message: '완료되었습니다. ✅' });
       navigate(ROUTES.COACH, { replace: true });
     } catch (error) {
@@ -55,11 +46,7 @@ const CoachSheet = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(`/api/v2/crews/${crewId}/reservations/${reservationId}`, {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await getCrewReservationByCoach(crewId, reservationId as string);
         setReservationInfo(data);
       } catch (error) {
         if (error instanceof AxiosError) {

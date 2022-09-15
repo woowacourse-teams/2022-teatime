@@ -14,7 +14,7 @@ interface TableRowProps {
   color: string;
   bgColor: string;
   onClickSheet?: (reservationId: number) => void;
-  onClickDelete?: (reservationId: number) => void;
+  onClickCancel?: (reservationId: number) => void;
   isCrew?: boolean;
 }
 
@@ -28,7 +28,7 @@ const TableRow = ({
   color,
   bgColor,
   onClickSheet,
-  onClickDelete,
+  onClickCancel,
   isCrew,
 }: TableRowProps) => {
   const date = getMonthDate(dateTime);
@@ -36,7 +36,7 @@ const TableRow = ({
   const isEditStatus = status === 'BEFORE_APPROVED' || status === 'APPROVED';
 
   return (
-    <tr>
+    <S.TbodyRow>
       <td>
         <S.Span bgColor={bgColor} color={color}>
           {statusName}
@@ -54,11 +54,11 @@ const TableRow = ({
         <td>
           <S.Icon src={ScheduleIcon} alt="스케줄 아이콘" onClick={() => onClickSheet?.(id)} />
           {isEditStatus && (
-            <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickDelete?.(id)} />
+            <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickCancel?.(id)} />
           )}
         </td>
       )}
-    </tr>
+    </S.TbodyRow>
   );
 };
 

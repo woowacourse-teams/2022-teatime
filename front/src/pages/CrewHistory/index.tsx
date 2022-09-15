@@ -3,19 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
-import { UserStateContext } from '@context/UserProvider';
-import api from '@api/index';
-import { ROUTES } from '@constants/index';
-import { CrewHistory as CrewHistoryType } from '@typings/domain';
+import EmptyContent from '@components/EmptyContent';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { getCrewHistoriesByMe } from '@api/crew';
+import { cancelReservation } from '@api/reservation';
+import { ROUTES } from '@constants/index';
+import type { CrewHistory as CrewHistoryType, CrewHistoryStatus } from '@typings/domain';
+
 import theme from '@styles/theme';
 import * as S from './styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };
 
-interface HistoryStatus {
-  [key: string]: StatusValue;
-}
+type HistoryStatus = {
+  [key in CrewHistoryStatus]: StatusValue;
+};
 
 const historyStatus: HistoryStatus = {
   BEFORE_APPROVED: {
@@ -46,32 +48,31 @@ const historyStatus: HistoryStatus = {
 };
 
 const CrewHistory = () => {
-  const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
 
-  const moveReservationSheet = (reservationId: number) => {
+  const changeHistoryStatus = (reservationId: number, status: CrewHistoryStatus) => {
+    setHistoryList((prevHistory) => {
+      return prevHistory.map((history) => {
+        if (history.reservationId === reservationId) {
+          history.status = status;
+        }
+        return history;
+      });
+    });
+  };
+
+  const handleShowSheet = (reservationId: number) => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`);
   };
 
-  const deleteReservation = async (reservationId: number) => {
+  const handleCancelReservation = async (reservationId: number) => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
-      await api.delete(`/api/v2/reservations/${reservationId}`, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
-        },
-      });
-      setHistoryList((prevHistory) => {
-        return prevHistory.map((history) => {
-          if (history.reservationId === reservationId) {
-            history.status = 'CANCELED';
-          }
-          return history;
-        });
-      });
+      await cancelReservation(reservationId);
+      changeHistoryStatus(reservationId, 'CANCELED');
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -84,11 +85,7 @@ const CrewHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/api/v2/crews/me/reservations', {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
+        const { data } = await getCrewHistoriesByMe();
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -100,39 +97,42 @@ const CrewHistory = () => {
   }, []);
 
   return (
-    <S.Table>
-      <S.Thead>
-        <tr>
-          <td>진행 상태</td>
-          <td>코치</td>
-          <td>날짜</td>
-          <td>시간</td>
-          <td />
-        </tr>
-      </S.Thead>
-      <S.Tbody>
-        {historyList.map((history) => {
-          const { reservationId, status, coachName, coachImage, dateTime } = history;
-          const { statusName, color, backgroundColor } = historyStatus[history.status];
-          return (
-            <TableRow
-              key={history.reservationId}
-              id={reservationId}
-              status={status}
-              name={coachName}
-              image={coachImage}
-              dateTime={dateTime}
-              statusName={statusName}
-              color={color}
-              bgColor={backgroundColor}
-              onClickSheet={moveReservationSheet}
-              onClickDelete={deleteReservation}
-              isCrew
-            />
-          );
-        })}
-      </S.Tbody>
-    </S.Table>
+    <>
+      <S.Table>
+        <thead>
+          <S.TheadRow>
+            <td>진행 상태</td>
+            <td>코치</td>
+            <td>날짜</td>
+            <td>시간</td>
+            <td />
+          </S.TheadRow>
+        </thead>
+        <tbody>
+          {historyList.map((history) => {
+            const { reservationId, status, coachName, coachImage, dateTime } = history;
+            const { statusName, color, backgroundColor } = historyStatus[history.status];
+            return (
+              <TableRow
+                key={history.reservationId}
+                id={reservationId}
+                status={status}
+                name={coachName}
+                image={coachImage}
+                dateTime={dateTime}
+                statusName={statusName}
+                color={color}
+                bgColor={backgroundColor}
+                onClickSheet={handleShowSheet}
+                onClickCancel={handleCancelReservation}
+                isCrew
+              />
+            );
+          })}
+        </tbody>
+      </S.Table>
+      {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
+    </>
   );
 };
 
