@@ -27,7 +27,6 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
-import com.woowacourse.teatime.teatime.infrastructure.Alarm;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
@@ -48,8 +47,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class ReservationService {
-
-    private final Alarm alarm;
 
     private final AlarmService alarmService;
 
@@ -85,11 +82,7 @@ public class ReservationService {
         Crew crew = reservation.getCrew();
         Coach coach = reservation.getCoach();
         AlarmDto dto = AlarmDto.of(coach, crew, reservation.getScheduleDateTime());
-        if (!isApproved) {
-            alarmService.cancelReservation(dto);
-            return;
-        }
-        alarmService.approveReservation(dto);
+        alarmService.decideReservation(isApproved, dto);
     }
 
     public void cancel(Long reservationId, UserRoleDto userRoleDto) {

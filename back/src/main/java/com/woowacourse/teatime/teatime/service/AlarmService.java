@@ -6,6 +6,7 @@ import static com.woowacourse.teatime.teatime.service.AlarmTitle.CONFIRM;
 import static com.woowacourse.teatime.teatime.service.AlarmTitle.REMIND_COACH;
 import static com.woowacourse.teatime.teatime.service.AlarmTitle.REMIND_CREW;
 import static com.woowacourse.teatime.util.Date.findFirstTime;
+import static com.woowacourse.teatime.util.Date.findLastTime;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
@@ -35,7 +36,15 @@ public class AlarmService {
         alarm.sendMessages(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), APPLY.getTitle(), message);
     }
 
-    public void approveReservation(AlarmDto alarmDto) {
+    public void decideReservation(boolean isApproved, AlarmDto alarmDto) {
+        if (!isApproved) {
+            cancelReservation(alarmDto);
+            return;
+        }
+        confirmReservation(alarmDto);
+    }
+
+    public void confirmReservation(AlarmDto alarmDto) {
         String message = getMessage(alarmDto.getCrewName(), alarmDto.getCoachName(), alarmDto.getTime());
         alarm.sendMessages(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), CONFIRM.getTitle(), message);
     }
@@ -48,7 +57,7 @@ public class AlarmService {
     public void remindReservation() {
         LocalDate date = LocalDate.now().plusDays(1);
         List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBetween(
-                findFirstTime(date), Date.findLastTime(date));
+                findFirstTime(date), findLastTime(date));
 
         for (Reservation reservation : reservations) {
             Coach coach = reservation.getCoach();
