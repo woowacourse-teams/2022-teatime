@@ -72,10 +72,14 @@ public class Reservation {
     }
 
     public void cancel(Role role) {
-        if (isCancelInProgressByCrew(role)) {
+        if (isCancelInProgressByCrew(role) || isCancelDone()) {
             throw new UnableToCancelReservationException();
         }
         schedule.init();
+    }
+
+    private boolean isCancelDone() {
+        return isReservationStatus(ReservationStatus.DONE);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {

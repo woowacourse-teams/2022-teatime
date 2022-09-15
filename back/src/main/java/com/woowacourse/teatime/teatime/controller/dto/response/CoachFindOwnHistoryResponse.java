@@ -58,6 +58,6 @@ public class CoachFindOwnHistoryResponse {
     private static CoachFindOwnHistoryResponse from(CanceledReservation reservation) {
         Crew crew = reservation.getCrew();
         return new CoachFindOwnHistoryResponse(reservation.getOriginId(), crew.getName(), crew.getImage(),
-                reservation.getScheduledAt(), ReservationStatus.CANCELED, reservation.getCreatedAt());
+                reservation.getOriginSchedule(), ReservationStatus.CANCELED, reservation.getCreatedAt());
     }
 }

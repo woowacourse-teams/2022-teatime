@@ -2,7 +2,6 @@ package com.woowacourse.teatime.teatime.controller;
 
 import com.woowacourse.teatime.auth.support.CoachAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
-import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
@@ -57,11 +56,11 @@ public class CrewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/me/canceled-reservations/{originId}")
+    @GetMapping("/me/canceled-reservations/{originReservationId}")
     public ResponseEntity<CrewFindOwnCanceledSheetResponse> findOwnCanceledSheets(
             @CrewAuthenticationPrincipal Long crewId,
-            @PathVariable @NotNull Long originId) {
-        CrewFindOwnCanceledSheetResponse response = sheetService.findOwnCanceledSheetByCrew(crewId, originId);
+            @PathVariable @NotNull Long originReservationId) {
+        CrewFindOwnCanceledSheetResponse response = sheetService.findOwnCanceledSheetByCrew(crewId, originReservationId);
         return ResponseEntity.ok(response);
     }
 

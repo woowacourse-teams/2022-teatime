@@ -40,8 +40,8 @@ class ReservationRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        crew = crewRepository.save(DomainFixture.CREW1);
-        coach = coachRepository.save(DomainFixture.COACH_BROWN);
+        crew = crewRepository.save(DomainFixture.getCrew());
+        coach = coachRepository.save(DomainFixture.getCoachJason());
         schedule = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME));
     }
 
@@ -118,7 +118,7 @@ class ReservationRepositoryTest {
 
         // when
         List<Reservation> approvedReservations
-                = reservationRepository.findAllApprovedReservationsBetween(Date.findLastTime(LOCAL_DATE));
+                = reservationRepository.findAllApprovedReservationsBefore(Date.findLastTime(LOCAL_DATE));
 
         // then
         assertThat(approvedReservations).hasSize(1);

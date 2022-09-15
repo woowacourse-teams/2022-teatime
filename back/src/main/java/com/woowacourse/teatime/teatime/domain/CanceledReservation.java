@@ -12,12 +12,10 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
-@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -39,17 +37,17 @@ public class CanceledReservation {
     private Crew crew;
 
     @Column(nullable = false)
-    private LocalDateTime scheduledAt;
+    private LocalDateTime originSchedule;
 
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    private CanceledReservation(Long originId, Coach coach, Crew crew, LocalDateTime scheduledAt) {
+    private CanceledReservation(Long originId, Coach coach, Crew crew, LocalDateTime originSchedule) {
         this.originId = originId;
         this.coach = coach;
         this.crew = crew;
-        this.scheduledAt = scheduledAt;
+        this.originSchedule = originSchedule;
     }
 
     public static CanceledReservation from(Reservation reservation) {

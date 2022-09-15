@@ -11,5 +11,5 @@ public interface CanceledReservationRepository extends JpaRepository<CanceledRes
 
     List<CanceledReservation> findAllByCrewId(Long crewId);
 
-    Optional<CanceledReservation> findByOriginId(Long reservationId);
+    Optional<CanceledReservation> findByOriginId(Long originReservationId);
 }

@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
@@ -178,15 +177,6 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
         questionRepository.save(getQuestion3(coach));
         Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
         예약을_승인한다(reservationId, new ReservationApproveRequest(false), coachToken);
-
-        RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("reservationId", reservationId)
-                .header("Authorization", "Bearer " + coachToken)
-                .body(new ReservationApproveRequest(false))
-                .when().post("/api/v2/reservations/{reservationId}")
-                .then().log().all()
-                .extract();
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

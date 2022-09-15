@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface CanceledSheetRepository extends JpaRepository<CanceledSheet, Long> {
 
     @Query("SELECT s FROM CanceledSheet AS s "
-            + "WHERE s.reservation.originId = :originId ORDER BY s.number")
-    List<CanceledSheet> findByOriginId(Long originId);
+            + "WHERE s.reservation.originId = :originReservationId ORDER BY s.number")
+    List<CanceledSheet> findByOriginId(Long originReservationId);
 }

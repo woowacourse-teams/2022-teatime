@@ -60,10 +60,10 @@ public class SheetService {
         return CrewFindOwnSheetResponse.of(reservation, sheets);
     }
 
-    public CrewFindOwnCanceledSheetResponse findOwnCanceledSheetByCrew(Long crewId, Long originId) {
-        CanceledReservation reservation = findCanceledReservation(originId);
+    public CrewFindOwnCanceledSheetResponse findOwnCanceledSheetByCrew(Long crewId, Long originReservationId) {
+        CanceledReservation reservation = findCanceledReservation(originReservationId);
         validateAuthorization(crewId, reservation);
-        List<CanceledSheet> sheets = canceledSheetRepository.findByOriginId(originId);
+        List<CanceledSheet> sheets = canceledSheetRepository.findByOriginId(originReservationId);
         return CrewFindOwnCanceledSheetResponse.of(reservation, sheets);
     }
 
@@ -73,8 +73,8 @@ public class SheetService {
         }
     }
 
-    private CanceledReservation findCanceledReservation(Long originId) {
-        return canceledReservationRepository.findByOriginId(originId)
+    private CanceledReservation findCanceledReservation(Long originReservationId) {
+        return canceledReservationRepository.findByOriginId(originReservationId)
                 .orElseThrow(NotFoundReservationException::new);
     }
 

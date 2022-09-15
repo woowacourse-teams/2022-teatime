@@ -205,7 +205,7 @@ public class ReservationService {
 
     public void updateReservationStatusToInProgress() {
         LocalDate today = LocalDate.now();
-        List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBetween(
+        List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBefore(
                 Date.findLastTime(today));
 
         for (Reservation reservation : reservations) {

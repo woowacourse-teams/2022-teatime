@@ -19,13 +19,17 @@ public class CrewFindOwnCanceledSheetResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
+
     private String coachName;
+
     private String coachImage;
+
     private SheetStatus status;
+
     private List<SheetDto> sheets;
 
     public static CrewFindOwnCanceledSheetResponse of(CanceledReservation reservation, List<CanceledSheet> sheets) {
-        LocalDateTime scheduledAt = reservation.getScheduledAt();
+        LocalDateTime scheduledAt = reservation.getOriginSchedule();
         Coach coach = reservation.getCoach();
         List<SheetDto> sheetDtos = SheetDto.fromCanceled(sheets);
         return new CrewFindOwnCanceledSheetResponse(scheduledAt, coach.getName(), coach.getImage(),
