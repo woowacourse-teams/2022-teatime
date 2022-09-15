@@ -40,11 +40,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+@Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 @Service
 public class ReservationService {
 
@@ -57,6 +61,8 @@ public class ReservationService {
     private final SheetRepository sheetRepository;
 
     public Long save(Long crewId, ReservationReserveRequest reservationReserveRequest) {
+        log.info(TransactionSynchronizationManager.getCurrentTransactionName());
+
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
         Schedule schedule = scheduleRepository.findById(reservationReserveRequest.getScheduleId())
