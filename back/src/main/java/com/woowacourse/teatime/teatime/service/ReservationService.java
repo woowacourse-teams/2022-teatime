@@ -48,7 +48,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional
 @Service
 public class ReservationService {
 
