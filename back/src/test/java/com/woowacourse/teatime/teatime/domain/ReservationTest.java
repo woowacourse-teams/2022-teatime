@@ -19,9 +19,6 @@ import org.junit.jupiter.api.Test;
 
 class ReservationTest {
 
-    private static final boolean 승인을_한다 = true;
-    private static final boolean 승인을_거절한다 = false;
-
     private Reservation reservation;
     private Schedule schedule;
 
@@ -34,7 +31,7 @@ class ReservationTest {
     @DisplayName("면담을 승인한다.")
     @Test
     void confirm_approve() {
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
 
         assertThat(reservation.getReservationStatus()).isEqualTo(ReservationStatus.APPROVED);
     }
@@ -42,7 +39,7 @@ class ReservationTest {
     @DisplayName("승인 전, 면담을 취소한다.")
     @Test
     void conform_denyApproval() {
-        reservation.confirm(승인을_거절한다);
+        reservation.cancel(Role.COACH);
 
         assertThat(schedule.getIsPossible()).isTrue();
     }
@@ -50,16 +47,16 @@ class ReservationTest {
     @DisplayName("승인이 되어 있는 상태에서 승인 요청을 하면 에러가 발생한다.")
     @Test
     void confirm_invalid() {
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
 
-        assertThatThrownBy(() -> reservation.confirm(승인을_한다))
+        assertThatThrownBy(() -> reservation.confirm())
                 .isInstanceOf(AlreadyApprovedException.class);
     }
 
     @DisplayName("코치가 예약을 취소할 수 있다.")
     @Test
     void cancel_coach() {
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
         reservation.cancel(Role.COACH);
 
         assertThat(schedule.getIsPossible()).isTrue();
@@ -68,7 +65,7 @@ class ReservationTest {
     @DisplayName("크루가 예약을 취소할 수 있다.")
     @Test
     void cancel_crew() {
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
         reservation.cancel(Role.CREW);
 
         assertThat(schedule.getIsPossible()).isTrue();
@@ -82,19 +79,11 @@ class ReservationTest {
         assertThat(schedule.getIsPossible()).isTrue();
     }
 
-    @DisplayName("코치가 예약을 취소할 때, 상태가 승인상태가 아닌 경우 에러가 발생한다.")
-    @Test
-    void cancel_invalidCancelException() {
-        assertThatThrownBy(() -> reservation.cancel(Role.COACH))
-                .isInstanceOf(UnableToCancelReservationException.class);
-
-    }
-
     @DisplayName("코치가 진행 중인 면담을 취소할 수 있다.")
     @Test
     void cancel_byCoach_inProgressReservation() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
         reservation.updateReservationStatusToInProgress();
 
         reservation.cancel(Role.COACH);
@@ -106,7 +95,7 @@ class ReservationTest {
     @Test
     void cancel_byCrew_inProgressReservation() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
         reservation.updateReservationStatusToInProgress();
 
         assertThatThrownBy(() -> reservation.cancel(Role.CREW))
@@ -117,7 +106,7 @@ class ReservationTest {
     @Test
     void updateReservationStatusToInProgress() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
 
         reservation.updateReservationStatusToInProgress();
 
@@ -138,7 +127,7 @@ class ReservationTest {
     void updateReservationStatusToInProgress_noTimeYet() {
         Schedule schedule = new Schedule(DomainFixture.COACH_BROWN, LocalDateTime.now().plusDays(1L));
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
 
         assertThatThrownBy(reservation::updateReservationStatusToInProgress)
                 .isInstanceOf(UnableToInProgressReservationException.class);
@@ -148,7 +137,7 @@ class ReservationTest {
     @Test
     void updateReservationStatusToDone() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
         reservation.updateReservationStatusToInProgress();
 
         reservation.updateReservationStatusToDone();
@@ -169,7 +158,7 @@ class ReservationTest {
     @Test
     void updateReservationStatusToDone_unableToDoneException_approved() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
 
         assertThatThrownBy(reservation::updateReservationStatusToDone)
                 .isInstanceOf(UnableToDoneReservationException.class);
@@ -179,7 +168,7 @@ class ReservationTest {
     @Test
     void updateReservationStatusToDone_unableToDoneException_done() {
         Reservation reservation = new Reservation(schedule, DomainFixture.CREW1);
-        reservation.confirm(승인을_한다);
+        reservation.confirm();
         reservation.updateReservationStatusToInProgress();
         reservation.updateReservationStatusToDone();
 

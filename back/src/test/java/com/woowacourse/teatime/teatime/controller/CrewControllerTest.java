@@ -132,6 +132,22 @@ class CrewControllerTest extends ControllerTestSupporter {
         perform.andExpect(status().isOk());
     }
 
+    @DisplayName("크루가 자신의 취소된 면담 시트 목록 조회에 성공한다.")
+    @Test
+    void findOwnCanceledSheets() throws Exception {
+        //given
+        String token = "나 크루다.";
+        크루의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc.perform(get("/api/v2/crews/me/canceled-reservations/1")
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isOk());
+    }
+
     @DisplayName("크루가 자신의 면담 시트 목록 조회에 실패한다. - 존재하지 않는 면담 아이디")
     @Test
     void findOwnSheets_notFoundReservationId() throws Exception {

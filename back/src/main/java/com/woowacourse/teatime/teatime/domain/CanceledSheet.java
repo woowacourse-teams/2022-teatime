@@ -11,23 +11,20 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Sheet {
+public class CanceledSheet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Reservation reservation;
+    private CanceledReservation reservation;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Integer number;
 
     @Column(nullable = false)
@@ -36,16 +33,19 @@ public class Sheet {
     @Lob
     private String answerContent;
 
-    public Sheet(Reservation reservation, Integer number, String questionContent) {
+    private CanceledSheet(CanceledReservation reservation, Integer number, String questionContent,
+                          String answerContent) {
         this.reservation = reservation;
         this.number = number;
         this.questionContent = questionContent;
-        this.answerContent = null;
+        this.answerContent = answerContent;
     }
 
-    public void modifyAnswer(int number, String content) {
-        if (this.number == number) {
-            this.answerContent = content;
-        }
+    public static CanceledSheet from(CanceledReservation canceledReservation, Sheet sheet) {
+        return new CanceledSheet(
+                canceledReservation,
+                sheet.getNumber(),
+                sheet.getQuestionContent(),
+                sheet.getAnswerContent());
     }
 }

@@ -16,11 +16,8 @@ import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UP
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_TWO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
@@ -159,6 +156,34 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 .header("Authorization", "Bearer " + crewToken)
                 .filter(document("find-own-sheets"))
                 .when().get("/api/v2/crews/me/reservations/{reservationId}")
+                .then().log().all()
+                .extract();
+
+        List<SheetDto> result = response.jsonPath().getList("sheets.", SheetDto.class);
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(result).hasSize(3)
+        );
+    }
+
+    @DisplayName("크루가 자신의 취소 면담 시트 하나를 조회한다.")
+    @Test
+    void findOwnCanceledSheet() {
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
+        Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
+        예약을_승인한다(reservationId, new ReservationApproveRequest(false), coachToken);
+
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("originId", reservationId)
+                .header("Authorization", "Bearer " + crewToken)
+                .filter(document("find-own-canceled-sheets"))
+                .when().get("/api/v2/crews/me/canceled-reservations/{originId}")
                 .then().log().all()
                 .extract();
 

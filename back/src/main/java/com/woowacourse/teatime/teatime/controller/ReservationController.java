@@ -7,7 +7,6 @@ import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.service.ReservationService;
-import com.woowacourse.teatime.teatime.service.SheetService;
 import java.net.URI;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -29,13 +28,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class ReservationController {
 
     private final ReservationService reservationService;
-    private final SheetService sheetService;
 
     @PostMapping
     public ResponseEntity<Void> reserve(@CrewAuthenticationPrincipal Long crewId,
                                         @Valid @RequestBody ReservationReserveRequest request) {
         Long reservationId = reservationService.save(crewId, request);
-        sheetService.save(reservationId);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

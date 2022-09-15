@@ -16,16 +16,27 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByScheduleCoachIdAndReservationStatusNotIn(Long coachId, List<ReservationStatus> statuses);
 
-    List<Reservation> findByCrewIdAndReservationStatusOrderByScheduleLocalDateTimeDesc(Long crewId,
-                                                                                       ReservationStatus status);
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.schedule.coach.id = :coachId "
+            + "AND r.reservationStatus NOT IN :status")
+    List<Reservation> findAllByCoachIdAndStatusNot(Long coachId, ReservationStatus status);
+
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.crew.id = :crewId "
+            + "AND r.reservationStatus = :status "
+            + "ORDER BY r.schedule.localDateTime DESC")
+    List<Reservation> findByCrewIdAndReservationStatus(Long crewId,
+                                                       ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
             + "WHERE r.reservationStatus = 'APPROVED' "
-            + "AND r.schedule.localDateTime >= :startTime "
             + "AND r.schedule.localDateTime < :endTime")
-    List<Reservation> findAllApprovedReservationsBetween(LocalDateTime startTime, LocalDateTime endTime);
+    List<Reservation> findAllApprovedReservationsBefore(LocalDateTime endTime);
 
-    List<Reservation> findByScheduleCoachIdAndReservationStatusIn(Long coachId, List<ReservationStatus> statuses);
+    @Query("SELECT r FROM Reservation AS r "
+            + "WHERE r.schedule.coach.id = :coachId "
+            + "AND r.reservationStatus = :status")
+    List<Reservation> findAllByCoachIdAndStatus(Long coachId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
             + "WHERE r.reservationStatus = 'APPROVED' "
