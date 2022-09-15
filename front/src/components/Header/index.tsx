@@ -18,10 +18,10 @@ import LogoIcon from '@assets/logo.svg';
 
 const Header = () => {
   const navigate = useNavigate();
+  const profileRef = useRef(null);
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
   const showSnackbar = useContext(SnackbarContext);
-  const profileRef = useRef(null);
   const [isActive, setIsActive] = useOutsideClick(profileRef, false);
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [nickName, setNickName] = useState('');
@@ -62,6 +62,11 @@ const Header = () => {
     setNickName(e.target.value);
   };
 
+  const handleOpenModal = () => {
+    openModal();
+    setNickName('');
+  };
+
   return (
     <S.HeaderContainer>
       <S.LogoLink to={userData ? `/${userData.role.toLowerCase()}` : ROUTES.HOME}>
@@ -90,7 +95,7 @@ const Header = () => {
               </Link>
             </Conditional>
 
-            <li onClick={() => openModal()}>닉네임 수정</li>
+            <li onClick={handleOpenModal}>닉네임 수정</li>
             <li onClick={handleLogout}>로그아웃</li>
           </Dropdown>
         </S.ProfileContainer>
@@ -100,11 +105,12 @@ const Header = () => {
           title="닉네임 수정"
           firstButtonName="취소하기"
           secondButtonName="수정하기"
-          onClickFirstButton={() => closeModal()}
+          onClickFirstButton={closeModal}
           onClickSecondButton={handleModifyNickname}
           closeModal={closeModal}
         >
           <S.Input
+            autoFocus
             type="text"
             placeholder="ex) 닉네임(이름)"
             value={nickName}

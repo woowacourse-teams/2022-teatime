@@ -43,7 +43,7 @@ const TitleWrapper = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  padding: 20px;
+  padding: 30px 20px;
 `;
 
 const CloseIconWrapper = styled.div`
