@@ -44,7 +44,7 @@ public class CoachFindOwnHistoryResponse {
                 .map(CoachFindOwnHistoryResponse::from)
                 .collect(Collectors.toList()));
 
-        response.sort(Comparator.comparing(CoachFindOwnHistoryResponse::getUpdatedAt));
+        response.sort(Comparator.comparing(CoachFindOwnHistoryResponse::getUpdatedAt).reversed());
         return response;
     }
 
