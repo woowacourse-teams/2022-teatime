@@ -23,12 +23,6 @@ const ModalContainer = styled.div`
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.WHITE};
   overflow: hidden;
-
-  p {
-    margin: 20px 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
 `;
 
 const TitleWrapper = styled.div`

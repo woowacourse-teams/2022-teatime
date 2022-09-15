@@ -4,9 +4,9 @@ import * as S from './styles';
 import CloseIcon from '@assets/close.svg';
 
 interface ModalProps {
-  icon: string;
+  icon?: string;
   title: string;
-  content: string;
+  children: React.ReactNode;
   firstButtonName: string;
   secondButtonName: string;
   closeModal: () => void;
@@ -17,7 +17,7 @@ interface ModalProps {
 const Modal = ({
   icon,
   title,
-  content,
+  children,
   firstButtonName,
   secondButtonName,
   closeModal,
@@ -40,9 +40,9 @@ const Modal = ({
             </S.CloseIconWrapper>
             <S.TitleWrapper>
               <h1>{title}</h1>
-              <img src={icon} alt={`${title} 아이콘`} />
+              {icon && <img src={icon} alt={`${title} 아이콘`} />}
             </S.TitleWrapper>
-            <p>{content}</p>
+            {children}
           </S.InnerContainer>
           <S.ButtonWrapper>
             <S.FirstButton onClick={onClickFirstButton}>{firstButtonName}</S.FirstButton>
