@@ -22,7 +22,7 @@ public class CanceledSheet {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private CanceledReservation reservation;
+    private CanceledReservation canceledReservation;
 
     @Column(nullable = false, unique = true)
     private Integer number;
@@ -33,9 +33,9 @@ public class CanceledSheet {
     @Lob
     private String answerContent;
 
-    private CanceledSheet(CanceledReservation reservation, Integer number, String questionContent,
+    private CanceledSheet(CanceledReservation canceledReservation, Integer number, String questionContent,
                           String answerContent) {
-        this.reservation = reservation;
+        this.canceledReservation = canceledReservation;
         this.number = number;
         this.questionContent = questionContent;
         this.answerContent = answerContent;
