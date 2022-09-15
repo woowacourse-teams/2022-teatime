@@ -123,8 +123,8 @@ const CrewHistory = () => {
                 statusName={statusName}
                 color={color}
                 bgColor={backgroundColor}
-                onClickSheet={moveReservationSheet}
-                onClickDelete={deleteReservation}
+                onClickSheet={handleShowSheet}
+                onClickCancel={handleCancelReservation}
                 isCrew
               />
             );
