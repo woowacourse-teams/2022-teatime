@@ -8,10 +8,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.web.servlet.ResultActions;
 
 class CoachControllerTest extends ControllerTestSupporter {
@@ -112,6 +115,7 @@ class CoachControllerTest extends ControllerTestSupporter {
     @DisplayName("코치가 자신의 면담 내역(히스토리) 조회에 실패한다. - 잘못된 토큰")
     @Test
     void coachFindOwnHistory_invalidToken() throws Exception {
+        //given
         String token = "나 잘못된 토큰.";
 
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/history")
@@ -119,7 +123,7 @@ class CoachControllerTest extends ControllerTestSupporter {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
 
-        //then
+        //when, then
         perform.andExpectAll(
                 status().isUnauthorized(),
                 jsonPath("message").value("유효하지 않은 토큰입니다.")
@@ -127,6 +131,39 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //docs
         perform.andDo(document("find-own-history-tokenException"));
+    }
 
+    @DisplayName("코치가 자신의 유저 네임 수정에 성공한다.")
+    @Test
+    void updateProfile() throws Exception {
+        // given
+        String token = "나 코치다.";
+        코치의_토큰을_검증한다(token);
+
+        //when
+        CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨");
+        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", request)
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isNoContent());
+    }
+
+    @DisplayName("코치가 자신의 유저 네임 수정에 실패한다. - 이름이 공백인 경우 400 에러가 난다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    void updateProfile_invalidProfile(String name) throws Exception {
+        // given
+        String token = "나 코치다.";
+        코치의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name))
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isBadRequest());
     }
 }

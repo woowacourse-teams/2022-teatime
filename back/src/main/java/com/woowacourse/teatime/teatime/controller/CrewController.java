@@ -2,18 +2,22 @@ package com.woowacourse.teatime.teatime.controller;
 
 import com.woowacourse.teatime.auth.support.CoachAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
+import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
+import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnCanceledSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnSheetResponse;
+import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.SheetService;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +33,7 @@ public class CrewController {
 
     private final ReservationService reservationService;
     private final SheetService sheetService;
+    private final CrewService crewService;
 
     @GetMapping("/me/reservations")
     public ResponseEntity<List<CrewFindOwnHistoryResponse>> findOwnReservations(
@@ -75,5 +80,12 @@ public class CrewController {
         sheetService.updateAnswer(crewId, reservationId, request);
         reservationService.updateSheetStatusToSubmitted(crewId, reservationId, request.getStatus());
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/me/profile")
+    public ResponseEntity<Void> updateProfile(
+            @CrewAuthenticationPrincipal Long crewId, @Valid @RequestBody CrewUpdateProfileRequest request) {
+        crewService.updateProfile(crewId, request);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
+import EmptyContent from '@components/EmptyContent';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
@@ -96,39 +97,42 @@ const CrewHistory = () => {
   }, []);
 
   return (
-    <S.Table>
-      <S.Thead>
-        <tr>
-          <td>진행 상태</td>
-          <td>코치</td>
-          <td>날짜</td>
-          <td>시간</td>
-          <td />
-        </tr>
-      </S.Thead>
-      <S.Tbody>
-        {historyList.map((history) => {
-          const { reservationId, status, coachName, coachImage, dateTime } = history;
-          const { statusName, color, backgroundColor } = historyStatus[history.status];
-          return (
-            <TableRow
-              key={history.reservationId}
-              id={reservationId}
-              status={status}
-              name={coachName}
-              image={coachImage}
-              dateTime={dateTime}
-              statusName={statusName}
-              color={color}
-              bgColor={backgroundColor}
-              onClickSheet={handleShowSheet}
-              onClickCancel={handleCancelReservation}
-              isCrew
-            />
-          );
-        })}
-      </S.Tbody>
-    </S.Table>
+    <>
+      <S.Table>
+        <thead>
+          <S.TheadRow>
+            <td>진행 상태</td>
+            <td>코치</td>
+            <td>날짜</td>
+            <td>시간</td>
+            <td />
+          </S.TheadRow>
+        </thead>
+        <tbody>
+          {historyList.map((history) => {
+            const { reservationId, status, coachName, coachImage, dateTime } = history;
+            const { statusName, color, backgroundColor } = historyStatus[history.status];
+            return (
+              <TableRow
+                key={history.reservationId}
+                id={reservationId}
+                status={status}
+                name={coachName}
+                image={coachImage}
+                dateTime={dateTime}
+                statusName={statusName}
+                color={color}
+                bgColor={backgroundColor}
+                onClickSheet={handleShowSheet}
+                onClickCancel={handleCancelReservation}
+                isCrew
+              />
+            );
+          })}
+        </tbody>
+      </S.Table>
+      {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
+    </>
   );
 };
 

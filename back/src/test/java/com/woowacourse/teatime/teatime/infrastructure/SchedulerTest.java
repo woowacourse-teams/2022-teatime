@@ -4,7 +4,7 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew1;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -54,7 +54,7 @@ class SchedulerTest {
     @BeforeEach
     void setUp() {
         coach = coachRepository.save(getCoachJason());
-        crew = crewRepository.save(getCrew1());
+        crew = crewRepository.save(getCrew());
     }
 
     @DisplayName("승인된 예약을 진행중인 예약으로 변경한다.")
