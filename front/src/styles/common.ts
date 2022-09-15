@@ -1,4 +1,13 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const FadeIn = keyframes`
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+`;
 
 const ScheduleContainer = styled.div`
   display: flex;
@@ -10,7 +19,7 @@ const ScheduleContainer = styled.div`
 const CalendarContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 45px;
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -33,4 +42,4 @@ const InfoContainer = styled.div`
   }
 `;
 
-export { ScheduleContainer, CalendarContainer, InfoContainer };
+export { FadeIn, ScheduleContainer, CalendarContainer, InfoContainer };

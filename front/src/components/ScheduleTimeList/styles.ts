@@ -1,13 +1,6 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const FadeIn = keyframes`
- from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+import { FadeIn } from '@styles/common';
 
 const TimeListContainer = styled.div`
   animation: ${FadeIn} 0.8s;

@@ -16,6 +16,8 @@ const getCoachReservations = () => api.get<CrewListMap>('/api/v2/coaches/me/rese
 
 const getCoachHistories = () => api.get<CoachHistory[]>('/api/v2/coaches/me/history');
 
+const editCoachNickName = (name: string) => api.put(`/api/v2/coaches/me/profile`, { name });
+
 export {
   getCoaches,
   getCoachSchedulesByMe,
@@ -23,4 +25,5 @@ export {
   getCoachReservations,
   editCoachSchedule,
   getCoachHistories,
+  editCoachNickName,
 };

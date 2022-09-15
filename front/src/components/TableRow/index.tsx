@@ -13,7 +13,7 @@ interface TableRowProps {
   statusName: string;
   color: string;
   bgColor: string;
-  onClickSheet?: (reservationId: number) => void;
+  onClickSheet?: (reservationId: number, status: string) => void;
   onClickCancel?: (reservationId: number) => void;
   isCrew?: boolean;
 }
@@ -52,7 +52,11 @@ const TableRow = ({
       <td>{time}</td>
       {isCrew && (
         <td>
-          <S.Icon src={ScheduleIcon} alt="스케줄 아이콘" onClick={() => onClickSheet?.(id)} />
+          <S.Icon
+            src={ScheduleIcon}
+            alt="스케줄 아이콘"
+            onClick={() => onClickSheet?.(id, status)}
+          />
           {isEditStatus && (
             <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickCancel?.(id)} />
           )}

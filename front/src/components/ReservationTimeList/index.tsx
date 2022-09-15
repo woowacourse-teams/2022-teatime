@@ -72,13 +72,14 @@ const ReservationTimeList = ({
         <Modal
           icon={CheckCircle}
           title="예약완료"
-          content="면담 내용을 지금 작성 하시겠습니까?"
           firstButtonName="나중에"
           secondButtonName="작성하기"
           onClickFirstButton={() => navigate(ROUTES.CREW_HISTORY)}
           onClickSecondButton={() => navigate(`${ROUTES.CREW_SHEET}/${reservationId}`)}
           closeModal={closeModal}
-        />
+        >
+          <S.ModalContent>면담 내용을 지금 작성 하시겠습니까?</S.ModalContent>
+        </Modal>
       )}
     </S.TimeListContainer>
   );

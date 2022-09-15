@@ -9,6 +9,9 @@ const getCrewHistoriesByCoach = (crewId: string) =>
 const getCrewReservationByMe = (reservationId: string) =>
   api.get<Reservation>(`/api/v2/crews/me/reservations/${reservationId}`);
 
+const getCrewCanceledReservation = (reservationId: string) =>
+  api.get<Reservation>(`/api/v2/crews/me/canceled-reservations/${reservationId}`);
+
 const getCrewReservationByCoach = (crewId: number, reservationId: string) =>
   api.get<Reservation>(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
 
@@ -18,10 +21,14 @@ const editCrewReservation = (reservationId: string, isSubmitted: boolean, sheets
     sheets,
   });
 
+const editCrewNickName = (name: string) => api.put(`/api/v2/crews/me/profile`, { name });
+
 export {
   getCrewHistoriesByMe,
   getCrewHistoriesByCoach,
   getCrewReservationByMe,
+  getCrewCanceledReservation,
   getCrewReservationByCoach,
   editCrewReservation,
+  editCrewNickName,
 };

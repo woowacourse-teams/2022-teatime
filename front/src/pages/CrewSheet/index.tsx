@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
@@ -7,7 +7,7 @@ import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { editCrewReservation, getCrewReservationByMe } from '@api/crew';
+import { editCrewReservation, getCrewCanceledReservation, getCrewReservationByMe } from '@api/crew';
 import { ROUTES } from '@constants/index';
 import type { Reservation, Sheets } from '@typings/domain';
 import * as S from '@styles/common';
@@ -16,6 +16,7 @@ const CrewSheet = () => {
   const { id: reservationId } = useParams();
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
+  const { state: isCanceled } = useLocation();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
 
   const isView = reservationInfo?.status === 'SUBMITTED';
@@ -36,7 +37,9 @@ const CrewSheet = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await getCrewReservationByMe(reservationId as string);
+        const { data } = isCanceled
+          ? await getCrewCanceledReservation(reservationId as string)
+          : await getCrewReservationByMe(reservationId as string);
         setReservationInfo(data);
       } catch (error) {
         if (error instanceof AxiosError) {

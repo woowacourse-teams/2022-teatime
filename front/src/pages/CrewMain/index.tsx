@@ -10,7 +10,7 @@ import { getCoaches } from '@api/coach';
 import type { Coach } from '@typings/domain';
 import * as S from './styles';
 
-const Crew = () => {
+const CrewMain = () => {
   const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
@@ -60,4 +60,4 @@ const Crew = () => {
   );
 };
 
-export default Crew;
+export default CrewMain;

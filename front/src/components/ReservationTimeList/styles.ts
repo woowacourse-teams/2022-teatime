@@ -1,13 +1,5 @@
-import styled, { css, keyframes } from 'styled-components';
-
-const FadeIn = keyframes`
- from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+import styled, { css } from 'styled-components';
+import { FadeIn } from '@styles/common';
 
 const TimeListContainer = styled.div`
   width: 250px;
@@ -102,4 +94,10 @@ const ReserveButtonWrapper = styled.div`
   }
 `;
 
-export { TimeListContainer, TimeBox, ReserveButtonWrapper };
+const ModalContent = styled.p`
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+export { TimeListContainer, TimeBox, ReserveButtonWrapper, ModalContent };
