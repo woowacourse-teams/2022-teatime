@@ -10,7 +10,8 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class DateTest {
+class
+DateTest {
 
     @DisplayName("지난 년도를 입력하면 예외를 반환한다.")
     @Test
@@ -43,5 +44,19 @@ class DateTest {
         LocalDateTime firstDay = Date.findFirstDateTime(future.getYear(), future.getMonthValue());
         LocalDate expectedDate = LocalDate.of(future.getYear(), future.getMonthValue(), 1);
         assertThat(firstDay).isEqualTo(LocalDateTime.of(expectedDate, LocalTime.MIN));
+    }
+
+    @DisplayName("패턴을 입력하면 localDateTiem을 패턴에 맞게 string으로 반환한다.")
+    @Test
+    void formatDate() {
+        //given
+        LocalDateTime dateTime = LocalDateTime.of(2022,9,15,13,30, 33);
+
+        //when
+        String actual = Date.formatDate("yyyy-MM-dd HH:mm", dateTime);
+
+        //then
+        String expected = "2022-09-15 13:30";
+        assertThat(actual).isEqualTo(expected);
     }
 }
