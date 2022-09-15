@@ -8,6 +8,7 @@ import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -49,6 +53,10 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private SheetStatus sheetStatus;
 
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
     public Reservation(Schedule schedule, Crew crew) {
         this.schedule = schedule;
         this.crew = crew;
@@ -56,28 +64,22 @@ public class Reservation {
         this.sheetStatus = SheetStatus.WRITING;
     }
 
-    public void confirm(boolean isApproved) {
+    public void confirm() {
         if (!isReservationStatus(ReservationStatus.BEFORE_APPROVED)) {
             throw new AlreadyApprovedException();
         }
-        if (isApproved) {
-            reservationStatus = ReservationStatus.APPROVED;
-            return;
-        }
-        reservationStatus = ReservationStatus.CANCELED;
-        schedule.init();
+        reservationStatus = ReservationStatus.APPROVED;
     }
 
     public void cancel(Role role) {
-        if (isCancelBeforeApprovedByCoach(role) || isCancelInProgressByCrew(role)) {
+        if (isCancelInProgressByCrew(role) || isCancelDone()) {
             throw new UnableToCancelReservationException();
         }
-        reservationStatus = ReservationStatus.CANCELED;
         schedule.init();
     }
 
-    private boolean isCancelBeforeApprovedByCoach(Role role) {
-        return role.isCoach() && isReservationStatus(ReservationStatus.BEFORE_APPROVED);
+    private boolean isCancelDone() {
+        return isReservationStatus(ReservationStatus.DONE);
     }
 
     private boolean isCancelInProgressByCrew(Role role) {

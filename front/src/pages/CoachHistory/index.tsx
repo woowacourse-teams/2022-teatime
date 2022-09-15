@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
+import EmptyContent from '@components/EmptyContent';
 import { getCoachHistories } from '@api/coach';
 import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
 import theme from '@styles/theme';
@@ -44,36 +45,39 @@ const CoachHistory = () => {
   }, []);
 
   return (
-    <S.Table>
-      <S.Thead>
-        <tr>
-          <td>진행 상태</td>
-          <td>크루</td>
-          <td>날짜</td>
-          <td>시간</td>
-          <td />
-        </tr>
-      </S.Thead>
-      <S.Tbody>
-        {historyList.map((history) => {
-          const { reservationId, status, crewName, crewImage, dateTime } = history;
-          const { statusName, color, backgroundColor } = historyStatus[history.status];
-          return (
-            <TableRow
-              key={history.reservationId}
-              id={reservationId}
-              status={status}
-              name={crewName}
-              image={crewImage}
-              dateTime={dateTime}
-              statusName={statusName}
-              color={color}
-              bgColor={backgroundColor}
-            />
-          );
-        })}
-      </S.Tbody>
-    </S.Table>
+    <>
+      <S.Table>
+        <thead>
+          <S.TheadRow>
+            <td>진행 상태</td>
+            <td>크루</td>
+            <td>날짜</td>
+            <td>시간</td>
+            <td />
+          </S.TheadRow>
+        </thead>
+        <tbody>
+          {historyList.map((history) => {
+            const { reservationId, status, crewName, crewImage, dateTime } = history;
+            const { statusName, color, backgroundColor } = historyStatus[history.status];
+            return (
+              <TableRow
+                key={history.reservationId}
+                id={reservationId}
+                status={status}
+                name={crewName}
+                image={crewImage}
+                dateTime={dateTime}
+                statusName={statusName}
+                color={color}
+                bgColor={backgroundColor}
+              />
+            );
+          })}
+        </tbody>
+      </S.Table>
+      {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
+    </>
   );
 };
 

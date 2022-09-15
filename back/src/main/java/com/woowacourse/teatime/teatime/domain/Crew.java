@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.domain;
 
+import com.woowacourse.teatime.teatime.exception.InvalidProfileInfoException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,5 +41,12 @@ public class Crew {
         if (this.slackId == null || this.slackId.isBlank()) {
             this.slackId = slackId;
         }
+    }
+
+    public void modifyName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new InvalidProfileInfoException();
+        }
+        this.name = name.trim();
     }
 }

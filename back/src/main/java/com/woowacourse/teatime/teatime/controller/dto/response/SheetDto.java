@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.controller.dto.response;
 
+import com.woowacourse.teatime.teatime.domain.CanceledSheet;
 import com.woowacourse.teatime.teatime.domain.Sheet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,19 @@ public class SheetDto {
         this.answerContent = sheet.getAnswerContent();
     }
 
+    private SheetDto(CanceledSheet sheet) {
+        this.questionNumber = sheet.getNumber();
+        this.questionContent = sheet.getQuestionContent();
+        this.answerContent = sheet.getAnswerContent();
+    }
+
     public static List<SheetDto> from(List<Sheet> sheets) {
+        return sheets.stream()
+                .map(SheetDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public static List<SheetDto> fromCanceled(List<CanceledSheet> sheets) {
         return sheets.stream()
                 .map(SheetDto::new)
                 .collect(Collectors.toList());

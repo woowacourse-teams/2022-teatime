@@ -46,7 +46,7 @@ public class DomainFixture {
         return new Coach("제이슨", "제이슨", "jason@email.com", "i am legend", "image");
     }
 
-    public static Crew getCrew1() {
+    public static Crew getCrew() {
         return new Crew("마루", "마루", "maru@email.com", "image");
     }
 }

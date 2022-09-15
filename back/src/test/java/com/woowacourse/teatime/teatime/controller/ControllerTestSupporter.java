@@ -10,6 +10,7 @@ import com.woowacourse.teatime.auth.infrastructure.PayloadDto;
 import com.woowacourse.teatime.auth.infrastructure.PayloadExtractor;
 import com.woowacourse.teatime.auth.service.AuthService;
 import com.woowacourse.teatime.teatime.service.CoachService;
+import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
 import com.woowacourse.teatime.teatime.service.ScheduleService;
 import com.woowacourse.teatime.teatime.service.SheetService;
@@ -17,10 +18,12 @@ import com.woowacourse.teatime.teatime.support.ControllerTest;
 import com.woowacourse.teatime.teatime.support.RestDocsSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+@MockBean(JpaMetamodelMappingContext.class)
 @ControllerTest
 public class ControllerTestSupporter extends RestDocsSupporter {
 
@@ -44,6 +47,9 @@ public class ControllerTestSupporter extends RestDocsSupporter {
 
     @MockBean
     protected CoachService coachService;
+
+    @MockBean
+    protected CrewService crewService;
 
     @MockBean
     protected AuthService authService;
