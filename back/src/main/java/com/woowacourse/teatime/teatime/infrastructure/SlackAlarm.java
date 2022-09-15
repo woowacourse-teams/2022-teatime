@@ -38,7 +38,7 @@ public class SlackAlarm implements Alarm {
                     .attachments(attachments)
                     .build());
         } catch (IOException | SlackApiException e) {
-            log.warn("send message request error : " + e.getMessage());
+            log.error("send message request error : " + e.getMessage());
             throw new SlackAlarmException();
         }
     }
