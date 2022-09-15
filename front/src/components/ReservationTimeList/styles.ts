@@ -94,4 +94,10 @@ const ReserveButtonWrapper = styled.div`
   }
 `;
 
-export { TimeListContainer, TimeBox, ReserveButtonWrapper };
+const ModalContent = styled.p`
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+export { TimeListContainer, TimeBox, ReserveButtonWrapper, ModalContent };
