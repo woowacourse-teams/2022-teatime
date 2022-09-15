@@ -274,7 +274,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
         코치의_토큰을_검증한다(token);
 
         doThrow(new NotFoundReservationException()).when(reservationService)
-                .updateReservationStatusToDoneV2(anyLong(), anyLong());
+                .updateReservationStatusToDone(anyLong(), anyLong());
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/reservations/1")
