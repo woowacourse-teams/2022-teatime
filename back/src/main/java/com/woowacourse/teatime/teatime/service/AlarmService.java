@@ -28,8 +28,8 @@ public class AlarmService {
 
     public void send(AlarmDto alarmDto, AlarmTitle alarmTitle) {
         String message = getMessage(alarmDto.getCrewName(), alarmDto.getCoachName(), alarmDto.getTime());
-        alarm.sendGroupMessage(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), alarmTitle.getTitle(),
-                message);
+        alarm.sendGroupMessage(List.of(alarmDto.getCrewSlackId(), alarmDto.getCoachSlackId()), alarmTitle.getTitle(),
+                message, alarmTitle.getBarColor());
     }
 
     public void remindReservation() {
@@ -41,8 +41,8 @@ public class AlarmService {
             Crew crew = reservation.getCrew();
 
             String message = getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
-            alarm.sendMessage(coach.getSlackId(), REMIND_COACH.getTitle(), message);
-            alarm.sendMessage(crew.getSlackId(), REMIND_CREW.getTitle(), message);
+            alarm.sendMessage(coach.getSlackId(), REMIND_COACH.getTitle(), message, REMIND_COACH.getBarColor());
+            alarm.sendMessage(crew.getSlackId(), REMIND_CREW.getTitle(), message, REMIND_CREW.getBarColor());
         }
     }
 
