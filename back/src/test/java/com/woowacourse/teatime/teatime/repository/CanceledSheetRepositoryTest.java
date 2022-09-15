@@ -1,7 +1,7 @@
 package com.woowacourse.teatime.teatime.repository;
 
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew1;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.woowacourse.teatime.teatime.domain.CanceledReservation;
@@ -40,12 +40,10 @@ public class CanceledSheetRepositoryTest {
     private CoachRepository coachRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
 
     @BeforeEach
     void setUp() {
-        crew = crewRepository.save(getCrew1());
+        crew = crewRepository.save(getCrew());
         coach = coachRepository.save(getCoachJason());
         schedule = scheduleRepository.save(new Schedule(coach, DomainFixture.DATE_TIME));
 
