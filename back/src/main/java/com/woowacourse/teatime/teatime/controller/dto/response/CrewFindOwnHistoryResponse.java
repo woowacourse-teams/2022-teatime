@@ -3,7 +3,7 @@ package com.woowacourse.teatime.teatime.controller.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woowacourse.teatime.teatime.domain.CanceledReservation;
-import com.woowacourse.teatime.teatime.domain.Crew;
+import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Schedule;
@@ -50,14 +50,14 @@ public class CrewFindOwnHistoryResponse {
 
     private static CrewFindOwnHistoryResponse from(Reservation reservation) {
         Schedule schedule = reservation.getSchedule();
-        Crew crew = reservation.getCrew();
-        return new CrewFindOwnHistoryResponse(reservation.getId(), crew.getName(), crew.getImage(),
+        Coach coach = reservation.getCoach();
+        return new CrewFindOwnHistoryResponse(reservation.getId(), coach.getName(), coach.getImage(),
                 schedule.getLocalDateTime(), reservation.getReservationStatus(), reservation.getUpdatedAt());
     }
 
     private static CrewFindOwnHistoryResponse from(CanceledReservation reservation) {
-        Crew crew = reservation.getCrew();
-        return new CrewFindOwnHistoryResponse(reservation.getOriginId(), crew.getName(), crew.getImage(),
+        Coach coach = reservation.getCoach();
+        return new CrewFindOwnHistoryResponse(reservation.getOriginId(), coach.getName(), coach.getImage(),
                 reservation.getOriginSchedule(), ReservationStatus.CANCELED, reservation.getCreatedAt());
     }
 }
