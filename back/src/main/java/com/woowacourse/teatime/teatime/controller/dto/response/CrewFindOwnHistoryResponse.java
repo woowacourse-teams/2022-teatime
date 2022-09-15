@@ -44,7 +44,7 @@ public class CrewFindOwnHistoryResponse {
                 .map(CrewFindOwnHistoryResponse::from)
                 .collect(Collectors.toList()));
 
-        response.sort(Comparator.comparing(CrewFindOwnHistoryResponse::getUpdatedAt));
+        response.sort(Comparator.comparing(CrewFindOwnHistoryResponse::getUpdatedAt).reversed());
         return response;
     }
 
