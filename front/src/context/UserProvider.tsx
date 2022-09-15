@@ -8,7 +8,10 @@ type State = {
   userData: UserInfo | null;
 };
 
-type Action = { type: 'SET_USER'; userData: UserInfo } | { type: 'DELETE_USER' };
+type Action =
+  | { type: 'SET_USER'; userData: UserInfo }
+  | { type: 'EDIT_USER'; name: string }
+  | { type: 'DELETE_USER' };
 
 type UserDispatch = Dispatch<Action>;
 
@@ -21,6 +24,16 @@ const reducer = (state: State, action: Action) => {
       return {
         ...state,
         userData,
+      };
+    }
+    case 'EDIT_USER': {
+      const newUserData = { ...state.userData };
+      newUserData.name = action.name;
+      setStorage(LOCAL_DB.USER, newUserData);
+
+      return {
+        ...state,
+        userData: newUserData,
       };
     }
     case 'DELETE_USER': {

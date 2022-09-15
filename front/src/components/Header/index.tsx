@@ -43,7 +43,7 @@ const Header = () => {
       userData?.role === 'COACH'
         ? await editCoachNickName(nickName)
         : await editCrewNickName(nickName);
-
+      dispatch({ type: 'EDIT_USER', name: nickName });
       showSnackbar({ message: '변경되었습니다. ✅' });
       closeModal();
     } catch (error) {
