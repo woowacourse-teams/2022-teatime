@@ -12,15 +12,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewSheetResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnCanceledSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.domain.Reservation;
+import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.exception.CannotSubmitBlankException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
@@ -107,6 +111,19 @@ class SheetServiceTest {
 
         assertThatThrownBy(() -> sheetService.findOwnSheetByCrew(crew.getId(), 존재하지_않는_아이디))
                 .isInstanceOf(NotFoundReservationException.class);
+    }
+
+    @DisplayName("크루가 자신의 취소된 면담 시트를 조회한다.")
+    @Test
+    void findOwnCanceledSheetByCrew() {
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
+        Long reservationId = reservationService.save(crew.getId(), new ReservationReserveRequest(schedule1.getId()));
+        reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), Role.COACH.name()));
+
+        CrewFindOwnCanceledSheetResponse canceledSheet = sheetService.findOwnCanceledSheetByCrew(crew.getId(),
+                reservationId);
+
+        assertThat(canceledSheet.getSheets()).hasSize(3);
     }
 
     @DisplayName("코치가 크루의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")

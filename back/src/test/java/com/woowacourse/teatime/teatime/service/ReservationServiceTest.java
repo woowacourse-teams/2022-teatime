@@ -20,6 +20,7 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservations
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
+import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Role;
@@ -30,12 +31,14 @@ import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
-import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import com.woowacourse.teatime.teatime.repository.CanceledReservationRepository;
+import com.woowacourse.teatime.teatime.repository.CanceledSheetRepository;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
+import com.woowacourse.teatime.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -63,17 +66,27 @@ class ReservationServiceTest {
     @Autowired
     private CanceledReservationRepository canceledReservationRepository;
     @Autowired
+    private CanceledSheetRepository canceledSheetRepository;
+    @Autowired
     private CrewRepository crewRepository;
     @Autowired
     private CoachRepository coachRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    private SheetRepository sheetRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @BeforeEach
     void setUp() {
         crew = crewRepository.save(CREW1);
         coach = coachRepository.save(COACH_BROWN);
         schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
+
+        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
+        questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
+        questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
     }
 
     @DisplayName("예약을 한다.")
@@ -132,13 +145,16 @@ class ReservationServiceTest {
         예약_승인을_확정한다(reservationId, false);
 
         assertAll(
+                () -> assertThat(reservationRepository.findAll()).isEmpty(),
+                () -> assertThat(sheetRepository.findAll()).isEmpty(),
                 () -> assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1),
+                () -> assertThat(canceledSheetRepository.findByOriginId(reservationId)).hasSize(3),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
 
 
-    @DisplayName("코치가 면담 예약을 취소할 수 있다. -> 예약이 삭제된다.")
+    @DisplayName("코치가 승인된 예약을 취소할 수 있다. -> 예약이 삭제된다.")
     @Test
     void cancel_coach() {
         Long reservationId = 예약에_성공한다();
@@ -147,12 +163,15 @@ class ReservationServiceTest {
         reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), "COACH"));
 
         assertAll(
+                () -> assertThat(reservationRepository.findAll()).isEmpty(),
+                () -> assertThat(sheetRepository.findAll()).isEmpty(),
                 () -> assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1),
+                () -> assertThat(canceledSheetRepository.findByOriginId(reservationId)).hasSize(3),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
 
-    @DisplayName("크루가 면담 예약을 취소할 수 있다. -> 예약이 삭제된다.")
+    @DisplayName("크루가 승인된 예약을 취소할 수 있다. -> 예약이 삭제된다.")
     @Test
     void cancel_crew() {
         Long reservationId = 예약에_성공한다();
@@ -161,7 +180,10 @@ class ReservationServiceTest {
         reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW"));
 
         assertAll(
+                () -> assertThat(reservationRepository.findAll()).isEmpty(),
+                () -> assertThat(sheetRepository.findAll()).isEmpty(),
                 () -> assertThat(canceledReservationRepository.findAllByCrewId(crew.getId())).hasSize(1),
+                () -> assertThat(canceledSheetRepository.findByOriginId(reservationId)).hasSize(3),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -208,9 +230,13 @@ class ReservationServiceTest {
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
 
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.minusDays(1)));
+        Long reservation2Id = reservationService.save(crew.getId(), new ReservationReserveRequest(schedule2.getId()));
+        reservationService.cancel(reservation2Id, new UserRoleDto(coach.getId(), Role.COACH.name()));
+
         List<CrewFindOwnHistoryResponse> reservations = reservationService.findOwnHistoryByCrew(crew.getId());
 
-        assertThat(reservations).hasSize(1);
+        assertThat(reservations).hasSize(2);
     }
 
     @DisplayName("코치가 크루의 히스토리를 조회한다.")

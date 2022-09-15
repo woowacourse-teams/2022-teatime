@@ -49,6 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReservationService {
 
+    private final SheetService sheetService;
     private final ReservationRepository reservationRepository;
     private final CanceledReservationRepository canceledReservationRepository;
     private final CrewRepository crewRepository;
@@ -65,6 +66,7 @@ public class ReservationService {
 
         schedule.reserve();
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        sheetService.save(reservation.getId());
         return reservation.getId();
     }
 

@@ -27,7 +27,7 @@ public class Sheet {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Reservation reservation;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer number;
 
     @Column(nullable = false)
