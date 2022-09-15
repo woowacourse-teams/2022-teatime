@@ -1,8 +1,5 @@
 package com.woowacourse.teatime.teatime.service;
 
-import static com.woowacourse.teatime.teatime.service.AlarmTitle.APPLY;
-import static com.woowacourse.teatime.teatime.service.AlarmTitle.CANCEL;
-import static com.woowacourse.teatime.teatime.service.AlarmTitle.CONFIRM;
 import static com.woowacourse.teatime.teatime.service.AlarmTitle.REMIND_COACH;
 import static com.woowacourse.teatime.teatime.service.AlarmTitle.REMIND_CREW;
 import static com.woowacourse.teatime.util.Date.findLastTime;
@@ -29,20 +26,10 @@ public class AlarmService {
     private final Alarm alarm;
     private final ReservationRepository reservationRepository;
 
-
-    public void applyReservation(AlarmDto alarmDto) {
+    public void send(AlarmDto alarmDto, AlarmTitle alarmTitle) {
         String message = getMessage(alarmDto.getCrewName(), alarmDto.getCoachName(), alarmDto.getTime());
-        alarm.sendMessages(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), APPLY.getTitle(), message);
-    }
-
-    public void confirmReservation(AlarmDto alarmDto) {
-        String message = getMessage(alarmDto.getCrewName(), alarmDto.getCoachName(), alarmDto.getTime());
-        alarm.sendMessages(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), CONFIRM.getTitle(), message);
-    }
-
-    public void cancelReservation(AlarmDto alarmDto) {
-        String message = getMessage(alarmDto.getCrewName(), alarmDto.getCoachName(), alarmDto.getTime());
-        alarm.sendMessages(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), CANCEL.getTitle(), message);
+        alarm.sendGroupMessage(List.of(alarmDto.getCrewSlackId(), alarmDto.getCrewSlackId()), alarmTitle.getTitle(),
+                message);
     }
 
     public void remindReservation() {

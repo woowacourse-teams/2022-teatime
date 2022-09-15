@@ -2,7 +2,6 @@ package com.woowacourse.teatime.teatime.service;
 
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.BEFORE_APPROVED;
-import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.IN_PROGRESS;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
@@ -17,7 +16,6 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservations
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.domain.CanceledReservation;
 import com.woowacourse.teatime.teatime.domain.CanceledSheet;
-import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
@@ -56,7 +54,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 public class ReservationService {
 
     private final AlarmService alarmService;
-
     private final SheetService sheetService;
     private final ReservationRepository reservationRepository;
     private final CanceledReservationRepository canceledReservationRepository;
@@ -66,56 +63,9 @@ public class ReservationService {
     private final SheetRepository sheetRepository;
     private final CanceledSheetRepository canceledSheetRepository;
 
-    public Long save(Long crewId, ReservationReserveRequest reservationReserveRequest) {
-        log.info(TransactionSynchronizationManager.getCurrentTransactionName());
-
-        Crew crew = crewRepository.findById(crewId)
-                .orElseThrow(NotFoundCrewException::new);
-        Schedule schedule = scheduleRepository.findById(reservationReserveRequest.getScheduleId())
-                .orElseThrow(NotFoundScheduleException::new);
-
-        schedule.reserve();
-        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        sheetService.save(reservation.getId());
-
+    private void sendAlarm(Crew crew, Schedule schedule, AlarmTitle alarmTitle) {
         AlarmDto dto = AlarmDto.of(schedule.getCoach(), crew, schedule.getLocalDateTime());
-        alarmService.applyReservation(dto);
-
-        return reservation.getId();
-    }
-
-    public void approve(Long coachId, Long reservationId, ReservationApproveRequest reservationApproveRequest) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-        validateIsSameCoach(coachId, reservation);
-
-        Crew crew = reservation.getCrew();
-        Coach coach = reservation.getCoach();
-        AlarmDto dto = AlarmDto.of(coach, crew, reservation.getScheduleDateTime());
-
-        Boolean isApproved = reservationApproveRequest.getIsApproved();
-        if (isApproved) {
-            reservation.confirm();
-            alarmService.confirmReservation(dto);
-            return;
-        }
-
-        cancelReservation(reservation, Role.COACH);
-        alarmService.cancelReservation(dto);
-    }
-
-    public void cancel(Long reservationId, UserRoleDto userRoleDto) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(NotFoundReservationException::new);
-        Role role = Role.search(userRoleDto.getRole());
-        validateAuthorization(userRoleDto.getId(), role, reservation);
-
-        cancelReservation(reservation, role);
-
-        Crew crew = reservation.getCrew();
-        Coach coach = reservation.getCoach();
-        AlarmDto dto = AlarmDto.of(coach, crew, reservation.getScheduleDateTime());
-        alarmService.cancelReservation(dto);
+        alarmService.send(dto, alarmTitle);
     }
 
     private void cancelReservation(Reservation reservation, Role role) {
@@ -129,7 +79,48 @@ public class ReservationService {
 
         reservation.cancel(role);
         reservationRepository.delete(reservation);
+    }
 
+    public Long save(Long crewId, ReservationReserveRequest reservationReserveRequest) {
+        log.info(TransactionSynchronizationManager.getCurrentTransactionName());
+
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(NotFoundCrewException::new);
+        Schedule schedule = scheduleRepository.findById(reservationReserveRequest.getScheduleId())
+                .orElseThrow(NotFoundScheduleException::new);
+
+        schedule.reserve();
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        sheetService.save(reservation.getId());
+        sendAlarm(crew, schedule, AlarmTitle.APPLY);
+
+        return reservation.getId();
+    }
+
+    public void approve(Long coachId, Long reservationId, ReservationApproveRequest reservationApproveRequest) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        validateIsSameCoach(coachId, reservation);
+
+        Boolean isApproved = reservationApproveRequest.getIsApproved();
+        if (isApproved) {
+            reservation.confirm();
+            sendAlarm(reservation.getCrew(), reservation.getSchedule(), AlarmTitle.CONFIRM);
+            return;
+        }
+
+        cancelReservation(reservation, Role.COACH);
+        sendAlarm(reservation.getCrew(), reservation.getSchedule(), AlarmTitle.CANCEL);
+    }
+
+    public void cancel(Long reservationId, UserRoleDto userRoleDto) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(NotFoundReservationException::new);
+        Role role = Role.search(userRoleDto.getRole());
+        validateAuthorization(userRoleDto.getId(), role, reservation);
+
+        cancelReservation(reservation, role);
+        sendAlarm(reservation.getCrew(), reservation.getSchedule(), AlarmTitle.CANCEL);
     }
 
     private void validateAuthorization(Long applicantId, Role role,
@@ -256,11 +247,7 @@ public class ReservationService {
 
         for (Reservation reservation : reservations) {
             cancelReservation(reservation, Role.COACH);
-
-            Crew crew = reservation.getCrew();
-            Coach coach = reservation.getCoach();
-            AlarmDto dto = AlarmDto.of(coach, crew, reservation.getScheduleDateTime());
-            alarmService.cancelReservation(dto);
+            sendAlarm(reservation.getCrew(), reservation.getSchedule(), AlarmTitle.CANCEL);
         }
     }
 

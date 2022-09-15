@@ -38,7 +38,7 @@ public class StringSplitTest {
         Crew crew = new Crew("U03S7DCHNM6", "야호", "email", "image");
         Coach coach = new Coach("U03TRCESYA2", "티타임", "굿", "굿");
         String message = getMessage(crew.getName(), coach.getName(), LocalDateTime.now());
-        alarm.sendMessages(List.of(crew.getSlackId()),REMIND_CREW.getTitle(), message);
+        alarm.sendGroupMessage(List.of(crew.getSlackId()), REMIND_CREW.getTitle(), message);
     }
 
     private String getMessage(String crewName, String coachName, LocalDateTime dateTime) {

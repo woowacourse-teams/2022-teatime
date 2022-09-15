@@ -6,5 +6,5 @@ public interface Alarm {
 
     void sendMessage(String userId, String title, String message);
 
-    void sendMessages(List<String> userId, String title, String message);
+    void sendGroupMessage(List<String> userId, String title, String message);
 }

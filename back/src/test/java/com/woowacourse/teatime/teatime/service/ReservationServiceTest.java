@@ -1,7 +1,6 @@
 package com.woowacourse.teatime.teatime.service;
 
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.APPROVED;
-import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
@@ -34,9 +33,7 @@ import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
 import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
-import com.woowacourse.teatime.teatime.exception.UnableToCancelReservationException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
-import com.woowacourse.teatime.teatime.infrastructure.Scheduler;
 import com.woowacourse.teatime.teatime.repository.CanceledReservationRepository;
 import com.woowacourse.teatime.teatime.repository.CanceledSheetRepository;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
@@ -145,7 +142,7 @@ class ReservationServiceTest {
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         doThrow(new SlackAlarmException())
                 .when(alarmService)
-                .applyReservation(any(AlarmDto.class));
+                .send(any(AlarmDto.class), any());
 
         //when, then
         assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
@@ -175,7 +172,7 @@ class ReservationServiceTest {
 
         doThrow(new SlackAlarmException())
                 .when(alarmService)
-                .confirmReservation(any(AlarmDto.class));
+                .send(any(AlarmDto.class), any());
 
         //when, then
         assertThatThrownBy(() -> 예약_승인을_확정한다(reservationId, true))
@@ -282,7 +279,7 @@ class ReservationServiceTest {
 
         doThrow(new SlackAlarmException())
                 .when(alarmService)
-                .cancelReservation(any(AlarmDto.class));
+                .send(any(AlarmDto.class), any());
 
         //when, then
         assertThatThrownBy(() -> reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW")))

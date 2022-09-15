@@ -32,7 +32,7 @@ public class Scheduler {
 
     @Scheduled(cron = "0 0 13 * * *")
     public void remindReservation() {
-        log.info("{}, 다음날 면담을 리마인드 해주는스케쥴러 실행", LocalDateTime.now());
+        log.info("{}, 다음날 면담을 리마인드 해주는 스케쥴러 실행", LocalDateTime.now());
         alarmService.remindReservation();
     }
 }

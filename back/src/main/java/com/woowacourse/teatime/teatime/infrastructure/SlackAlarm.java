@@ -45,7 +45,7 @@ public class SlackAlarm implements Alarm {
     }
 
     @Override
-    public void sendMessages(List<String> userIds, String title, String message) {
+    public void sendGroupMessage(List<String> userIds, String title, String message) {
         for (String userId : userIds) {
             sendMessage(userId, title, message);
         }
