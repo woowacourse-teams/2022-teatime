@@ -19,7 +19,7 @@ const ScheduleContainer = styled.div`
 const CalendarContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 45px;
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
