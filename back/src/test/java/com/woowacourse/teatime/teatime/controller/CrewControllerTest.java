@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
@@ -16,6 +17,8 @@ import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.web.servlet.ResultActions;
 
 class CrewControllerTest extends ControllerTestSupporter {
@@ -29,7 +32,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/me/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -44,7 +47,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/me/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -63,7 +66,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -82,7 +85,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -106,7 +109,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/a/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -122,7 +125,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/me/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -141,7 +144,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //then
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/me/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -163,7 +166,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/me/reservations/a")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -179,7 +182,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -195,7 +198,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations/a")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -211,7 +214,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/a/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -230,7 +233,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
@@ -253,7 +256,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -275,8 +278,8 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/reservations/1",
-                new SheetAnswerUpdateRequest(SUBMITTED, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE)))
-                .header("Authorization", "Bearer " + token))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE)))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -292,8 +295,8 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/reservations/a",
-                new SheetAnswerUpdateRequest(SUBMITTED, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE)))
-                .header("Authorization", "Bearer " + token))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE)))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -309,8 +312,8 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/reservations/a",
-                new SheetAnswerUpdateRequest(null, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE)))
-                .header("Authorization", "Bearer " + token))
+                        new SheetAnswerUpdateRequest(null, List.of(SHEET_ANSWER_UPDATE_REQUEST_ONE)))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -326,8 +329,42 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/reservations/a",
-                new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(null, "a", "a"))))
-                .header("Authorization", "Bearer " + token))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(null, "a", "a"))))
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("크루가 자신의 유저 네임 수정에 성공한다.")
+    @Test
+    void updateProfile() throws Exception {
+        // given
+        String token = "나 크루다.";
+        크루의_토큰을_검증한다(token);
+
+        //when
+        CrewUpdateProfileRequest request = new CrewUpdateProfileRequest("쿄");
+        ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/profile", request)
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isNoContent());
+    }
+
+    @DisplayName("크루가 자신의 유저 네임 수정에 실패한다. - 이름이 공백인 경우 400 에러가 난다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    void updateProfile_invalidProfile(String name) throws Exception {
+        // given
+        String token = "나 크루다.";
+        크루의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/profile", new CrewUpdateProfileRequest(name))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then

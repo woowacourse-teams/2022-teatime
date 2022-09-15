@@ -237,7 +237,7 @@ class ReservationServiceTest {
         Long reservationId = reservationService.save(crew.getId(), reservationReserveRequest);
         예약_승인을_확정한다(reservationId, true);
         승인된_예약을_진행중인_예약으로_변경한다();
-        reservationService.updateReservationStatusToDone(reservationId);
+        reservationService.updateReservationStatusToDone(coach.getId(), reservationId);
 
         List<CoachFindCrewHistoryResponse> reservations = reservationService.findCrewHistoryByCoach(crew.getId());
 
@@ -285,7 +285,7 @@ class ReservationServiceTest {
         reservation.confirm(true);
         승인된_예약을_진행중인_예약으로_변경한다();
 
-        reservationService.updateReservationStatusToDone(reservation.getId());
+        reservationService.updateReservationStatusToDone(coach.getId(), reservation.getId());
         CoachReservationsResponse response = reservationService.findByCoachId(coach.getId());
 
         assertAll(
