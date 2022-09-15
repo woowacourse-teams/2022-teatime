@@ -23,8 +23,7 @@ public class SlackAlarm implements Alarm {
     private String token;
 
     @Override
-    public void sendMessage(String userId, String title, String message) {
-        String barColor = "#99b387";
+    public void sendMessage(String userId, String title, String message, String barColor) {
         try {
             List<Attachment> attachments = List.of(
                     Attachment.builder()
@@ -45,9 +44,9 @@ public class SlackAlarm implements Alarm {
     }
 
     @Override
-    public void sendGroupMessage(List<String> userIds, String title, String message) {
+    public void sendGroupMessage(List<String> userIds, String title, String message, String barColor) {
         for (String userId : userIds) {
-            sendMessage(userId, title, message);
+            sendMessage(userId, title, message, barColor);
         }
     }
 }
