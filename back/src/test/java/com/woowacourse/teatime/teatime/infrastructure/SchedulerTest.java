@@ -19,7 +19,6 @@ import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +62,26 @@ class SchedulerTest {
     void updateReservationStatusToInProgress() {
         // given
         Schedule schedule = scheduleRepository.save(new Schedule(coach, LocalDateTime.now()));
+        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
+        reservation.confirm();
+
+        // when
+        scheduler.updateReservationStatusToInProgress();
+
+        // then
+        Reservation savedReservation = reservationRepository.findById(reservation.getId())
+                .orElseThrow();
+        ReservationStatus actual = savedReservation.getReservationStatus();
+        assertThat(actual).isEqualTo(IN_PROGRESS);
+    }
+
+    @DisplayName("승인된 예약중 오늘 이전의 예약도 진행중인 예약으로 변경한다.")
+    @Test
+    void updateReservationStatusToInProgress_beforeToday() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime yesterday = now.minusDays(1);
+        Schedule schedule = scheduleRepository.save(new Schedule(coach, yesterday));
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         reservation.confirm();
 

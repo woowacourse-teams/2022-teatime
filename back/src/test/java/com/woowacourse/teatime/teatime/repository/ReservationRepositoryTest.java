@@ -3,7 +3,6 @@ package com.woowacourse.teatime.teatime.repository;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.BEFORE_APPROVED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.CANCELED;
 import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.LOCAL_DATE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -119,7 +118,7 @@ class ReservationRepositoryTest {
 
         // when
         List<Reservation> approvedReservations
-                = reservationRepository.findAllApprovedReservationsBetween(DATE_TIME, Date.findLastTime(LOCAL_DATE));
+                = reservationRepository.findAllApprovedReservationsBetween(Date.findLastTime(LOCAL_DATE));
 
         // then
         assertThat(approvedReservations).hasSize(1);
