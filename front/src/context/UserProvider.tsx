@@ -27,7 +27,7 @@ const reducer = (state: State, action: Action) => {
       };
     }
     case 'EDIT_USER': {
-      const newUserData = { ...state.userData };
+      const newUserData = { ...state.userData } as UserInfo;
       newUserData.name = action.name;
       setStorage(LOCAL_DB.USER, newUserData);
 
