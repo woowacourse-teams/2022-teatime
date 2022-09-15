@@ -62,11 +62,12 @@ const CrewHistory = () => {
     });
   };
 
-  const changeHistoryIndex = (reservationId: number) => {
-    const copyHistoryList = historyList;
+  const moveForefrontHistory = (reservationId: number) => {
+    const copyHistoryList = [...historyList];
     const index = copyHistoryList.findIndex((history) => history.reservationId === reservationId);
-    const changedHistory = copyHistoryList.splice(index, 1);
-    copyHistoryList.splice(0, 0, changedHistory[0]);
+    const changedHistory = copyHistoryList[index];
+    copyHistoryList.splice(index, 1);
+    copyHistoryList.unshift(changedHistory);
     setHistoryList(copyHistoryList);
   };
 
@@ -81,7 +82,7 @@ const CrewHistory = () => {
     try {
       await cancelReservation(reservationId);
       changeHistoryStatus(reservationId, 'CANCELED');
-      changeHistoryIndex(reservationId);
+      moveForefrontHistory(reservationId);
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
       if (error instanceof AxiosError) {

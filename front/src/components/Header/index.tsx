@@ -94,7 +94,6 @@ const Header = () => {
                 <li>히스토리</li>
               </Link>
             </Conditional>
-
             <li onClick={handleOpenModal}>닉네임 수정</li>
             <li onClick={handleLogout}>로그아웃</li>
           </Dropdown>
