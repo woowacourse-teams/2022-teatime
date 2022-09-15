@@ -10,6 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
@@ -30,6 +32,7 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
 import com.woowacourse.teatime.teatime.exception.NotFoundRoleException;
 import com.woowacourse.teatime.teatime.exception.NotFoundScheduleException;
+import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import com.woowacourse.teatime.teatime.repository.CanceledReservationRepository;
 import com.woowacourse.teatime.teatime.repository.CanceledSheetRepository;
@@ -39,6 +42,7 @@ import com.woowacourse.teatime.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.SheetRepository;
+import com.woowacourse.teatime.teatime.service.dto.AlarmDto;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +53,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -73,6 +78,8 @@ class ReservationServiceTest {
     private CoachRepository coachRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @MockBean
+    private AlarmService alarmService;
     @Autowired
     private SheetRepository sheetRepository;
     @Autowired
@@ -128,6 +135,25 @@ class ReservationServiceTest {
                 .isInstanceOf(AlreadyReservedException.class);
     }
 
+    @DisplayName("예약을 할 때 알람이 정상적으로 동작이 안되면 예외를 반환하지만 예약은 저장된다.")
+    @Test
+    void reserve_slackAlarmException() {
+        //given
+        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
+        doThrow(new SlackAlarmException())
+                .when(alarmService)
+                .send(any(AlarmDto.class), any());
+
+        //when, then
+        assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
+                .isInstanceOf(SlackAlarmException.class);
+        boolean actual = reservationRepository.findAll()
+                .stream()
+                .anyMatch(reservation
+                        -> reservation.getCoach().equals(coach) && reservation.getSchedule().equals(schedule));
+        assertThat(actual).isTrue();
+    }
+
     @DisplayName("면담 예약을 승인한다.")
     @Test
     void approveReservation() {
@@ -136,6 +162,27 @@ class ReservationServiceTest {
 
         Reservation foundReservation = reservationRepository.findById(reservationId).get();
         assertThat(foundReservation.getReservationStatus()).isEqualTo(ReservationStatus.APPROVED);
+    }
+
+    @DisplayName("예약을 승인할 때 알람이 정상적으로 동작이 안되면 예외를 반환하지만 예약은 승인된다.")
+    @Test
+    void approve_slackAlarmException() {
+        //given
+        Long reservationId = 예약에_성공한다();
+
+        doThrow(new SlackAlarmException())
+                .when(alarmService)
+                .send(any(AlarmDto.class), any());
+
+        //when, then
+        assertThatThrownBy(() -> 예약_승인을_확정한다(reservationId, true))
+                .isInstanceOf(SlackAlarmException.class);
+
+        ReservationStatus actual = reservationRepository.findById(reservationId)
+                .get()
+                .getReservationStatus();
+        ReservationStatus expected = APPROVED;
+        assertThat(actual).isEqualTo(expected);
     }
 
     @DisplayName("승인 전, 면담 예약을 거절한다. -> 예약이 삭제된다.")
@@ -222,6 +269,22 @@ class ReservationServiceTest {
         assertThatThrownBy(
                 () -> reservationService.cancel(말도_안되는_아이디, new UserRoleDto(coach.getId(), "CREW")))
                 .isInstanceOf(NotFoundReservationException.class);
+    }
+
+    @DisplayName("예약을 취소할 때 알람이 정상적으로 동작이 안되면 예외를 반환하지만 예약은 삭제된다.")
+    @Test
+    void cancel_slackAlarmException() {
+        //given
+        Long reservationId = 예약에_성공한다();
+
+        doThrow(new SlackAlarmException())
+                .when(alarmService)
+                .send(any(AlarmDto.class), any());
+
+        //when, then
+        assertThatThrownBy(() -> reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW")))
+                .isInstanceOf(SlackAlarmException.class);
+        assertThat(reservationRepository.findById(reservationId)).isEmpty();
     }
 
     @DisplayName("크루가 자신에 해당되는 면담 예약 목록을 조회한다.")

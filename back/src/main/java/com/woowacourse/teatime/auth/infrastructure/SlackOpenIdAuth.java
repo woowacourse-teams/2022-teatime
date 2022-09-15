@@ -7,7 +7,7 @@ import com.slack.api.methods.request.openid.connect.OpenIDConnectTokenRequest;
 import com.slack.api.methods.request.openid.connect.OpenIDConnectUserInfoRequest;
 import com.slack.api.methods.response.openid.connect.OpenIDConnectTokenResponse;
 import com.slack.api.methods.response.openid.connect.OpenIDConnectUserInfoResponse;
-import com.woowacourse.teatime.auth.exception.SlackException;
+import com.woowacourse.teatime.auth.exception.SlackLoginException;
 import com.woowacourse.teatime.auth.service.UserInfoDto;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class SlackOpenIdAuth implements OpenIdAuth {
             return response.getAccessToken();
         } catch (SlackApiException | IOException e) {
             log.warn("token response error : " + e.getMessage());
-            throw new SlackException();
+            throw new SlackLoginException();
         }
     }
 
@@ -58,7 +58,7 @@ public class SlackOpenIdAuth implements OpenIdAuth {
             return new UserInfoDto(response.getUserId(), response.getName(), response.getEmail(), response.getUserImage192());
         } catch (SlackApiException | IOException e) {
             log.warn("user info response error : " + e.getMessage());
-            throw new SlackException();
+            throw new SlackLoginException();
         }
     }
 }

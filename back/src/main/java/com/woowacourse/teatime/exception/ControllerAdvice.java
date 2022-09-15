@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.REQUEST_TIMEOUT;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import com.woowacourse.teatime.exception.dto.ErrorResponse;
+import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,13 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleInvalidRequest(RuntimeException e) {
         log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler({
+            SlackAlarmException.class
+    })
+    public void handleInvalidRequest(SlackAlarmException e) {
+        log.error("알람 전송 실패 {} {}", e.getMessage(), e);
     }
 
     @ExceptionHandler(RuntimeException.class)
