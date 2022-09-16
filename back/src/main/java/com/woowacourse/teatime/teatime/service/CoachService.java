@@ -35,6 +35,6 @@ public class CoachService {
     public void updateProfile(Long coachId, CoachUpdateProfileRequest request) {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        coach.modifyName(request.getName());
+        coach.modifyProfile(request.getName());
     }
 }
