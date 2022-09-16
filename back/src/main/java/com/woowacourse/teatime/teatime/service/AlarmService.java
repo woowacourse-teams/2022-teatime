@@ -18,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClientException;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class AlarmService {
 
