@@ -11,8 +11,7 @@ const Home = () => {
   const { userData } = useContext(UserStateContext);
 
   const handleLogin = () => {
-    location.href =
-      'https://slack.com/openid/connect/authorize?scope=openid,email,profile&response_type=code&redirect_uri=https://dev.teatime.pe.kr/certification&client_id=3853132979991.3908459157459';
+    location.href = `https://slack.com/openid/connect/authorize?scope=openid,email,profile&response_type=code&redirect_uri=${process.env.REDIRECT_URL}/certification&client_id=3853132979991.3908459157459`;
   };
 
   useEffect(() => {
