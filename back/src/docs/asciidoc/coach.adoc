@@ -1,0 +1,47 @@
+= Coach
+:toc: left
+:toclevels: 2
+:sectlinks:
+:source-highlighter: highlightjs
+
+[[home]]
+== home
+
+* link:index.html[목록으로 가기]
+
+[[find-all-coaches]]
+== 코치 목록 조회
+
+=== 코치 목록 조회 성공
+
+operation::find-all-coaches[]
+
+=== 코치 목록 조회 실패
+
+==== 토큰이 잘못된 경우 401
+
+include::{snippets}/find-all-coaches-tokenException/http-response.adoc[]
+
+== 코치 면담 목록 조회
+
+=== 코치 면담 목록 조회 성공
+
+operation::find-coach-reservations[]
+==== 토큰이 잘못된 경우 401
+
+include::{snippets}/find-coach-reservations-tokenException/http-response.adoc[]
+
+== 코치 히스토리 조회
+
+=== 코치 히스토리 조회 성공
+
+operation::find-own-history[]
+==== 토큰이 잘못된 경우 401
+
+include::{snippets}/find-own-history-tokenException/http-response.adoc[]
+
+== 코치 프로필 수정
+
+=== 코치 프로필 수정 성공
+
+operation::coach-update-profile[]

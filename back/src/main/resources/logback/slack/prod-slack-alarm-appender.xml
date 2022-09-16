@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <appender name="SLACK-PROD-ERROR" class="com.github.maricn.logback.SlackAppender">
+        <webhookUri>${prod-slack-alarm}</webhookUri>
+        <channel>#알림-운영서버-오류</channel>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${ERROR_LOG_PATTERN}</pattern>
+        </layout>
+        <username>알림봇</username>
+        <iconEmoji>:bimo:</iconEmoji>
+    </appender>
+
+    <appender name="PROD_ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SLACK-PROD-ERROR"/>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+</included>

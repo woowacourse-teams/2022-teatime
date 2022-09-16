@@ -2,12 +2,19 @@ import * as S from './styles';
 
 interface TitleProps {
   text: string;
+  highlightText?: string;
+  hightlightColor?: string;
+  extraText?: string;
 }
 
-const Title = ({ text }: TitleProps) => {
+const Title = ({ text, highlightText, extraText, hightlightColor }: TitleProps) => {
   return (
     <S.TitleWrapper>
-      <h1>{text}</h1>
+      <S.Title>{text}</S.Title>
+      {highlightText && (
+        <S.HighLightText hightlightColor={hightlightColor}>{highlightText}</S.HighLightText>
+      )}
+      {extraText && <S.Title>{extraText}</S.Title>}
     </S.TitleWrapper>
   );
 };

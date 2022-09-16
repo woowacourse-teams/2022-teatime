@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
+    <property name="BASE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="ERROR_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{36} - %msg%n"/>
+    <property resource="application-slack-web-hook.yml" />
+
+    <springProfile name="local">
+        <include resource="logback/console-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev">
+        <include resource="logback/file-info-appender.xml"/>
+        <include resource="logback/dev-warn-appender.xml"/>
+        <include resource="logback/slack/dev-slack-alarm-appender.xml"/>
+
+        <logger name="com.woowacourse.teatime" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="DEV-WARN"/>
+            <appender-ref ref="DEV_ASYNC_SLACK"/>
+        </logger>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="DEV-WARN"/>
+            <appender-ref ref="DEV_ASYNC_SLACK"/>
+        </logger>
+    </springProfile>
+
+
+    <springProfile name="prod">
+        <include resource="logback/file-info-appender.xml"/>
+        <include resource="logback/prod-warn-appender.xml"/>
+        <include resource="logback/file-error-appender.xml"/>
+        <include resource="logback/slack/prod-slack-alarm-appender.xml"/>
+
+        <logger name="com.woowacourse.teatime" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="PROD-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="PROD_ASYNC_SLACK"/>
+        </logger>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="PROD-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="PROD_ASYNC_SLACK"/>
+        </logger>
+    </springProfile>
+</configuration>

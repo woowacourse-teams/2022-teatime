@@ -1,13 +1,6 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0
-  }
-  to {
-    opacity: 1
-  }
-`;
+import { FadeIn } from '@styles/common';
 
 const Background = styled.div`
   height: 100%;
@@ -20,7 +13,7 @@ const Background = styled.div`
   top: 0;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.7);
-  animation: ${fadeIn} 0.3s;
+  animation: ${FadeIn} 0.3s;
 `;
 
 const ModalContainer = styled.div`
@@ -30,18 +23,13 @@ const ModalContainer = styled.div`
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.WHITE};
   overflow: hidden;
-
-  p {
-    margin: 20px 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
 
   img {
     margin: 0 0 3px 10px;
@@ -56,7 +44,7 @@ const TitleWrapper = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  padding: 20px;
+  padding: 30px 20px;
 `;
 
 const CloseIconWrapper = styled.div`

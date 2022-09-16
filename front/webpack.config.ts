@@ -2,6 +2,8 @@ import path from 'path';
 import webpack from 'webpack';
 import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import Dotenv from 'dotenv-webpack';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -30,7 +32,7 @@ const config: webpack.Configuration = {
     publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
-    assetModuleFilename: 'images/[hash][ext][query]',
+    assetModuleFilename: 'images/[name].[hash][ext][query]',
     clean: true,
   },
   module: {
@@ -48,15 +50,7 @@ const config: webpack.Configuration = {
         exclude: path.join(__dirname, 'node_modules'),
       },
       {
-        test: /\.css?$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.(png|svg|gif)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        test: /\.(png|svg|gif|woff)$/i,
         type: 'asset/resource',
       },
     ],
@@ -64,8 +58,13 @@ const config: webpack.Configuration = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      favicon: 'public/favicon.ico',
+      favicon: 'src/assets/logo.png',
     }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+    }),
+    new Dotenv(),
   ],
   devServer: {
     historyApiFallback: true,

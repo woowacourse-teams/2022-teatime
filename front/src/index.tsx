@@ -1,10 +1,12 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import worker from './mocks/browser';
+
 import App from './App';
 import GlobalStyle from '@styles/GlobalStyle';
+import GlobalFonts from '@styles/GlobalFonts';
 import theme from '@styles/theme';
+import worker from './mocks/browser';
 
 // const main = async () => {
 //   if (process.env.NODE_ENV === 'development') {
@@ -26,6 +28,7 @@ root.render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
       <GlobalStyle />
+      <GlobalFonts />
       <App />
     </BrowserRouter>
   </ThemeProvider>

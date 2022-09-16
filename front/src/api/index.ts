@@ -1,7 +1,32 @@
 import axios from 'axios';
 
+import { getStorage } from '@utils/localStorage';
+import { LOCAL_DB } from '@constants/index';
+
+export const BASE_URL = process.env.BACK_URL;
+
 const api = axios.create({
-  baseURL: 'http://3.38.213.179:8080',
+  baseURL: BASE_URL,
 });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = getStorage(LOCAL_DB.USER)?.token;
+
+    if (typeof token !== 'string' || !token) {
+      return config;
+    }
+
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    return config;
+  },
+
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default api;

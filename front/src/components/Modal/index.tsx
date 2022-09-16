@@ -1,22 +1,28 @@
-import ModalPotal from '@components/ModalPotal';
-import CloseIcon from '@assets/close.svg';
+import Portal from '../../Portal';
 import * as S from './styles';
+
+import CloseIcon from '@assets/close.svg';
+
 interface ModalProps {
-  icon: string;
+  icon?: string;
   title: string;
-  content: string;
+  children: React.ReactNode;
   firstButtonName: string;
   secondButtonName: string;
   closeModal: () => void;
+  onClickFirstButton: () => void;
+  onClickSecondButton: () => void;
 }
 
 const Modal = ({
   icon,
   title,
-  content,
+  children,
   firstButtonName,
   secondButtonName,
   closeModal,
+  onClickFirstButton,
+  onClickSecondButton,
 }: ModalProps) => {
   const handleClickDimmer = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -25,7 +31,7 @@ const Modal = ({
   };
 
   return (
-    <ModalPotal>
+    <Portal id="modal">
       <S.Background onClick={handleClickDimmer}>
         <S.ModalContainer>
           <S.InnerContainer>
@@ -34,17 +40,17 @@ const Modal = ({
             </S.CloseIconWrapper>
             <S.TitleWrapper>
               <h1>{title}</h1>
-              <img src={icon} alt={`${title} 아이콘`} />
+              {icon && <img src={icon} alt={`${title} 아이콘`} />}
             </S.TitleWrapper>
-            <p>{content}</p>
+            {children}
           </S.InnerContainer>
           <S.ButtonWrapper>
-            <S.FirstButton>{firstButtonName}</S.FirstButton>
-            <S.SecondButton>{secondButtonName}</S.SecondButton>
+            <S.FirstButton onClick={onClickFirstButton}>{firstButtonName}</S.FirstButton>
+            <S.SecondButton onClick={onClickSecondButton}>{secondButtonName}</S.SecondButton>
           </S.ButtonWrapper>
         </S.ModalContainer>
       </S.Background>
-    </ModalPotal>
+    </Portal>
   );
 };
 

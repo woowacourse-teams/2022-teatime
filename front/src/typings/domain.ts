@@ -1,5 +1,25 @@
-import dayjs from 'dayjs';
+type UserRole = 'CREW' | 'COACH';
 
+type SheetStatus = 'WRITING' | 'SUBMITTED';
+
+type CrewHistoryStatus = 'BEFORE_APPROVED' | 'APPROVED' | 'IN_PROGRESS' | 'DONE' | 'CANCELED';
+
+type CoachHistoryStatus = 'DONE' | 'CANCELED';
+
+interface UserInfo {
+  image: string;
+  name: string;
+  role: UserRole;
+  token: string;
+}
+interface Crew {
+  reservationId: number;
+  crewId: number;
+  crewName: string;
+  crewImage: string;
+  dateTime: string;
+  sheetStatus?: SheetStatus;
+}
 interface Coach {
   id: number;
   name: string;
@@ -8,22 +28,89 @@ interface Coach {
 }
 
 interface MonthYear {
-  startDate: dayjs.Dayjs;
-  firstDOW: number; // 0 === Sunday
-  lastDate: number;
   month: string;
   year: string;
+  startDate: Date;
+  firstDOW: number;
+  lastDate: number;
 }
 
-interface Schedule {
+interface Reservation {
+  dateTime: string;
+  coachName: string;
+  coachImage: string;
+  status: string;
+  sheets: Sheets[];
+}
+
+interface CrewHistory {
+  reservationId: number;
+  coachName: string;
+  coachImage: string;
+  dateTime: string;
+  status: CrewHistoryStatus;
+}
+
+interface CoachHistory {
+  reservationId: number;
+  crewName: string;
+  crewImage: string;
+  dateTime: string;
+  status: CoachHistoryStatus;
+}
+
+interface HistoryList {
+  reservationId: number;
+  coachName: string;
+  coachImage: string;
+  dateTime: string;
+  sheets: Sheets[];
+}
+
+interface Sheets {
+  questionNumber: number;
+  questionContent: string;
+  answerContent: string | null;
+}
+
+interface TimeSchedule {
   id: number;
   dateTime: string;
   isPossible?: boolean;
   isSelected?: boolean;
 }
 
-type DaySchedule = { day: number; schedules: Schedule[] };
+interface DaySchedule {
+  day: number;
+  schedules: TimeSchedule[];
+}
 
-type ScheduleMap = Record<number, Schedule[]>;
+interface ScheduleInfo {
+  monthSchedule: MonthScheduleMap;
+  daySchedule: TimeSchedule[];
+  date: string;
+}
 
-export { Coach, MonthYear, Schedule, DaySchedule, ScheduleMap };
+type MonthScheduleMap = Record<number, TimeSchedule[]>;
+
+type CrewListMap = Record<string, Crew[]>;
+
+export {
+  UserInfo,
+  UserRole,
+  Crew,
+  Coach,
+  MonthYear,
+  ScheduleInfo,
+  DaySchedule,
+  TimeSchedule,
+  Reservation,
+  MonthScheduleMap,
+  CrewListMap,
+  Sheets,
+  CrewHistory,
+  HistoryList,
+  CoachHistory,
+  CrewHistoryStatus,
+  CoachHistoryStatus,
+};

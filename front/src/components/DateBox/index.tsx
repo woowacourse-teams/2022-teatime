@@ -1,15 +1,16 @@
-import dayjs from 'dayjs';
-import { Schedule } from '@typings/domain';
+import { getCurrentFullDate } from '@utils/date';
+import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
 
 interface DateBoxProps {
   date?: number;
-  daySchedule?: Schedule[];
+  daySchedule?: TimeSchedule[];
   onClick?: () => void;
   selectedDay?: number | null;
-  today?: string;
+  currentDay?: Date;
   isCoach?: boolean;
   isWeekend?: boolean;
+  isPastDay?: boolean;
 }
 
 const DateBox = ({
@@ -17,13 +18,16 @@ const DateBox = ({
   daySchedule = [],
   onClick,
   selectedDay,
-  today,
+  currentDay,
   isCoach,
   isWeekend,
+  isPastDay,
 }: DateBoxProps) => {
   const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
-  const isToday = today === dayjs().format('YYYY-MM-DD');
-  const hasSchedule = daySchedule.filter((time) => time.isPossible === true).length > 0;
+  const isToday = currentDay?.getTime() === getCurrentFullDate().getTime();
+  const hasSchedule =
+    daySchedule.filter((time) => time.isPossible === true || (time.isPossible === false && isCoach))
+      .length > 0;
 
   return (
     <S.DateContainer
@@ -32,6 +36,7 @@ const DateBox = ({
       isSelected={!!isSelected}
       isCoach={isCoach}
       isWeekend={isWeekend}
+      isPastDay={isPastDay}
       onClick={onClick}
     >
       {date}
