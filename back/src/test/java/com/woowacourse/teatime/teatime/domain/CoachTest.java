@@ -20,7 +20,7 @@ class CoachTest {
 
         //when
         String expected = "뉴이슨";
-        coach.modifyName(expected);
+        coach.modifyProfile(expected);
 
         //then
         assertThat(coach.getName()).isEqualTo(expected);
@@ -34,7 +34,7 @@ class CoachTest {
 
         //when
         String expected = " 뉴이슨   ";
-        coach.modifyName(expected);
+        coach.modifyProfile(expected);
 
         //then
         assertThat(coach.getName()).isEqualTo(expected.trim());
@@ -48,7 +48,7 @@ class CoachTest {
         Coach coach = getCoachJason();
 
         //when, then
-        assertThatThrownBy(() -> coach.modifyName(name))
+        assertThatThrownBy(() -> coach.modifyProfile(name))
                 .isInstanceOf(InvalidProfileInfoException.class);
     }
 }

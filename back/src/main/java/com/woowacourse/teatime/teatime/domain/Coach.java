@@ -11,6 +11,7 @@ import javax.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -36,7 +37,7 @@ public class Coach {
     private String image;
 
     public Coach(String slackId, String name, String email, String image) {
-        this(slackId, name, email, "안녕하세요~ " + name + "입니다:)", image);
+        this(slackId, name, email, getDescription(name), image);
     }
 
     public Coach(String slackId, String name, String email, String description, String image) {
@@ -47,17 +48,23 @@ public class Coach {
         this.image = image;
     }
 
-    public void setSlackId(String slackId) {
-        if (this.slackId == null || this.slackId.isBlank()) {
-            this.slackId = slackId;
-        }
-    }
-
-    public void modifyName(String name) {
+    public void modifyProfile(String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidProfileInfoException();
         }
         this.name = name.trim();
+        this.description = getDescription(name);
+    }
+
+    @NotNull
+    private static String getDescription(String name) {
+        return "안녕하세요~ " + name + "입니다:)";
+    }
+
+    public void setSlackId(String slackId) {
+        if (this.slackId == null || this.slackId.isBlank()) {
+            this.slackId = slackId;
+        }
     }
 
     @Override
