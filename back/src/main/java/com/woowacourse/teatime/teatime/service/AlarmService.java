@@ -11,6 +11,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ public class AlarmService {
     private final WebClient botClient;
     private final ReservationRepository reservationRepository;
 
+    @Async
     public void send(AlarmInfoDto alarmInfoDto, AlarmTitle alarmTitle) {
         List<SlackAlarmDto> alarmDtos = SlackAlarmDto.of(alarmInfoDto, alarmTitle);
         for (SlackAlarmDto alarmDto : alarmDtos) {
@@ -52,7 +55,8 @@ public class AlarmService {
                     .bodyValue(alarmDto)
                     .retrieve()
                     .bodyToMono(SlackAlarmDto.class)
-                    .block();
+                    .then()
+                    .subscribe();
         } catch (WebClientException e) {
             log.error("슬랙 알람 전송 중 예외가 발생했습니다. {} {}", e.getMessage(), e);
         }
