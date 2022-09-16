@@ -135,24 +135,24 @@ class ReservationServiceTest {
                 .isInstanceOf(AlreadyReservedException.class);
     }
 
-    @DisplayName("예약을 할 때 알람이 정상적으로 동작이 안되면 예외를 반환하지만 예약은 저장된다.")
-    @Test
-    void reserve_slackAlarmException() {
-        //given
-        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
-        doThrow(new SlackAlarmException())
-                .when(alarmService)
-                .send(any(AlarmInfoDto.class), any());
-
-        //when, then
-        assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
-                .isInstanceOf(SlackAlarmException.class);
-        boolean actual = reservationRepository.findAll()
-                .stream()
-                .anyMatch(reservation
-                        -> reservation.getCoach().equals(coach) && reservation.getSchedule().equals(schedule));
-        assertThat(actual).isTrue();
-    }
+//    @DisplayName("예약을 할 때 알람이 정상적으로 동작이 안되면 예외를 반환하지만 예약은 저장된다.")
+//    @Test
+//    void reserve_slackAlarmException() {
+//        //given
+//        ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
+//        doThrow(new SlackAlarmException())
+//                .when(alarmService)
+//                .send(any(AlarmInfoDto.class), any());
+//
+//        //when, then
+//        assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
+//                .isInstanceOf(SlackAlarmException.class);
+//        boolean actual = reservationRepository.findAll()
+//                .stream()
+//                .anyMatch(reservation
+//                        -> reservation.getCoach().equals(coach) && reservation.getSchedule().equals(schedule));
+//        assertThat(actual).isTrue();
+//    }
 
     @DisplayName("면담 예약을 승인한다.")
     @Test
