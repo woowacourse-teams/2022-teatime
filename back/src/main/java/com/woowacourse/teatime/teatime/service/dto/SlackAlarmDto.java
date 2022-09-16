@@ -27,7 +27,8 @@ public class SlackAlarmDto {
     public static List<SlackAlarmDto> of(AlarmInfoDto alarmInfoDto, AlarmTitle alarmTitle) {
         String message = getMessage(alarmInfoDto.getCrewName(), alarmInfoDto.getCoachName(), alarmInfoDto.getTime());
         AttachmentDto attachmentDto = new AttachmentDto(alarmTitle.getBarColor(), message);
-        return List.of(new SlackAlarmDto(alarmInfoDto.getCoachSlackId(), alarmTitle.getMessage(), List.of(attachmentDto)),
+        return List.of(
+                new SlackAlarmDto(alarmInfoDto.getCoachSlackId(), alarmTitle.getMessage(), List.of(attachmentDto)),
                 new SlackAlarmDto(alarmInfoDto.getCrewSlackId(), alarmTitle.getMessage(), List.of(attachmentDto)));
     }
 
@@ -44,7 +45,7 @@ public class SlackAlarmDto {
         Coach coach = reservation.getCoach();
         String message = getMessage(crew.getName(), coach.getName(), reservation.getScheduleDateTime());
         AttachmentDto attachmentDto = new AttachmentDto(REMIND_CREW.getBarColor(), message);
-        return new SlackAlarmDto(coach.getSlackId(), REMIND_CREW.getMessage(), List.of(attachmentDto));
+        return new SlackAlarmDto(crew.getSlackId(), REMIND_CREW.getMessage(), List.of(attachmentDto));
     }
 
     private static String getMessage(String crewName, String coachName, LocalDateTime dateTime) {
