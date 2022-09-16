@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class AlarmDto {
+public class AlarmInfoDto {
 
     private final String crewSlackId;
     private final String coachSlackId;
@@ -17,7 +17,7 @@ public class AlarmDto {
     private final String coachName;
     private final LocalDateTime time;
 
-    public static AlarmDto of(Coach coach, Crew crew, LocalDateTime time) {
-        return new AlarmDto(crew.getSlackId(), coach.getSlackId(), crew.getName(), coach.getName(), time);
+    public static AlarmInfoDto of(Coach coach, Crew crew, LocalDateTime time) {
+        return new AlarmInfoDto(crew.getSlackId(), coach.getSlackId(), crew.getName(), coach.getName(), time);
     }
 }

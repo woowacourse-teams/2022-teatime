@@ -42,7 +42,7 @@ import com.woowacourse.teatime.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.SheetRepository;
-import com.woowacourse.teatime.teatime.service.dto.AlarmDto;
+import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -142,7 +142,7 @@ class ReservationServiceTest {
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule.getId());
         doThrow(new SlackAlarmException())
                 .when(alarmService)
-                .send(any(AlarmDto.class), any());
+                .send(any(AlarmInfoDto.class), any());
 
         //when, then
         assertThatThrownBy(() -> reservationService.save(crew.getId(), reservationReserveRequest))
@@ -172,7 +172,7 @@ class ReservationServiceTest {
 
         doThrow(new SlackAlarmException())
                 .when(alarmService)
-                .send(any(AlarmDto.class), any());
+                .send(any(AlarmInfoDto.class), any());
 
         //when, then
         assertThatThrownBy(() -> 예약_승인을_확정한다(reservationId, true))
@@ -279,7 +279,7 @@ class ReservationServiceTest {
 
         doThrow(new SlackAlarmException())
                 .when(alarmService)
-                .send(any(AlarmDto.class), any());
+                .send(any(AlarmInfoDto.class), any());
 
         //when, then
         assertThatThrownBy(() -> reservationService.cancel(reservationId, new UserRoleDto(crew.getId(), "CREW")))

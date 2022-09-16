@@ -20,10 +20,6 @@ public enum AlarmTitle {
         return message;
     }
 
-    public String getTitle() {
-        return message;
-    }
-
     public String getBarColor() {
         return barColor;
     }

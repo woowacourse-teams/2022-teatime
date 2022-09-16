@@ -34,7 +34,7 @@ import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.SheetRepository;
-import com.woowacourse.teatime.teatime.service.dto.AlarmDto;
+import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -64,7 +64,7 @@ public class ReservationService {
     private final CanceledSheetRepository canceledSheetRepository;
 
     private void sendAlarm(Crew crew, Schedule schedule, AlarmTitle alarmTitle) {
-        AlarmDto dto = AlarmDto.of(schedule.getCoach(), crew, schedule.getLocalDateTime());
+        AlarmInfoDto dto = AlarmInfoDto.of(schedule.getCoach(), crew, schedule.getLocalDateTime());
         alarmService.send(dto, alarmTitle);
     }
 
