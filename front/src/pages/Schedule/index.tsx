@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
@@ -7,7 +7,8 @@ import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
-import { getCoachSchedulesByMe } from '@api/coach';
+import { SnackbarContext } from '@context/SnackbarProvider';
+import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
 import type { DaySchedule, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
 import theme from '@styles/theme';
@@ -41,6 +42,7 @@ const getAllTime = (date: string) => {
 };
 
 const Schedule = () => {
+  const showSnackbar = useContext(SnackbarContext);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
@@ -100,6 +102,36 @@ const Schedule = () => {
     });
   };
 
+  const getSelectedTimes = () => {
+    return schedule.daySchedule.reduce((newArray, { isSelected, dateTime }) => {
+      if (isSelected) {
+        newArray.push(dateTime);
+      }
+      return newArray;
+    }, [] as string[]);
+  };
+
+  const updateAvailableTimes = (selectedTimes: string[]) => {
+    setSchedule((allSchedules) => {
+      const newDaySchedule = schedule.monthSchedule[selectedDay].map(
+        ({ id, dateTime, isPossible }) => {
+          if (selectedTimes.includes(dateTime)) {
+            return { id, dateTime, isPossible: true, isSelected: true };
+          }
+          if (isPossible === false) {
+            return { id, dateTime, isPossible, isSelected: false };
+          }
+          return { id, dateTime, isSelected: false };
+        }
+      );
+
+      return {
+        ...allSchedules,
+        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
+      };
+    });
+  };
+
   const handleUpdateMonth = (increment: number) => {
     closeTimeList();
     updateMonthYear(increment);
@@ -144,25 +176,18 @@ const Schedule = () => {
     });
   };
 
-  const handleUpdateDaySchedule = (selectedTimes: string[]) => {
-    setSchedule((allSchedules) => {
-      const newDaySchedule = schedule.monthSchedule[selectedDay].map(
-        ({ id, dateTime, isPossible }) => {
-          if (selectedTimes.includes(dateTime)) {
-            return { id, dateTime, isPossible: true, isSelected: true };
-          }
-          if (isPossible === false) {
-            return { id, dateTime, isPossible, isSelected: false };
-          }
-          return { id, dateTime, isSelected: false };
-        }
-      );
-
-      return {
-        ...allSchedules,
-        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
-      };
-    });
+  const handleUpdateDaySchedule = async () => {
+    const selectedTimes = getSelectedTimes();
+    try {
+      await editCoachSchedule(schedule.date, selectedTimes);
+      updateAvailableTimes(selectedTimes);
+      showSnackbar({ message: '확정되었습니다. ✅' });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -217,11 +242,10 @@ const Schedule = () => {
           {isOpenTimeList && (
             <ScheduleTimeList
               isSelectedAll={isSelectedAll}
-              date={schedule.date}
               daySchedule={schedule.daySchedule}
               onClickTime={handleClickTime}
               onSelectAll={handleSelectAll}
-              onUpdateSchedule={handleUpdateDaySchedule}
+              onUpdateDaySchedule={handleUpdateDaySchedule}
             />
           )}
         </S.CalendarContainer>
