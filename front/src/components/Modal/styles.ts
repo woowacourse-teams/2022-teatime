@@ -29,6 +29,7 @@ const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
 
   img {
     margin: 0 0 3px 10px;
