@@ -9,11 +9,14 @@ import com.woowacourse.teatime.teatime.service.dto.SlackAlarmDto;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -41,12 +44,16 @@ public class AlarmService {
     }
 
     private void requestAlarm(SlackAlarmDto alarmDto) {
-        botClient.post()
-                .uri("/api/send")
-                .header("Authorization", botSecretKey)
-                .bodyValue(alarmDto)
-                .retrieve()
-                .bodyToMono(SlackAlarmDto.class)
-                .block();
+        try {
+            botClient.post()
+                    .uri("/api/send")
+                    .header("Authorization", botSecretKey)
+                    .bodyValue(alarmDto)
+                    .retrieve()
+                    .bodyToMono(SlackAlarmDto.class)
+                    .block();
+        } catch (WebClientException e) {
+            log.error("슬랙 알람 전송 중 예외가 발생했습니다. {} {}", e.getMessage(), e);
+        }
     }
 }
