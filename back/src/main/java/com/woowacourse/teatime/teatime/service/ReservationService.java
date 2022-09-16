@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -53,7 +51,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @RequiredArgsConstructor
 @Transactional
 @Service
-@EnableAsync
 public class ReservationService {
 
     private final AlarmService alarmService;
@@ -95,7 +92,7 @@ public class ReservationService {
         schedule.reserve();
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         sheetService.save(reservation.getId());
-//        sendAlarm(crew, schedule, AlarmTitle.APPLY);
+        sendAlarm(crew, schedule, AlarmTitle.APPLY);
 
         return reservation.getId();
     }
