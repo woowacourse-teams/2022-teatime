@@ -61,7 +61,6 @@ const ProfileWrapper = styled.div`
 const Input = styled.input`
   width: 100%;
   height: 45px;
-  margin: 15px 0;
   text-align: center;
   border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
   border-radius: 20px;
