@@ -92,7 +92,7 @@ public class ReservationService {
         schedule.reserve();
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         sheetService.save(reservation.getId());
-        sendAlarm(crew, schedule, AlarmTitle.APPLY);
+//        sendAlarm(crew, schedule, AlarmTitle.APPLY);
 
         return reservation.getId();
     }
