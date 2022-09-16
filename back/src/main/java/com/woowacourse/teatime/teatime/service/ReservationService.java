@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -81,6 +82,7 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    @Async
     public Long save(Long crewId, ReservationReserveRequest reservationReserveRequest) {
         log.info(TransactionSynchronizationManager.getCurrentTransactionName());
 
@@ -92,7 +94,7 @@ public class ReservationService {
         schedule.reserve();
         Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
         sheetService.save(reservation.getId());
-//        sendAlarm(crew, schedule, AlarmTitle.APPLY);
+        sendAlarm(crew, schedule, AlarmTitle.APPLY);
 
         return reservation.getId();
     }

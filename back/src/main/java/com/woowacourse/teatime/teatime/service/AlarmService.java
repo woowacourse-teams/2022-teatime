@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClientException;
 @RequiredArgsConstructor
 @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
 @Service
+@EnableAsync
 public class AlarmService {
 
     @Value("${slack.bot.secret-key}")
@@ -52,7 +54,8 @@ public class AlarmService {
                     .bodyValue(alarmDto)
                     .retrieve()
                     .bodyToMono(SlackAlarmDto.class)
-                    .block();
+                    .then()
+                    .subscribe();
         } catch (WebClientException e) {
             log.error("슬랙 알람 전송 중 예외가 발생했습니다. {} {}", e.getMessage(), e);
         }
