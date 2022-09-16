@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,7 +23,6 @@ import org.springframework.web.reactive.function.client.WebClientException;
 @RequiredArgsConstructor
 @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
 @Service
-@EnableAsync
 public class AlarmService {
 
     @Value("${slack.bot.secret-key}")
@@ -30,6 +30,7 @@ public class AlarmService {
     private final WebClient botClient;
     private final ReservationRepository reservationRepository;
 
+    @Async
     public void send(AlarmInfoDto alarmInfoDto, AlarmTitle alarmTitle) {
         List<SlackAlarmDto> alarmDtos = SlackAlarmDto.of(alarmInfoDto, alarmTitle);
         for (SlackAlarmDto alarmDto : alarmDtos) {

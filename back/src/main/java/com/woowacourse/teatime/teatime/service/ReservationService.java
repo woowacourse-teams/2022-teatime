@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -52,6 +53,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @RequiredArgsConstructor
 @Transactional
 @Service
+@EnableAsync
 public class ReservationService {
 
     private final AlarmService alarmService;
@@ -82,7 +84,6 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
-    @Async
     public Long save(Long crewId, ReservationReserveRequest reservationReserveRequest) {
         log.info(TransactionSynchronizationManager.getCurrentTransactionName());
 
