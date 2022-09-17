@@ -1,4 +1,10 @@
-import { getFormatDate, getHourMinutes, getMonthDate, getMonthYearDetails } from '../date';
+import {
+  getDateTime,
+  getFormatDate,
+  getHourMinutes,
+  getMonthDate,
+  getMonthYearDetails,
+} from '../date';
 
 describe('입력한 날짜 정보를 올바른 포맷으로 변환하는지 확인한다.', () => {
   test("년도, 월, 일이 입력되면 'YYYY-MM-DD' 형식으로 변환한다.", () => {
@@ -33,5 +39,14 @@ describe('Date 객체 형식을 올바르게 변환하는지 확인한다.', () 
     expect(monthYearDetails.year.length).toBe(4);
     expect(monthYearDetails.firstDOW).toBeLessThanOrEqual(6);
     expect(monthYearDetails.lastDate).toBeGreaterThanOrEqual(28);
+  });
+});
+
+describe('날짜/시간을 올바르게 비교하는지 확인한다.', () => {
+  test('입력된 날짜의 시간이 현재보다 과거인지 확인한다.', () => {
+    const dateString = '2022-09-17T14:30:00.000Z';
+    const isPastTime = new Date() > getDateTime(dateString);
+
+    expect(isPastTime).toBe(true);
   });
 });
