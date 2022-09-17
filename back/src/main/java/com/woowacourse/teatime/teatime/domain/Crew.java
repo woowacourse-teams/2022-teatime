@@ -38,13 +38,9 @@ public class Crew {
     }
 
     public void setSlackId(String slackId) {
-        if (needToUpdateSlackId(slackId)) {
+        if (!slackId.equals(this.slackId)) {
             this.slackId = slackId;
         }
-    }
-
-    private boolean needToUpdateSlackId(String slackId) {
-        return this.slackId == null || this.slackId.isBlank() || !this.slackId.equals(slackId);
     }
 
     public void modifyName(String name) {
