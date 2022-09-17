@@ -62,7 +62,7 @@ public class Coach {
     }
 
     public void setSlackId(String slackId) {
-        if (this.slackId == null || this.slackId.isBlank()) {
+        if (!slackId.equals(this.slackId)) {
             this.slackId = slackId;
         }
     }
