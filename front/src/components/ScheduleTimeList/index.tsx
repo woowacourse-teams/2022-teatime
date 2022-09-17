@@ -1,4 +1,4 @@
-import { getHourMinutes } from '@utils/date';
+import { getDateTime, getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
 
@@ -22,11 +22,13 @@ const ScheduleTimeList = ({
       <S.ScrollContainer>
         {daySchedule.map((schedule) => {
           const time = getHourMinutes(schedule.dateTime);
+          const isPastTime = new Date() > getDateTime(schedule.dateTime);
 
           return (
             <S.TimeBox
               key={schedule.id}
               isPossible={schedule.isPossible}
+              isPastTime={isPastTime}
               selected={schedule.isSelected ? true : false}
               onClick={() => onClickTime(schedule.dateTime)}
             >
