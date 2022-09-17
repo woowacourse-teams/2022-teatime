@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.service;
 import static com.woowacourse.teatime.util.Date.findLastTime;
 
 import com.woowacourse.teatime.teatime.domain.Reservation;
+import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
 import com.woowacourse.teatime.teatime.service.dto.SlackAlarmDto;
@@ -12,16 +13,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+@Transactional(readOnly = true)
 @Service
 public class AlarmService {
 
@@ -58,7 +57,7 @@ public class AlarmService {
                     .then()
                     .subscribe();
         } catch (WebClientException e) {
-            log.error("슬랙 알람 전송 중 예외가 발생했습니다. {} {}", e.getMessage(), e);
+            throw new SlackAlarmException();
         }
     }
 }
