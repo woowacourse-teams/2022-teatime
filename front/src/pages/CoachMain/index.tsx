@@ -103,8 +103,8 @@ const CoachMain = () => {
     });
   };
 
-  const handleClickProfile = (crewId: number) => {
-    navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`);
+  const handleClickProfile = (crewId: number, crewName: string) => {
+    navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`, { state: crewName });
   };
 
   const handleReject = async (status: string, index: number, reservationId: number) => {
@@ -248,7 +248,7 @@ const CoachMain = () => {
                   color={color}
                   draggedColor={draggedColor}
                   onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}
-                  onClickProfile={() => handleClickProfile(crew.crewId)}
+                  onClickProfile={() => handleClickProfile(crew.crewId, crew.crewName)}
                   onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
                   onDragStart={(e) => handleDragStart(e, index)}
                 />
