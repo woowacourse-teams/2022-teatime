@@ -9,9 +9,9 @@ const Label = styled.label`
   color: ${({ theme }) => theme.colors.BLUE_800};
 `;
 
-const Textarea = styled.textarea<{ isFocus: boolean }>`
+const Textarea = styled.textarea<{ isFocus: boolean; isView: boolean }>`
   width: 100%;
-  height: 150px;
+  height: ${({ isView }) => (isView ? '180px' : '92px')};
   margin-top: 12px;
   padding: 10px;
   border: 1px solid
@@ -20,7 +20,7 @@ const Textarea = styled.textarea<{ isFocus: boolean }>`
   font-size: 15px;
   line-height: 19px;
   font-family: none;
-  resize: vertical;
+  resize: ${({ isView }) => (isView ? 'vertical' : 'none')};
 `;
 
 const Span = styled.span`
