@@ -74,6 +74,7 @@ const Reservation = () => {
   };
 
   const handleUpdateMonth = (increment: number) => {
+    setSchedule({ monthSchedule: {}, daySchedule: [] });
     closeTimeList();
     updateMonthYear(increment);
   };

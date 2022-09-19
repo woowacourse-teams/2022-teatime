@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getStorage } from '@utils/localStorage';
 import { LOCAL_DB } from '@constants/index';
 
-export const BASE_URL = process.env.BACK_URL;
+const BASE_URL = process.env.BACK_URL;
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -20,7 +20,6 @@ api.interceptors.request.use(
     config.headers = {
       Authorization: `Bearer ${token}`,
     };
-
     return config;
   },
 
@@ -29,4 +28,4 @@ api.interceptors.request.use(
   }
 );
 
-export default api;
+export { api, BASE_URL };

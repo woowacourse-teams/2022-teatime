@@ -17,6 +17,7 @@ const HeaderContainer = styled.div`
 
 const LogoImage = styled.img`
   width: 30px;
+  height: 30px;
   margin-right: 8px;
 `;
 
