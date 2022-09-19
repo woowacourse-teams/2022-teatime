@@ -5,7 +5,8 @@ import { AxiosError } from 'axios';
 import Card from '@components/Card';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { ROUTES } from '@constants/index';
+import { CACHE, ROUTES } from '@constants/index';
+import { cacheFetch } from '@utils/cacheFetch';
 import { getCoaches } from '@api/coach';
 import type { Coach } from '@typings/domain';
 import * as S from './styles';
@@ -23,7 +24,7 @@ const CrewMain = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await getCoaches();
+        const { data } = await cacheFetch(CACHE.KEY, getCoaches, CACHE.TIME);
         setCoaches(data);
       } catch (error) {
         if (error instanceof AxiosError) {
