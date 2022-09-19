@@ -75,7 +75,7 @@ public class ControllerAdvice {
             SlackAlarmException.class
     })
     public void handleInvalidRequest(SlackAlarmException e) {
-        log.error("알람 전송 실패 {} {}", e.getMessage(), e);
+        log.error("슬랙 알람 전송 중 예외가 발생했습니다. {} {}", e.getMessage(), e);
     }
 
     @ExceptionHandler(RuntimeException.class)
