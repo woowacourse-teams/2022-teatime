@@ -1,0 +1,47 @@
+name: 티타임 프론트엔드 CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths: "front/**"
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths: "front/**"
+
+defaults:
+  run:
+    working-directory: front
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log node version
+        run: node -v
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Clean install dependencies
+        run: npm ci
+
+      - name: Run unit test
+        run: npm test
+        env:
+          CI: true
+
+      - name: Build Project
+        run: npm run build
