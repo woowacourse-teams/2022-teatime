@@ -12,13 +12,11 @@ on:
       - develop
     paths: "front/**"
 
-defaults:
-  run:
-    working-directory: front
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./front
     steps:
       - uses: actions/checkout@v3
       - name: Log node version
@@ -37,11 +35,14 @@ jobs:
 
       - name: Clean install dependencies
         run: npm ci
+        working-directory: ${{ env.working-directory }}
 
       - name: Run unit test
         run: npm test
         env:
           CI: true
+        working-directory: ${{ env.working-directory }}
 
       - name: Build Project
         run: npm run build
+        working-directory: ${{ env.working-directory }}
