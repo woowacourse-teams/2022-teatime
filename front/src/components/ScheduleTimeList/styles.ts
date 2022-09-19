@@ -18,7 +18,7 @@ const ScrollContainer = styled.div`
   }
 `;
 
-const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean }>`
+const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean; isPastTime: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@ const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean }>`
   cursor: pointer;
 
   ${(props) =>
-    props.isPossible === false &&
+    (props.isPossible === false || props.isPastTime) &&
     css`
       background-color: ${({ theme }) => theme.colors.GRAY_200};
       color: ${({ theme }) => theme.colors.GRAY_500};
