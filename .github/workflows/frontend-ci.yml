@@ -44,7 +44,9 @@ jobs:
 
       - name: Create .env file
         shell: bash
-        if: ${{ github.base_ref == 'develop' }}
+        run: |
+          echo "github.base_ref: ${{ github.base_ref }}"
+      - if: ${{ github.base_ref == 'develop' }}
         run: |
           touch .env
           echo BACK_URL="$BACK_URL" >> .env
