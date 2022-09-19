@@ -1,4 +1,4 @@
-import api from '@api/index';
+import { api } from '@api/index';
 import { CrewHistory, HistoryList, Reservation, Sheets } from '@typings/domain';
 
 const getCrewHistoriesByMe = () => api.get<CrewHistory[]>('/api/v2/crews/me/reservations');

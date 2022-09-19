@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
@@ -13,6 +13,7 @@ import EmptyContent from '@components/EmptyContent';
 
 const HistorySheet = () => {
   const { id: crewId } = useParams();
+  const { state: crewName } = useLocation();
   const [historyIndex, setHistoryIndex] = useState(0);
   const [historyList, setHistoryList] = useState<HistoryList[]>();
 
@@ -56,7 +57,11 @@ const HistorySheet = () => {
               );
             })}
           </S.InfoContainer>
-          <Sheet title="작성한 면담 내용" sheets={historyList[historyIndex].sheets} isView />
+          <Sheet
+            title={`${crewName}의 면담 내용`}
+            sheets={historyList[historyIndex].sheets}
+            isView
+          />
         </>
       )}
       <BackButton />

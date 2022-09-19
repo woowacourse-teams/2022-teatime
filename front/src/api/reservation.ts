@@ -1,4 +1,4 @@
-import api from '@api/index';
+import { api } from '@api/index';
 
 const createReservation = (scheduleId: number) => api.post(`/api/v2/reservations`, { scheduleId });
 
