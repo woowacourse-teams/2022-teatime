@@ -28,6 +28,11 @@ const LOCAL_DB = {
   USER: 'user',
 };
 
+const CACHE = {
+  KEY: 'coaches',
+  TIME: 600000,
+};
+
 const HOUR_MILLISECONDS = 60 * 60 * 1000;
 
 const SHEET_MAX_LENGTH = 2000;
@@ -38,6 +43,7 @@ export {
   CALENDAR_DATE_LENGTH,
   DAY_NUMBER,
   LOCAL_DB,
+  CACHE,
   HOUR_MILLISECONDS,
   SHEET_MAX_LENGTH,
 };
