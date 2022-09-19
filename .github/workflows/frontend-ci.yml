@@ -9,12 +9,6 @@ on:
     paths:
       - "front/**"
 
-env:
-  BACK_URL: ${{ secrets.BACK_URL }}
-  REDIRECT_URL: ${{ secrets.REDIRECT_URL }}
-  BACK_URL_PROD: ${{ secrets.BACK_URL_PROD }}
-  REDIRECT_URL_PROD: ${{ secrets.REDIRECT_URL_PROD }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,19 +38,13 @@ jobs:
 
       - name: Create .env file
         shell: bash
-        run: |
-          echo "pr branch: ${{ github.event.pull_request.base.ref }}"
-      - if: ${{ github.event.pull_request.base.ref == 'develop' }}
+        env:
+          BACK_URL: ${{ secrets.BACK_URL }}
+          REDIRECT_URL: ${{ secrets.REDIRECT_URL }}
         run: |
           touch .env
           echo BACK_URL="$BACK_URL" >> .env
           echo REDIRECT_URL="$REDIRECT_URL" >> .env
-          cat .env
-      - if: ${{ github.event.pull_request.base.ref == 'main' }}
-        run: |
-          touch .env
-          echo BACK_URL_PROD="$BACK_URL_PROD" >> .env
-          echo REDIRECT_URL_PROD="$REDIRECT_URL_PROD" >> .env
           cat .env
 
       - name: Clean install dependencies
