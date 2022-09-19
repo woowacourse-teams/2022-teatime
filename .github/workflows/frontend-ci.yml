@@ -46,6 +46,7 @@ jobs:
           echo BACK_URL="$BACK_URL" >> .env
           echo REDIRECT_URL="$REDIRECT_URL" >> .env
           cat .env
+        working-directory: ${{ env.working-directory }}
 
       - name: Clean install dependencies
         run: npm ci
