@@ -54,6 +54,7 @@ const YearMonthContainer = styled.div`
 
   img {
     width: 13px;
+    height: 24px;
     cursor: pointer;
   }
 
