@@ -16,7 +16,7 @@ const CrewSheet = () => {
   const { id: reservationId } = useParams();
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
-  const { state: isCanceled } = useLocation();
+  const { state: status } = useLocation();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
 
   const isView = reservationInfo?.status === 'SUBMITTED';
@@ -37,6 +37,7 @@ const CrewSheet = () => {
   useEffect(() => {
     (async () => {
       try {
+        const isCanceled = status === 'CANCELED';
         const { data } = isCanceled
           ? await getCrewCanceledReservation(reservationId as string)
           : await getCrewReservationByMe(reservationId as string);
