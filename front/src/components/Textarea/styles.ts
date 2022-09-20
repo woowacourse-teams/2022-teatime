@@ -21,6 +21,13 @@ const Textarea = styled.textarea<{ isFocus: boolean; isView: boolean }>`
   line-height: 19px;
   font-family: none;
   resize: ${({ isView }) => (isView ? 'vertical' : 'none')};
+  ::-webkit-resizer {
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid ${({ theme }) => theme.colors.BLUE_700};
+    border-left: 50px solid transparent;
+    border-right: 50px solid ${({ theme }) => theme.colors.BLUE_700};
+    border-radius: 4px;
+  }
 `;
 
 const Span = styled.span`
