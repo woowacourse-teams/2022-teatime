@@ -16,7 +16,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
-  const handleChangeContent = (index: number) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
     if (e.target.value.length > SHEET_MAX_LENGTH) {
       alert('더 이상 작성할 수 없습니다.');
       e.target.value = e.target.value.substring(0, SHEET_MAX_LENGTH);
@@ -51,7 +51,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             id="0"
             label={contents[0].questionContent}
             value={sheets[0].answerContent || ''}
-            handleChangeContent={handleChangeContent(0)}
+            handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isView={isView}
           />
@@ -59,7 +59,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             id="1"
             label={contents[1].questionContent}
             value={sheets[1].answerContent || ''}
-            handleChangeContent={handleChangeContent(1)}
+            handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isView={isView}
           />
@@ -67,7 +67,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             id="2"
             label={contents[2].questionContent}
             value={sheets[2].answerContent || ''}
-            handleChangeContent={handleChangeContent(2)}
+            handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isView={isView}
           />
