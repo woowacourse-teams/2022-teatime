@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.service;
 
+import static com.woowacourse.teatime.util.Date.findFirstTime;
 import static com.woowacourse.teatime.util.Date.findLastTime;
 
 import com.woowacourse.teatime.teatime.domain.Reservation;
@@ -39,7 +40,8 @@ public class AlarmService {
 
     public void remindReservation() {
         LocalDate date = LocalDate.now().plusDays(1);
-        List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBefore(findLastTime(date));
+        List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBetween(findFirstTime(date),
+                findLastTime(date));
         for (Reservation reservation : reservations) {
             requestAlarm(SlackAlarmDto.remindCoach(reservation));
             requestAlarm(SlackAlarmDto.remindCrew(reservation));
