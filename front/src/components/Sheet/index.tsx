@@ -9,10 +9,11 @@ interface SheetProps {
   title: string;
   sheets: Sheets[];
   onSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
+  isUnalterable: boolean;
   isView: boolean;
 }
 
-const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
+const Sheet = ({ title, sheets, onSubmit, isUnalterable, isView }: SheetProps) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
@@ -30,6 +31,8 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
 
   const handleSubmitButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (isUnalterable) return alert('면담이 진행되면 제출할 수 없습니다.🚫');
 
     const isSubmitted = e.currentTarget.innerText === '제출하기';
     if (isSubmitted) {
@@ -72,7 +75,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             isView={isView}
           />
           {!isView && (
-            <S.ButtonContainer>
+            <S.ButtonContainer isUnalterable={isUnalterable}>
               <S.FirstButton onClick={handleSubmitButton}>임시저장</S.FirstButton>
               <S.SecondButton onClick={handleSubmitButton}>제출하기</S.SecondButton>
             </S.ButtonContainer>

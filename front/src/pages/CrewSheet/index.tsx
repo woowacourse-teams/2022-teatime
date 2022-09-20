@@ -19,6 +19,7 @@ const CrewSheet = () => {
   const { state: status } = useLocation();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
 
+  const isUnalterable = status === 'IN_PROGRESS' || status === 'DONE';
   const isView = reservationInfo?.status === 'SUBMITTED';
 
   const handleSubmit = async (isSubmitted: boolean, contents: Sheets[]) => {
@@ -66,6 +67,7 @@ const CrewSheet = () => {
         title="면담 내용 작성"
         sheets={reservationInfo.sheets}
         onSubmit={handleSubmit}
+        isUnalterable={isUnalterable}
         isView={isView}
       />
       <BackButton />
