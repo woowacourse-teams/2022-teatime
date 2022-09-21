@@ -1,7 +1,15 @@
 import styled from 'styled-components';
 
+const Container = styled.div`
+  display: flex;
+`;
+
 const Name = styled.p`
   font-size: 20px;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    font-size: 16px;
+  }
 `;
 
 const Image = styled.img`
@@ -9,6 +17,11 @@ const Image = styled.img`
   height: 50px;
   margin-bottom: 6px;
   border-radius: 50%;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const DateWrapper = styled.div`
@@ -25,6 +38,17 @@ const DateWrapper = styled.div`
     font-size: 18px;
     color: ${({ theme }) => theme.colors.BLUE_700};
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    img {
+      width: 14px;
+      height: 14px;
+    }
+
+    span {
+      font-size: 14px;
+    }
+  }
 `;
 
-export { Name, Image, DateWrapper };
+export { Container, Name, Image, DateWrapper };

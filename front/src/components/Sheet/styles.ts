@@ -23,6 +23,13 @@ const ButtonContainer = styled.div`
       opacity: 0.7;
     }
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    button {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
 `;
 
 const FirstButton = styled.button`
