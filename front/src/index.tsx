@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import App from './App';
 import GlobalStyle from '@styles/GlobalStyle';
 import GlobalFonts from '@styles/GlobalFonts';
-import theme from '@styles/theme';
+import { theme } from '@styles/theme';
 import worker from './mocks/browser';
 
 // const main = async () => {
