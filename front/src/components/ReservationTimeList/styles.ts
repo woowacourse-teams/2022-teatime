@@ -47,7 +47,7 @@ const TimeBox = styled.div<{ isPossible?: boolean }>`
       pointer-events: none;
     `}
 
-  @media screen and   (${({ theme }) => theme.devices.tablet}) {
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
     width: 100px;
   }
 `;

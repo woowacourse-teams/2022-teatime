@@ -8,6 +8,13 @@ const TimeListContainer = styled.div`
   height: 100%;
   width: 250px;
   margin-left: 60px;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+  }
 `;
 
 const ScrollContainer = styled.div`
@@ -15,6 +22,14 @@ const ScrollContainer = styled.div`
   overflow: scroll;
   ::-webkit-scrollbar {
     display: none;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 50px 0 60px;
   }
 `;
 
@@ -49,6 +64,10 @@ const TimeBox = styled.div<{ isPossible?: boolean; selected: boolean; isPastTime
 
   &:hover {
     border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    width: 100px;
   }
 `;
 
