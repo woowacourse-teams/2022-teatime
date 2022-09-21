@@ -21,6 +21,7 @@ const Image = styled.img`
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     width: 30px;
     height: 30px;
+    margin-bottom: 0;
   }
 `;
 
@@ -40,6 +41,8 @@ const DateWrapper = styled.div`
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
+    margin-top: 0;
+
     img {
       width: 14px;
       height: 14px;
