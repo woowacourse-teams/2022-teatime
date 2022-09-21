@@ -29,7 +29,7 @@ const ScheduleTimeList = ({
               key={schedule.id}
               isPossible={schedule.isPossible}
               isPastTime={isPastTime}
-              selected={schedule.isSelected ? true : false}
+              isSelected={schedule.isSelected ? true : false}
               onClick={() => onClickTime(schedule.dateTime)}
             >
               {time}
