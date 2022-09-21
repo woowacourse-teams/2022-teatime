@@ -7,14 +7,14 @@ interface Item {
 
 interface SelectListProps {
   lists: Item[];
-  show: boolean;
+  hidden?: boolean;
   selectedItem: string;
   onSelect: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const SelectList = ({ lists, show, selectedItem, onSelect }: SelectListProps) => {
+const SelectList = ({ lists, hidden, selectedItem, onSelect }: SelectListProps) => {
   return (
-    <S.Container onClick={onSelect} show={show}>
+    <S.Container onClick={onSelect} hidden={hidden}>
       {lists.map(({ id, text }) => (
         <S.ListItem key={id} id={id} isSelected={selectedItem === id}>
           {text}

@@ -232,7 +232,7 @@ const CoachMain = () => {
           { id: 'approved', text: '확정된 일정' },
           { id: 'inProgress', text: '진행중인 일정' },
         ]}
-        show={width <= size.tablet}
+        hidden={width > size.tablet}
         selectedItem={selectedBoard}
         onSelect={handleSelectBoardName}
       />

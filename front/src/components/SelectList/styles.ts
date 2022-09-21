@@ -1,12 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Container = styled.ul<{ show: boolean }>`
-  display: ${({ show }) => (show ? 'flex' : 'none')};
+const Container = styled.ul<{ hidden?: boolean }>`
+  display: flex;
   justify-content: space-between;
   width: 90%;
   list-style: none;
   padding-left: 0;
   height: 50px;
+
+  ${(props) =>
+    props.hidden &&
+    css`
+      display: none;
+    `}
 `;
 
 const ListItem = styled.li<{ isSelected?: boolean }>`
