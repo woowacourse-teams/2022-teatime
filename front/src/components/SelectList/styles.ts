@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
-const Container = styled.ul`
-  display: flex;
+const Container = styled.ul<{ show: boolean }>`
+  display: ${({ show }) => (show ? 'flex' : 'none')};
   justify-content: space-between;
   width: 90%;
-  margin: 0 20px;
   list-style: none;
   padding-left: 0;
   height: 50px;
