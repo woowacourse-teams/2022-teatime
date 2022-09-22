@@ -2,10 +2,16 @@ import * as S from './styles';
 
 import LoadingImage from '@assets/loading.gif';
 
-const Loading = () => {
+interface LoadingProps {
+  showImage: boolean;
+  text?: string;
+}
+
+const Loading = ({ showImage, text }: LoadingProps) => {
   return (
     <S.ImageContainer>
-      <img src={LoadingImage} alt="로딩 이미지" />
+      {showImage && <img src={LoadingImage} alt="로딩 이미지" />}
+      {text && <div>{text}</div>}
     </S.ImageContainer>
   );
 };
