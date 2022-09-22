@@ -9,7 +9,7 @@ interface SheetProps {
   title: string;
   sheets: Sheets[];
   onSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
-  isUnalterable: boolean;
+  isUnalterable?: boolean;
   isView: boolean;
 }
 
@@ -75,7 +75,7 @@ const Sheet = ({ title, sheets, onSubmit, isUnalterable, isView }: SheetProps) =
             isView={isView}
           />
           {!isView && (
-            <S.ButtonContainer isUnalterable={isUnalterable}>
+            <S.ButtonContainer isUnalterable={!!isUnalterable}>
               <S.FirstButton onClick={handleSubmitButton}>임시저장</S.FirstButton>
               <S.SecondButton onClick={handleSubmitButton}>제출하기</S.SecondButton>
             </S.ButtonContainer>
