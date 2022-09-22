@@ -9,6 +9,7 @@ const ROUTES = {
   HISTORY_SHEET: '/history-sheet',
   CREW_HISTORY: '/crew-history',
   COACH_HISTORY: '/coach-history',
+  COACH_PROFILE: '/coach-profile',
   CERTIFICATION: '/certification',
 };
 

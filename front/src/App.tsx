@@ -20,6 +20,7 @@ const CoachSheet = lazy(() => import('@pages/CoachSheet'));
 const HistorySheet = lazy(() => import('@pages/HistorySheet'));
 const CrewHistory = lazy(() => import('@pages/CrewHistory'));
 const CoachHistory = lazy(() => import('@pages/CoachHistory'));
+const CoachProfile = lazy(() => import('@pages/CoachProfile'));
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
               <Route path={ROUTES.COACH} element={<CoachMain />} />
               <Route path={ROUTES.SCHEDULE} element={<Schedule />} />
               <Route path={ROUTES.COACH_HISTORY} element={<CoachHistory />} />
+              <Route path={ROUTES.COACH_PROFILE} element={<CoachProfile />} />
               <Route path={`${ROUTES.COACH_SHEET}/:id`} element={<CoachSheet />} />
               <Route path={`${ROUTES.HISTORY_SHEET}/:id`} element={<HistorySheet />} />
             </Route>

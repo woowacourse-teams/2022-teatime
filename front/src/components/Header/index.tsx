@@ -87,14 +87,17 @@ const Header = () => {
               <Link to={ROUTES.SCHEDULE}>
                 <li>스케줄 관리</li>
               </Link>
+              <Link to={ROUTES.COACH_PROFILE}>
+                <li>프로필 수정</li>
+              </Link>
             </Conditional>
 
             <Conditional condition={userData.role === 'CREW'}>
               <Link to={ROUTES.CREW_HISTORY}>
                 <li>히스토리</li>
               </Link>
+              <li onClick={handleOpenModal}>닉네임 수정</li>
             </Conditional>
-            <li onClick={handleOpenModal}>닉네임 수정</li>
             <li onClick={handleLogout}>로그아웃</li>
           </Dropdown>
         </S.ProfileContainer>
