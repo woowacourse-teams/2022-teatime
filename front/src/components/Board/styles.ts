@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const BoardContainer = styled.div<{ isDraggingOver: boolean }>`
+const BoardContainer = styled.div<{ isDraggingOver: boolean; isSelected?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +15,16 @@ const BoardContainer = styled.div<{ isDraggingOver: boolean }>`
     css`
       background-color: ${({ theme }) => theme.colors.GRAY_150};
     `}
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: none;
+
+    ${(props) =>
+      props.isSelected &&
+      css`
+        display: flex;
+      `}
+  }
 `;
 
 const TitleCircle = styled.div``;

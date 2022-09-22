@@ -5,7 +5,7 @@ import TableRow from '@components/TableRow';
 import EmptyContent from '@components/EmptyContent';
 import { getCoachHistories } from '@api/coach';
 import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
-import theme from '@styles/theme';
+import { theme } from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };

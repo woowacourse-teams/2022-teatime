@@ -4,7 +4,7 @@ const Container = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  width: 1000px;
+  max-width: 1000px;
   height: calc(100vh - 150px);
   padding: 30px 50px;
   margin: 50px auto;
@@ -15,6 +15,8 @@ const Container = styled.div`
     height: 100%;
     padding: 20px 10px;
     box-shadow: none;
+    flex-direction: column;
+    margin: 10px auto;
   }
 `;
 

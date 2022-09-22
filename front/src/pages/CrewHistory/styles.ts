@@ -7,6 +7,11 @@ const Table = styled.table`
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    width: 95%;
+    font-size: 15px;
+  }
 `;
 
 const TheadRow = styled.tr`

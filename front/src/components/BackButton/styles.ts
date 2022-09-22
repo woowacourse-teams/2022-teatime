@@ -16,6 +16,10 @@ const ArrowIcon = styled.img`
     transform: scale(1.1);
     transition: ease-in-out 0.2s;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: none;
+  }
 `;
 
 export { ArrowIcon };

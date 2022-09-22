@@ -7,6 +7,11 @@ const TbodyRow = styled.tr`
   grid-auto-rows: 96px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.GRAY_300};
   color: ${({ theme }) => theme.colors.BLUE_700};
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    grid-auto-rows: 60px;
+    font-size: 14px;
+  }
 `;
 
 const Span = styled.span<{ color: string; bgColor: string }>`
@@ -15,6 +20,11 @@ const Span = styled.span<{ color: string; bgColor: string }>`
   border-radius: 4px;
   background-color: ${({ bgColor }) => bgColor};
   color: ${({ color }) => color};
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    padding: 4px;
+    font-size: 14px;
+  }
 `;
 
 const Profile = styled.div`
@@ -30,6 +40,15 @@ const Profile = styled.div`
     border: 3px solid white;
     box-shadow: 0 0 16px rgb(210, 210, 210);
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    padding-left: 15px;
+
+    img {
+      width: 36px;
+      height: 36px;
+    }
+  }
 `;
 
 const Icon = styled.img`
@@ -39,6 +58,12 @@ const Icon = styled.img`
   cursor: pointer;
   :hover {
     transform: scale(1.1);
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
   }
 `;
 
