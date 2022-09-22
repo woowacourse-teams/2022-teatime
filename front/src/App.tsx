@@ -2,11 +2,11 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Header from '@components/Header';
+import Loading from '@components/Loading';
 import SnackbarProvider from '@context/SnackbarProvider';
 import UserProvider from '@context/UserProvider';
 import AuthRoute from './AuthRoute';
 import { ROUTES } from './constants';
-import Loading from '@components/Loading';
 
 const CrewMain = lazy(() => import('@pages/CrewMain'));
 const Reservation = lazy(() => import('@pages/Reservation'));
