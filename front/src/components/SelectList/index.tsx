@@ -1,9 +1,9 @@
 import * as S from './styles';
 
-interface Item {
+type Item = {
   id: string;
   text: string;
-}
+};
 
 interface SelectListProps {
   lists: Item[];
