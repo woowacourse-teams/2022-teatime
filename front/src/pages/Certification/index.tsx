@@ -30,7 +30,7 @@ const Certification = () => {
     })();
   }, []);
 
-  return <Loading showImage />;
+  return <Loading />;
 };
 
 export default Certification;

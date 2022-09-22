@@ -26,7 +26,7 @@ const App = () => {
     <UserProvider>
       <SnackbarProvider>
         <Header />
-        <Suspense fallback={<Loading showImage={false} text="Loading..." />}>
+        <Suspense fallback={<Loading text="Loading..." />}>
           <Routes>
             <Route path={ROUTES.HOME} element={<Home />} />
             <Route path={ROUTES.CERTIFICATION} element={<Certification />} />
