@@ -7,13 +7,13 @@ const BoardContainer = styled.div<{ isDraggingOver: boolean; isSelected?: boolea
   width: 330px;
   height: 100%;
   padding: 15px;
-  background-color: ${({ theme }) => theme.colors.GRAY_100};
+  background-color: ${({ theme }) => theme.colors.GRAY_150};
   border-radius: 10px;
 
   ${(props) =>
     props.isDraggingOver &&
     css`
-      background-color: ${({ theme }) => theme.colors.GRAY_150};
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
     `}
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
