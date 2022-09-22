@@ -67,7 +67,7 @@ const CrewSheet = () => {
         onSubmit={handleSubmit}
         isView={isView}
       />
-      {isView && <BackButton />}
+      <BackButton />
     </Frame>
   );
 };

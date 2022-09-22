@@ -8,7 +8,8 @@ const CardContainer = styled.div`
   height: 350px;
   padding: 35px 16px;
   border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+  background-color: ${({ theme }) => theme.colors.WHITE};
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
   overflow: hidden;
   cursor: pointer;
 

@@ -31,7 +31,7 @@ const config: webpack.Configuration = {
   output: {
     publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: '[name].[contenthash].js',
     assetModuleFilename: 'images/[name].[hash][ext][query]',
     clean: true,
   },

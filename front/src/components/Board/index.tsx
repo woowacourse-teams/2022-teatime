@@ -5,6 +5,7 @@ import * as S from './styles';
 
 interface BoardProps {
   children: React.ReactNode;
+  isSelected?: boolean;
   title: string;
   color: string;
   length: number;
@@ -12,7 +13,7 @@ interface BoardProps {
   onDrop: (e: React.DragEvent<HTMLDivElement>) => Promise<void>;
 }
 
-const Board = ({ children, title, color, length, status, onDrop }: BoardProps) => {
+const Board = ({ children, isSelected, title, color, length, status, onDrop }: BoardProps) => {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -36,6 +37,7 @@ const Board = ({ children, title, color, length, status, onDrop }: BoardProps) =
       onDragLeave={handleDragLeave}
       isDraggingOver={isDraggingOver}
       data-status={status}
+      isSelected={isSelected}
     >
       <S.TitleContainer color={color}>
         <S.TitleCircle />
