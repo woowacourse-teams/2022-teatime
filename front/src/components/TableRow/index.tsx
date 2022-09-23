@@ -7,7 +7,7 @@ import CancelIcon from '@assets/cancel.svg';
 interface TableRowProps {
   id: number;
   status: string;
-  isCanceledCoach?: boolean;
+  isCanceledStatusByCoach?: boolean;
   name: string;
   image: string;
   dateTime: string;
@@ -21,7 +21,7 @@ interface TableRowProps {
 const TableRow = ({
   id,
   status,
-  isCanceledCoach,
+  isCanceledStatusByCoach,
   name,
   image,
   dateTime,
@@ -51,7 +51,7 @@ const TableRow = ({
       <td>{date}</td>
       <td>{time}</td>
       <td>
-        {!isCanceledCoach && (
+        {!isCanceledStatusByCoach && (
           <S.Icon src={ScheduleIcon} alt="스케줄 아이콘" onClick={onClickSheet} />
         )}
         {isEditStatus && (

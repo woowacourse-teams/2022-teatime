@@ -23,6 +23,8 @@ public class CoachFindOwnHistoryResponse {
 
     private Long reservationId;
 
+    private Long crewId;
+
     private String crewName;
 
     private String crewImage;
@@ -51,13 +53,13 @@ public class CoachFindOwnHistoryResponse {
     private static CoachFindOwnHistoryResponse from(Reservation reservation) {
         Schedule schedule = reservation.getSchedule();
         Crew crew = reservation.getCrew();
-        return new CoachFindOwnHistoryResponse(reservation.getId(), crew.getName(), crew.getImage(),
+        return new CoachFindOwnHistoryResponse(reservation.getId(), crew.getId(), crew.getName(), crew.getImage(),
                 schedule.getLocalDateTime(), reservation.getReservationStatus(), reservation.getUpdatedAt());
     }
 
     private static CoachFindOwnHistoryResponse from(CanceledReservation reservation) {
         Crew crew = reservation.getCrew();
-        return new CoachFindOwnHistoryResponse(reservation.getOriginId(), crew.getName(), crew.getImage(),
+        return new CoachFindOwnHistoryResponse(reservation.getOriginId(), crew.getId(), crew.getName(), crew.getImage(),
                 reservation.getOriginSchedule(), ReservationStatus.CANCELED, reservation.getCreatedAt());
     }
 }

@@ -7,7 +7,7 @@ import EmptyContent from '@components/EmptyContent';
 import { ROUTES } from '@constants/index';
 import { getCoachHistories } from '@api/coach';
 import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
-import theme from '@styles/theme';
+import { theme } from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };

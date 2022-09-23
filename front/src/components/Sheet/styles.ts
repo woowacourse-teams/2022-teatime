@@ -48,6 +48,13 @@ const ButtonContainer = styled.div<{ isUnalterable: boolean }>`
         }
       `}
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    button {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
 `;
 
 export { SheetContainer, ButtonContainer, FirstButton, SecondButton };

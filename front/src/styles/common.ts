@@ -40,6 +40,19 @@ const InfoContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    margin-right: 0px;
+    margin: 20px 0;
+    padding: 5px 10px;
+    width: 100%;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+  }
 `;
 
 export { FadeIn, ScheduleContainer, CalendarContainer, InfoContainer };

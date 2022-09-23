@@ -11,7 +11,7 @@ import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
 import type { DaySchedule, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
-import theme from '@styles/theme';
+import { theme } from '@styles/theme';
 import * as S from '@styles/common';
 
 const timeArray = [
@@ -133,6 +133,7 @@ const Schedule = () => {
   };
 
   const handleUpdateMonth = (increment: number) => {
+    setSchedule({ monthSchedule: {}, daySchedule: [], date: '' });
     closeTimeList();
     updateMonthYear(increment);
   };

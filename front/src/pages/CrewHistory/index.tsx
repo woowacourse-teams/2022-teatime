@@ -10,7 +10,7 @@ import { cancelReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
 import type { CrewHistory as CrewHistoryType, CrewHistoryStatus } from '@typings/domain';
 
-import theme from '@styles/theme';
+import { theme } from '@styles/theme';
 import * as S from './styles';
 
 type StatusValue = { statusName: string; color: string; backgroundColor: string };

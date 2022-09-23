@@ -13,7 +13,7 @@ import { getCoachSchedulesByCrew } from '@api/coach';
 import { createReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
-import theme from '@styles/theme';
+import { theme } from '@styles/theme';
 import * as S from '@styles/common';
 
 import CheckCircle from '@assets/check-circle.svg';

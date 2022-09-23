@@ -34,6 +34,7 @@ const Flow = keyframes`
 const Container = styled.div`
   height: calc(100vh - 50px);
   width: 100%;
+  background-color: #bfdbfe;
 `;
 
 const MainSection = styled.section`
@@ -116,8 +117,8 @@ const OverlapContent = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   z-index: 1;
-  padding-left: 20%;
-  margin-top: 200px;
+  padding: 0 20%;
+  margin-top: 10%;
   gap: 20px;
 
   button {
@@ -125,14 +126,14 @@ const ButtonContainer = styled.div`
     align-items: center;
     justify-content: center;
     z-index: 1;
-    width: 250px;
+    width: 50%;
     height: 70px;
     border: none;
     border-radius: 12px;
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2), inset 1px 1px 1px rgba(0, 0, 0, 0.1);
 
     &:hover {
       transition: 0.2s;
@@ -146,11 +147,11 @@ const ButtonContainer = styled.div`
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
-    padding-left: 0;
+    padding: 0;
     margin-top: 100px;
 
     button {
-      width: 150px;
+      width: 100%;
       font-size: 16px;
     }
 

@@ -40,9 +40,6 @@ const Home = () => {
             <img src={SlackIcon} alt="슬랙 아이콘" />
             <span>Slack으로 로그인</span>
           </S.SlackButton>
-          <S.TeamIntroButton onClick={() => alert('준비중입니다.')}>
-            <span>팀원 소개</span>
-          </S.TeamIntroButton>
         </S.ButtonContainer>
       </S.MainSection>
     </S.Container>

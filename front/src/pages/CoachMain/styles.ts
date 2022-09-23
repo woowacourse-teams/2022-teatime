@@ -5,6 +5,11 @@ const Layout = styled.div`
   flex-direction: column;
   max-width: 1080px;
   margin: 50px auto;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    align-items: center;
+    margin: 25px auto;
+  }
 `;
 
 const BoardListContainer = styled.div`

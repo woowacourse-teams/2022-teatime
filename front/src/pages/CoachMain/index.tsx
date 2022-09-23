@@ -4,15 +4,17 @@ import { AxiosError } from 'axios';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
+import SelectList from '@components/SelectList';
 import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
+import useWindowSize from '@hooks/useWindowSize';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { confirmReservation, cancelReservation, rejectReservation } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
 import { ROUTES } from '@constants/index';
 import type { CrewListMap } from '@typings/domain';
-import theme from '@styles/theme';
+import { theme, size } from '@styles/theme';
 import * as S from './styles';
 
 interface BoardItemValue {
@@ -30,9 +32,11 @@ interface BoardItem {
 
 const CoachMain = () => {
   const navigate = useNavigate();
+  const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
+  const [selectedBoard, setSelectedBoard] = useState('beforeApproved');
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -152,8 +156,7 @@ const CoachMain = () => {
       .status as string;
     const draggedItem = crews[from][itemId];
 
-    if (from === to) return;
-    if (from === 'inProgress' || to === 'beforeApproved') return;
+    if (from === to || from === 'inProgress' || to === 'beforeApproved') return;
     if (from === 'beforeApproved' && to === 'inProgress') return;
     if (to === 'inProgress' && getDateTime(draggedItem.dateTime) > new Date()) {
       showSnackbar({ message: '진행 가능한 시간이 아닙니다. 🚫' });
@@ -165,6 +168,12 @@ const CoachMain = () => {
     }
 
     handleApprove(itemId, draggedItem.reservationId);
+  };
+
+  const handleSelectBoardName = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName !== 'LI') return;
+    setSelectedBoard(target.id);
   };
 
   const boardItem: BoardItem = {
@@ -217,6 +226,16 @@ const CoachMain = () => {
 
   return (
     <S.Layout>
+      <SelectList
+        lists={[
+          { id: 'beforeApproved', text: '대기중인 일정' },
+          { id: 'approved', text: '확정된 일정' },
+          { id: 'inProgress', text: '진행중인 일정' },
+        ]}
+        hidden={width > size.tablet}
+        selectedItem={selectedBoard}
+        onSelect={handleSelectBoardName}
+      />
       <S.BoardListContainer>
         {Object.keys(crews).map((status) => {
           const {
@@ -230,6 +249,7 @@ const CoachMain = () => {
 
           return (
             <Board
+              isSelected={selectedBoard === status}
               status={status}
               key={status}
               title={title}
