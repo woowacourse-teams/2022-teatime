@@ -34,7 +34,7 @@ const CoachHistory = () => {
   const [historyList, setHistoryList] = useState<CoachHistoryType[]>([]);
 
   const handleShowSheet = (reservationId: number, crewId: number) => () => {
-    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`, { state: crewId });
+    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: { crewId } });
   };
 
   useEffect(() => {
@@ -72,6 +72,7 @@ const CoachHistory = () => {
                 key={history.reservationId}
                 id={reservationId}
                 status={status}
+                isCanceledCoach={status === 'CANCELED'}
                 name={crewName}
                 image={crewImage}
                 dateTime={dateTime}
