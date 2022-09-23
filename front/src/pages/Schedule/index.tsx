@@ -133,6 +133,7 @@ const Schedule = () => {
   };
 
   const handleUpdateMonth = (increment: number) => {
+    setSchedule({ monthSchedule: {}, daySchedule: [], date: '' });
     closeTimeList();
     updateMonthYear(increment);
   };

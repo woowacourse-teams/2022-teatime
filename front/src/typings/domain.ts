@@ -53,6 +53,7 @@ interface CrewHistory {
 
 interface CoachHistory {
   reservationId: number;
+  crewId: number;
   crewName: string;
   crewImage: string;
   dateTime: string;
