@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import EmptyContent from '@components/EmptyContent';
-import { ROUTES } from '@constants/index';
 import { getCoachHistories } from '@api/coach';
 import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
 import { theme } from '@styles/theme';
@@ -30,12 +28,7 @@ const historyStatus: HistoryStatus = {
 };
 
 const CoachHistory = () => {
-  const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CoachHistoryType[]>([]);
-
-  const handleShowSheet = (reservationId: number, crewId: number) => () => {
-    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: { crewId } });
-  };
 
   useEffect(() => {
     (async () => {
@@ -65,21 +58,19 @@ const CoachHistory = () => {
         </thead>
         <tbody>
           {historyList.map((history) => {
-            const { reservationId, crewId, status, crewName, crewImage, dateTime } = history;
+            const { reservationId, status, crewName, crewImage, dateTime } = history;
             const { statusName, color, backgroundColor } = historyStatus[history.status];
             return (
               <TableRow
                 key={history.reservationId}
                 id={reservationId}
                 status={status}
-                isCanceledStatusByCoach={status === 'CANCELED'}
                 name={crewName}
                 image={crewImage}
                 dateTime={dateTime}
                 statusName={statusName}
                 color={color}
                 bgColor={backgroundColor}
-                onClickSheet={handleShowSheet(reservationId, crewId)}
               />
             );
           })}
