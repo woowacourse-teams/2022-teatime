@@ -14,14 +14,14 @@ interface TableRowProps {
   statusName: string;
   color: string;
   bgColor: string;
-  onClickSheet: () => void;
+  onClickSheet?: (reservationId: number, status: string) => void;
   onClickCancel?: (reservationId: number) => void;
+  isCrew?: boolean;
 }
 
 const TableRow = ({
   id,
   status,
-  isCanceledStatusByCoach,
   name,
   image,
   dateTime,
@@ -30,6 +30,7 @@ const TableRow = ({
   bgColor,
   onClickSheet,
   onClickCancel,
+  isCrew,
 }: TableRowProps) => {
   const date = getMonthDate(dateTime);
   const time = getHourMinutes(dateTime);
@@ -50,14 +51,18 @@ const TableRow = ({
       </td>
       <td>{date}</td>
       <td>{time}</td>
-      <td>
-        {!isCanceledStatusByCoach && (
-          <S.Icon src={ScheduleIcon} alt="스케줄 아이콘" onClick={onClickSheet} />
-        )}
-        {isEditStatus && (
-          <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickCancel?.(id)} />
-        )}
-      </td>
+      {isCrew && (
+        <td>
+          <S.Icon
+            src={ScheduleIcon}
+            alt="스케줄 아이콘"
+            onClick={() => onClickSheet?.(id, status)}
+          />
+          {isEditStatus && (
+            <S.Icon src={CancelIcon} alt="취소 아이콘" onClick={() => onClickCancel?.(id)} />
+          )}
+        </td>
+      )}
     </S.TbodyRow>
   );
 };
