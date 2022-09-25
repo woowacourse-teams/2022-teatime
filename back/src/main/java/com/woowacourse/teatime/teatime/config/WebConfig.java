@@ -4,11 +4,13 @@ import com.google.common.net.HttpHeaders;
 import com.woowacourse.teatime.auth.support.CoachArgumentResolver;
 import com.woowacourse.teatime.auth.support.CrewArgumentResolver;
 import com.woowacourse.teatime.auth.support.UserArgumentResolver;
+import com.woowacourse.teatime.teatime.aspect.LoggingInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final CoachArgumentResolver coachArgumentResolver;
     private final CrewArgumentResolver crewArgumentResolver;
     private final UserArgumentResolver userArgumentResolver;
+    private final LoggingInterceptor loggingInterceptor;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
@@ -31,6 +34,12 @@ public class WebConfig implements WebMvcConfigurer {
                 )
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .exposedHeaders(HttpHeaders.LOCATION);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loggingInterceptor);
+        WebMvcConfigurer.super.addInterceptors(registry);
     }
 
     @Override
