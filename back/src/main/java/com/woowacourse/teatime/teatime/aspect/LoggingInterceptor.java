@@ -3,11 +3,13 @@ package com.woowacourse.teatime.teatime.aspect;
 import com.woowacourse.teatime.teatime.aspect.QueryCountInspector.Counter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
 
@@ -16,10 +18,6 @@ public class LoggingInterceptor implements HandlerInterceptor {
     private static final int QUERY_COUNT_WARNING_STANDARD = 10;
 
     private final QueryCountInspector queryCountInspector;
-
-    public LoggingInterceptor(final QueryCountInspector queryCountInspector) {
-        this.queryCountInspector = queryCountInspector;
-    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -42,4 +40,3 @@ public class LoggingInterceptor implements HandlerInterceptor {
         queryCountInspector.clearCounter();
     }
 }
-
