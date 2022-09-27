@@ -254,7 +254,7 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 .extract();
 
         ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_하나를_조회한다(reservationId, crewToken);
-        String sheetStatus = findOwnSheetResponse.jsonPath().getObject("status", String.class);
+        String sheetStatus = findOwnSheetResponse.jsonPath().getObject("sheetStatus", String.class);
         List<SheetDto> sheetDtos = findOwnSheetResponse.jsonPath().getList("sheets.", SheetDto.class);
         List<String> answers = sheetDtos.stream()
                 .map(SheetDto::getAnswerContent)
@@ -298,7 +298,7 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 .extract();
 
         ExtractableResponse<Response> findOwnSheetResponse = 크루가_자신의_면담시트를_하나를_조회한다(reservationId, crewToken);
-        String sheetStatus = findOwnSheetResponse.jsonPath().getObject("status", String.class);
+        String sheetStatus = findOwnSheetResponse.jsonPath().getObject("sheetStatus", String.class);
         List<SheetDto> sheetDtos = findOwnSheetResponse.jsonPath().getList("sheets.", SheetDto.class);
         List<String> answers = sheetDtos.stream()
                 .map(SheetDto::getAnswerContent)
