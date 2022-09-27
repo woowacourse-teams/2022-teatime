@@ -1,18 +1,19 @@
 package com.woowacourse.teatime.teatime.aspect;
 
+import lombok.Getter;
 import org.hibernate.resource.jdbc.spi.StatementInspector;
 import org.springframework.stereotype.Component;
 
 @Component
 public class QueryCountInspector implements StatementInspector {
 
-    private final ThreadLocal<Long> queryCount = new ThreadLocal<>();
+    private final ThreadLocal<Counter> queryCount = new ThreadLocal<>();
 
     public void startCounter() {
-        queryCount.set(0L);
+        queryCount.set(new Counter(0L, System.currentTimeMillis()));
     }
 
-    public Long getQueryCount() {
+    public Counter getQueryCount() {
         return queryCount.get();
     }
 
@@ -22,14 +23,23 @@ public class QueryCountInspector implements StatementInspector {
 
     @Override
     public String inspect(String sql) {
-        increaseCount();
+        Counter counter = queryCount.get();
+        counter.increaseCount();
         return sql;
     }
 
-    private void increaseCount() {
-        final Long count = queryCount.get();
-        if (count != null) {
-            queryCount.set(count + 1);
+    @Getter
+    class Counter {
+        private Long count;
+        private Long time;
+
+        public Counter(Long count, Long time) {
+            this.count = count;
+            this.time = time;
+        }
+
+        public void increaseCount() {
+            count++;
         }
     }
 }

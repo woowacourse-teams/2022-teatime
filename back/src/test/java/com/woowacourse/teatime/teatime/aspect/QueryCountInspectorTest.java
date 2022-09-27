@@ -2,6 +2,7 @@ package com.woowacourse.teatime.teatime.aspect;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.woowacourse.teatime.teatime.aspect.QueryCountInspector.Counter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,8 @@ class QueryCountInspectorTest {
         queryCountInspector.startCounter();
 
         // when
-        Long queryCount = queryCountInspector.getQueryCount();
+        Counter counter = queryCountInspector.getQueryCount();
+        Long queryCount = counter.getCount();
 
         // then
         assertThat(queryCount).isZero();
@@ -45,7 +47,8 @@ class QueryCountInspectorTest {
         queryCountInspector.inspect("INSERT INTO crew VALUES('value1', 'value2', 'value3')");
 
         // then
-        Long queryCount = queryCountInspector.getQueryCount();
+        Counter counter = queryCountInspector.getQueryCount();
+        Long queryCount = counter.getCount();
         assertThat(queryCount).isOne();
     }
 
@@ -60,7 +63,7 @@ class QueryCountInspectorTest {
         queryCountInspector.clearCounter();
 
         // then
-        Long queryCount = queryCountInspector.getQueryCount();
-        assertThat(queryCount).isNull();
+        Counter counter = queryCountInspector.getQueryCount();
+        assertThat(counter).isNull();
     }
 }

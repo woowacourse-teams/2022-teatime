@@ -1,5 +1,6 @@
 package com.woowacourse.teatime.teatime.aspect;
 
+import com.woowacourse.teatime.teatime.aspect.QueryCountInspector.Counter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
 
-    private static final String QUERY_COUNT_LOG_FORMAT = "STATUS_CODE: {}, METHOD: {}, URL: {}, QUERY_COUNT: {}";
+    private static final String QUERY_COUNT_LOG_FORMAT = "STATUS_CODE: {}, METHOD: {}, URL: {}, TIME: {}초, QUERY_COUNT: {}";
     private static final String QUERY_COUNT_WARNING_LOG_FORMAT = "하나의 요청에 쿼리가 10번 이상 날라갔습니다.  쿼리 횟수 : {} ";
     private static final int QUERY_COUNT_WARNING_STANDARD = 10;
 
@@ -29,13 +30,16 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response,
                                 final Object handler, final Exception ex) {
-        final Long queryCount = queryCountInspector.getQueryCount();
+        Counter counter = queryCountInspector.getQueryCount();
+        final double duration = (System.currentTimeMillis() - counter.getTime()) / 1000.0;
+        final long queryCount = counter.getCount();
 
         log.info(QUERY_COUNT_LOG_FORMAT, response.getStatus(), request.getMethod(), request.getRequestURI(),
-                queryCount);
+                duration, queryCount);
         if (queryCount >= QUERY_COUNT_WARNING_STANDARD) {
             log.warn(QUERY_COUNT_WARNING_LOG_FORMAT, queryCount);
         }
+        queryCountInspector.clearCounter();
     }
 }
 
