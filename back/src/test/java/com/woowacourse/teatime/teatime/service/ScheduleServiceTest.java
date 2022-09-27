@@ -118,15 +118,19 @@ class ScheduleServiceTest {
     @DisplayName("코치의 스케쥴을 업데이트할 때 해당 날짜에 이미 예약이 존재하면 그 예약을 삭제하지 않는다.")
     @Test
     void update_if_reservation_exist() {
+        // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDateTime reservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 58));
         LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
+
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
+        scheduleRepository.save(new Schedule(coach, notReservedTime));
+
         Crew crew = crewRepository.save(CREW1);
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule1.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
-        scheduleRepository.save(new Schedule(coach, notReservedTime));
 
+        // when
         ScheduleUpdateRequest scheduleUpdateRequest
                 = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH,
                 List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2)));
@@ -136,6 +140,7 @@ class ScheduleServiceTest {
                 new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
         List<ScheduleDto> schedules = responses.get(0).getSchedules();
 
+        // then
         assertThat(schedules).hasSize(3);
     }
 }
