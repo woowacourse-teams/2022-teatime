@@ -24,7 +24,9 @@ public class QueryCountInspector implements StatementInspector {
     @Override
     public String inspect(String sql) {
         Counter counter = queryCount.get();
-        counter.increaseCount();
+        if (counter != null) {
+            counter.increaseCount();
+        }
         return sql;
     }
 
