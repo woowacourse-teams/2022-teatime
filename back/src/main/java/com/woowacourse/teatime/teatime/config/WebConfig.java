@@ -8,6 +8,7 @@ import com.woowacourse.teatime.teatime.aspect.LoggingInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -22,6 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
     private final CrewArgumentResolver crewArgumentResolver;
     private final UserArgumentResolver userArgumentResolver;
     private final LoggingInterceptor loggingInterceptor;
+
+    private final Environment environment;
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
@@ -38,7 +41,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loggingInterceptor);
+        for (String profileName : environment.getActiveProfiles()) {
+            if (profileName.equals("local") || profileName.equals("dev")) {
+                registry.addInterceptor(loggingInterceptor);
+            }
+        }
+
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 
