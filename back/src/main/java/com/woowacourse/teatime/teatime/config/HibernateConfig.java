@@ -1,19 +1,17 @@
 package com.woowacourse.teatime.teatime.config;
 
 import com.woowacourse.teatime.teatime.aspect.QueryCountInspector;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@RequiredArgsConstructor
 @Configuration
 public class HibernateConfig {
 
     private final QueryCountInspector queryCountInspector;
-
-    public HibernateConfig(final QueryCountInspector queryCountInspector) {
-        this.queryCountInspector = queryCountInspector;
-    }
 
     @Bean
     public HibernatePropertiesCustomizer configureStatementInspector() {
