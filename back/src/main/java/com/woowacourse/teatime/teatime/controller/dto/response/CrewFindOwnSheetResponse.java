@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.controller.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Reservation;
+import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.domain.Sheet;
 import com.woowacourse.teatime.teatime.domain.SheetStatus;
@@ -25,7 +26,9 @@ public class CrewFindOwnSheetResponse {
 
     private String coachImage;
 
-    private SheetStatus status;
+    private SheetStatus sheetStatus;
+
+    private ReservationStatus reservationStatus;
 
     private List<SheetDto> sheets;
 
@@ -34,6 +37,6 @@ public class CrewFindOwnSheetResponse {
         Coach coach = schedule.getCoach();
         List<SheetDto> sheetDtos = SheetDto.from(sheets);
         return new CrewFindOwnSheetResponse(schedule.getLocalDateTime(), coach.getName(), coach.getImage(),
-                reservation.getSheetStatus(), sheetDtos);
+                reservation.getSheetStatus(), reservation.getReservationStatus(), sheetDtos);
     }
 }
