@@ -51,23 +51,18 @@ const CrewSheet = () => {
 
   if (!reservationInfo) return <></>;
 
-  const isUnalterable = status === 'IN_PROGRESS' || status === 'DONE';
-  const isView = reservationInfo.sheetStatus === 'SUBMITTED';
+  const { coachName, coachImage, dateTime, sheets, sheetStatus } = reservationInfo;
 
   return (
     <Frame>
       <S.InfoContainer>
-        <ReservationInfo
-          image={reservationInfo.coachImage}
-          name={reservationInfo.coachName}
-          dateTime={reservationInfo.dateTime}
-        />
+        <ReservationInfo image={coachImage} name={coachName} dateTime={dateTime} />
       </S.InfoContainer>
       <Sheet
         title="면담 내용 작성"
-        sheets={reservationInfo.sheets}
+        sheets={sheets}
         onSubmit={handleSubmit}
-        isView={isView || isUnalterable}
+        isView={status === 'IN_PROGRESS' || status === 'DONE' || sheetStatus === 'SUBMITTED'}
       />
       <BackButton />
     </Frame>
