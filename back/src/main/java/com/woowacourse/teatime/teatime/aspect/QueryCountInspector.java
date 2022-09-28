@@ -27,7 +27,7 @@ public class QueryCountInspector implements StatementInspector {
     public String inspect(String sql) {
         Counter counter = queryCount.get();
         if (counter != null) {
-            log.debug("COUNT : {}, SQL query: {}", counter.getCount(), sql);
+            log.info("COUNT : {}, SQL query: {}", counter.getCount(), sql);
             counter.increaseCount();
         }
         return sql;
