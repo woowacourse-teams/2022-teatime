@@ -4,6 +4,7 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJaso
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAVE_REQUEST;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_JUNE_SAVE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
@@ -39,17 +40,21 @@ public class CoachServiceTest {
         assertThat(coaches.size()).isEqualTo(2);
     }
 
-    @DisplayName("자신의 이름을 수정한다.")
+    @DisplayName("자신의 프로필을 수정한다.")
     @Test
     void updateProfile() {
         // given
         Coach coach = coachRepository.save(getCoachJason());
 
         // when
-        String expected = "name";
-        coachService.updateProfile(coach.getId(), new CoachUpdateProfileRequest(expected));
+        String expectedName = "name";
+        String expectedDescription = "안뇽하세요.";
+        coachService.updateProfile(coach.getId(), new CoachUpdateProfileRequest(expectedName, expectedDescription));
 
         // then
-        assertThat(coach.getName()).isEqualTo(expected);
+        assertAll(
+                () -> assertThat(coach.getName()).isEqualTo(expectedName),
+                () -> assertThat(coach.getDescription()).isEqualTo(expectedDescription)
+        );
     }
 }
