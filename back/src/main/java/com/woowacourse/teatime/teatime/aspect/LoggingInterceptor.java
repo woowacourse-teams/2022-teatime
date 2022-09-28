@@ -26,11 +26,11 @@ public class LoggingInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response,
-                                final Object handler, final Exception ex) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                                Object handler, Exception ex) {
         Counter counter = queryCountInspector.getQueryCount();
-        final double duration = (System.currentTimeMillis() - counter.getTime()) / 1000.0;
-        final long queryCount = counter.getCount();
+        double duration = (System.currentTimeMillis() - counter.getTime()) / 1000.0;
+        long queryCount = counter.getCount();
 
         log.info(QUERY_COUNT_LOG_FORMAT, response.getStatus(), request.getMethod(), request.getRequestURI(),
                 duration, queryCount);
