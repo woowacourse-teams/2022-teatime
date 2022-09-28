@@ -22,5 +22,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "AND s.isPossible = true "
             + "AND s.localDateTime >= :start "
             + "AND s.localDateTime < :end")
-    void deleteAllReservedByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
+    void deleteAllReservableByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
 }

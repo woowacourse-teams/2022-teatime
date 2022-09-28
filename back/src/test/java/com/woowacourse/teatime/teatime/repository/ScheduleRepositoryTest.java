@@ -75,7 +75,7 @@ public class ScheduleRepositoryTest {
         LocalDate localDate = LocalDate.of(2022, 7, 1);
         LocalDateTime start = Date.findFirstTime(localDate);
         LocalDateTime end = Date.findLastTime(localDate);
-        scheduleRepository.deleteAllReservedByCoachIdBetween(coach.getId(), start, end);
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), start, end);
 
         // then
         List<Schedule> schedules = scheduleRepository.findAll();

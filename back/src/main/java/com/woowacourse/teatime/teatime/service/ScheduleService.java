@@ -55,7 +55,7 @@ public class ScheduleService {
         LocalDateTime end = Date.findLastTime(date);
         validateDeletable(coachId, request, start, end);
 
-        scheduleRepository.deleteAllReservedByCoachIdBetween(coachId, start, end);
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coachId, start, end);
     }
 
     private void validateDeletable(Long coachId, ScheduleUpdateRequest request, LocalDateTime start,
