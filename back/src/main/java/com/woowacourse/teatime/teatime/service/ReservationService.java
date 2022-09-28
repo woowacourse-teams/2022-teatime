@@ -151,7 +151,7 @@ public class ReservationService {
 
     public List<CrewFindOwnHistoryResponse> findOwnHistoryByCrew(Long crewId) {
         validateCrewId(crewId);
-        List<Reservation> reservations = reservationRepository.findAllByCrewIdRecently(crewId);
+        List<Reservation> reservations = reservationRepository.findAllByCrewIdLatestOrder(crewId);
         List<CanceledReservation> canceledReservations = canceledReservationRepository.findAllByCrewId(crewId);
         return CrewFindOwnHistoryResponse.of(reservations, canceledReservations);
     }

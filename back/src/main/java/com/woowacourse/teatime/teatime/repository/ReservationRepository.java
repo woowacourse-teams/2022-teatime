@@ -17,7 +17,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             + "ON c.id = :crewId "
             + "INNER JOIN r.schedule AS s "
             + "ORDER BY s.localDateTime DESC")
-    List<Reservation> findAllByCrewIdRecently(Long crewId);
+    List<Reservation> findAllByCrewIdLatestOrder(Long crewId);
 
     @Query("SELECT r FROM Reservation AS r "
             + "INNER JOIN r.schedule AS s "

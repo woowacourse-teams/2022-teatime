@@ -150,7 +150,7 @@ class ReservationRepositoryTest {
 
     @DisplayName("해당 크루의 면담을 최신순으로 모두 가져온다.")
     @Test
-    void findAllByCrewIdRecently() {
+    void findAllByCrewIdLatestOrder() {
         // given
         LocalDateTime dateTime1 = DomainFixture.DATE_TIME;
         LocalDateTime dateTime2 = DomainFixture.DATE_TIME.plusHours(1);
@@ -160,7 +160,7 @@ class ReservationRepositoryTest {
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
 
         // when
-        List<Reservation> reservations = reservationRepository.findAllByCrewIdRecently(crew.getId());
+        List<Reservation> reservations = reservationRepository.findAllByCrewIdLatestOrder(crew.getId());
 
         // then
         assertAll(
