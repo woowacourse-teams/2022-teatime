@@ -72,7 +72,7 @@ const CoachHistory = () => {
                 key={history.reservationId}
                 id={reservationId}
                 status={status}
-                isCanceledStatusByCoach={status === 'CANCELED'}
+                isHiddenSheet={status === 'CANCELED'}
                 name={crewName}
                 image={crewImage}
                 dateTime={dateTime}
