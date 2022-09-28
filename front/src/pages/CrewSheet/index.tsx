@@ -19,9 +19,6 @@ const CrewSheet = () => {
   const { state: status } = useLocation();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
 
-  const isUnalterable = status === 'IN_PROGRESS' || status === 'DONE';
-  const isView = reservationInfo?.status === 'SUBMITTED';
-
   const handleSubmit = async (isSubmitted: boolean, contents: Sheets[]) => {
     try {
       await editCrewReservation(reservationId as string, isSubmitted, contents);
@@ -53,6 +50,9 @@ const CrewSheet = () => {
   }, []);
 
   if (!reservationInfo) return <></>;
+
+  const isUnalterable = status === 'IN_PROGRESS' || status === 'DONE';
+  const isView = reservationInfo.sheetStatus === 'SUBMITTED';
 
   return (
     <Frame>
