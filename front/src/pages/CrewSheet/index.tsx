@@ -67,8 +67,7 @@ const CrewSheet = () => {
         title="면담 내용 작성"
         sheets={reservationInfo.sheets}
         onSubmit={handleSubmit}
-        isUnalterable={isUnalterable}
-        isView={isView}
+        isView={isView || isUnalterable}
       />
       <BackButton />
     </Frame>

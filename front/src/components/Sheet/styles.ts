@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const SheetContainer = styled.div`
   width: 100%;
@@ -8,19 +8,7 @@ const SheetContainer = styled.div`
   }
 `;
 
-const FirstButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.WHITE};
-  border: 1px solid ${({ theme }) => theme.colors.BLUE_600};
-  color: ${({ theme }) => theme.colors.BLUE_600};
-`;
-
-const SecondButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.BLUE_600};
-  color: ${({ theme }) => theme.colors.WHITE};
-  border: none;
-`;
-
-const ButtonContainer = styled.div<{ isUnalterable: boolean }>`
+const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
 
@@ -35,18 +23,6 @@ const ButtonContainer = styled.div<{ isUnalterable: boolean }>`
     :hover {
       opacity: 0.7;
     }
-
-    ${(props) =>
-      props.isUnalterable &&
-      css`
-        background-color: ${({ theme }) => theme.colors.GRAY_200};
-        color: ${({ theme }) => theme.colors.GRAY_600};
-        border: none;
-
-        :hover {
-          opacity: 1;
-        }
-      `}
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
@@ -55,6 +31,18 @@ const ButtonContainer = styled.div<{ isUnalterable: boolean }>`
       font-size: 14px;
     }
   }
+`;
+
+const FirstButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.WHITE};
+  border: 1px solid ${({ theme }) => theme.colors.BLUE_600};
+  color: ${({ theme }) => theme.colors.BLUE_600};
+`;
+
+const SecondButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.BLUE_600};
+  color: ${({ theme }) => theme.colors.WHITE};
+  border: none;
 `;
 
 export { SheetContainer, ButtonContainer, FirstButton, SecondButton };
