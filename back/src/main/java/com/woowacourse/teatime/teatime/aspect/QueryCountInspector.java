@@ -1,9 +1,11 @@
 package com.woowacourse.teatime.teatime.aspect;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.resource.jdbc.spi.StatementInspector;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class QueryCountInspector implements StatementInspector {
 
@@ -25,6 +27,7 @@ public class QueryCountInspector implements StatementInspector {
     public String inspect(String sql) {
         Counter counter = queryCount.get();
         if (counter != null) {
+            log.debug("COUNT : {}, SQL query: {}", counter.getCount(), sql);
             counter.increaseCount();
         }
         return sql;
