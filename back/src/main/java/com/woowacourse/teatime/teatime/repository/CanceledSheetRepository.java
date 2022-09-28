@@ -11,5 +11,5 @@ public interface CanceledSheetRepository extends JpaRepository<CanceledSheet, Lo
             + "INNER JOIN s.canceledReservation AS r "
             + "ON r.originId = :originReservationId "
             + "ORDER BY s.number")
-    List<CanceledSheet> findByOriginId(Long originReservationId);
+    List<CanceledSheet> findAllByOriginId(Long originReservationId);
 }

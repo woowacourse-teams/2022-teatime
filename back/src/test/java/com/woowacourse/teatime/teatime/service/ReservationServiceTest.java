@@ -195,7 +195,7 @@ class ReservationServiceTest {
                 () -> assertThat(reservationRepository.findAll()).isEmpty(),
                 () -> assertThat(sheetRepository.findAll()).isEmpty(),
                 () -> assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1),
-                () -> assertThat(canceledSheetRepository.findByOriginId(reservationId)).hasSize(3),
+                () -> assertThat(canceledSheetRepository.findAllByOriginId(reservationId)).hasSize(3),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -213,7 +213,7 @@ class ReservationServiceTest {
                 () -> assertThat(reservationRepository.findAll()).isEmpty(),
                 () -> assertThat(sheetRepository.findAll()).isEmpty(),
                 () -> assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1),
-                () -> assertThat(canceledSheetRepository.findByOriginId(reservationId)).hasSize(3),
+                () -> assertThat(canceledSheetRepository.findAllByOriginId(reservationId)).hasSize(3),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }
@@ -230,7 +230,7 @@ class ReservationServiceTest {
                 () -> assertThat(reservationRepository.findAll()).isEmpty(),
                 () -> assertThat(sheetRepository.findAll()).isEmpty(),
                 () -> assertThat(canceledReservationRepository.findAllByCrewId(crew.getId())).hasSize(1),
-                () -> assertThat(canceledSheetRepository.findByOriginId(reservationId)).hasSize(3),
+                () -> assertThat(canceledSheetRepository.findAllByOriginId(reservationId)).hasSize(3),
                 () -> assertThat(schedule.getIsPossible()).isTrue()
         );
     }

@@ -71,7 +71,7 @@ public class ReservationService {
     private void cancelReservation(Reservation reservation, Role role) {
         CanceledReservation canceledReservation = CanceledReservation.from(reservation);
         CanceledReservation savedCanceledReservation = canceledReservationRepository.save(canceledReservation);
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservation.getId());
         List<CanceledSheet> canceledSheets = sheets.stream()
                 .map(sheet -> CanceledSheet.from(savedCanceledReservation, sheet))
                 .collect(Collectors.toList());
@@ -151,7 +151,7 @@ public class ReservationService {
 
     public List<CrewFindOwnHistoryResponse> findOwnHistoryByCrew(Long crewId) {
         validateCrewId(crewId);
-        List<Reservation> reservations = reservationRepository.findByCrewIdRecently(crewId);
+        List<Reservation> reservations = reservationRepository.findAllByCrewIdRecently(crewId);
         List<CanceledReservation> canceledReservations = canceledReservationRepository.findAllByCrewId(crewId);
         return CrewFindOwnHistoryResponse.of(reservations, canceledReservations);
     }
@@ -189,11 +189,11 @@ public class ReservationService {
     public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndReservationStatus(crewId, DONE);
+                reservationRepository.findAllByCrewIdAndReservationStatus(crewId, DONE);
 
         List<CoachFindCrewHistoryResponse> response = new ArrayList<>();
         for (Reservation reservation : reservations) {
-            List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
+            List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservation.getId());
             response.add(CoachFindCrewHistoryResponse.from(reservation, sheets));
         }
 

@@ -58,13 +58,13 @@ class ReservationRepositoryTest {
 
     @DisplayName("크루에 해당하는 면담 목록을 조회한다. - 면담 상태 : BEFORE_APPROVED")
     @Test
-    void findByCrewId() {
+    void findAllByCrewIdAndReservationStatus() {
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));
 
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndReservationStatus(crew.getId(),
+                reservationRepository.findAllByCrewIdAndReservationStatus(crew.getId(),
                         BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
@@ -114,7 +114,7 @@ class ReservationRepositoryTest {
 
     @DisplayName("해당 시간대 사이의 조건에 맞는 모든 면담을 조회한다. - 면담 상태 : APPROVED, 시트 상태 : WRITING")
     @Test
-    void findAllShouldCancel() {
+    void findAllShouldBeCanceled() {
         // given
         LocalDateTime firstTime = DomainFixture.DATE_TIME;
         Schedule schedule2 = scheduleRepository.save(new Schedule(coach, firstTime.plusHours(1)));
@@ -134,7 +134,7 @@ class ReservationRepositoryTest {
 
     @DisplayName("코치에 해당하는 완료 상태의 면담 목록을 조회한다.")
     @Test
-    void findByCoachIdAndReservationStatusInCanceledAndDone() {
+    void findAllByCoachIdAndStatus() {
         Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule, crew));
 
@@ -150,7 +150,7 @@ class ReservationRepositoryTest {
 
     @DisplayName("해당 크루의 면담을 최신순으로 모두 가져온다.")
     @Test
-    void findByCrewIdRecently() {
+    void findAllByCrewIdRecently() {
         // given
         LocalDateTime dateTime1 = DomainFixture.DATE_TIME;
         LocalDateTime dateTime2 = DomainFixture.DATE_TIME.plusHours(1);
@@ -160,7 +160,7 @@ class ReservationRepositoryTest {
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
 
         // when
-        List<Reservation> reservations = reservationRepository.findByCrewIdRecently(crew.getId());
+        List<Reservation> reservations = reservationRepository.findAllByCrewIdRecently(crew.getId());
 
         // then
         assertAll(

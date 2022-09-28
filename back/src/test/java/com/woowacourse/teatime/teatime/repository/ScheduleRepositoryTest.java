@@ -38,7 +38,7 @@ public class ScheduleRepositoryTest {
 
     @DisplayName("해당 코치와, 년, 월에 해당하는 스케줄 전체 목록을 조회한다.")
     @Test
-    void findByCoachIdAndLocalDateTimeBetween() {
+    void findAllByCoachIdBetween() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime dateTime1 = start.plusDays(1);
         LocalDateTime dateTime2 = start.plusDays(2);
@@ -50,7 +50,7 @@ public class ScheduleRepositoryTest {
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
 
-        List<Schedule> schedules = scheduleRepository.findByCoachIdBetween(
+        List<Schedule> schedules = scheduleRepository.findAllByCoachIdBetween(
                 coach.getId(), start, end);
 
         assertAll(
@@ -64,11 +64,11 @@ public class ScheduleRepositoryTest {
     void deleteAllByCoachIdAndLocalDateTimeBetween() {
         // given
         LocalDateTime july1_1 = LocalDateTime.of(2022, 7, 1, 1, 0, 0);
-        LocalDateTime july2_1 = LocalDateTime.of(2022, 7, 1, 2, 0, 0);
+        LocalDateTime july1_2 = LocalDateTime.of(2022, 7, 1, 2, 0, 0);
 
         Coach coach = coachRepository.save(DomainFixture.COACH_JASON);
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, july1_1));
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, july2_1));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, july1_2));
         schedule2.reserve();
 
         // when

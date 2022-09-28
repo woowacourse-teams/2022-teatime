@@ -14,7 +14,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "ON c.id = :coachId "
             + "WHERE s.localDateTime >= :start "
             + "AND s.localDateTime < :end")
-    List<Schedule> findByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
+    List<Schedule> findAllByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
 
     @Modifying
     @Query("DELETE FROM Schedule AS s "
