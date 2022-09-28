@@ -24,7 +24,7 @@ public class CrewFindOwnCanceledSheetResponse {
 
     private String coachImage;
 
-    private SheetStatus status;
+    private SheetStatus sheetStatus;
 
     private List<SheetDto> sheets;
 
