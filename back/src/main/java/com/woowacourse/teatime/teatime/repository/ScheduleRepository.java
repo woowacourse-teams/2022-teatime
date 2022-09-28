@@ -19,7 +19,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Modifying
     @Query("DELETE FROM Schedule AS s "
             + "WHERE s.coach.id = :coachId "
-            + "AND s.isPossible = true "
+            + "AND s.isPossible = TRUE "
             + "AND s.localDateTime >= :start "
             + "AND s.localDateTime < :end")
     void deleteAllReservableByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
