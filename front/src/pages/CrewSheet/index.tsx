@@ -16,10 +16,8 @@ const CrewSheet = () => {
   const { id: reservationId } = useParams();
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
-  const { state: isCanceled } = useLocation();
+  const { state: status } = useLocation();
   const [reservationInfo, setReservationInfo] = useState<Reservation>();
-
-  const isView = reservationInfo?.status === 'SUBMITTED';
 
   const handleSubmit = async (isSubmitted: boolean, contents: Sheets[]) => {
     try {
@@ -37,6 +35,7 @@ const CrewSheet = () => {
   useEffect(() => {
     (async () => {
       try {
+        const isCanceled = status === 'CANCELED';
         const { data } = isCanceled
           ? await getCrewCanceledReservation(reservationId as string)
           : await getCrewReservationByMe(reservationId as string);
@@ -52,20 +51,18 @@ const CrewSheet = () => {
 
   if (!reservationInfo) return <></>;
 
+  const { coachName, coachImage, dateTime, sheets, sheetStatus } = reservationInfo;
+
   return (
     <Frame>
       <S.InfoContainer>
-        <ReservationInfo
-          image={reservationInfo.coachImage}
-          name={reservationInfo.coachName}
-          dateTime={reservationInfo.dateTime}
-        />
+        <ReservationInfo image={coachImage} name={coachName} dateTime={dateTime} />
       </S.InfoContainer>
       <Sheet
         title="면담 내용 작성"
-        sheets={reservationInfo.sheets}
+        sheets={sheets}
         onSubmit={handleSubmit}
-        isView={isView}
+        isReadOnly={status === 'IN_PROGRESS' || status === 'DONE' || sheetStatus === 'SUBMITTED'}
       />
       <BackButton />
     </Frame>

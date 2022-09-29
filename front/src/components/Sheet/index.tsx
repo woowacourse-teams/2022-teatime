@@ -9,10 +9,10 @@ interface SheetProps {
   title: string;
   sheets: Sheets[];
   onSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
-  isView: boolean;
+  isReadOnly: boolean;
 }
 
-const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
+const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
@@ -53,7 +53,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             value={sheets[0].answerContent || ''}
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
-            isView={isView}
+            isReadOnly={isReadOnly}
           />
           <Textarea
             id="1"
@@ -61,7 +61,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             value={sheets[1].answerContent || ''}
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
-            isView={isView}
+            isReadOnly={isReadOnly}
           />
           <Textarea
             id="2"
@@ -69,9 +69,9 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             value={sheets[2].answerContent || ''}
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
-            isView={isView}
+            isReadOnly={isReadOnly}
           />
-          {!isView && (
+          {!isReadOnly && (
             <S.ButtonContainer>
               <S.FirstButton onClick={handleSubmitButton}>임시저장</S.FirstButton>
               <S.SecondButton onClick={handleSubmitButton}>제출하기</S.SecondButton>
