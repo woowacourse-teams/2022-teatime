@@ -60,6 +60,7 @@ public class AuthService {
         Coach coach = coachRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> saveCoachAndDefaultQuestions(userInfo));
         coach.setSlackId(userInfo.getSlackId());
+        coach.setImage(userInfo.getImage());
 
         Map<String, Object> claims = Map.of("id", coach.getId(), "role", COACH);
         String token = jwtTokenProvider.createToken(claims);
@@ -87,6 +88,7 @@ public class AuthService {
         Crew crew = crewRepository.findByEmail(userInfo.getEmail())
                 .orElseGet(() -> saveCrew(userInfo));
         crew.setSlackId(userInfo.getSlackId());
+        crew.setImage(userInfo.getImage());
 
         Map<String, Object> claims = Map.of("id", crew.getId(), "role", CREW);
         String token = jwtTokenProvider.createToken(claims);

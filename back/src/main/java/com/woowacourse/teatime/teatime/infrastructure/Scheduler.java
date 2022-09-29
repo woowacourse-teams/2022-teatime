@@ -24,12 +24,6 @@ public class Scheduler {
         reservationService.updateReservationStatusToInProgress();
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
-    public void cancelReservationNotSubmitted() {
-        log.info("{}, 전날까지 면담내용을 제출하지 않았다면 면담을 취소하는 스케쥴러 실행", LocalDateTime.now());
-        reservationService.cancelReservationNotSubmitted();
-    }
-
     @Scheduled(cron = "0 0 18 * * *")
     public void remindReservation() {
         log.info("{}, 다음날 면담을 리마인드 해주는 스케쥴러 실행", LocalDateTime.now());

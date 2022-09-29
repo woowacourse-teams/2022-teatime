@@ -34,7 +34,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -49,7 +49,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -71,7 +71,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -84,7 +84,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         String token = "나 잘못된 토큰";
 
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/reservations")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
         //then
         perform.andExpectAll(
@@ -105,7 +105,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/history")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -119,7 +119,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         String token = "나 잘못된 토큰.";
 
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/history")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
 
@@ -143,7 +143,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         //when
         CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨", "안녕하세요 티타임 코치입니다.");
         ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", request)
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -184,5 +184,39 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //then
         perform.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("코치가 자신의 프로필 조회에 성공한다.")
+    @Test
+    void coachGetProfile() throws Exception {
+        // given
+        String token = "나 코치다.";
+        코치의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/profile")
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isOk());
+    }
+
+    @DisplayName("코치가 자신의 프로필 조회에 실패한다. - 잘못된 토큰")
+    @Test
+    void coachGetProfile_invalidToken() throws Exception {
+        //given
+        String token = "나 잘못된 토큰.";
+
+        ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/profile")
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
+        //when, then
+        perform.andExpectAll(
+                status().isUnauthorized(),
+                jsonPath("message").value("유효하지 않은 토큰입니다.")
+        );
     }
 }
