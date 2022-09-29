@@ -18,7 +18,7 @@ public class Scheduler {
     private final ReservationService reservationService;
     private final AlarmService alarmService;
 
-    @Scheduled(cron = "0 0/30 10-18 * * *")
+    @Scheduled(cron = "0 0/30 10-22 * * *")
     public void updateReservationStatusToInProgress() {
         log.info("{}, 승인된 예약을 진행중인 예약으로 변경하는 스케쥴러 실행", LocalDateTime.now());
         reservationService.updateReservationStatusToInProgress();
