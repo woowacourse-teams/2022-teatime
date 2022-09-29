@@ -10,7 +10,6 @@ import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES } from '@constants/index';
-import { editCoachNickName } from '@api/coach';
 import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
 
@@ -40,9 +39,7 @@ const Header = () => {
       if (nickName.trim() === '') throw new Error('닉네임을 작성해 주세요!');
       if (nickName.length > 20) throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
 
-      userData?.role === 'COACH'
-        ? await editCoachNickName(nickName)
-        : await editCrewNickName(nickName);
+      await editCrewNickName(nickName);
       dispatch({ type: 'EDIT_USER', name: nickName });
       showSnackbar({ message: '변경되었습니다. ✅' });
       closeModal();
