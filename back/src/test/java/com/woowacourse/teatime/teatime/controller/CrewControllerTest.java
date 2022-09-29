@@ -57,64 +57,62 @@ class CrewControllerTest extends ControllerTestSupporter {
         );
     }
 
-    @DisplayName("코치가 크루의 면담 목록(히스토리) 조회에 성공한다.")
-    @Test
-    void coachFindCrewReservations() throws Exception {
-        //given
-        String token = "나 코치다";
-        코치의_토큰을_검증한다(token);
+//    @DisplayName("코치가 크루의 면담 목록(히스토리) 조회에 성공한다.")
+//    @Test
+//    void coachFindCrewReservations() throws Exception {
+//        //given
+//        String token = "나 코치다";
+//        코치의_토큰을_검증한다(token);
+//
+//        //when
+//        ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations")
+//                        .header("Authorization", "Bearer " + token))
+//                .andDo(print());
+//
+//        //then
+//        perform.andExpect(status().isOk());
+//    }
 
-        //when
-        ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations")
-                        .header("Authorization", "Bearer " + token))
-                .andDo(print());
+//    @DisplayName("코치가 크루의 면담 목록(히스토리) 조회에 실패한다. -  존재하지 않는 크루 아이디")
+//    @Test
+//    void coachFindCrewReservations_notFoundCrewId() throws Exception {
+//        //given
+//        String token = "나 코치다";
+//        코치의_토큰을_검증한다(token);
+//
+//        doThrow(new NotFoundCrewException()).when(reservationService)
+//                .findCrewHistoryByCoach(anyLong());
+//
+//        //when
+//        ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations")
+//                        .header("Authorization", "Bearer " + token))
+//                .andDo(print());
+//
+//        //then
+//        perform.andExpectAll(
+//                status().isNotFound(),
+//                jsonPath("message").value("존재하지 않는 크루입니다.")
+//        );
+//
+//        //docs
+//        perform.andDo(document("find-crew-sheets-notFoundCrew"));
+//    }
 
-        //then
-        perform.andExpect(status().isOk());
-    }
-
-    @DisplayName("코치가 크루의 면담 목록(히스토리) 조회에 실패한다. -  존재하지 않는 크루 아이디")
-    @Test
-    void coachFindCrewReservations_notFoundCrewId() throws Exception {
-        //given
-        String token = "나 코치다";
-        코치의_토큰을_검증한다(token);
-
-        doThrow(new NotFoundCrewException()).when(reservationService)
-                .findCrewHistoryByCoach(anyLong());
-
-        //when
-        ResultActions perform = mockMvc.perform(get("/api/v2/crews/1/reservations")
-                        .header("Authorization", "Bearer " + token))
-                .andDo(print());
-
-        //then
-        perform.andExpectAll(
-                status().isNotFound(),
-                jsonPath("message").value("존재하지 않는 크루입니다.")
-        );
-
-        //docs
-        perform.andDo(document("find-crew-sheets-notFoundCrew"));
-
-    }
-
-
-    @DisplayName("코치가 크루의 면담 목록(히스토리) 조회에 실패한다. - 잘못된 크루 아이디(숫자가 아닌 문자)")
-    @Test
-    void coachFindCrewReservations_invalidCrewId() throws Exception {
-        //given
-        String token = "나 코치다";
-        코치의_토큰을_검증한다(token);
-
-        //when
-        ResultActions perform = mockMvc.perform(get("/api/v2/crews/a/reservations")
-                        .header("Authorization", "Bearer " + token))
-                .andDo(print());
-
-        //then
-        perform.andExpect(status().isBadRequest());
-    }
+//    @DisplayName("코치가 크루의 면담 목록(히스토리) 조회에 실패한다. - 잘못된 크루 아이디(숫자가 아닌 문자)")
+//    @Test
+//    void coachFindCrewReservations_invalidCrewId() throws Exception {
+//        //given
+//        String token = "나 코치다";
+//        코치의_토큰을_검증한다(token);
+//
+//        //when
+//        ResultActions perform = mockMvc.perform(get("/api/v2/crews/a/reservations")
+//                        .header("Authorization", "Bearer " + token))
+//                .andDo(print());
+//
+//        //then
+//        perform.andExpect(status().isBadRequest());
+//    }
 
     @DisplayName("크루가 자신의 면담 시트 목록 조회에 성공한다.")
     @Test
