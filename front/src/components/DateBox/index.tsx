@@ -35,7 +35,7 @@ const DateBox = ({
       hasDate={!!date}
       isSelected={!!isSelected}
       isCoach={isCoach}
-      isWeekend={isWeekend}
+      // isWeekend={isWeekend}
       isPastDay={isPastDay}
       onClick={onClick}
     >
