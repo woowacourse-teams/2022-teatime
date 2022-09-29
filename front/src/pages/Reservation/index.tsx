@@ -80,7 +80,7 @@ const Reservation = () => {
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
-    if (isWeekend) return;
+    // if (isWeekend) return;
 
     openTimeList();
     selectDaySchedule(day);

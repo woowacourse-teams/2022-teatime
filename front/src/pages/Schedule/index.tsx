@@ -31,6 +31,14 @@ const timeArray = [
   '16:30',
   '17:00',
   '17:30',
+  '18:00',
+  '18:30',
+  '19:00',
+  '19:30',
+  '20:00',
+  '20:30',
+  '21:00',
+  '21:30',
 ];
 
 const getAllTime = (date: string) => {
@@ -139,7 +147,7 @@ const Schedule = () => {
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
-    if (isWeekend) return;
+    // if (isWeekend) return;
 
     openTimeList();
     selectDaySchedule(day);
