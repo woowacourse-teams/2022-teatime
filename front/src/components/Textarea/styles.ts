@@ -9,9 +9,9 @@ const Label = styled.label`
   color: ${({ theme }) => theme.colors.BLUE_800};
 `;
 
-const Textarea = styled.textarea<{ isFocus: boolean; isView: boolean }>`
+const Textarea = styled.textarea<{ isFocus: boolean; isReadOnly: boolean }>`
   width: 100%;
-  height: ${({ isView }) => (isView ? '180px' : '92px')};
+  height: ${({ isReadOnly }) => (isReadOnly ? '180px' : '92px')};
   margin-top: 12px;
   padding: 10px;
   border: 1px solid
@@ -20,7 +20,7 @@ const Textarea = styled.textarea<{ isFocus: boolean; isView: boolean }>`
   font-size: 15px;
   line-height: 19px;
   font-family: none;
-  resize: ${({ isView }) => (isView ? 'vertical' : 'none')};
+  resize: ${({ isReadOnly }) => (isReadOnly ? 'vertical' : 'none')};
   ::-webkit-resizer {
     border-top: 50px solid transparent;
     border-bottom: 50px solid ${({ theme }) => theme.colors.BLUE_700};

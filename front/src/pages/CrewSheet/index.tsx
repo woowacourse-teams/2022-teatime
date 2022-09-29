@@ -62,7 +62,7 @@ const CrewSheet = () => {
         title="면담 내용 작성"
         sheets={sheets}
         onSubmit={handleSubmit}
-        isView={status === 'IN_PROGRESS' || status === 'DONE' || sheetStatus === 'SUBMITTED'}
+        isReadOnly={status === 'IN_PROGRESS' || status === 'DONE' || sheetStatus === 'SUBMITTED'}
       />
       <BackButton />
     </Frame>
