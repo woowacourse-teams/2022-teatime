@@ -112,26 +112,6 @@ class ReservationRepositoryTest {
         assertThat(approvedReservations).hasSize(1);
     }
 
-    @DisplayName("해당 시간대 사이의 조건에 맞는 모든 면담을 조회한다. - 면담 상태 : APPROVED, 시트 상태 : WRITING")
-    @Test
-    void findAllShouldBeCanceled() {
-        // given
-        LocalDateTime firstTime = DomainFixture.DATE_TIME;
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, firstTime.plusHours(1)));
-        Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
-        Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
-
-        reservation1.confirm();
-        reservation2.confirm();
-
-        // when
-        List<Reservation> reservations
-                = reservationRepository.findAllShouldBeCanceled(firstTime, firstTime.plusDays(1));
-
-        // then
-        assertThat(reservations).hasSize(2);
-    }
-
     @DisplayName("코치에 해당하는 완료 상태의 면담 목록을 조회한다.")
     @Test
     void findAllByCoachIdAndStatus() {

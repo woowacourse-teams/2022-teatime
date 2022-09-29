@@ -53,12 +53,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             + "ON c.id = :coachId "
             + "AND r.reservationStatus = :status")
     List<Reservation> findAllByCoachIdAndStatus(Long coachId, ReservationStatus status);
-
-    @Query("SELECT r FROM Reservation AS r "
-            + "INNER JOIN r.schedule AS s "
-            + "WHERE r.reservationStatus = 'APPROVED' "
-            + "AND r.sheetStatus = 'WRITING' "
-            + "AND s.localDateTime >= :startTime "
-            + "AND s.localDateTime < :endTime")
-    List<Reservation> findAllShouldBeCanceled(LocalDateTime startTime, LocalDateTime endTime);
 }

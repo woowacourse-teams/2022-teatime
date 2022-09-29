@@ -37,7 +37,6 @@ import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -234,20 +233,6 @@ public class ReservationService {
     private void updateStartedReservationToInProgress(Reservation reservation) {
         if (reservation.isBeforeFromNow()) {
             reservation.updateReservationStatusToInProgress();
-        }
-    }
-
-    public void cancelReservationNotSubmitted() {
-        LocalDate today = LocalDateTime.now().toLocalDate();
-        LocalDateTime firstTime = Date.findFirstTime(today);
-        LocalDateTime lastTime = Date.findLastTime(today);
-
-        List<Reservation> reservations
-                = reservationRepository.findAllShouldBeCanceled(firstTime, lastTime);
-
-        for (Reservation reservation : reservations) {
-            cancelReservation(reservation, Role.COACH);
-            sendAlarm(reservation.getCrew(), reservation.getSchedule(), AlarmTitle.CANCEL);
         }
     }
 
