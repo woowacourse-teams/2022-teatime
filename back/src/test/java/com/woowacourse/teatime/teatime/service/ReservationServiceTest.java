@@ -420,28 +420,6 @@ class ReservationServiceTest {
         assertThat(actual).isEqualTo(ReservationStatus.IN_PROGRESS);
     }
 
-    @DisplayName("승인된 면담 중 전날까지 작성하지 않은 면담을 모두 취소한다.")
-    @Test
-    void cancelReservationNotSubmitted() {
-        // given
-        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, DATE_TIME.plusHours(1)));
-        Reservation reservation1 = reservationRepository.save(new Reservation(schedule1, crew));
-        Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
-        reservation1.confirm();
-        reservation2.confirm();
-        reservation1.updateSheetStatusToSubmitted();
-
-        // when
-        reservationService.cancelReservationNotSubmitted();
-
-        // then
-        assertAll(
-                () -> assertThat(reservationRepository.findAllByCoachIdAndStatus(coach.getId(), APPROVED)).hasSize(1),
-                () -> assertThat(canceledReservationRepository.findAllByCoachId(coach.getId())).hasSize(1)
-        );
-    }
-
     @DisplayName("코치가 자신에 해당되는 취소, 완료 상태의 면담 예약 목록을 조회한다.")
     @Test
     void findOwnHistoryByCoach() {

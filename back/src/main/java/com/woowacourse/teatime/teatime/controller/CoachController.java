@@ -5,6 +5,7 @@ import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachProfileResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservationsResponse;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
@@ -52,5 +53,11 @@ public class CoachController {
             @CoachAuthenticationPrincipal Long coachId, @Valid @RequestBody CoachUpdateProfileRequest request) {
         coachService.updateProfile(coachId, request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/me/profile")
+    public ResponseEntity<CoachProfileResponse> getProfile(@CoachAuthenticationPrincipal Long coachId) {
+        CoachProfileResponse response = coachService.getProfile(coachId);
+        return ResponseEntity.ok(response);
     }
 }

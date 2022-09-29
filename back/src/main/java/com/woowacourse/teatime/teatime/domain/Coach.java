@@ -67,6 +67,12 @@ public class Coach {
         }
     }
 
+    public void setImage(String image) {
+        if (!image.equals(this.image)) {
+            this.image = image;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
