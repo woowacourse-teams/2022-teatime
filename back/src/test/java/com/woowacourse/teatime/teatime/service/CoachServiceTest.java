@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachProfileResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import java.util.List;
@@ -55,6 +56,23 @@ public class CoachServiceTest {
         assertAll(
                 () -> assertThat(coach.getName()).isEqualTo(expectedName),
                 () -> assertThat(coach.getDescription()).isEqualTo(expectedDescription)
+        );
+    }
+
+    @DisplayName("자신의 프로필을 조회한다.")
+    @Test
+    void getProfile() {
+        // given
+        Coach coach = coachRepository.save(getCoachJason());
+
+        // when
+        CoachProfileResponse response = coachService.getProfile(coach.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.getImage()).isEqualTo("image"),
+                () -> assertThat(response.getName()).isEqualTo("제이슨"),
+                () -> assertThat(response.getDescription()).isEqualTo("i am legend")
         );
     }
 }
