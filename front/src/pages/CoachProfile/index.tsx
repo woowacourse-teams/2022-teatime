@@ -6,7 +6,7 @@ import { CoachData } from '@typings/domain';
 import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { ROUTES } from '@constants/index';
+import { ROUTES, MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
 
 const CoachProfile = () => {
@@ -22,6 +22,16 @@ const CoachProfile = () => {
   const { image, name, description } = coachProfile;
 
   const handleChangeProfile = (e: React.ChangeEvent<HTMLFormElement>) => {
+    if (e.target.name === 'name' && e.target.value.length > MAX_LENGTH.NAME) {
+      e.target.value = e.target.value.substring(0, MAX_LENGTH.NAME);
+      return alert('길이는 20 이하로 작성해 주세요!');
+    }
+
+    if (e.target.name === 'description' && e.target.value.length > MAX_LENGTH.DESCRIPTION) {
+      e.target.value = e.target.value.substring(0, MAX_LENGTH.DESCRIPTION);
+      return alert('길이는 60 이하로 작성해 주세요!');
+    }
+
     setCoachProfile((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
