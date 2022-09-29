@@ -9,6 +9,7 @@ import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.PayloadDto;
 import com.woowacourse.teatime.auth.infrastructure.PayloadExtractor;
 import com.woowacourse.teatime.auth.service.AuthService;
+import com.woowacourse.teatime.teatime.aspect.QueryCountInspector;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
@@ -32,6 +33,9 @@ public class ControllerTestSupporter extends RestDocsSupporter {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    protected QueryCountInspector queryCountInspector;
 
     @MockBean
     private PayloadExtractor payloadExtractor;

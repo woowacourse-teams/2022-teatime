@@ -46,7 +46,7 @@ public class QuestionServiceTest {
         List<SheetQuestionUpdateDto> defaultQuestions =
                 List.of(DEFAULT_SHEET_QUESTION_1, DEFAULT_SHEET_QUESTION_2, DEFAULT_SHEET_QUESTION_3);
         questionService.updateQuestions(coach.getId(), defaultQuestions);
-        List<String> contents = questionRepository.findByCoachId(coach.getId()).stream()
+        List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
 
@@ -68,7 +68,7 @@ public class QuestionServiceTest {
                 List.of(CUSTOM_SHEET_QUESTION_1, DEFAULT_SHEET_QUESTION_2, CUSTOM_SHEET_QUESTION_3);
         questionService.updateQuestions(coach.getId(), newQuestions);
 
-        List<String> contents = questionRepository.findByCoachId(coach.getId()).stream()
+        List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
 

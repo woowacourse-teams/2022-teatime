@@ -46,7 +46,7 @@ class SheetRepositoryTest {
         sheetRepository.save(new Sheet(reservation, 2, "별자리는 뭔가요?"));
         sheetRepository.save(new Sheet(reservation, 3, "핸드폰 기종은요?"));
 
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservation.getId());
 
         assertThat(sheets).hasSize(3);
     }

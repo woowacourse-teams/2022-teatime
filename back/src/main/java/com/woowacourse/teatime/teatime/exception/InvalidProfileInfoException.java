@@ -4,7 +4,7 @@ import com.woowacourse.teatime.exception.BadRequestException;
 
 public class InvalidProfileInfoException extends BadRequestException {
 
-    private static final String ERROR_MESSAGE = "유효하지 않은 프로필 정보입니다.";
+    private static final String ERROR_MESSAGE = "팔요한 정보를 모두 입력해 주세요.";
 
     public InvalidProfileInfoException() {
         super(ERROR_MESSAGE);

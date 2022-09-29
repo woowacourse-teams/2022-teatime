@@ -34,6 +34,7 @@ const Flow = keyframes`
 const Container = styled.div`
   height: calc(100vh - 50px);
   width: 100%;
+  background-color: #bfdbfe;
 `;
 
 const MainSection = styled.section`

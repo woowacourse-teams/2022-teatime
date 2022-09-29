@@ -12,36 +12,53 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findById(Long id);
 
-    List<Reservation> findByCrewIdOrderByScheduleLocalDateTimeDesc(Long crewId);
-
-    List<Reservation> findByScheduleCoachIdAndReservationStatusNotIn(Long coachId, List<ReservationStatus> statuses);
+    @Query("SELECT r FROM Reservation AS r "
+            + "INNER JOIN r.crew AS c "
+            + "ON c.id = :crewId "
+            + "INNER JOIN r.schedule AS s "
+            + "ORDER BY s.localDateTime DESC")
+    List<Reservation> findAllByCrewIdLatestOrder(Long crewId);
 
     @Query("SELECT r FROM Reservation AS r "
-            + "WHERE r.schedule.coach.id = :coachId "
-            + "AND r.reservationStatus NOT IN :status")
+            + "INNER JOIN r.schedule AS s "
+            + "INNER JOIN s.coach AS c "
+            + "ON c.id = :coachId "
+            + "WHERE r.reservationStatus NOT IN :status")
     List<Reservation> findAllByCoachIdAndStatusNot(Long coachId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
-            + "WHERE r.crew.id = :crewId "
-            + "AND r.reservationStatus = :status "
-            + "ORDER BY r.schedule.localDateTime DESC")
-    List<Reservation> findByCrewIdAndReservationStatus(Long crewId,
-                                                       ReservationStatus status);
+            + "INNER JOIN r.crew AS c "
+            + "ON c.id = :crewId "
+            + "INNER JOIN r.schedule AS s "
+            + "WHERE r.reservationStatus = :status "
+            + "ORDER BY s.localDateTime DESC")
+    List<Reservation> findAllByCrewIdAndReservationStatus(Long crewId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
+            + "INNER JOIN r.schedule AS s "
             + "WHERE r.reservationStatus = 'APPROVED' "
-            + "AND r.schedule.localDateTime < :endTime")
+            + "AND s.localDateTime < :endTime")
     List<Reservation> findAllApprovedReservationsBefore(LocalDateTime endTime);
 
     @Query("SELECT r FROM Reservation AS r "
-            + "WHERE r.schedule.coach.id = :coachId "
+            + "INNER JOIN r.schedule AS s "
+            + "WHERE r.reservationStatus = 'APPROVED' "
+            + "AND s.localDateTime >= :startTime "
+            + "AND s.localDateTime < :endTime")
+    List<Reservation> findAllApprovedReservationsBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+    @Query("SELECT r FROM Reservation AS r "
+            + "INNER JOIN r.schedule AS s "
+            + "INNER JOIN s.coach AS c "
+            + "ON c.id = :coachId "
             + "AND r.reservationStatus = :status")
     List<Reservation> findAllByCoachIdAndStatus(Long coachId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
+            + "INNER JOIN r.schedule AS s "
             + "WHERE r.reservationStatus = 'APPROVED' "
             + "AND r.sheetStatus = 'WRITING' "
-            + "AND r.schedule.localDateTime >= :startTime "
-            + "AND r.schedule.localDateTime < :endTime")
+            + "AND s.localDateTime >= :startTime "
+            + "AND s.localDateTime < :endTime")
     List<Reservation> findAllShouldBeCanceled(LocalDateTime startTime, LocalDateTime endTime);
 }

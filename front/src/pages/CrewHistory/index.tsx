@@ -72,9 +72,8 @@ const CrewHistory = () => {
     setHistoryList(copyHistoryList);
   };
 
-  const handleShowSheet = (reservationId: number, status: string) => {
-    const isCanceled = status === 'CANCELED';
-    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`, { state: isCanceled });
+  const handleShowSheet = (reservationId: number, status: string) => () => {
+    navigate(`${ROUTES.CREW_SHEET}/${reservationId}`, { state: status });
   };
 
   const handleCancelReservation = async (reservationId: number) => {
@@ -134,9 +133,8 @@ const CrewHistory = () => {
                 statusName={statusName}
                 color={color}
                 bgColor={backgroundColor}
-                onClickSheet={handleShowSheet}
+                onClickSheet={handleShowSheet(reservationId, status)}
                 onClickCancel={handleCancelReservation}
-                isCrew
               />
             );
           })}

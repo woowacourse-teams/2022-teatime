@@ -8,7 +8,8 @@ const Container = styled.div`
   height: calc(100vh - 150px);
   padding: 30px 50px;
   margin: 50px auto;
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background-color: ${({ theme }) => theme.colors.WHITE};
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     width: 100%;

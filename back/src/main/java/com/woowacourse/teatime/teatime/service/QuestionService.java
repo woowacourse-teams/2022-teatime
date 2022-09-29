@@ -24,7 +24,7 @@ public class QuestionService {
     public void updateQuestions(Long coachId, List<SheetQuestionUpdateDto> request) {
         Coach coach = findCoach(coachId);
 
-        List<Question> savedQuestions = questionRepository.findByCoachId(coach.getId());
+        List<Question> savedQuestions = questionRepository.findAllByCoachId(coach.getId());
         List<Question> requestQuestions = request.stream()
                 .map(question -> new Question(coach, question.getQuestionNumber(), question.getQuestionContent()))
                 .collect(Collectors.toList());

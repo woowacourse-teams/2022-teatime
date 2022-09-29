@@ -55,7 +55,7 @@ public class CanceledSheetRepositoryTest {
 
     @Test
     void findByOriginId() {
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservation.getId());
         CanceledReservation canceledReservation = CanceledReservation.from(reservation);
         canceledReservationRepository.save(canceledReservation);
 
@@ -63,6 +63,6 @@ public class CanceledSheetRepositoryTest {
             canceledSheetRepository.save(CanceledSheet.from(canceledReservation, sheet));
         }
 
-        assertThat(canceledSheetRepository.findByOriginId(reservation.getId())).hasSize(3);
+        assertThat(canceledSheetRepository.findAllByOriginId(reservation.getId())).hasSize(3);
     }
 }

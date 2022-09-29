@@ -149,7 +149,7 @@ class CoachAcceptanceTest extends AcceptanceTestSupporter {
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + coachToken)
-                .body(new CoachUpdateProfileRequest("재성이형"))
+                .body(new CoachUpdateProfileRequest("재성이형", "안녕하세요"))
                 .filter(document("coach-update-profile"))
                 .when().put("/api/v2/coaches/me/profile")
                 .then().log().all()

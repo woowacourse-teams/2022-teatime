@@ -9,6 +9,7 @@ const HeaderContainer = styled.div`
   height: 50px;
   padding: 0 10%;
   box-shadow: 0px 3px 4px ${({ theme }) => theme.colors.GRAY_300};
+  background-color: ${({ theme }) => theme.colors.WHITE};
 
   h1 {
     font-size: 18px;

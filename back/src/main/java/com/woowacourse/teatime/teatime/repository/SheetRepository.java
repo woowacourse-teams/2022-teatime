@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SheetRepository extends JpaRepository<Sheet, Long> {
 
-    List<Sheet> findByReservationIdOrderByNumber(Long reservationId);
+    List<Sheet> findAllByReservationIdOrderByNumber(Long reservationId);
 }
