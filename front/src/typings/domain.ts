@@ -13,6 +13,12 @@ interface UserInfo {
   token: string;
 }
 
+interface CoachData {
+  image: string;
+  name: string;
+  description: string;
+}
+
 interface Crew {
   reservationId: number;
   crewId: number;
@@ -101,6 +107,7 @@ type CrewListMap = Record<string, Crew[]>;
 
 export {
   UserInfo,
+  CoachData,
   UserRole,
   Crew,
   Coach,
