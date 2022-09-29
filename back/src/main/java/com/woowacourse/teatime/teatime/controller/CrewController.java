@@ -41,13 +41,13 @@ public class CrewController {
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping("/{crewId}/reservations")
-    public ResponseEntity<List<CoachFindCrewHistoryResponse>> findCrewReservations(
-            @CoachAuthenticationPrincipal Long coachId,
-            @PathVariable @NotNull Long crewId) {
-        List<CoachFindCrewHistoryResponse> responses = reservationService.findCrewHistoryByCoach(crewId);
-        return ResponseEntity.ok(responses);
-    }
+//    @GetMapping("/{crewId}/reservations")
+//    public ResponseEntity<List<CoachFindCrewHistoryResponse>> findCrewReservations(
+//            @CoachAuthenticationPrincipal Long coachId,
+//            @PathVariable @NotNull Long crewId) {
+//        List<CoachFindCrewHistoryResponse> responses = reservationService.findCrewHistoryByCoach(crewId);
+//        return ResponseEntity.ok(responses);
+//    }
 
     @GetMapping("/me/reservations/{reservationId}")
     public ResponseEntity<CrewFindOwnSheetResponse> findOwnSheets(@CrewAuthenticationPrincipal Long crewId,

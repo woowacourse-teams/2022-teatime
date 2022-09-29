@@ -37,16 +37,22 @@ public class Crew {
         this.image = image;
     }
 
+    public void modifyName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new InvalidProfileInfoException();
+        }
+        this.name = name.trim();
+    }
+
     public void setSlackId(String slackId) {
         if (!slackId.equals(this.slackId)) {
             this.slackId = slackId;
         }
     }
 
-    public void modifyName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidProfileInfoException();
+    public void setImage(String image) {
+        if (!image.equals(this.image)) {
+            this.image = image;
         }
-        this.name = name.trim();
     }
 }

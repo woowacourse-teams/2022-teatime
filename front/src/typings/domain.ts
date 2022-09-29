@@ -12,6 +12,7 @@ interface UserInfo {
   role: UserRole;
   token: string;
 }
+
 interface Crew {
   reservationId: number;
   crewId: number;
@@ -20,6 +21,7 @@ interface Crew {
   dateTime: string;
   sheetStatus?: SheetStatus;
 }
+
 interface Coach {
   id: number;
   name: string;
@@ -39,7 +41,8 @@ interface Reservation {
   dateTime: string;
   coachName: string;
   coachImage: string;
-  status: string;
+  sheetStatus: SheetStatus;
+  reservationStatus: CrewHistoryStatus;
   sheets: Sheets[];
 }
 

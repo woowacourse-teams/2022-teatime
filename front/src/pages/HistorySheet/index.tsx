@@ -60,7 +60,7 @@ const HistorySheet = () => {
           <Sheet
             title={`${crewName}의 면담 내용`}
             sheets={historyList[historyIndex].sheets}
-            isView
+            isReadOnly
           />
         </>
       )}

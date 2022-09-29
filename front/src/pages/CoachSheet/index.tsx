@@ -69,7 +69,7 @@ const CoachSheet = () => {
         />
       </S.InfoContainer>
       <Styled.SheetContainer>
-        <Sheet title="작성한 면담 내용" sheets={reservationInfo.sheets} isView />
+        <Sheet title="작성한 면담 내용" sheets={reservationInfo.sheets} isReadOnly />
         {hasCompleteButton && (
           <Styled.CompleteButtonWrapper>
             <button onClick={handleCompleteReservation}>면담 완료하기</button>

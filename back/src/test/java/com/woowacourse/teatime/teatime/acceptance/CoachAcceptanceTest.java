@@ -158,4 +158,18 @@ class CoachAcceptanceTest extends AcceptanceTestSupporter {
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
+
+    @DisplayName("코치가 자신의 프로필을 조회한다.")
+    @Test
+    void getProfile() {
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + coachToken)
+                .filter(document("coach-get-profile"))
+                .when().get("/api/v2/coaches/me/profile")
+                .then().log().all()
+                .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
 }
