@@ -15,32 +15,20 @@ const Container = styled.div`
   }
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-
-  button {
-    padding: 10px 20px;
-    border-radius: 16px;
-    margin-right: 10px;
-    cursor: pointer;
-
-    :hover {
-      opacity: 0.7;
-    }
-  }
-`;
-
-const FirstButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.WHITE};
-  border: 1px solid ${({ theme }) => theme.colors.BLUE_600};
-  color: ${({ theme }) => theme.colors.BLUE_600};
-`;
-
-const SecondButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.BLUE_600};
+const EditButton = styled.button`
+  width: 100%;
+  height: 40px;
+  border-radius: 18px;
+  margin-right: 10px;
+  background-color: ${({ theme }) => theme.colors.GREEN_700};
   color: ${({ theme }) => theme.colors.WHITE};
   border: none;
+  font-size: 16px;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -70,4 +58,4 @@ const InputWrapper = styled.div`
   }
 `;
 
-export { Container, ButtonWrapper, FirstButton, SecondButton, InputWrapper };
+export { Container, EditButton, InputWrapper };
