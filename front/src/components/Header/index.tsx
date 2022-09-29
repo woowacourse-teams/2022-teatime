@@ -9,7 +9,7 @@ import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { ROUTES } from '@constants/index';
+import { ROUTES, MAX_LENGTH } from '@constants/index';
 import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
 
@@ -37,7 +37,8 @@ const Header = () => {
   const handleModifyNickname = async () => {
     try {
       if (nickName.trim() === '') throw new Error('닉네임을 작성해 주세요!');
-      if (nickName.length > 20) throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
+      if (nickName.length > MAX_LENGTH.NAME)
+        throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
 
       await editCrewNickName(nickName);
       dispatch({ type: 'EDIT_USER', name: nickName });
