@@ -13,7 +13,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "INNER JOIN s.coach AS c "
             + "ON c.id = :coachId "
             + "WHERE s.localDateTime >= :start "
-            + "AND s.localDateTime < :end")
+            + "AND s.localDateTime < :end "
+            + "ORDER BY s.localDateTime")
     List<Schedule> findAllByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
 
     @Modifying

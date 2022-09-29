@@ -3,6 +3,8 @@ package com.woowacourse.teatime.teatime.service;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +75,36 @@ class ScheduleServiceTest {
         List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
 
         assertThat(responses).hasSize(1);
+    }
+
+    @DisplayName("코치의 스케쥴 목록 조회할 때 스케쥴이 시간 순으로 정렬된다.")
+    @Test
+    void find_order() {
+        //given
+        Coach coach = coachRepository.save(getCoachJason());
+        Crew crew = crewRepository.save(getCrew());
+        LocalDate tomorrow = NOW.plusDays(1);
+        Schedule 스케쥴1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(tomorrow, LocalTime.of(10, 30))));
+        Schedule 스케쥴2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(tomorrow, LocalTime.of(11, 0))));
+        Schedule 예약될_스케쥴 = scheduleRepository
+                .save(new Schedule(coach, LocalDateTime.of(tomorrow, LocalTime.of(12, 0))));
+        reservationService.save(crew.getId(), new ReservationReserveRequest(예약될_스케쥴.getId()));
+
+        //when
+        ScheduleFindRequest REQUEST = new ScheduleFindRequest(tomorrow.getYear(), tomorrow.getMonthValue());
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
+        ScheduleFindResponse response = responses.get(0);
+        List<ScheduleDto> schedules = response.getSchedules();
+        List<LocalDateTime> list = schedules.stream()
+                .map(ScheduleDto::getDateTime)
+                .collect(Collectors.toList());
+
+        //then
+        assertThat(list).containsExactly(
+                스케쥴1.getLocalDateTime(),
+                스케쥴2.getLocalDateTime(),
+                예약될_스케쥴.getLocalDateTime()
+        );
     }
 
     @DisplayName("코치 아이디가 존재하지 않는 다면 예외를 발생시킨다,")
