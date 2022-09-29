@@ -16,9 +16,11 @@ import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.service.QuestionService;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private static final String COACH_EMAIL_DOMAIN = "woowahan";
-    private static final String ADMIN_EMAIL = "teatime";
     private static final String DEFAULT_QUESTION_1 = "이번 면담을 통해 논의하고 싶은 내용";
     private static final String DEFAULT_QUESTION_2 = "최근에 자신이 긍정적으로 보는 시도와 변화";
     private static final String DEFAULT_QUESTION_3 = "이번 면담을 통해 생기기를 원하는 변화";
@@ -38,6 +39,9 @@ public class AuthService {
     private final CoachRepository coachRepository;
     private final QuestionService questionService;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Value("${coaches}")
+    private List<String> emails;
 
     public LoginResponse login(LoginRequest loginRequest) {
         String code = loginRequest.getCode();
@@ -50,10 +54,17 @@ public class AuthService {
         String email = userInfo.getEmail();
         String emailDomain = StringUtils.substringBetween(email, "@", ".");
 
-        if (COACH_EMAIL_DOMAIN.equals(emailDomain) || email.contains(ADMIN_EMAIL)) {
+        List<String> emails = getEmails();
+        if (COACH_EMAIL_DOMAIN.equals(emailDomain) || emails.contains(email)) {
             return getCoachLoginResponse(userInfo);
         }
         return getCrewLoginResponse(userInfo);
+    }
+
+    private List<String> getEmails() {
+        return emails.stream()
+                .map(String::trim)
+                .collect(Collectors.toList());
     }
 
     private LoginResponse getCoachLoginResponse(UserInfoDto userInfo) {
