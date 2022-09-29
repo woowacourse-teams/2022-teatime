@@ -9,8 +9,7 @@ import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { ROUTES } from '@constants/index';
-import { editCoachNickName } from '@api/coach';
+import { ROUTES, MAX_LENGTH } from '@constants/index';
 import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
 
@@ -38,11 +37,10 @@ const Header = () => {
   const handleModifyNickname = async () => {
     try {
       if (nickName.trim() === '') throw new Error('닉네임을 작성해 주세요!');
-      if (nickName.length > 20) throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
+      if (nickName.length > MAX_LENGTH.NAME)
+        throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
 
-      userData?.role === 'COACH'
-        ? await editCoachNickName(nickName)
-        : await editCrewNickName(nickName);
+      await editCrewNickName(nickName);
       dispatch({ type: 'EDIT_USER', name: nickName });
       showSnackbar({ message: '변경되었습니다. ✅' });
       closeModal();
@@ -87,14 +85,17 @@ const Header = () => {
               <Link to={ROUTES.SCHEDULE}>
                 <li>스케줄 관리</li>
               </Link>
+              <Link to={ROUTES.COACH_PROFILE}>
+                <li>프로필 수정</li>
+              </Link>
             </Conditional>
 
             <Conditional condition={userData.role === 'CREW'}>
               <Link to={ROUTES.CREW_HISTORY}>
                 <li>히스토리</li>
               </Link>
+              <li onClick={handleOpenModal}>닉네임 수정</li>
             </Conditional>
-            <li onClick={handleOpenModal}>닉네임 수정</li>
             <li onClick={handleLogout}>로그아웃</li>
           </Dropdown>
         </S.ProfileContainer>

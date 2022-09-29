@@ -20,12 +20,12 @@ public class ScheduleFindResponse {
 
     public static List<ScheduleFindResponse> from(List<Schedule> schedules) {
         List<Integer> days = findDays(schedules);
-        List<ScheduleFindResponse> scheduleFindRespons = new ArrayList<>();
+        List<ScheduleFindResponse> scheduleFindResponse = new ArrayList<>();
         for (Integer day : days) {
             List<Schedule> scheduleByDay = findByDay(day, schedules);
-            scheduleFindRespons.add(ScheduleFindResponse.of(day, scheduleByDay));
+            scheduleFindResponse.add(ScheduleFindResponse.of(day, scheduleByDay));
         }
-        return scheduleFindRespons;
+        return scheduleFindResponse;
     }
 
     private static List<Integer> findDays(List<Schedule> schedules) {

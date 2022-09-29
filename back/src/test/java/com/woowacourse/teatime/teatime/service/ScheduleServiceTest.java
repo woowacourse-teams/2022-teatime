@@ -3,6 +3,8 @@ package com.woowacourse.teatime.teatime.service;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +77,36 @@ class ScheduleServiceTest {
         assertThat(responses).hasSize(1);
     }
 
+    @DisplayName("코치의 스케쥴 목록 조회할 때 스케쥴이 시간 순으로 정렬된다.")
+    @Test
+    void find_order() {
+        //given
+        Coach coach = coachRepository.save(getCoachJason());
+        Crew crew = crewRepository.save(getCrew());
+        LocalDate tomorrow = NOW.plusDays(1);
+        Schedule 스케쥴1 = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(tomorrow, LocalTime.of(10, 30))));
+        Schedule 스케쥴2 = scheduleRepository.save(new Schedule(coach, LocalDateTime.of(tomorrow, LocalTime.of(11, 0))));
+        Schedule 예약될_스케쥴 = scheduleRepository
+                .save(new Schedule(coach, LocalDateTime.of(tomorrow, LocalTime.of(12, 0))));
+        reservationService.save(crew.getId(), new ReservationReserveRequest(예약될_스케쥴.getId()));
+
+        //when
+        ScheduleFindRequest REQUEST = new ScheduleFindRequest(tomorrow.getYear(), tomorrow.getMonthValue());
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), REQUEST);
+        ScheduleFindResponse response = responses.get(0);
+        List<ScheduleDto> schedules = response.getSchedules();
+        List<LocalDateTime> list = schedules.stream()
+                .map(ScheduleDto::getDateTime)
+                .collect(Collectors.toList());
+
+        //then
+        assertThat(list).containsExactly(
+                스케쥴1.getLocalDateTime(),
+                스케쥴2.getLocalDateTime(),
+                예약될_스케쥴.getLocalDateTime()
+        );
+    }
+
     @DisplayName("코치 아이디가 존재하지 않는 다면 예외를 발생시킨다,")
     @Test
     void find_NotExistedCoachException() {
@@ -118,15 +151,19 @@ class ScheduleServiceTest {
     @DisplayName("코치의 스케쥴을 업데이트할 때 해당 날짜에 이미 예약이 존재하면 그 예약을 삭제하지 않는다.")
     @Test
     void update_if_reservation_exist() {
+        // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDateTime reservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 58));
         LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
+
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
+        scheduleRepository.save(new Schedule(coach, notReservedTime));
+
         Crew crew = crewRepository.save(CREW1);
         ReservationReserveRequest reservationReserveRequest = new ReservationReserveRequest(schedule1.getId());
         reservationService.save(crew.getId(), reservationReserveRequest);
-        scheduleRepository.save(new Schedule(coach, notReservedTime));
 
+        // when
         ScheduleUpdateRequest scheduleUpdateRequest
                 = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH,
                 List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2)));
@@ -136,6 +173,7 @@ class ScheduleServiceTest {
                 new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
         List<ScheduleDto> schedules = responses.get(0).getSchedules();
 
+        // then
         assertThat(schedules).hasSize(3);
     }
 }

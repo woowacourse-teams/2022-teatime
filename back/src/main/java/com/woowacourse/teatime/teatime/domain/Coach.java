@@ -11,13 +11,14 @@ import javax.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class Coach {
 
+    public static final String PREFIX_DESCRIPTION = "안녕하세요~ ";
+    public static final String SUFFIX_DESCRIPTION = "입니다:)";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +38,7 @@ public class Coach {
     private String image;
 
     public Coach(String slackId, String name, String email, String image) {
-        this(slackId, name, email, getDescription(name), image);
+        this(slackId, name, email, PREFIX_DESCRIPTION + name + SUFFIX_DESCRIPTION, image);
     }
 
     public Coach(String slackId, String name, String email, String description, String image) {
@@ -48,22 +49,27 @@ public class Coach {
         this.image = image;
     }
 
-    public void modifyProfile(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidProfileInfoException();
-        }
+    public void modifyProfile(String name, String description) {
+        validateProfile(name, description);
         this.name = name.trim();
-        this.description = getDescription(name);
+        this.description = description.trim();
     }
 
-    @NotNull
-    private static String getDescription(String name) {
-        return "안녕하세요~ " + name + "입니다:)";
+    private void validateProfile(String name, String description) {
+        if ((name == null || name.isBlank()) || (description == null || description.isBlank())) {
+            throw new InvalidProfileInfoException();
+        }
     }
 
     public void setSlackId(String slackId) {
         if (!slackId.equals(this.slackId)) {
             this.slackId = slackId;
+        }
+    }
+
+    public void setImage(String image) {
+        if (!image.equals(this.image)) {
+            this.image = image;
         }
     }
 

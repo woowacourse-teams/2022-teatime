@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.service;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.CoachProfileResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
@@ -35,6 +36,12 @@ public class CoachService {
     public void updateProfile(Long coachId, CoachUpdateProfileRequest request) {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        coach.modifyProfile(request.getName());
+        coach.modifyProfile(request.getName(), request.getDescription());
+    }
+
+    public CoachProfileResponse getProfile(Long coachId) {
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+        return new CoachProfileResponse(coach);
     }
 }

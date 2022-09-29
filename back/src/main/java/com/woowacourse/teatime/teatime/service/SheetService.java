@@ -43,7 +43,7 @@ public class SheetService {
     public int save(Long reservationId) {
         Reservation reservation = findReservation(reservationId);
         Coach coach = reservation.getCoach();
-        List<Question> questions = questionRepository.findByCoachId(coach.getId());
+        List<Question> questions = questionRepository.findAllByCoachId(coach.getId());
 
         List<Sheet> sheets = questions.stream()
                 .map(question -> new Sheet(reservation, question.getNumber(), question.getContent()))
@@ -56,14 +56,14 @@ public class SheetService {
     public CrewFindOwnSheetResponse findOwnSheetByCrew(Long crewId, Long reservationId) {
         Reservation reservation = findReservation(reservationId);
         validateAuthorization(crewId, reservation);
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservationId);
         return CrewFindOwnSheetResponse.of(reservation, sheets);
     }
 
     public CrewFindOwnCanceledSheetResponse findOwnCanceledSheetByCrew(Long crewId, Long originReservationId) {
         CanceledReservation reservation = findCanceledReservation(originReservationId);
         validateAuthorization(crewId, reservation);
-        List<CanceledSheet> sheets = canceledSheetRepository.findByOriginId(originReservationId);
+        List<CanceledSheet> sheets = canceledSheetRepository.findAllByOriginId(originReservationId);
         return CrewFindOwnCanceledSheetResponse.of(reservation, sheets);
     }
 
@@ -87,7 +87,7 @@ public class SheetService {
     public CoachFindCrewSheetResponse findCrewSheetByCoach(Long crewId, Long reservationId) {
         validateCrew(crewId);
         Reservation reservation = findReservation(reservationId);
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservationId);
         return CoachFindCrewSheetResponse.of(reservation, sheets);
     }
 
@@ -104,7 +104,7 @@ public class SheetService {
             validateAnswer(sheetDtos);
         }
 
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservationId);
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservationId);
         for (Sheet sheet : sheets) {
             modifyAnswer(sheetDtos, sheet);
         }

@@ -37,7 +37,6 @@ import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,7 +70,7 @@ public class ReservationService {
     private void cancelReservation(Reservation reservation, Role role) {
         CanceledReservation canceledReservation = CanceledReservation.from(reservation);
         CanceledReservation savedCanceledReservation = canceledReservationRepository.save(canceledReservation);
-        List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
+        List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservation.getId());
         List<CanceledSheet> canceledSheets = sheets.stream()
                 .map(sheet -> CanceledSheet.from(savedCanceledReservation, sheet))
                 .collect(Collectors.toList());
@@ -151,7 +150,7 @@ public class ReservationService {
 
     public List<CrewFindOwnHistoryResponse> findOwnHistoryByCrew(Long crewId) {
         validateCrewId(crewId);
-        List<Reservation> reservations = reservationRepository.findByCrewIdOrderByScheduleLocalDateTimeDesc(crewId);
+        List<Reservation> reservations = reservationRepository.findAllByCrewIdLatestOrder(crewId);
         List<CanceledReservation> canceledReservations = canceledReservationRepository.findAllByCrewId(crewId);
         return CrewFindOwnHistoryResponse.of(reservations, canceledReservations);
     }
@@ -189,11 +188,11 @@ public class ReservationService {
     public List<CoachFindCrewHistoryResponse> findCrewHistoryByCoach(Long crewId) {
         validateCrewId(crewId);
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndReservationStatus(crewId, DONE);
+                reservationRepository.findAllByCrewIdAndReservationStatus(crewId, DONE);
 
         List<CoachFindCrewHistoryResponse> response = new ArrayList<>();
         for (Reservation reservation : reservations) {
-            List<Sheet> sheets = sheetRepository.findByReservationIdOrderByNumber(reservation.getId());
+            List<Sheet> sheets = sheetRepository.findAllByReservationIdOrderByNumber(reservation.getId());
             response.add(CoachFindCrewHistoryResponse.from(reservation, sheets));
         }
 
@@ -237,20 +236,6 @@ public class ReservationService {
         }
     }
 
-    public void cancelReservationNotSubmitted() {
-        LocalDate today = LocalDateTime.now().toLocalDate();
-        LocalDateTime firstTime = Date.findFirstTime(today);
-        LocalDateTime lastTime = Date.findLastTime(today);
-
-        List<Reservation> reservations
-                = reservationRepository.findAllShouldBeCanceled(firstTime, lastTime);
-
-        for (Reservation reservation : reservations) {
-            cancelReservation(reservation, Role.COACH);
-            sendAlarm(reservation.getCrew(), reservation.getSchedule(), AlarmTitle.CANCEL);
-        }
-    }
-
     public List<CoachFindOwnHistoryResponse> findOwnHistoryByCoach(Long coachId) {
         validateCoachId(coachId);
         List<Reservation> reservations = reservationRepository.findAllByCoachIdAndStatus(coachId, DONE);
@@ -258,4 +243,3 @@ public class ReservationService {
         return CoachFindOwnHistoryResponse.of(reservations, canceledReservations);
     }
 }
-

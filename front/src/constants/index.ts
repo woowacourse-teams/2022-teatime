@@ -9,6 +9,7 @@ const ROUTES = {
   HISTORY_SHEET: '/history-sheet',
   CREW_HISTORY: '/crew-history',
   COACH_HISTORY: '/coach-history',
+  COACH_PROFILE: '/coach-profile',
   CERTIFICATION: '/certification',
 };
 
@@ -35,7 +36,11 @@ const CACHE = {
 
 const HOUR_MILLISECONDS = 60 * 60 * 1000;
 
-const SHEET_MAX_LENGTH = 2000;
+const MAX_LENGTH = {
+  SHEET: 2000,
+  NAME: 20,
+  DESCRIPTION: 60,
+};
 
 export {
   ROUTES,
@@ -45,5 +50,5 @@ export {
   LOCAL_DB,
   CACHE,
   HOUR_MILLISECONDS,
-  SHEET_MAX_LENGTH,
+  MAX_LENGTH,
 };

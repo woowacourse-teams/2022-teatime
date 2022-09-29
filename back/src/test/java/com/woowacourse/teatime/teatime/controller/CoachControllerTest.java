@@ -141,7 +141,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         코치의_토큰을_검증한다(token);
 
         //when
-        CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨");
+        CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨", "안녕하세요 티타임 코치입니다.");
         ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", request)
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
@@ -150,20 +150,73 @@ class CoachControllerTest extends ControllerTestSupporter {
         perform.andExpect(status().isNoContent());
     }
 
-    @DisplayName("코치가 자신의 유저 네임 수정에 실패한다. - 이름이 공백인 경우 400 에러가 난다.")
+    @DisplayName("코치가 자신의 프로필 수정에 실패한다. - 이름이 공백인 경우 400 에러가 난다.")
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "   "})
-    void updateProfile_invalidProfile(String name) throws Exception {
+    void updateProfile_invalidName(String name) throws Exception {
         // given
         String token = "나 코치다.";
         코치의_토큰을_검증한다(token);
 
         //when
-        ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name))
+        ResultActions perform = mockMvc
+                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name, "안녕하세요 티타임 코치입니다."))
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
         perform.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("코치가 자신의 프로필 수정에 실패한다. - 설명이 공백인 경우 400 에러가 난다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    void updateProfile_invalidDescription(String description) throws Exception {
+        // given
+        String token = "나 코치다.";
+        코치의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest("브라운", description))
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("코치가 자신의 프로필 조회에 성공한다.")
+    @Test
+    void coachGetProfile() throws Exception {
+        // given
+        String token = "나 코치다.";
+        코치의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/profile")
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isOk());
+    }
+
+    @DisplayName("코치가 자신의 프로필 조회에 실패한다. - 잘못된 토큰")
+    @Test
+    void coachGetProfile_invalidToken() throws Exception {
+        //given
+        String token = "나 잘못된 토큰.";
+
+        ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/profile")
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
+        //when, then
+        perform.andExpectAll(
+                status().isUnauthorized(),
+                jsonPath("message").value("유효하지 않은 토큰입니다.")
+        );
     }
 }

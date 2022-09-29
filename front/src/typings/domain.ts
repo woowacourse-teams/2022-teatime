@@ -12,6 +12,13 @@ interface UserInfo {
   role: UserRole;
   token: string;
 }
+
+interface CoachData {
+  image: string;
+  name: string;
+  description: string;
+}
+
 interface Crew {
   reservationId: number;
   crewId: number;
@@ -20,6 +27,7 @@ interface Crew {
   dateTime: string;
   sheetStatus?: SheetStatus;
 }
+
 interface Coach {
   id: number;
   name: string;
@@ -39,7 +47,8 @@ interface Reservation {
   dateTime: string;
   coachName: string;
   coachImage: string;
-  status: string;
+  sheetStatus: SheetStatus;
+  reservationStatus: CrewHistoryStatus;
   sheets: Sheets[];
 }
 
@@ -98,6 +107,7 @@ type CrewListMap = Record<string, Crew[]>;
 
 export {
   UserInfo,
+  CoachData,
   UserRole,
   Crew,
   Coach,

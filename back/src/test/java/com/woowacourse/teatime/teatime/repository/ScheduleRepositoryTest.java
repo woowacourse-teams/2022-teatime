@@ -38,7 +38,7 @@ public class ScheduleRepositoryTest {
 
     @DisplayName("해당 코치와, 년, 월에 해당하는 스케줄 전체 목록을 조회한다.")
     @Test
-    void findByCoachIdAndLocalDateTimeBetween() {
+    void findAllByCoachIdBetween() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime dateTime1 = start.plusDays(1);
         LocalDateTime dateTime2 = start.plusDays(2);
@@ -50,7 +50,7 @@ public class ScheduleRepositoryTest {
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
 
-        List<Schedule> schedules = scheduleRepository.findByCoachIdAndLocalDateTimeBetweenOrderByLocalDateTime(
+        List<Schedule> schedules = scheduleRepository.findAllByCoachIdBetween(
                 coach.getId(), start, end);
 
         assertAll(
@@ -62,18 +62,22 @@ public class ScheduleRepositoryTest {
     @DisplayName("해당 코치와, 날짜에 해당하는 하루 스케줄을 모두 삭제한다.")
     @Test
     void deleteAllByCoachIdAndLocalDateTimeBetween() {
+        // given
         LocalDateTime july1_1 = LocalDateTime.of(2022, 7, 1, 1, 0, 0);
-        LocalDateTime july2_1 = LocalDateTime.of(2022, 7, 2, 1, 0, 0);
+        LocalDateTime july1_2 = LocalDateTime.of(2022, 7, 1, 2, 0, 0);
 
         Coach coach = coachRepository.save(DomainFixture.COACH_JASON);
-        scheduleRepository.save(new Schedule(coach, july1_1));
-        scheduleRepository.save(new Schedule(coach, july2_1));
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, july1_1));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, july1_2));
+        schedule2.reserve();
 
+        // when
         LocalDate localDate = LocalDate.of(2022, 7, 1);
         LocalDateTime start = Date.findFirstTime(localDate);
         LocalDateTime end = Date.findLastTime(localDate);
-        scheduleRepository.deleteAllByCoachIdAndLocalDateTimeBetween(coach.getId(), start, end);
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), start, end);
 
+        // then
         List<Schedule> schedules = scheduleRepository.findAll();
         assertThat(schedules).hasSize(1);
     }

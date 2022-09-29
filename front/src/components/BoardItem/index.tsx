@@ -71,7 +71,7 @@ const BoardItem = ({
         </S.CloseIconWrapper>
       </S.TopSection>
       <S.BottomSection>
-        <div onClick={onClickProfile}>
+        <div>
           <S.ProfileImage src={image} alt={`${personName} 이미지`} />
           <span>{personName}</span>
         </div>

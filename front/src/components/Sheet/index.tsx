@@ -2,24 +2,24 @@ import { useState } from 'react';
 
 import Textarea from '@components/Textarea';
 import { Sheets } from '@typings/domain';
-import { SHEET_MAX_LENGTH } from '@constants/index';
+import { MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
 
 interface SheetProps {
   title: string;
   sheets: Sheets[];
   onSubmit?: (isSubmitted: boolean, contents: Sheets[]) => void;
-  isView: boolean;
+  isReadOnly: boolean;
 }
 
-const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
+const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [contents, setContents] = useState<Sheets[]>(sheets);
 
   const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
-    if (e.target.value.length > SHEET_MAX_LENGTH) {
+    if (e.target.value.length > MAX_LENGTH.SHEET) {
       alert('더 이상 작성할 수 없습니다.');
-      e.target.value = e.target.value.substring(0, SHEET_MAX_LENGTH);
+      e.target.value = e.target.value.substring(0, MAX_LENGTH.SHEET);
     }
     setContents((prevContent) => {
       const newContent = [...prevContent];
@@ -53,7 +53,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             value={sheets[0].answerContent || ''}
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
-            isView={isView}
+            isReadOnly={isReadOnly}
           />
           <Textarea
             id="1"
@@ -61,7 +61,7 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             value={sheets[1].answerContent || ''}
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
-            isView={isView}
+            isReadOnly={isReadOnly}
           />
           <Textarea
             id="2"
@@ -69,9 +69,9 @@ const Sheet = ({ title, sheets, onSubmit, isView }: SheetProps) => {
             value={sheets[2].answerContent || ''}
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
-            isView={isView}
+            isReadOnly={isReadOnly}
           />
-          {!isView && (
+          {!isReadOnly && (
             <S.ButtonContainer>
               <S.FirstButton onClick={handleSubmitButton}>임시저장</S.FirstButton>
               <S.SecondButton onClick={handleSubmitButton}>제출하기</S.SecondButton>

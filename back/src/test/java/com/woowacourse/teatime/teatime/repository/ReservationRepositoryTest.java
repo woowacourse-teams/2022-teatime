@@ -6,6 +6,7 @@ import static com.woowacourse.teatime.teatime.domain.ReservationStatus.DONE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.LOCAL_DATE;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
@@ -57,13 +58,13 @@ class ReservationRepositoryTest {
 
     @DisplayName("크루에 해당하는 면담 목록을 조회한다. - 면담 상태 : BEFORE_APPROVED")
     @Test
-    void findByCrewId() {
+    void findAllByCrewIdAndReservationStatus() {
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));
         reservationRepository.save(new Reservation(schedule, crew));
 
         List<Reservation> reservations =
-                reservationRepository.findByCrewIdAndReservationStatus(crew.getId(),
+                reservationRepository.findAllByCrewIdAndReservationStatus(crew.getId(),
                         BEFORE_APPROVED);
 
         assertThat(reservations).hasSize(3);
@@ -80,30 +81,17 @@ class ReservationRepositoryTest {
         reservationRepository.save(new Reservation(schedule2, crew));
         reservationRepository.save(new Reservation(newCoachSchedule, crew));
 
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
-                coach.getId(), List.of(DONE, CANCELED));
+        List<Reservation> doneReservations = reservationRepository.findAllByCoachIdAndStatusNot(
+                coach.getId(), DONE);
+        List<Reservation> canceledReservations = reservationRepository.findAllByCoachIdAndStatusNot(
+                coach.getId(), CANCELED);
 
-        assertThat(reservations).hasSize(2);
+        assertThat(List.of(doneReservations, canceledReservations)).hasSize(2);
     }
 
-    @DisplayName("코치의 한 달 면담 목록을 조회한다. - 종료된 예약만 있는 경우")
+    @DisplayName("해당 시간 이전의 승인된 예약들을 모두 조회한다.")
     @Test
-    void findByCoachIdExceptDoneAndCanceled_done() {
-        Reservation reservation = reservationRepository.save(new Reservation(schedule, crew));
-        reservation.confirm();
-        reservation.updateReservationStatusToInProgress();
-        reservation.updateSheetStatusToSubmitted();
-        reservation.updateReservationStatusToDone();
-
-        List<Reservation> reservations = reservationRepository.findByScheduleCoachIdAndReservationStatusNotIn(
-                coach.getId(), List.of(DONE, CANCELED));
-
-        assertThat(reservations).hasSize(0);
-    }
-
-    @DisplayName("오늘에 해당하는 승인된 예약들을 모두 조회한다.")
-    @Test
-    void findAllApprovedReservationsBetween() {
+    void findAllApprovedReservationsBefore() {
         // given
         Coach jason = coachRepository.save(getCoachJason());
         Schedule jasonSchedule1 = scheduleRepository.save(new Schedule(jason, DomainFixture.DATE_TIME));
@@ -124,29 +112,9 @@ class ReservationRepositoryTest {
         assertThat(approvedReservations).hasSize(1);
     }
 
-    @DisplayName("해당 시간대 사이의 조건에 맞는 모든 면담을 조회한다. - 면담 상태 : APPROVED, 시트 상태 : WRITING")
-    @Test
-    void findAllShouldCancel() {
-        // given
-        LocalDateTime firstTime = DomainFixture.DATE_TIME;
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, firstTime.plusHours(1)));
-        Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
-        Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
-
-        reservation1.confirm();
-        reservation2.confirm();
-
-        // when
-        List<Reservation> reservations
-                = reservationRepository.findAllShouldBeCanceled(firstTime, firstTime.plusDays(1));
-
-        // then
-        assertThat(reservations).hasSize(2);
-    }
-
     @DisplayName("코치에 해당하는 완료 상태의 면담 목록을 조회한다.")
     @Test
-    void findByCoachIdAndReservationStatusInCanceledAndDone() {
+    void findAllByCoachIdAndStatus() {
         Reservation reservation1 = reservationRepository.save(new Reservation(schedule, crew));
         Reservation reservation2 = reservationRepository.save(new Reservation(schedule, crew));
 
@@ -158,5 +126,49 @@ class ReservationRepositoryTest {
         reservation2.cancel(Role.COACH);
 
         assertThat(reservationRepository.findAllByCoachIdAndStatus(coach.getId(), DONE)).hasSize(1);
+    }
+
+    @DisplayName("해당 크루의 면담을 최신순으로 모두 가져온다.")
+    @Test
+    void findAllByCrewIdLatestOrder() {
+        // given
+        LocalDateTime dateTime1 = DomainFixture.DATE_TIME;
+        LocalDateTime dateTime2 = DomainFixture.DATE_TIME.plusHours(1);
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, dateTime1));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, dateTime2));
+        Reservation reservation1 = reservationRepository.save(new Reservation(schedule1, crew));
+        Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
+
+        // when
+        List<Reservation> reservations = reservationRepository.findAllByCrewIdLatestOrder(crew.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(reservations).hasSize(2),
+                () -> assertThat(reservations).containsExactly(reservation2, reservation1)
+        );
+    }
+
+
+    @DisplayName("해당 시간 사이의 모든 승인된 예약들을 조회한다.")
+    @Test
+    void findAllApprovedReservationsBetween() {
+        // given
+        LocalDateTime dateTime1 = DomainFixture.DATE_TIME;
+        LocalDateTime dateTime2 = DomainFixture.DATE_TIME.plusHours(1);
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, dateTime1));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, dateTime2));
+        Reservation reservation1 = reservationRepository.save(new Reservation(schedule1, crew));
+        Reservation reservation2 = reservationRepository.save(new Reservation(schedule2, crew));
+        reservation1.confirm();
+        reservation2.confirm();
+
+        // when
+        List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBetween(
+                Date.findFirstTime(LOCAL_DATE),
+                Date.findLastTime(LOCAL_DATE));
+
+        // then
+        assertThat(reservations).hasSize(2);
     }
 }
