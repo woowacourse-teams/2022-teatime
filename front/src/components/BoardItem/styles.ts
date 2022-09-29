@@ -83,12 +83,12 @@ const BottomSection = styled.div`
     align-items: center;
     width: calc(100% - 100px);
     padding-right: 5px;
-    cursor: pointer;
+    /* cursor: pointer; */
 
-    &:hover {
+    /* &:hover {
       opacity: 0.5;
       transition: ease-in-out 0.2s;
-    }
+    } */
 
     span {
       overflow-x: hidden;

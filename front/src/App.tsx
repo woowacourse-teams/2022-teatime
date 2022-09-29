@@ -44,7 +44,7 @@ const App = () => {
               <Route path={ROUTES.COACH_HISTORY} element={<CoachHistory />} />
               <Route path={ROUTES.COACH_PROFILE} element={<CoachProfile />} />
               <Route path={`${ROUTES.COACH_SHEET}/:id`} element={<CoachSheet />} />
-              <Route path={`${ROUTES.HISTORY_SHEET}/:id`} element={<HistorySheet />} />
+              {/* <Route path={`${ROUTES.HISTORY_SHEET}/:id`} element={<HistorySheet />} /> */}
             </Route>
           </Routes>
         </Suspense>
