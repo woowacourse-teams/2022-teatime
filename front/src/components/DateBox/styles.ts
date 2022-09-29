@@ -52,7 +52,7 @@ const DateContainer = styled.div<{
     `}
 
   ${(props) =>
-    (props.isPastDay || props.isWeekend) &&
+    props.isPastDay &&
     css`
       pointer-events: none;
       border: none;
