@@ -22,16 +22,6 @@ const CoachProfile = () => {
   const { image, name, description } = coachProfile;
 
   const handleChangeProfile = (e: React.ChangeEvent<HTMLFormElement>) => {
-    if (e.target.name === 'name' && e.target.value.length > MAX_LENGTH.NAME) {
-      e.target.value = e.target.value.substring(0, MAX_LENGTH.NAME);
-      return alert('길이는 20 이하로 작성해 주세요!');
-    }
-
-    if (e.target.name === 'description' && e.target.value.length > MAX_LENGTH.DESCRIPTION) {
-      e.target.value = e.target.value.substring(0, MAX_LENGTH.DESCRIPTION);
-      return alert('길이는 60 이하로 작성해 주세요!');
-    }
-
     setCoachProfile((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
@@ -39,6 +29,10 @@ const CoachProfile = () => {
 
   const handleSubmitProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (name.length > MAX_LENGTH.NAME || description.length > MAX_LENGTH.DESCRIPTION) {
+      return alert('글자 수를 조정해 주세요');
+    }
 
     try {
       await editCoachProfile({
@@ -77,11 +71,17 @@ const CoachProfile = () => {
       <img src={image} alt="코치 프로필 이미지" />
       <form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
         <S.InputWrapper>
-          <label htmlFor="">Nickname</label>
+          <div>
+            <label htmlFor="">Nickname</label>
+            <span>{`${name.length} / 20`}</span>
+          </div>
           <input name="name" type="text" defaultValue={name} />
         </S.InputWrapper>
         <S.InputWrapper>
-          <label htmlFor="">Description</label>
+          <div>
+            <label htmlFor="">Description</label>
+            <span>{`${description.length} / 60`}</span>
+          </div>
           <textarea name="description" id="" defaultValue={description} rows={7}></textarea>
         </S.InputWrapper>
         <S.EditButton>수정하기</S.EditButton>
