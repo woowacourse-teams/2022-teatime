@@ -73,16 +73,23 @@ const CoachProfile = () => {
         <S.InputWrapper>
           <div>
             <label htmlFor="">Nickname</label>
-            <span>{`${name.length} / 20`}</span>
+            <span>{`${name.length} / ${MAX_LENGTH.NAME}`}</span>
           </div>
-          <input name="name" type="text" defaultValue={name} />
+          <input name="name" type="text" maxLength={MAX_LENGTH.NAME} defaultValue={name} required />
         </S.InputWrapper>
         <S.InputWrapper>
           <div>
             <label htmlFor="">Description</label>
-            <span>{`${description.length} / 60`}</span>
+            <span>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</span>
           </div>
-          <textarea name="description" id="" defaultValue={description} rows={7}></textarea>
+          <textarea
+            name="description"
+            id=""
+            rows={7}
+            maxLength={MAX_LENGTH.DESCRIPTION}
+            defaultValue={description}
+            required
+          ></textarea>
         </S.InputWrapper>
         <S.EditButton>수정하기</S.EditButton>
       </form>
