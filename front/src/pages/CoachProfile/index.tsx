@@ -72,19 +72,26 @@ const CoachProfile = () => {
       <form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
         <S.InputWrapper>
           <div>
-            <label htmlFor="">Nickname</label>
+            <label htmlFor="name">Nickname</label>
             <span>{`${name.length} / ${MAX_LENGTH.NAME}`}</span>
           </div>
-          <input name="name" type="text" maxLength={MAX_LENGTH.NAME} defaultValue={name} required />
+          <input
+            id="name"
+            name="name"
+            type="text"
+            maxLength={MAX_LENGTH.NAME}
+            defaultValue={name}
+            required
+          />
         </S.InputWrapper>
         <S.InputWrapper>
           <div>
-            <label htmlFor="">Description</label>
+            <label htmlFor="description">Description</label>
             <span>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</span>
           </div>
           <textarea
             name="description"
-            id=""
+            id="description"
             rows={7}
             maxLength={MAX_LENGTH.DESCRIPTION}
             defaultValue={description}
