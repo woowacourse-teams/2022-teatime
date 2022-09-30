@@ -27,20 +27,19 @@ const DateBox = ({
   const isToday = currentDay?.getTime() === getCurrentFullDate().getTime();
   const hasSchedule =
     daySchedule.filter((time) => time.isPossible === true || time.isPossible === false).length > 0;
-
   const impossibleSchdules = daySchedule.filter((time) => time.isPossible === false && !isCoach);
 
-  const isAllImpossibleSchedules =
+  const isImpossibleDay =
     impossibleSchdules.length > 0 && impossibleSchdules.length === daySchedule.length;
 
   return (
     <S.DateContainer
       hasSchedule={hasSchedule}
-      isAllImpossibleSchedules={isAllImpossibleSchedules}
       hasDate={!!date}
       isSelected={!!isSelected}
       isCoach={isCoach}
       // isWeekend={isWeekend}
+      isImpossibleDay={isImpossibleDay}
       isPastDay={isPastDay}
       onClick={onClick}
     >

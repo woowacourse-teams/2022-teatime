@@ -11,11 +11,11 @@ const TodayIndicator = styled.div`
 
 const DateContainer = styled.div<{
   hasSchedule: boolean;
-  isAllImpossibleSchedules?: boolean;
   hasDate: boolean;
   isSelected: boolean;
   isCoach?: boolean;
   isWeekend?: boolean;
+  isImpossibleDay?: boolean;
   isPastDay?: boolean;
 }>`
   position: relative;
@@ -64,7 +64,7 @@ const DateContainer = styled.div<{
     `}
 
   ${(props) =>
-    props.isAllImpossibleSchedules &&
+    props.isImpossibleDay &&
     css`
       background-color: ${({ theme }) => theme.colors.GRAY_200};
     `}
@@ -72,8 +72,9 @@ const DateContainer = styled.div<{
   ${(props) =>
     props.isSelected &&
     css`
-      background-color: ${({ theme }) => theme.colors.GREEN_900};
       color: ${({ theme }) => theme.colors.WHITE};
+      background-color: ${({ theme }) => theme.colors.GREEN_900};
+      border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
     `}
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
