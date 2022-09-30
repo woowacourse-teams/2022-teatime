@@ -37,7 +37,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
       const checkValidation = contents.some((content) => !content.answerContent);
       if (checkValidation) return;
 
-      if (!confirm('📮 정말로 제출하시겠습니까?\n\n✔️ 제출 시 수정은 불가합니다.')) return;
+      if (!confirm('⛔️제출 시 수정은 불가합니다.⛔️\n\n 정말로 제출하시겠습니까?')) return;
     }
     onSubmit?.(isSubmitted, contents);
   };
