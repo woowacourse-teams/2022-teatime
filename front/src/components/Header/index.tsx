@@ -38,7 +38,7 @@ const Header = () => {
     try {
       if (nickName.trim() === '') throw new Error('닉네임을 작성해 주세요!');
       if (nickName.length > MAX_LENGTH.NAME)
-        throw new Error('닉네임 길이는 20 이하로 작성해 주세요!');
+        throw new Error(`닉네임 길이는 ${MAX_LENGTH.NAME} 이하로 작성해 주세요!`);
 
       await editCrewNickName(nickName);
       dispatch({ type: 'EDIT_USER', name: nickName });
@@ -111,10 +111,12 @@ const Header = () => {
         >
           <S.Input
             autoFocus
+            maxLength={MAX_LENGTH.NAME}
             type="text"
             placeholder="ex) 닉네임(이름)"
             value={nickName}
             onChange={(e) => handleChangeInput(e)}
+            required
           />
         </Modal>
       )}
