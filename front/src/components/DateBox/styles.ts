@@ -31,13 +31,6 @@ const DateContainer = styled.div<{
   cursor: ${(props) => (props.hasSchedule || props.isCoach) && 'pointer'};
 
   ${(props) =>
-    props.isSelected &&
-    css`
-      background-color: ${({ theme }) => theme.colors.GREEN_900};
-      color: ${({ theme }) => theme.colors.WHITE};
-    `}
-
-  ${(props) =>
     props.isCoach &&
     props.hasDate &&
     css`
@@ -57,8 +50,22 @@ const DateContainer = styled.div<{
       pointer-events: none;
       border: none;
     `}
+ 
+  ${(props) =>
+    !props.isPastDay &&
+    props.isCoach &&
+    css`
+      color: black;
+    `}
 
-  @media screen and   (${({ theme }) => theme.devices.tablet}) {
+  ${(props) =>
+    props.isSelected &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GREEN_900};
+      color: ${({ theme }) => theme.colors.WHITE};
+    `}
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
     width: 40px;
     height: 40px;
   }
