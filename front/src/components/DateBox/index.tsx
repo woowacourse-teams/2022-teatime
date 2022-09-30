@@ -27,8 +27,8 @@ const DateBox = ({
   const isToday = currentDay?.getTime() === getCurrentFullDate().getTime();
   const hasSchedule =
     daySchedule.filter((time) => time.isPossible === true || time.isPossible === false).length > 0;
-  const impossibleSchdules = daySchedule.filter((time) => time.isPossible === false && !isCoach);
 
+  const impossibleSchdules = daySchedule.filter((time) => time.isPossible === false && !isCoach);
   const isImpossibleDay =
     impossibleSchdules.length > 0 && impossibleSchdules.length === daySchedule.length;
 
