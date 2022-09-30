@@ -11,6 +11,7 @@ const TodayIndicator = styled.div`
 
 const DateContainer = styled.div<{
   hasSchedule: boolean;
+  isAllImpossibleSchedules?: boolean;
   hasDate: boolean;
   isSelected: boolean;
   isCoach?: boolean;
@@ -29,6 +30,10 @@ const DateContainer = styled.div<{
   background-color: ${(props) => props.hasSchedule && props.theme.colors.GREEN_300};
   color: ${(props) => !props.hasSchedule && props.theme.colors.GRAY_300};
   cursor: ${(props) => (props.hasSchedule || props.isCoach) && 'pointer'};
+
+  &:hover {
+    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
+  }
 
   ${(props) =>
     props.isCoach &&
@@ -55,7 +60,13 @@ const DateContainer = styled.div<{
     !props.isPastDay &&
     props.isCoach &&
     css`
-      color: black;
+      color: ${({ theme }) => theme.colors.GREEN_900};
+    `}
+
+  ${(props) =>
+    props.isAllImpossibleSchedules &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
     `}
 
   ${(props) =>
