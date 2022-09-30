@@ -15,6 +15,7 @@ const DateContainer = styled.div<{
   isSelected: boolean;
   isCoach?: boolean;
   isWeekend?: boolean;
+  isImpossibleDay?: boolean;
   isPastDay?: boolean;
 }>`
   position: relative;
@@ -30,12 +31,9 @@ const DateContainer = styled.div<{
   color: ${(props) => !props.hasSchedule && props.theme.colors.GRAY_300};
   cursor: ${(props) => (props.hasSchedule || props.isCoach) && 'pointer'};
 
-  ${(props) =>
-    props.isSelected &&
-    css`
-      background-color: ${({ theme }) => theme.colors.GREEN_900};
-      color: ${({ theme }) => theme.colors.WHITE};
-    `}
+  &:hover {
+    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
+  }
 
   ${(props) =>
     props.isCoach &&
@@ -57,8 +55,29 @@ const DateContainer = styled.div<{
       pointer-events: none;
       border: none;
     `}
+ 
+  ${(props) =>
+    !props.isPastDay &&
+    props.isCoach &&
+    css`
+      color: ${({ theme }) => theme.colors.GREEN_900};
+    `}
 
-  @media screen and   (${({ theme }) => theme.devices.tablet}) {
+  ${(props) =>
+    props.isImpossibleDay &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GRAY_200};
+    `}
+
+  ${(props) =>
+    props.isSelected &&
+    css`
+      color: ${({ theme }) => theme.colors.WHITE};
+      background-color: ${({ theme }) => theme.colors.GREEN_900};
+      border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
+    `}
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
     width: 40px;
     height: 40px;
   }

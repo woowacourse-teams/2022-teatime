@@ -63,7 +63,7 @@ const TimeBox = styled.div<{ isPossible?: boolean; isSelected: boolean; isPastTi
     `}
 
   &:hover {
-    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
+    border: 3px solid ${({ theme }) => theme.colors.GREEN_900};
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
