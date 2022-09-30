@@ -30,6 +30,7 @@ const theme = {
     GREEN_400: '#b8e09b',
     GREEN_700: '#797d6b',
     GREEN_900: '#404338',
+    BLUE_300: '#bfdbfe',
     BLUE_600: '#0085ff',
     BLUE_700: '#6D798E',
     BLUE_800: '#3d5a80',
