@@ -34,7 +34,7 @@ const TimeBox = styled.div<{ isPossible?: boolean }>`
   cursor: pointer;
 
   &:hover {
-    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
+    border: 4px solid ${({ theme }) => theme.colors.GREEN_900};
   }
 
   ${(props) =>
