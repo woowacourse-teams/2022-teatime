@@ -12,8 +12,10 @@ const CardListContainer = styled.div`
   grid-template-columns: repeat(4, 250px);
   gap: 40px;
 
-  @media screen and (${({ theme }) => theme.devices.laptop}) {
-    grid-template-columns: repeat(4, 200px);
+  @media screen and (${({ theme }) => theme.devices.laptopM}) {
+    width: 100%;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, 250px);
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {

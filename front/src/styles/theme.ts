@@ -5,6 +5,7 @@ const size = {
   mobileXL: 480,
   tablet: 768,
   laptop: 1024,
+  laptopM: 1200,
   laptopL: 1440,
   desktop: 2560,
 };
@@ -51,6 +52,7 @@ const theme = {
     mobileXL: `max-width: ${size.mobileXL}px`,
     tablet: `max-width: ${size.tablet}px`,
     laptop: `max-width: ${size.laptop}px`,
+    laptopM: `max-width: ${size.laptopM}px`,
     laptopL: `max-width: ${size.laptopL}px`,
     desktop: `max-width: ${size.desktop}px`,
   },
