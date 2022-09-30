@@ -1,6 +1,6 @@
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
-import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { DAY_NUMBER, DAY_OF_WEEKS, HOUR_MILLISECONDS } from '@constants/index';
 import { convertToFullDate, getCurrentFullDate } from '@utils/date';
 import type { MonthYear, MonthScheduleMap } from '@typings/domain';
 
@@ -29,7 +29,8 @@ const Calendar = ({
   monthSchedule,
 }: CalendarProps) => {
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
-  const currentDate = new Date();
+  const currentDateTime = new Date().getTime();
+  const startDateTime = startDate.getTime() - 9 * HOUR_MILLISECONDS;
 
   return (
     <S.CalendarContainer>
@@ -38,13 +39,13 @@ const Calendar = ({
           {year}년 {month}월
         </span>
         <div>
-          <Conditional condition={startDate < currentDate}>
-            <img src={LeftArrowDisabled} alt="이전 버튼 비활성화 아이콘" />
+          <Conditional condition={startDateTime < currentDateTime}>
+            <img src={LeftArrowDisabled} alt="비활성화된 왼쪽 화살표" />
           </Conditional>
-          <Conditional condition={startDate >= currentDate}>
-            <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => onUpdateMonth(-1)} />
+          <Conditional condition={startDateTime >= currentDateTime}>
+            <img src={LeftArrow} alt="왼쪽 화살표" onClick={() => onUpdateMonth(-1)} />
           </Conditional>
-          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => onUpdateMonth(1)} />
+          <img src={RightArrow} alt="오른쪽 화살표" onClick={() => onUpdateMonth(1)} />
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
