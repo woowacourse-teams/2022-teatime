@@ -59,10 +59,10 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
     props.isPossible &&
     css`
       ::before {
+        content: '';
         position: absolute;
         top: 15px;
         right: 15px;
-        content: '';
         width: 14px;
         height: 14px;
         border-radius: 50%;
