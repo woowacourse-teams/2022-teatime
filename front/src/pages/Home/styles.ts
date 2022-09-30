@@ -34,7 +34,11 @@ const Flow = keyframes`
 const Container = styled.div`
   height: calc(100vh - 50px);
   width: 100%;
-  background-color: #bfdbfe;
+  background-color: ${({ theme }) => theme.colors.BLUE_300};
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    position: fixed;
+  }
 `;
 
 const MainSection = styled.section`
