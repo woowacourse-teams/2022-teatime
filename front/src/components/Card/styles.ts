@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const CardContainer = styled.div`
+const CardContainer = styled.div<{ isPossible: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,6 +54,21 @@ const CardContainer = styled.div`
   &:hover {
     transform: scale(1.03);
   }
+
+  ${(props) =>
+    props.isPossible &&
+    css`
+      ::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: ${({ theme }) => theme.colors.GREEN_400};
+      }
+    `}
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     height: 250px;

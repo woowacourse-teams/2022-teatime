@@ -57,6 +57,7 @@ const CrewMain = () => {
               description={description}
               buttonName="예약하기"
               onClick={() => handleClickCard(id, image)}
+              isPossible={coach.isPossible}
             />
           );
         })}
