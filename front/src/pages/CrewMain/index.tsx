@@ -48,7 +48,7 @@ const CrewMain = () => {
     <S.Layout>
       <S.CardListContainer>
         {coaches.map((coach) => {
-          const { id, name, image, description } = coach;
+          const { id, name, image, description, isPossible } = coach;
           return (
             <Card
               key={id}
@@ -57,7 +57,7 @@ const CrewMain = () => {
               description={description}
               buttonName="예약하기"
               onClick={() => handleClickCard(id, image)}
-              isPossible={coach.isPossible}
+              isPossible={isPossible}
             />
           );
         })}
