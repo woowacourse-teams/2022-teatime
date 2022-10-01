@@ -58,13 +58,21 @@ const CardContainer = styled.div`
     height: 250px;
     padding: 20px 10px;
 
+    span {
+      font-size: 16px;
+    }
+
     img {
       width: 70px;
       height: 70px;
     }
 
     p {
-      display: none;
+      font-size: 12px;
+    }
+
+    button {
+      font-size: 14px;
     }
   }
 
@@ -79,10 +87,6 @@ const CardContainer = styled.div`
 
     p {
       display: none;
-    }
-
-    button {
-      font-size: 14px;
     }
   }
 `;
