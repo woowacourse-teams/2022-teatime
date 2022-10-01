@@ -28,8 +28,8 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         given(coachService.findAll())
                 .willReturn(List.of(
-                        new CoachFindResponse(COACH_BROWN),
-                        new CoachFindResponse(COACH_JASON)
+                        new CoachFindResponse(COACH_BROWN, true),
+                        new CoachFindResponse(COACH_JASON, false)
                 ));
 
         //when

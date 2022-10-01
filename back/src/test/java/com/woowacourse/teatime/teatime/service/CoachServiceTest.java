@@ -6,7 +6,6 @@ import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_JUNE_SAVE
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.woowacourse.teatime.teatime.controller.dto.request.CoachSaveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachProfileResponse;
@@ -32,10 +31,8 @@ public class CoachServiceTest {
     @DisplayName("코치 목록을 조회한다.")
     @Test
     void findAll() {
-        CoachSaveRequest request1 = COACH_BROWN_SAVE_REQUEST;
-        CoachSaveRequest request2 = COACH_JUNE_SAVE_REQUEST;
-        coachService.save(request1);
-        coachService.save(request2);
+        coachService.save(COACH_BROWN_SAVE_REQUEST);
+        coachService.save(COACH_JUNE_SAVE_REQUEST);
         List<CoachFindResponse> coaches = coachService.findAll();
 
         assertThat(coaches.size()).isEqualTo(2);
