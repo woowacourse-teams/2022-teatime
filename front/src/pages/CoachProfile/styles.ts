@@ -37,8 +37,11 @@ const InputWrapper = styled.div`
   width: 330px;
   margin: 30px 0;
 
-  label {
-    margin-bottom: 6px;
+  div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 0 2px;
     color: ${({ theme }) => theme.colors.GRAY_600};
   }
 
