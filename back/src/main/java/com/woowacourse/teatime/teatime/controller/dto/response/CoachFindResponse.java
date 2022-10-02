@@ -15,8 +15,9 @@ public class CoachFindResponse {
     private String name;
     private String description;
     private String image;
+    private Boolean isPossible;
 
-    public CoachFindResponse(Coach coach) {
-        this(coach.getId(), coach.getName(), coach.getDescription(), coach.getImage());
+    public CoachFindResponse(Coach coach, boolean isPossible) {
+        this(coach.getId(), coach.getName(), coach.getDescription(), coach.getImage(), isPossible);
     }
 }

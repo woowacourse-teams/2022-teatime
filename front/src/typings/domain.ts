@@ -33,6 +33,7 @@ interface Coach {
   name: string;
   description: string;
   image: string;
+  isPossible: boolean;
 }
 
 interface MonthYear {

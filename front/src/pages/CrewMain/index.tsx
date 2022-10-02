@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
+import EmptyContent from '@components/EmptyContent';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { CACHE, ROUTES } from '@constants/index';
@@ -17,8 +18,8 @@ const CrewMain = () => {
   const dispatch = useContext(UserDispatchContext);
   const [coaches, setCoaches] = useState<Coach[]>();
 
-  const handleClickCard = (id: number) => {
-    navigate(`${ROUTES.RESERVATION}/${id}`);
+  const handleClickCard = (id: number, image: string) => {
+    navigate(`${ROUTES.RESERVATION}/${id}`, { state: image });
   };
 
   useEffect(() => {
@@ -41,18 +42,22 @@ const CrewMain = () => {
     })();
   }, []);
 
+  if (!coaches) return <EmptyContent text={'등록된 사용자가 없습니다.'} />;
+
   return (
     <S.Layout>
       <S.CardListContainer>
-        {coaches?.map((coach) => {
+        {coaches.map((coach) => {
+          const { id, name, image, description, isPossible } = coach;
           return (
             <Card
-              key={coach.id}
-              name={coach.name}
-              image={coach.image}
-              description={coach.description}
+              key={id}
+              name={name}
+              image={image}
+              description={description}
               buttonName="예약하기"
-              onClick={() => handleClickCard(coach.id)}
+              onClick={() => handleClickCard(id, image)}
+              isPossible={isPossible}
             />
           );
         })}
