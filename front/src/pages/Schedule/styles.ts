@@ -1,3 +1,4 @@
+import { FadeIn } from '@styles/common';
 import styled from 'styled-components';
 
 const SelectCompleteButton = styled.button`
@@ -9,6 +10,7 @@ const SelectCompleteButton = styled.button`
   border-radius: 10px;
   font-size: 15px;
   cursor: pointer;
+  animation: ${FadeIn} 0.6s;
 
   &:hover {
     opacity: 0.7;

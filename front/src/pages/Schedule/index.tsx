@@ -70,11 +70,13 @@ const Schedule = () => {
     daySchedule: [],
     date: '',
   });
-
   const [selectedDayList, setSelectedDayList] = useState<{ dates: string[]; times: string[] }>({
     dates: [],
     times: [],
   });
+
+  const isMultipleSelecting =
+    selectedCalendarMode === 'multiSelect' && selectedDayList.dates.length > 0;
 
   const selectDaySchedule = (day: number) => {
     setSchedule((allSchedules) => {
@@ -156,6 +158,10 @@ const Schedule = () => {
   };
 
   const handleUpdateMonth = (increment: number) => {
+    if (isMultipleSelecting) {
+      alert(`${month}월 등록을 완료해주세요.`);
+      return;
+    }
     setSchedule({ monthSchedule: {}, daySchedule: [], date: '' });
     closeTimeList();
     updateMonthYear(increment);
@@ -316,7 +322,7 @@ const Schedule = () => {
               }
               onUpdateMonth={handleUpdateMonth}
             />
-            {!isOpenMultipleTimeList && selectedCalendarMode === 'multiSelect' && (
+            {!isOpenMultipleTimeList && isMultipleSelecting && (
               <S.SelectCompleteButton onClick={handleCompleteMultipleDate}>
                 날짜 선택 완료
               </S.SelectCompleteButton>
