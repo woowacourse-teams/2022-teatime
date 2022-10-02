@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SlackAlarmDto {
 
+    private static final String DIRECT_LINK = "[티타임 바로가기](https://teatime.pe.kr/)";
+
     private String channel;
     private String text;
     private List<AttachmentDto> attachments;
@@ -50,6 +52,7 @@ public class SlackAlarmDto {
 
     private static String getMessage(String crewName, String coachName, LocalDateTime dateTime) {
         return String.join("\r\n",
+                DIRECT_LINK,
                 "크루: " + crewName,
                 "코치: " + coachName,
                 "티타임: " + Date.formatDate("yyyy-MM-dd HH:mm", dateTime)
