@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 const Container = styled.ul`
+  list-style: none;
   display: flex;
   justify-content: flex-start;
   padding-left: 0;
   margin-bottom: 25px;
   gap: 5px;
-  list-style: none;
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     justify-content: center;
