@@ -25,6 +25,12 @@ const ListItem = styled.li<{ isSelected?: boolean }>`
   cursor: pointer;
   font-size: 15px;
 
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.YELLOW_200};
+    color: ${({ theme }) => theme.colors.BLACK};
+    transition: 0.2s;
+  }
+
   @media screen and (${({ theme }) => theme.devices.mobileXL}) {
     width: 50%;
   }
