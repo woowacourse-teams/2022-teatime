@@ -237,6 +237,7 @@ const Schedule = () => {
           highlightText={isOpenTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
+          helpTip="면담 신청은 30분 단위입니다. 30분 단위로 여러명이 신청할 수도 있으니 주의하세요."
         />
         <S.CalendarContainer>
           <Calendar
