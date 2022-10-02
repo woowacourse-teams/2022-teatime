@@ -3,10 +3,12 @@ import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
+import CalendarSelectList from '@components/CalendarSelectList';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
+import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
@@ -52,6 +54,8 @@ const getAllTime = (date: string) => {
 const Schedule = () => {
   const showSnackbar = useContext(SnackbarContext);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
+  const { selectedItem: selectedCalendarMode, handleSelectItem: handleSelectCalendarMode } =
+    useSelectList('singleSelect');
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [isSelectedAll, setIsSelectedAll] = useState(false);
@@ -237,6 +241,14 @@ const Schedule = () => {
           highlightText={isOpenTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
+        />
+        <CalendarSelectList
+          lists={[
+            { id: 'singleSelect', text: '개별 선택' },
+            { id: 'multiSelect', text: '다중 선택' },
+          ]}
+          selectedItem={selectedCalendarMode}
+          onSelect={handleSelectCalendarMode}
         />
         <S.CalendarContainer>
           <Calendar
