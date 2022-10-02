@@ -288,6 +288,34 @@ const Schedule = () => {
     }
   };
 
+  const handleUpdateMultipleDaySchedule = async () => {
+    // const selectedTimes = getSelectedTimes();
+
+    const selectedTimes = selectedDayList.times.reduce((newArray, { time, isSelected }) => {
+      if (isSelected) {
+        newArray.push(time);
+      }
+      return newArray;
+    }, [] as string[]);
+
+    const multipleDaySchedules = selectedDayList.dates.map((date) => {
+      const schedules = selectedTimes.map((time) => `${date}T${time}:00.000Z`);
+      return { date, schedules };
+    });
+
+    console.log(multipleDaySchedules);
+
+    try {
+      // await editCoachSchedule(multipleDaySchedules);
+      showSnackbar({ message: '확정되었습니다. ✅' });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     closeTimeList();
     closeMultipleTimeList();
@@ -399,6 +427,7 @@ const Schedule = () => {
                     {t.time}
                   </S.MultipleTimeBox>
                 ))}
+                <button onClick={handleUpdateMultipleDaySchedule}>확인</button>
               </S.ScrollContainer>
             </S.MultipleTimeListContainer>
           )}
