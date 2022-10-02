@@ -14,7 +14,8 @@ import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
 import type { DaySchedule, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
 import { theme } from '@styles/theme';
-import * as S from '@styles/common';
+import * as SS from '@styles/common';
+import * as S from './styles';
 
 const timeArray = [
   '10:00',
@@ -54,6 +55,11 @@ const getAllTime = (date: string) => {
 const Schedule = () => {
   const showSnackbar = useContext(SnackbarContext);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
+  const {
+    value: isOpenMultipleTimeList,
+    setTrue: openMultipleTimeList,
+    setFalse: closeMultipleTimeList,
+  } = useBoolean();
   const { selectedItem: selectedCalendarMode, handleSelectItem: handleSelectCalendarMode } =
     useSelectList('singleSelect');
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
@@ -63,6 +69,11 @@ const Schedule = () => {
     monthSchedule: {},
     daySchedule: [],
     date: '',
+  });
+
+  const [selectedDayList, setSelectedDayList] = useState<{ dates: string[]; times: string[] }>({
+    dates: [],
+    times: [],
   });
 
   const selectDaySchedule = (day: number) => {
@@ -159,6 +170,32 @@ const Schedule = () => {
     setIsSelectedAll(false);
   };
 
+  const handleClickMultipleDate = (day: number) => {
+    const date = getFormatDate(year, month, day);
+
+    setSelectedDayList((prev) => {
+      const newDates = [...selectedDayList.dates];
+      const findIndex = newDates.findIndex((newDate) => newDate === date);
+
+      if (newDates.includes(date)) {
+        newDates.splice(findIndex, 1);
+      } else {
+        newDates.push(date);
+      }
+      console.log('newDates', newDates);
+
+      return {
+        ...prev,
+        dates: newDates,
+      };
+    });
+  };
+
+  const handleCompleteMultipleDate = () => {
+    // Todo: 선택된 날짜없이 완료를 누를수없게 하기
+    openMultipleTimeList();
+  };
+
   const handleClickTime = (dateTime: string) => {
     setSchedule((allSchedules) => {
       const selectedIndex = schedule.daySchedule.findIndex((time) => time.dateTime === dateTime);
@@ -204,6 +241,18 @@ const Schedule = () => {
   };
 
   useEffect(() => {
+    closeTimeList();
+    closeMultipleTimeList();
+
+    setSelectedDayList((prev) => {
+      return {
+        ...prev,
+        dates: [],
+      };
+    });
+  }, [selectedCalendarMode]);
+
+  useEffect(() => {
     const initSelectedTime = () => {
       setSchedule((allSchedules) => {
         const newDaySchedule = [...schedule.daySchedule];
@@ -217,7 +266,7 @@ const Schedule = () => {
     };
 
     initSelectedTime();
-  }, [schedule.date]);
+  }, [schedule.date, selectedCalendarMode]);
 
   useEffect(() => {
     (async () => {
@@ -235,14 +284,14 @@ const Schedule = () => {
 
   return (
     <Frame>
-      <S.ScheduleContainer>
+      <SS.ScheduleContainer>
         <Title
           text="등록 가능한"
-          highlightText={isOpenTimeList ? '시간을' : '날짜를'}
+          highlightText={isOpenTimeList || isOpenMultipleTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
-        <S.CalendarContainer>
+        <SS.CalendarContainer>
           <div>
             <CalendarSelectList
               lists={[
@@ -250,7 +299,10 @@ const Schedule = () => {
                 { id: 'multiSelect', text: '다중 선택' },
               ]}
               selectedItem={selectedCalendarMode}
-              onSelect={handleSelectCalendarMode}
+              onSelect={(e: React.MouseEvent<HTMLElement>) => {
+                setSelectedDay(0);
+                handleSelectCalendarMode(e);
+              }}
             />
             <Calendar
               isCoach
@@ -258,10 +310,19 @@ const Schedule = () => {
               monthYear={monthYear}
               dateBoxLength={dateBoxLength}
               selectedDay={selectedDay}
-              onClickDate={handleClickDate}
+              selectedDayList={selectedDayList.dates}
+              onClickDate={
+                selectedCalendarMode === 'multiSelect' ? handleClickMultipleDate : handleClickDate
+              }
               onUpdateMonth={handleUpdateMonth}
             />
+            {!isOpenMultipleTimeList && selectedCalendarMode === 'multiSelect' && (
+              <S.SelectCompleteButton onClick={handleCompleteMultipleDate}>
+                날짜 선택 완료
+              </S.SelectCompleteButton>
+            )}
           </div>
+
           {isOpenTimeList && (
             <ScheduleTimeList
               isSelectedAll={isSelectedAll}
@@ -271,8 +332,15 @@ const Schedule = () => {
               onUpdateDaySchedule={handleUpdateDaySchedule}
             />
           )}
-        </S.CalendarContainer>
-      </S.ScheduleContainer>
+          {isOpenMultipleTimeList && (
+            <div>
+              {timeArray.map((v) => (
+                <div key={v}>{v}</div>
+              ))}
+            </div>
+          )}
+        </SS.CalendarContainer>
+      </SS.ScheduleContainer>
     </Frame>
   );
 };

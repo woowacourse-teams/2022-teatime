@@ -8,8 +8,8 @@ interface DateBoxProps {
   onClick?: () => void;
   selectedDay?: number | null;
   currentDay?: Date;
+  isMultipleSelected?: boolean;
   isCoach?: boolean;
-  isWeekend?: boolean;
   isPastDay?: boolean;
 }
 
@@ -20,7 +20,7 @@ const DateBox = ({
   selectedDay,
   currentDay,
   isCoach,
-  isWeekend,
+  isMultipleSelected,
   isPastDay,
 }: DateBoxProps) => {
   const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
@@ -36,9 +36,8 @@ const DateBox = ({
     <S.DateContainer
       hasSchedule={hasSchedule}
       hasDate={!!date}
-      isSelected={!!isSelected}
+      isSelected={!!isSelected || !!isMultipleSelected}
       isCoach={isCoach}
-      // isWeekend={isWeekend}
       isImpossibleDay={isImpossibleDay}
       isPastDay={isPastDay}
       onClick={onClick}

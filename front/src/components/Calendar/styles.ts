@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 const CalendarContainer = styled.div`
+  /* pointer-events: none; Todo: 다중선택을 완료하고 타임리스트가 뜰때 비활성화하기 */
+
   display: flex;
   flex-direction: column;
 

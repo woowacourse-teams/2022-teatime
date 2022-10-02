@@ -11,6 +11,7 @@ import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;
+  selectedDayList?: string[];
   onUpdateMonth: (increment: number) => void;
   onClickDate: (day: number, isWeekend: boolean) => void;
   monthYear: MonthYear;
@@ -21,6 +22,7 @@ interface CalendarProps {
 
 const Calendar = ({
   isCoach,
+  selectedDayList,
   onUpdateMonth,
   onClickDate,
   monthYear,
@@ -59,6 +61,9 @@ const Calendar = ({
           const isWeekend = dayNumber === DAY_NUMBER.SUNDAY || dayNumber === DAY_NUMBER.SATURDAY;
           const isPastDay = convertToFullDate(year, month, date) < getCurrentFullDate();
 
+          const dateString = `${year}-${month}-${String(date).padStart(2, '0')}`;
+          const isMultipleSelected = selectedDayList?.includes(dateString);
+
           return isOutOfCalendar ? (
             <DateBox key={index} />
           ) : (
@@ -68,9 +73,9 @@ const Calendar = ({
               daySchedule={monthSchedule[date]}
               onClick={() => onClickDate(date, isWeekend)}
               selectedDay={selectedDay}
+              isMultipleSelected={isMultipleSelected}
               currentDay={convertToFullDate(year, month, date)}
               isCoach={isCoach}
-              isWeekend={isWeekend}
               isPastDay={isPastDay}
             />
           );
