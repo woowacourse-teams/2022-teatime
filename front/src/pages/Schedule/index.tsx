@@ -12,7 +12,12 @@ import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
-import type { DaySchedule, ScheduleInfo, MonthScheduleMap } from '@typings/domain';
+import type {
+  DaySchedule,
+  ScheduleInfo,
+  MonthScheduleMap,
+  MultipleDaySchedule,
+} from '@typings/domain';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
@@ -70,7 +75,7 @@ const Schedule = () => {
     daySchedule: [],
     date: '',
   });
-  const [selectedDayList, setSelectedDayList] = useState<{ dates: string[]; times: string[] }>({
+  const [selectedDayList, setSelectedDayList] = useState<MultipleDaySchedule>({
     dates: [],
     times: [],
   });
@@ -157,19 +162,29 @@ const Schedule = () => {
     });
   };
 
+  const initSelectedMultipleTimes = () => {
+    setSelectedDayList((prev) => {
+      const initTimes = timeArray.map((time, index) => ({ id: index, time, isSelected: false }));
+
+      return {
+        ...prev,
+        times: initTimes,
+      };
+    });
+  };
+
   const handleUpdateMonth = (increment: number) => {
     if (isMultipleSelecting) {
       alert(`${month}월 등록을 완료해주세요.`);
       return;
     }
+
     setSchedule({ monthSchedule: {}, daySchedule: [], date: '' });
     closeTimeList();
     updateMonthYear(increment);
   };
 
   const handleClickDate = (day: number, isWeekend: boolean) => {
-    // if (isWeekend) return;
-
     openTimeList();
     selectDaySchedule(day);
     setSelectedDay(day);
@@ -178,6 +193,13 @@ const Schedule = () => {
 
   const handleClickMultipleDate = (day: number) => {
     const date = getFormatDate(year, month, day);
+    const hasImPossibleDay =
+      schedule.monthSchedule[day].filter((v) => v.isPossible === false).length > 0;
+
+    if (hasImPossibleDay) {
+      alert(`${day}일은 이미 예약된 시간이 존재하여 일괄 수정할 수 없어요.`);
+      return;
+    }
 
     setSelectedDayList((prev) => {
       const newDates = [...selectedDayList.dates];
@@ -188,7 +210,6 @@ const Schedule = () => {
       } else {
         newDates.push(date);
       }
-      console.log('newDates', newDates);
 
       return {
         ...prev,
@@ -198,8 +219,16 @@ const Schedule = () => {
   };
 
   const handleCompleteMultipleDate = () => {
-    // Todo: 선택된 날짜없이 완료를 누를수없게 하기
     openMultipleTimeList();
+
+    initSelectedMultipleTimes();
+
+    console.log(selectedDayList.times);
+  };
+
+  const handleReSelectMultipleDate = () => {
+    closeMultipleTimeList();
+    initSelectedMultipleTimes();
   };
 
   const handleClickTime = (dateTime: string) => {
@@ -211,6 +240,19 @@ const Schedule = () => {
       return {
         ...allSchedules,
         daySchedule: newSchedules,
+      };
+    });
+  };
+
+  const handleClickMutipleTime = (time: string) => {
+    setSelectedDayList((prev) => {
+      const selectedIndex = selectedDayList.times.findIndex((t) => t.time === time);
+      const newTimes = [...selectedDayList.times];
+      newTimes[selectedIndex].isSelected = !newTimes[selectedIndex].isSelected;
+
+      return {
+        ...prev,
+        times: newTimes,
       };
     });
   };
@@ -312,6 +354,7 @@ const Schedule = () => {
             />
             <Calendar
               isCoach
+              isMultipleSelecting={isOpenMultipleTimeList}
               monthSchedule={schedule.monthSchedule}
               monthYear={monthYear}
               dateBoxLength={dateBoxLength}
@@ -324,7 +367,12 @@ const Schedule = () => {
             />
             {!isOpenMultipleTimeList && isMultipleSelecting && (
               <S.SelectCompleteButton onClick={handleCompleteMultipleDate}>
-                날짜 선택 완료
+                날짜 선택 완료하기
+              </S.SelectCompleteButton>
+            )}
+            {isOpenMultipleTimeList && (
+              <S.SelectCompleteButton onClick={handleReSelectMultipleDate}>
+                날짜 다시 선택하기
               </S.SelectCompleteButton>
             )}
           </div>
@@ -338,12 +386,21 @@ const Schedule = () => {
               onUpdateDaySchedule={handleUpdateDaySchedule}
             />
           )}
+
           {isOpenMultipleTimeList && (
-            <div>
-              {timeArray.map((v) => (
-                <div key={v}>{v}</div>
-              ))}
-            </div>
+            <S.MultipleTimeListContainer>
+              <S.ScrollContainer>
+                {selectedDayList.times.map((t) => (
+                  <S.MultipleTimeBox
+                    key={t.id}
+                    isSelected={t.isSelected}
+                    onClick={() => handleClickMutipleTime(t.time)}
+                  >
+                    {t.time}
+                  </S.MultipleTimeBox>
+                ))}
+              </S.ScrollContainer>
+            </S.MultipleTimeListContainer>
           )}
         </SS.CalendarContainer>
       </SS.ScheduleContainer>
