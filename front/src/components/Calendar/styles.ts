@@ -1,10 +1,15 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const CalendarContainer = styled.div`
-  /* pointer-events: none; Todo: 다중선택을 완료하고 타임리스트가 뜰때 비활성화하기 */
-
+const CalendarContainer = styled.div<{ isMultipleSelecting?: boolean }>`
   display: flex;
   flex-direction: column;
+
+  ${(props) =>
+    props.isMultipleSelecting &&
+    css`
+      pointer-events: none;
+      opacity: 0.6;
+    `}
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     align-items: center;
