@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import Textarea from '@components/Textarea';
+import HelpTip from '@components/HelpTip';
 import { Sheets } from '@typings/domain';
 import { MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
@@ -45,7 +46,10 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
   return (
     <>
       <S.SheetContainer>
-        <h2>{title}</h2>
+        <S.TitleWrapper>
+          <h2>{title}</h2>
+          {!isReadOnly && <HelpTip text="임시저장된 내용은 상대방에게 보이지 않습니다." />}
+        </S.TitleWrapper>
         <form>
           <Textarea
             id="0"

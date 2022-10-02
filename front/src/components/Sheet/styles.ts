@@ -8,6 +8,10 @@ const SheetContainer = styled.div`
   }
 `;
 
+const TitleWrapper = styled.div`
+  display: flex;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -45,4 +49,4 @@ const SecondButton = styled.button`
   border: none;
 `;
 
-export { SheetContainer, ButtonContainer, FirstButton, SecondButton };
+export { SheetContainer, TitleWrapper, ButtonContainer, FirstButton, SecondButton };
