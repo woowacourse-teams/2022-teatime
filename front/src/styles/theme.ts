@@ -36,6 +36,7 @@ const theme = {
     BLUE_700: '#6D798E',
     BLUE_800: '#3d5a80',
     BLUE_900: '#1f2937',
+    YELLOW_200: '#ffe594',
     YELLOW_400: '#ffdd00',
     ORANGE_100: '#ffedd5',
     ORANGE_200: '#fae0af',

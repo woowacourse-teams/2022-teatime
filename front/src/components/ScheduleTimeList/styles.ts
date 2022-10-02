@@ -92,8 +92,8 @@ const ButtonContainer = styled.div`
 const CheckButton = styled.button``;
 
 const ConfirmButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.BLUE_600};
-  color: ${({ theme }) => theme.colors.WHITE};
+  background-color: ${({ theme }) => theme.colors.YELLOW_200};
+  color: ${({ theme }) => theme.colors.BLACK};
 `;
 
 export { TimeListContainer, ScrollContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };

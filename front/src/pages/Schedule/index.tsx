@@ -242,24 +242,26 @@ const Schedule = () => {
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
-        <CalendarSelectList
-          lists={[
-            { id: 'singleSelect', text: '개별 선택' },
-            { id: 'multiSelect', text: '다중 선택' },
-          ]}
-          selectedItem={selectedCalendarMode}
-          onSelect={handleSelectCalendarMode}
-        />
         <S.CalendarContainer>
-          <Calendar
-            isCoach
-            monthSchedule={schedule.monthSchedule}
-            monthYear={monthYear}
-            dateBoxLength={dateBoxLength}
-            selectedDay={selectedDay}
-            onClickDate={handleClickDate}
-            onUpdateMonth={handleUpdateMonth}
-          />
+          <div>
+            <CalendarSelectList
+              lists={[
+                { id: 'singleSelect', text: '개별 선택' },
+                { id: 'multiSelect', text: '다중 선택' },
+              ]}
+              selectedItem={selectedCalendarMode}
+              onSelect={handleSelectCalendarMode}
+            />
+            <Calendar
+              isCoach
+              monthSchedule={schedule.monthSchedule}
+              monthYear={monthYear}
+              dateBoxLength={dateBoxLength}
+              selectedDay={selectedDay}
+              onClickDate={handleClickDate}
+              onUpdateMonth={handleUpdateMonth}
+            />
+          </div>
           {isOpenTimeList && (
             <ScheduleTimeList
               isSelectedAll={isSelectedAll}
