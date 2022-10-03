@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { TimeBox } from '@components/TimeBox/styles';
 import { FadeIn } from '@styles/common';
 
 const TimeListContainer = styled.div`
@@ -21,22 +22,7 @@ const TimeListContainer = styled.div`
   }
 `;
 
-const TimeBox = styled.div<{ isPossible?: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  margin-bottom: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
-  border-radius: 4px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    border: 3px solid ${({ theme }) => theme.colors.GREEN_900};
-  }
-
+const ReservationTimeBox = styled(TimeBox)`
   ${(props) =>
     props.isPossible === false &&
     css`
@@ -46,10 +32,6 @@ const TimeBox = styled.div<{ isPossible?: boolean }>`
       text-decoration: line-through;
       pointer-events: none;
     `}
-
-  @media screen and (${({ theme }) => theme.devices.tablet}) {
-    width: 100px;
-  }
 `;
 
 const ReserveButtonWrapper = styled.div`
@@ -100,4 +82,4 @@ const ModalContent = styled.p`
   font-weight: bold;
 `;
 
-export { TimeListContainer, TimeBox, ReserveButtonWrapper, ModalContent };
+export { TimeListContainer, ReservationTimeBox, ReserveButtonWrapper, ModalContent };

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { TimeBox } from '@components/TimeBox/styles';
 import { FadeIn } from '@styles/common';
 
 const MultipleTimeListContainer = styled.div`
@@ -16,32 +17,13 @@ const MultipleTimeListContainer = styled.div`
   }
 `;
 
-const MultipleTimeBox = styled.div<{ isPossible?: boolean; isSelected?: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  margin-bottom: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
-  border-radius: 4px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-
+const MultipleTimeBox = styled(TimeBox)`
   ${(props) =>
     props.isSelected &&
     css`
       background-color: ${({ theme }) => theme.colors.GREEN_900};
       color: ${({ theme }) => theme.colors.WHITE};
     `}
-
-  &:hover {
-    border: 3px solid ${({ theme }) => theme.colors.GREEN_900};
-  }
-
-  @media screen and (${({ theme }) => theme.devices.tablet}) {
-    width: 100px;
-  }
 `;
 
 const ScrollContainer = styled.div`
