@@ -1,4 +1,4 @@
-import HelpTip from '@components/HelpTip';
+import Tooltip from '@components/Tooltip';
 import * as S from './styles';
 
 interface TitleProps {
@@ -6,10 +6,10 @@ interface TitleProps {
   highlightText?: string;
   hightlightColor?: string;
   extraText?: string;
-  helpTip?: string;
+  tooltipText?: string;
 }
 
-const Title = ({ text, highlightText, extraText, hightlightColor, helpTip }: TitleProps) => {
+const Title = ({ text, highlightText, extraText, hightlightColor, tooltipText }: TitleProps) => {
   return (
     <S.TitleWrapper>
       <S.Title>{text}</S.Title>
@@ -17,7 +17,7 @@ const Title = ({ text, highlightText, extraText, hightlightColor, helpTip }: Tit
         <S.HighLightText hightlightColor={hightlightColor}>{highlightText}</S.HighLightText>
       )}
       {extraText && <S.Title>{extraText}</S.Title>}
-      {helpTip && <HelpTip text={helpTip} />}
+      {tooltipText && <Tooltip text={tooltipText} />}
     </S.TitleWrapper>
   );
 };

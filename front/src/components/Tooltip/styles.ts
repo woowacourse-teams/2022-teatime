@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FadeIn } from '@styles/common';
 
-const Help = styled.div`
+const TooltipBox = styled.div`
   position: relative;
   width: 24px;
   height: 24px;
@@ -14,7 +14,7 @@ const Help = styled.div`
   line-height: 22px;
 
   ::before {
-    content: '?';
+    content: 'i';
     color: ${({ theme }) => theme.colors.GRAY_300};
   }
 
@@ -25,9 +25,10 @@ const Help = styled.div`
 
   p {
     position: absolute;
-    left: -10px;
+    top: -19px;
+    left: 30px;
     display: none;
-    width: 220px;
+    width: 300px;
     margin-top: 6px;
     padding: 14px;
     border-radius: 4px;
@@ -39,4 +40,4 @@ const Help = styled.div`
   }
 `;
 
-export { Help };
+export { TooltipBox };
