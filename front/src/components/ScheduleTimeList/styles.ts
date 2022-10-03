@@ -75,7 +75,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   position: absolute;
-  bottom: 1px;
+  bottom: 0;
   width: 250px;
 
   button {

@@ -15,17 +15,14 @@ const MultipleTimeList = ({
   return (
     <S.MultipleTimeListContainer>
       <S.ScrollContainer>
-        {selectedTimes.map((t) => (
-          <S.MultipleTimeBox
-            key={t.id}
-            isSelected={t.isSelected}
-            onClick={() => onClickTime(t.time)}
-          >
-            {t.time}
+        {selectedTimes.map(({ id, time, isSelected }) => (
+          <S.MultipleTimeBox key={id} isSelected={isSelected} onClick={() => onClickTime(time)}>
+            {time}
           </S.MultipleTimeBox>
         ))}
-        <button onClick={onClickUpdateMultipleDaySchedule}>확인</button>
       </S.ScrollContainer>
+
+      <S.ConfirmButton onClick={onClickUpdateMultipleDaySchedule}>확인</S.ConfirmButton>
     </S.MultipleTimeListContainer>
   );
 };

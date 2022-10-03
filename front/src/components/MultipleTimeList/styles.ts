@@ -29,16 +29,6 @@ const MultipleTimeBox = styled.div<{ isPossible?: boolean; isSelected?: boolean 
   cursor: pointer;
 
   ${(props) =>
-    props.isPossible === false &&
-    css`
-      background-color: ${({ theme }) => theme.colors.GRAY_200};
-      color: ${({ theme }) => theme.colors.GRAY_500};
-      cursor: default;
-      text-decoration: line-through;
-      pointer-events: none;
-    `}
-
-  ${(props) =>
     props.isSelected &&
     css`
       background-color: ${({ theme }) => theme.colors.GREEN_900};
@@ -66,8 +56,29 @@ const ScrollContainer = styled.div`
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 50px 0 60px;
+    margin: 10px 0 60px;
   }
 `;
 
-export { MultipleTimeListContainer, MultipleTimeBox, ScrollContainer };
+const ConfirmButton = styled.button`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 50px;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.YELLOW_200};
+  color: ${({ theme }) => theme.colors.BLACK};
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+export { MultipleTimeListContainer, MultipleTimeBox, ScrollContainer, ConfirmButton };
