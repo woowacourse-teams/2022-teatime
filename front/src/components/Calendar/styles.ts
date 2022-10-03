@@ -17,6 +17,11 @@ const DateGrid = styled.div`
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     grid-template-columns: repeat(7, 40px);
   }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    grid-template-columns: repeat(7, 35px);
+    gap: 8px;
+  }
 `;
 
 const DayOfWeekBox = styled.div`
@@ -32,6 +37,12 @@ const DayOfWeekBox = styled.div`
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     width: 40px;
     height: 40px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
   }
 `;
 
