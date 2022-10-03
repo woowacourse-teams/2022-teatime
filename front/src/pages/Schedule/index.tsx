@@ -332,7 +332,7 @@ const Schedule = () => {
       refetch();
       closeMultipleTimeList();
       initSelectedMutltipleDates();
-      showSnackbar({ message: '확정되었습니다. ✅' });
+      showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
