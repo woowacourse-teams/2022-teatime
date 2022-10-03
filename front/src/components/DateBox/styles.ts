@@ -81,6 +81,12 @@ const DateContainer = styled.div<{
     width: 40px;
     height: 40px;
   }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
 `;
 
 export { DateContainer, TodayIndicator };
