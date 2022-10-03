@@ -330,7 +330,6 @@ const Schedule = () => {
       // Todo: 변경된 다중선택 api
       // await editCoachSchedule(multipleDaySchedules);
       refetch();
-      closeMultipleTimeList();
       initSelectedMutltipleDates();
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
