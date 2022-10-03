@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { FadeIn } from '@styles/common';
 
-const SelectCompleteButton = styled.button`
+const SelectStatusButton = styled.button`
   width: 100%;
   background-color: #ffe594;
   margin: 20px 0;
@@ -86,4 +86,4 @@ const ScrollContainer = styled.div`
   }
 `;
 
-export { SelectCompleteButton, MultipleTimeListContainer, MultipleTimeBox, ScrollContainer };
+export { SelectStatusButton, MultipleTimeListContainer, MultipleTimeBox, ScrollContainer };

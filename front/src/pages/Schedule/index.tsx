@@ -6,6 +6,7 @@ import Calendar from '@components/Calendar';
 import CalendarSelectList from '@components/CalendarSelectList';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
+import Conditional from '@components/Conditional';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
 import useSelectList from '@hooks/useSelectList';
@@ -276,6 +277,7 @@ const Schedule = () => {
 
   const handleUpdateDaySchedule = async () => {
     const selectedTimes = getSelectedTimes();
+    // const daySchedule = [{ date: schedule.date, schedules: selectedTimes }]; // 바뀐api
     try {
       await editCoachSchedule(schedule.date, selectedTimes);
       updateAvailableTimes(selectedTimes);
@@ -308,6 +310,7 @@ const Schedule = () => {
     try {
       // await editCoachSchedule(multipleDaySchedules);
       showSnackbar({ message: '확정되었습니다. ✅' });
+      // Todo: 다중수정 완료했을때 처리. refetch할것인지
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
@@ -393,16 +396,18 @@ const Schedule = () => {
               }
               onUpdateMonth={handleUpdateMonth}
             />
-            {!isOpenMultipleTimeList && isMultipleSelecting && (
-              <S.SelectCompleteButton onClick={handleCompleteMultipleDate}>
+
+            <Conditional condition={!isOpenMultipleTimeList && isMultipleSelecting}>
+              <S.SelectStatusButton onClick={handleCompleteMultipleDate}>
                 날짜 선택 완료하기
-              </S.SelectCompleteButton>
-            )}
-            {isOpenMultipleTimeList && (
-              <S.SelectCompleteButton onClick={handleReSelectMultipleDate}>
+              </S.SelectStatusButton>
+            </Conditional>
+
+            <Conditional condition={isOpenMultipleTimeList}>
+              <S.SelectStatusButton onClick={handleReSelectMultipleDate}>
                 날짜 다시 선택하기
-              </S.SelectCompleteButton>
-            )}
+              </S.SelectStatusButton>
+            </Conditional>
           </div>
 
           {isOpenTimeList && (
