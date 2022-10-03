@@ -25,6 +25,11 @@ const CardListContainer = styled.div`
   @media screen and (${({ theme }) => theme.devices.mobileXL}) {
     grid-template-columns: repeat(2, 150px);
   }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    grid-template-columns: repeat(2, 130px);
+    gap: 20px;
+  }
 `;
 
 export { CardListContainer, Layout };
