@@ -71,6 +71,7 @@ const Schedule = () => {
     useSelectList('singleSelect');
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
+  const [refetchCount, setRefetchCount] = useState(0);
   const [isSelectedAll, setIsSelectedAll] = useState(false);
   const [schedule, setSchedule] = useState<ScheduleInfo>({
     monthSchedule: {},
@@ -84,6 +85,10 @@ const Schedule = () => {
 
   const isMultipleSelecting =
     selectedCalendarMode === 'multiSelect' && selectedDayList.dates.length > 0;
+
+  const refetch = () => {
+    setRefetchCount((prev) => prev + 1);
+  };
 
   const selectDaySchedule = (day: number) => {
     setSchedule((allSchedules) => {
@@ -151,6 +156,15 @@ const Schedule = () => {
       return {
         ...allSchedules,
         monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
+      };
+    });
+  };
+
+  const initSelectedMutltipleDates = () => {
+    setSelectedDayList((prev) => {
+      return {
+        ...prev,
+        dates: [],
       };
     });
   };
@@ -308,8 +322,10 @@ const Schedule = () => {
     try {
       // Todo: 변경된 다중선택 api
       // await editCoachSchedule(multipleDaySchedules);
+      refetch();
+      closeMultipleTimeList();
+      initSelectedMutltipleDates();
       showSnackbar({ message: '확정되었습니다. ✅' });
-      // Todo: 다중수정 완료했을때 처리. refetch할것인지
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
@@ -321,13 +337,7 @@ const Schedule = () => {
   useEffect(() => {
     closeTimeList();
     closeMultipleTimeList();
-
-    setSelectedDayList((prev) => {
-      return {
-        ...prev,
-        dates: [],
-      };
-    });
+    initSelectedMutltipleDates();
   }, [selectedCalendarMode]);
 
   useEffect(() => {
@@ -358,7 +368,7 @@ const Schedule = () => {
         }
       }
     })();
-  }, [monthYear]);
+  }, [monthYear, refetchCount]);
 
   return (
     <Frame>
