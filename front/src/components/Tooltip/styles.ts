@@ -38,6 +38,15 @@ const TooltipBox = styled.div`
     font-size: 15px;
     line-height: 1.4;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    p {
+      top: 20px;
+      left: -80px;
+      width: 180px;
+      z-index: 1;
+    }
+  }
 `;
 
 export { TooltipBox };
