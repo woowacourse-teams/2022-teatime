@@ -401,6 +401,7 @@ const Schedule = () => {
             />
             <Calendar
               isCoach
+              isOpenTimeList={isOpenTimeList}
               isMultipleSelecting={isOpenMultipleTimeList}
               monthSchedule={schedule.monthSchedule}
               monthYear={monthYear}

@@ -12,6 +12,7 @@ import * as S from './styles';
 interface CalendarProps {
   isCoach?: boolean;
   isMultipleSelecting?: boolean;
+  isOpenTimeList?: boolean;
   selectedDayList?: string[];
   onUpdateMonth: (increment: number) => void;
   onClickDate: (day: number) => void;
@@ -23,6 +24,7 @@ interface CalendarProps {
 
 const Calendar = ({
   isCoach,
+  isOpenTimeList,
   isMultipleSelecting,
   selectedDayList,
   onUpdateMonth,
@@ -37,7 +39,7 @@ const Calendar = ({
   const startDateTime = startDate.getTime() - 9 * HOUR_MILLISECONDS;
 
   return (
-    <S.CalendarContainer isMultipleSelecting={isMultipleSelecting}>
+    <S.CalendarContainer isMultipleSelecting={isMultipleSelecting} isOpenTimeList={isOpenTimeList}>
       <S.YearMonthContainer>
         <span>
           {year}년 {month}월

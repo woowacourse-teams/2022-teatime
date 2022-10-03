@@ -138,6 +138,7 @@ const Reservation = () => {
         />
         <SS.CalendarContainer>
           <Calendar
+            isOpenTimeList={isOpenTimeList}
             monthSchedule={schedule.monthSchedule}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
