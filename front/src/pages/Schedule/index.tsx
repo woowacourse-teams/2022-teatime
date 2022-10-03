@@ -22,6 +22,7 @@ import type {
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
+import MultipleTimeList from '@components/MultipleTimeList';
 
 const timeArray = [
   '10:00',
@@ -421,20 +422,11 @@ const Schedule = () => {
           )}
 
           {isOpenMultipleTimeList && (
-            <S.MultipleTimeListContainer>
-              <S.ScrollContainer>
-                {selectedDayList.times.map((t) => (
-                  <S.MultipleTimeBox
-                    key={t.id}
-                    isSelected={t.isSelected}
-                    onClick={() => handleClickMutipleTime(t.time)}
-                  >
-                    {t.time}
-                  </S.MultipleTimeBox>
-                ))}
-                <button onClick={handleUpdateMultipleDaySchedule}>확인</button>
-              </S.ScrollContainer>
-            </S.MultipleTimeListContainer>
+            <MultipleTimeList
+              selectedTimes={selectedDayList.times}
+              onClickTime={handleClickMutipleTime}
+              onClickUpdateMultipleDaySchedule={handleUpdateMultipleDaySchedule}
+            />
           )}
         </SS.CalendarContainer>
       </SS.ScheduleContainer>

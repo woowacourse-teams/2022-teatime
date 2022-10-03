@@ -127,6 +127,7 @@ export {
   DaySchedule,
   TimeSchedule,
   Reservation,
+  MultipleTime,
   MultipleDaySchedule,
   MonthScheduleMap,
   CrewListMap,
