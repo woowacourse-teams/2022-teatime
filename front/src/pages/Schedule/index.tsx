@@ -134,15 +134,6 @@ const Schedule = () => {
     });
   };
 
-  const getSelectedTimes = () => {
-    return schedule.daySchedule.reduce((newArray, { isSelected, dateTime }) => {
-      if (isSelected) {
-        newArray.push(dateTime);
-      }
-      return newArray;
-    }, [] as string[]);
-  };
-
   const updateAvailableTimes = (selectedTimes: string[]) => {
     setSchedule((allSchedules) => {
       const newDaySchedule = schedule.monthSchedule[selectedDay].map(
@@ -222,10 +213,7 @@ const Schedule = () => {
 
   const handleCompleteMultipleDate = () => {
     openMultipleTimeList();
-
     initSelectedMultipleTimes();
-
-    console.log(selectedDayList.times);
   };
 
   const handleReSelectMultipleDate = () => {
@@ -277,10 +265,21 @@ const Schedule = () => {
   };
 
   const handleUpdateDaySchedule = async () => {
-    const selectedTimes = getSelectedTimes();
-    // const daySchedule = [{ date: schedule.date, schedules: selectedTimes }]; // 바뀐api
+    const selectedTimes = schedule.daySchedule.reduce((newArray, { isSelected, dateTime }) => {
+      if (isSelected) {
+        newArray.push(dateTime);
+      }
+      return newArray;
+    }, [] as string[]);
+
+    const daySchedules = [{ date: schedule.date, schedules: selectedTimes }];
+    // Todo: 변경된 다중선택 api
+    console.log(daySchedules);
+
     try {
       await editCoachSchedule(schedule.date, selectedTimes);
+      // Todo: 변경된 다중선택 api
+      // await editCoachSchedule(daySchedules);
       updateAvailableTimes(selectedTimes);
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
@@ -292,8 +291,6 @@ const Schedule = () => {
   };
 
   const handleUpdateMultipleDaySchedule = async () => {
-    // const selectedTimes = getSelectedTimes();
-
     const selectedTimes = selectedDayList.times.reduce((newArray, { time, isSelected }) => {
       if (isSelected) {
         newArray.push(time);
@@ -305,10 +302,11 @@ const Schedule = () => {
       const schedules = selectedTimes.map((time) => `${date}T${time}:00.000Z`);
       return { date, schedules };
     });
-
+    // Todo: 변경된 다중선택 api
     console.log(multipleDaySchedules);
 
     try {
+      // Todo: 변경된 다중선택 api
       // await editCoachSchedule(multipleDaySchedules);
       showSnackbar({ message: '확정되었습니다. ✅' });
       // Todo: 다중수정 완료했을때 처리. refetch할것인지
@@ -411,7 +409,7 @@ const Schedule = () => {
             </Conditional>
           </div>
 
-          {isOpenTimeList && (
+          <Conditional condition={isOpenTimeList}>
             <ScheduleTimeList
               isSelectedAll={isSelectedAll}
               daySchedule={schedule.daySchedule}
@@ -419,15 +417,15 @@ const Schedule = () => {
               onSelectAll={handleSelectAll}
               onUpdateDaySchedule={handleUpdateDaySchedule}
             />
-          )}
+          </Conditional>
 
-          {isOpenMultipleTimeList && (
+          <Conditional condition={isOpenMultipleTimeList}>
             <MultipleTimeList
               selectedTimes={selectedDayList.times}
               onClickTime={handleClickMutipleTime}
               onClickUpdateMultipleDaySchedule={handleUpdateMultipleDaySchedule}
             />
-          )}
+          </Conditional>
         </SS.CalendarContainer>
       </SS.ScheduleContainer>
     </Frame>

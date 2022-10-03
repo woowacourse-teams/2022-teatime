@@ -18,6 +18,10 @@ const getCoachHistories = () => api.get<CoachHistory[]>('/api/v2/coaches/me/hist
 const editCoachProfile = (data: { name: string; description: string }) =>
   api.put(`/api/v2/coaches/me/profile`, data);
 
+// Todo: 변경된 다중선택 api
+// const editCoachSchedule = (data: { date: string; schedules: string[] }[]) =>
+//   api.put(`/api/v2/coaches/me/schedules`, { data });
+
 const editCoachSchedule = (date: string, schedules: string[]) =>
   api.put(`/api/v2/coaches/me/schedules`, { date, schedules });
 

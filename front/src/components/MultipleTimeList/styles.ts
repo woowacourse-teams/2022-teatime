@@ -17,15 +17,6 @@ const MultipleTimeListContainer = styled.div`
   }
 `;
 
-const MultipleTimeBox = styled(TimeBox)`
-  ${(props) =>
-    props.isSelected &&
-    css`
-      background-color: ${({ theme }) => theme.colors.GREEN_900};
-      color: ${({ theme }) => theme.colors.WHITE};
-    `}
-`;
-
 const ScrollContainer = styled.div`
   height: calc(100% - 70px);
   overflow: scroll;
@@ -40,6 +31,15 @@ const ScrollContainer = styled.div`
     gap: 10px;
     margin: 10px 0 60px;
   }
+`;
+
+const MultipleTimeBox = styled(TimeBox)`
+  ${(props) =>
+    props.isSelected &&
+    css`
+      background-color: ${({ theme }) => theme.colors.GREEN_900};
+      color: ${({ theme }) => theme.colors.WHITE};
+    `}
 `;
 
 const ConfirmButton = styled.button`
