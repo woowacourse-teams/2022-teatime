@@ -104,7 +104,7 @@ interface ScheduleInfo {
 
 interface MultipleTime {
   id: number;
-  time: string;
+  dateTime: string;
   isSelected: boolean;
 }
 interface MultipleDaySchedule {

@@ -6,6 +6,7 @@ import Calendar from '@components/Calendar';
 import CalendarSelectList from '@components/CalendarSelectList';
 import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
+import MultipleTimeList from '@components/MultipleTimeList';
 import Conditional from '@components/Conditional';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
@@ -18,11 +19,12 @@ import type {
   ScheduleInfo,
   MonthScheduleMap,
   MultipleDaySchedule,
+  TimeSchedule,
+  MultipleTime,
 } from '@typings/domain';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
-import MultipleTimeList from '@components/MultipleTimeList';
 
 const timeArray = [
   '10:00',
@@ -103,6 +105,24 @@ const Schedule = () => {
     });
   };
 
+  const selectMultipleDays = (date: string) => {
+    setSelectedDayList((prev) => {
+      const newDates = [...selectedDayList.dates];
+      const findIndex = newDates.findIndex((newDate) => newDate === date);
+
+      if (newDates.includes(date)) {
+        newDates.splice(findIndex, 1);
+      } else {
+        newDates.push(date);
+      }
+
+      return {
+        ...prev,
+        dates: newDates,
+      };
+    });
+  };
+
   const createScheduleMap = (scheduleArray: DaySchedule[]) => {
     setSchedule((allSchedules) => {
       const initialMonthSchedule = Array.from({ length: lastDate }).reduce(
@@ -160,6 +180,15 @@ const Schedule = () => {
     });
   };
 
+  const getSelectedTimes = <T extends MultipleTime | TimeSchedule>(array: T[]): string[] => {
+    return array.reduce((newArray, { isSelected, dateTime }) => {
+      if (isSelected) {
+        newArray.push(dateTime);
+      }
+      return newArray;
+    }, [] as string[]);
+  };
+
   const initSelectedMutltipleDates = () => {
     setSelectedDayList((prev) => {
       return {
@@ -171,7 +200,11 @@ const Schedule = () => {
 
   const initSelectedMultipleTimes = () => {
     setSelectedDayList((prev) => {
-      const initTimes = timeArray.map((time, index) => ({ id: index, time, isSelected: false }));
+      const initTimes = timeArray.map((dateTime, index) => ({
+        id: index,
+        dateTime,
+        isSelected: false,
+      }));
 
       return {
         ...prev,
@@ -208,21 +241,7 @@ const Schedule = () => {
       return;
     }
 
-    setSelectedDayList((prev) => {
-      const newDates = [...selectedDayList.dates];
-      const findIndex = newDates.findIndex((newDate) => newDate === date);
-
-      if (newDates.includes(date)) {
-        newDates.splice(findIndex, 1);
-      } else {
-        newDates.push(date);
-      }
-
-      return {
-        ...prev,
-        dates: newDates,
-      };
-    });
+    selectMultipleDays(date);
   };
 
   const handleCompleteMultipleDate = () => {
@@ -248,9 +267,9 @@ const Schedule = () => {
     });
   };
 
-  const handleClickMutipleTime = (time: string) => {
+  const handleClickMutipleTime = (dateTime: string) => {
     setSelectedDayList((prev) => {
-      const selectedIndex = selectedDayList.times.findIndex((t) => t.time === time);
+      const selectedIndex = selectedDayList.times.findIndex((t) => t.dateTime === dateTime);
       const newTimes = [...selectedDayList.times];
       newTimes[selectedIndex].isSelected = !newTimes[selectedIndex].isSelected;
 
@@ -279,13 +298,7 @@ const Schedule = () => {
   };
 
   const handleUpdateDaySchedule = async () => {
-    const selectedTimes = schedule.daySchedule.reduce((newArray, { isSelected, dateTime }) => {
-      if (isSelected) {
-        newArray.push(dateTime);
-      }
-      return newArray;
-    }, [] as string[]);
-
+    const selectedTimes = getSelectedTimes(schedule.daySchedule);
     const daySchedules = [{ date: schedule.date, schedules: selectedTimes }];
     // Todo: 변경된 다중선택 api
     console.log(daySchedules);
@@ -305,13 +318,7 @@ const Schedule = () => {
   };
 
   const handleUpdateMultipleDaySchedule = async () => {
-    const selectedTimes = selectedDayList.times.reduce((newArray, { time, isSelected }) => {
-      if (isSelected) {
-        newArray.push(time);
-      }
-      return newArray;
-    }, [] as string[]);
-
+    const selectedTimes = getSelectedTimes(selectedDayList.times);
     const multipleDaySchedules = selectedDayList.dates.map((date) => {
       const schedules = selectedTimes.map((time) => `${date}T${time}:00.000Z`);
       return { date, schedules };

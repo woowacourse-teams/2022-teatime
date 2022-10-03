@@ -15,9 +15,9 @@ const MultipleTimeList = ({
   return (
     <S.MultipleTimeListContainer>
       <S.ScrollContainer>
-        {selectedTimes.map(({ id, time, isSelected }) => (
-          <S.MultipleTimeBox key={id} isSelected={isSelected} onClick={() => onClickTime(time)}>
-            {time}
+        {selectedTimes.map(({ id, dateTime, isSelected }) => (
+          <S.MultipleTimeBox key={id} isSelected={isSelected} onClick={() => onClickTime(dateTime)}>
+            {dateTime}
           </S.MultipleTimeBox>
         ))}
       </S.ScrollContainer>
