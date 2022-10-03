@@ -38,8 +38,10 @@ const TitleWrapper = styled.div`
   }
 
   h1 {
-    font-size: 26px;
-    color: ${({ theme }) => theme.colors.BLUE_800};
+    font-size: 28px;
+    background: ${({ theme }) =>
+      `linear-gradient(to top, ${theme.colors.YELLOW_400} 40%, transparent 50%)`};
+    color: ${({ theme }) => theme.colors.BLUE_900};
   }
 `;
 
