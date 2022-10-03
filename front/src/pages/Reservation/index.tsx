@@ -161,7 +161,7 @@ const Reservation = () => {
       {isOpenModal && (
         <Modal
           icon={CheckCircle}
-          title="예약완료"
+          title="예약 완료"
           firstButtonName="나중에"
           secondButtonName="작성하기"
           onClickFirstButton={() => navigate(ROUTES.CREW_HISTORY)}

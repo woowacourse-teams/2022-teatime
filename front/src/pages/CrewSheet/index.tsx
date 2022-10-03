@@ -22,7 +22,11 @@ const CrewSheet = () => {
   const handleSubmit = async (isSubmitted: boolean, contents: Sheets[]) => {
     try {
       await editCrewReservation(reservationId as string, isSubmitted, contents);
-      showSnackbar({ message: isSubmitted ? '제출되었습니다. 💌' : '임시 저장되었습니다. 📝' });
+      showSnackbar({
+        message: isSubmitted
+          ? '제출되었습니다. 💌'
+          : '임시 저장되었습니다. 📝\n( 상대방에게 보이지 않습니다. )',
+      });
       navigate(ROUTES.CREW_HISTORY);
     } catch (error) {
       if (error instanceof AxiosError) {
