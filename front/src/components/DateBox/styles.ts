@@ -14,7 +14,6 @@ const DateContainer = styled.div<{
   hasDate: boolean;
   isSelected: boolean;
   isCoach?: boolean;
-  isWeekend?: boolean;
   isImpossibleDay?: boolean;
   isPastDay?: boolean;
 }>`

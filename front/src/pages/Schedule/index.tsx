@@ -177,7 +177,7 @@ const Schedule = () => {
     updateMonthYear(increment);
   };
 
-  const handleClickDate = (day: number, isWeekend: boolean) => {
+  const handleClickDate = (day: number) => {
     openTimeList();
     selectDaySchedule(day);
     setSelectedDay(day);
