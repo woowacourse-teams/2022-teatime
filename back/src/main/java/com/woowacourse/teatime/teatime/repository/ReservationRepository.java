@@ -21,8 +21,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation AS r "
             + "JOIN FETCH r.schedule AS s "
-            + "JOIN FETCH s.coach AS c "
-            + "WHERE c.id = :coachId AND r.reservationStatus NOT IN :status")
+            + "JOIN FETCH r.crew AS cr "
+            + "INNER JOIN s.coach AS co "
+            + "ON co.id = :coachId "
+            + "WHERE r.reservationStatus NOT IN :status")
     List<Reservation> findAllByCoachIdAndStatusNot(Long coachId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
