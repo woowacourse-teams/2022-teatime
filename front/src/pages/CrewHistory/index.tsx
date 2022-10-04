@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import EmptyContent from '@components/EmptyContent';
+import Filter from '@components/Filter';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
@@ -51,7 +52,7 @@ const CrewHistory = () => {
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
-  const [category, setCategory] = useState('ALL');
+  const [category, setCategory] = useState<string>('ALL');
 
   const changeHistoryStatus = (reservationId: number, status: CrewHistoryStatus) => {
     setHistoryList((prevHistory) => {
@@ -121,28 +122,14 @@ const CrewHistory = () => {
 
   return (
     <S.Container>
-      <select
-        onChange={handleFilterStatus}
-        style={{
-          width: 100,
-          height: 35,
-          margin: '20px 0 10px',
-          fontSize: 16,
-          border: '2px solid gray',
-          borderRadius: 5,
-          background: 'transparent',
-          color: '#4b5563',
-          paddingLeft: 10,
-          outline: 0,
-        }}
-      >
+      <Filter onFilterStatus={handleFilterStatus}>
         <option value="ALL">전체</option>
         <option value="BEFORE_APPROVED">승인전</option>
         <option value="APPROVED">승인완료</option>
         <option value="IN_PROGRESS">진행중</option>
         <option value="DONE">면담완료</option>
         <option value="CANCELED">면담취소</option>
-      </select>
+      </Filter>
       <S.Table>
         <thead>
           <S.TheadRow>

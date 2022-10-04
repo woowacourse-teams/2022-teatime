@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import EmptyContent from '@components/EmptyContent';
+import Filter from '@components/Filter';
 import { ROUTES } from '@constants/index';
 import { getCoachHistories } from '@api/coach';
 import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
@@ -66,25 +67,11 @@ const CoachHistory = () => {
 
   return (
     <S.Container>
-      <select
-        onChange={handleFilterStatus}
-        style={{
-          width: 100,
-          height: 35,
-          margin: '20px 0 10px',
-          fontSize: 16,
-          border: '2px solid gray',
-          borderRadius: 5,
-          background: 'transparent',
-          color: '#4b5563',
-          paddingLeft: 10,
-          outline: 0,
-        }}
-      >
+      <Filter onFilterStatus={handleFilterStatus}>
         <option value="ALL">전체</option>
         <option value="DONE">면담완료</option>
         <option value="CANCELED">면담취소</option>
-      </select>
+      </Filter>
       <S.Table>
         <thead>
           <S.TheadRow>
