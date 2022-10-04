@@ -300,13 +300,9 @@ const Schedule = () => {
   const handleUpdateDaySchedule = async () => {
     const selectedTimes = getSelectedTimes(schedule.daySchedule);
     const daySchedules = [{ date: schedule.date, schedules: selectedTimes }];
-    // Todo: 변경된 다중선택 api
-    console.log(daySchedules);
 
     try {
-      await editCoachSchedule(schedule.date, selectedTimes);
-      // Todo: 변경된 다중선택 api
-      // await editCoachSchedule(daySchedules);
+      await editCoachSchedule(daySchedules);
       updateAvailableTimes(selectedTimes);
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
@@ -323,12 +319,9 @@ const Schedule = () => {
       const schedules = selectedTimes.map((time) => `${date}T${time}:00.000Z`);
       return { date, schedules };
     });
-    // Todo: 변경된 다중선택 api
-    console.log(multipleDaySchedules);
 
     try {
-      // Todo: 변경된 다중선택 api
-      // await editCoachSchedule(multipleDaySchedules);
+      await editCoachSchedule(multipleDaySchedules);
       refetch();
       closeMultipleTimeList();
       initSelectedMutltipleDates();
