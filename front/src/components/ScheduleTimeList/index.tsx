@@ -25,7 +25,7 @@ const ScheduleTimeList = ({
           const isPastTime = new Date() > getDateTime(schedule.dateTime);
 
           return (
-            <S.TimeBox
+            <S.ScheduleTimeBox
               key={schedule.id}
               isPossible={schedule.isPossible}
               isPastTime={isPastTime}
@@ -33,7 +33,7 @@ const ScheduleTimeList = ({
               onClick={() => onClickTime(schedule.dateTime)}
             >
               {time}
-            </S.TimeBox>
+            </S.ScheduleTimeBox>
           );
         })}
       </S.ScrollContainer>

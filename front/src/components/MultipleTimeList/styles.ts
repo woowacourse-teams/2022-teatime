@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { TimeBox } from '@components/TimeBox/styles';
 import { FadeIn } from '@styles/common';
 
-const TimeListContainer = styled.div`
+const MultipleTimeListContainer = styled.div`
   animation: ${FadeIn} 0.8s;
   position: relative;
   height: 100%;
@@ -29,21 +29,11 @@ const ScrollContainer = styled.div`
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 50px 0 60px;
+    margin: 10px 0 60px;
   }
 `;
 
-const ScheduleTimeBox = styled(TimeBox)`
-  ${(props) =>
-    (props.isPossible === false || props.isPastTime) &&
-    css`
-      background-color: ${({ theme }) => theme.colors.GRAY_200};
-      color: ${({ theme }) => theme.colors.GRAY_500};
-      cursor: default;
-      text-decoration: line-through;
-      pointer-events: none;
-    `}
-
+const MultipleTimeBox = styled(TimeBox)`
   ${(props) =>
     props.isSelected &&
     css`
@@ -52,36 +42,25 @@ const ScheduleTimeBox = styled(TimeBox)`
     `}
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+const ConfirmButton = styled.button`
   position: absolute;
   bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 250px;
+  height: 50px;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.YELLOW_200};
+  color: ${({ theme }) => theme.colors.BLACK};
 
-  button {
-    width: 120px;
-    height: 50px;
-    border: none;
-    border-radius: 4px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
+  &:hover {
+    opacity: 0.7;
   }
 `;
 
-const CheckButton = styled.button``;
-
-const ConfirmButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.YELLOW_200};
-  color: ${({ theme }) => theme.colors.BLACK};
-`;
-
-export {
-  TimeListContainer,
-  ScrollContainer,
-  ScheduleTimeBox,
-  ButtonContainer,
-  CheckButton,
-  ConfirmButton,
-};
+export { MultipleTimeListContainer, MultipleTimeBox, ScrollContainer, ConfirmButton };

@@ -81,9 +81,7 @@ const Reservation = () => {
     updateMonthYear(increment);
   };
 
-  const handleClickDate = (day: number, isWeekend: boolean) => {
-    // if (isWeekend) return;
-
+  const handleClickDate = (day: number) => {
     openTimeList();
     selectDaySchedule(day);
     setSelectedDay(day);
@@ -140,6 +138,7 @@ const Reservation = () => {
         />
         <SS.CalendarContainer>
           <Calendar
+            isOpenTimeList={isOpenTimeList}
             monthSchedule={schedule.monthSchedule}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}

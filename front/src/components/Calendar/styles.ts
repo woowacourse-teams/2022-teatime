@@ -1,11 +1,34 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
-const CalendarContainer = styled.div`
+const MoveLeft = keyframes`
+  from {
+    transform: translateX(50px) 
+  }
+  to {
+    transform: translateX(0px) 
+  }
+`;
+
+const CalendarContainer = styled.div<{ isMultipleSelecting?: boolean; isOpenTimeList?: boolean }>`
   display: flex;
   flex-direction: column;
 
+  ${(props) =>
+    props.isMultipleSelecting &&
+    css`
+      pointer-events: none;
+      opacity: 0.6;
+    `}
+
+  ${(props) =>
+    (props.isMultipleSelecting || props.isOpenTimeList) &&
+    css`
+      animation: ${MoveLeft} 0.3s;
+    `}
+
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     align-items: center;
+    animation: none;
   }
 `;
 

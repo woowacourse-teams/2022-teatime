@@ -1,6 +1,6 @@
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
-import { DAY_NUMBER, DAY_OF_WEEKS, HOUR_MILLISECONDS } from '@constants/index';
+import { DAY_OF_WEEKS, HOUR_MILLISECONDS } from '@constants/index';
 import { convertToFullDate, getCurrentFullDate } from '@utils/date';
 import type { MonthYear, MonthScheduleMap } from '@typings/domain';
 
@@ -11,8 +11,11 @@ import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;
+  isMultipleSelecting?: boolean;
+  isOpenTimeList?: boolean;
+  selectedDayList?: string[];
   onUpdateMonth: (increment: number) => void;
-  onClickDate: (day: number, isWeekend: boolean) => void;
+  onClickDate: (day: number) => void;
   monthYear: MonthYear;
   dateBoxLength: number;
   selectedDay: number | null;
@@ -21,6 +24,9 @@ interface CalendarProps {
 
 const Calendar = ({
   isCoach,
+  isOpenTimeList,
+  isMultipleSelecting,
+  selectedDayList,
   onUpdateMonth,
   onClickDate,
   monthYear,
@@ -33,7 +39,7 @@ const Calendar = ({
   const startDateTime = startDate.getTime() - 9 * HOUR_MILLISECONDS;
 
   return (
-    <S.CalendarContainer>
+    <S.CalendarContainer isMultipleSelecting={isMultipleSelecting} isOpenTimeList={isOpenTimeList}>
       <S.YearMonthContainer>
         <span>
           {year}년 {month}월
@@ -55,9 +61,9 @@ const Calendar = ({
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW + 1;
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;
-          const dayNumber = convertToFullDate(year, month, date).getDay();
-          const isWeekend = dayNumber === DAY_NUMBER.SUNDAY || dayNumber === DAY_NUMBER.SATURDAY;
           const isPastDay = convertToFullDate(year, month, date) < getCurrentFullDate();
+          const dateString = `${year}-${month}-${String(date).padStart(2, '0')}`;
+          const isMultipleSelected = selectedDayList?.includes(dateString);
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
@@ -66,11 +72,11 @@ const Calendar = ({
               key={index}
               date={date}
               daySchedule={monthSchedule[date]}
-              onClick={() => onClickDate(date, isWeekend)}
+              onClick={() => onClickDate(date)}
               selectedDay={selectedDay}
+              isMultipleSelected={isMultipleSelected}
               currentDay={convertToFullDate(year, month, date)}
               isCoach={isCoach}
-              isWeekend={isWeekend}
               isPastDay={isPastDay}
             />
           );

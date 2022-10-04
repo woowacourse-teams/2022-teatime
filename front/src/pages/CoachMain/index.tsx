@@ -4,10 +4,11 @@ import { AxiosError } from 'axios';
 
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
-import SelectList from '@components/SelectList';
+import BoardSelectList from '@components/BoardSelectList';
 import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
+import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { confirmReservation, cancelReservation, rejectReservation } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
@@ -34,9 +35,10 @@ const CoachMain = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
+  const { selectedItem: selectedBoard, handleSelectItem: handleSelectBoard } =
+    useSelectList('beforeApproved');
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
-  const [selectedBoard, setSelectedBoard] = useState('beforeApproved');
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -170,12 +172,6 @@ const CoachMain = () => {
     handleApprove(itemId, draggedItem.reservationId);
   };
 
-  const handleSelectBoardName = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName !== 'LI') return;
-    setSelectedBoard(target.id);
-  };
-
   const boardItem: BoardItem = {
     beforeApproved: {
       title: '대기중인 일정',
@@ -226,7 +222,7 @@ const CoachMain = () => {
 
   return (
     <S.Layout>
-      <SelectList
+      <BoardSelectList
         lists={[
           { id: 'beforeApproved', text: '대기중인 일정' },
           { id: 'approved', text: '확정된 일정' },
@@ -234,7 +230,7 @@ const CoachMain = () => {
         ]}
         hidden={width > size.tablet}
         selectedItem={selectedBoard}
-        onSelect={handleSelectBoardName}
+        onSelect={handleSelectBoard}
       />
       <S.BoardListContainer>
         {Object.keys(crews).map((status) => {
