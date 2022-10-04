@@ -208,7 +208,7 @@ public class ReservationService {
 
         if (SUBMITTED.equals(status)) {
             reservation.updateSheetStatusToSubmitted();
-            sendAlarm(crew, reservation.getSchedule(), AlarmTitle.SUBMIT_SHEET);
+            alarmService.alertSheetSubmitted(reservation);
         }
     }
 
