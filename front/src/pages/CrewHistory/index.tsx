@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
@@ -51,6 +51,7 @@ const CrewHistory = () => {
   const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
+  const [category, setCategory] = useState('ALL');
 
   const changeHistoryStatus = (reservationId: number, status: CrewHistoryStatus) => {
     setHistoryList((prevHistory) => {
@@ -92,6 +93,18 @@ const CrewHistory = () => {
     }
   };
 
+  const handleFilterStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategory(e.target.value);
+  };
+
+  const filteredHistory = () => {
+    if (category === 'ALL') {
+      return historyList;
+    }
+
+    return historyList.filter((v) => v.status === category);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -107,7 +120,29 @@ const CrewHistory = () => {
   }, []);
 
   return (
-    <>
+    <S.Container>
+      <select
+        onChange={handleFilterStatus}
+        style={{
+          width: 100,
+          height: 35,
+          margin: '20px 0 10px',
+          fontSize: 16,
+          border: '2px solid gray',
+          borderRadius: 5,
+          background: 'transparent',
+          color: '#4b5563',
+          paddingLeft: 10,
+          outline: 0,
+        }}
+      >
+        <option value="ALL">전체</option>
+        <option value="BEFORE_APPROVED">승인전</option>
+        <option value="APPROVED">승인완료</option>
+        <option value="IN_PROGRESS">진행중</option>
+        <option value="DONE">면담완료</option>
+        <option value="CANCELED">면담취소</option>
+      </select>
       <S.Table>
         <thead>
           <S.TheadRow>
@@ -119,7 +154,7 @@ const CrewHistory = () => {
           </S.TheadRow>
         </thead>
         <tbody>
-          {historyList.map((history) => {
+          {filteredHistory().map((history) => {
             const { reservationId, status, coachName, coachImage, dateTime } = history;
             const { statusName, color, backgroundColor } = historyStatus[history.status];
             return (
@@ -140,8 +175,8 @@ const CrewHistory = () => {
           })}
         </tbody>
       </S.Table>
-      {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
-    </>
+      {filteredHistory().length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
+    </S.Container>
   );
 };
 
