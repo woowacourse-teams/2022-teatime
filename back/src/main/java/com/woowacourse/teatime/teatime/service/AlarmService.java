@@ -49,8 +49,10 @@ public class AlarmService {
     }
 
     public void alertSheetSubmitted(Reservation reservation) {
-        SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.SUBMIT_SHEET_TO_CREW);
-        SlackAlarmDto.alarmToCoach(reservation, AlarmTitle.SUBMIT_SHEET_TO_COACH);
+        SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.SUBMIT_SHEET_TO_CREW);
+        requestAlarm(crewAlarmDto);
+        SlackAlarmDto coachAlarmDto = SlackAlarmDto.alarmToCoach(reservation, AlarmTitle.SUBMIT_SHEET_TO_COACH);
+        requestAlarm(coachAlarmDto);
     }
 
     private void requestAlarm(SlackAlarmDto alarmDto) {
