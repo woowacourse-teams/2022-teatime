@@ -202,9 +202,13 @@ public class ReservationService {
     public void updateSheetStatusToSubmitted(Long crewId, Long reservationId, SheetStatus status) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(NotFoundReservationException::new);
-        validateCrewAuthorization(crewId, reservation);
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(NotFoundCrewException::new);
+        validateCrewAuthorization(crew.getId(), reservation);
+
         if (SUBMITTED.equals(status)) {
             reservation.updateSheetStatusToSubmitted();
+            alarmService.alertSheetSubmitted(reservation);
         }
     }
 

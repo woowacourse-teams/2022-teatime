@@ -43,9 +43,14 @@ public class AlarmService {
         List<Reservation> reservations = reservationRepository.findAllApprovedReservationsBetween(findFirstTime(date),
                 findLastTime(date));
         for (Reservation reservation : reservations) {
-            requestAlarm(SlackAlarmDto.remindCoach(reservation));
-            requestAlarm(SlackAlarmDto.remindCrew(reservation));
+            requestAlarm(SlackAlarmDto.alarmToCoach(reservation, AlarmTitle.REMIND_COACH));
+            requestAlarm(SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.REMIND_CREW));
         }
+    }
+
+    public void alertSheetSubmitted(Reservation reservation) {
+        SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.SUBMIT_SHEET_TO_CREW);
+        SlackAlarmDto.alarmToCoach(reservation, AlarmTitle.SUBMIT_SHEET_TO_COACH);
     }
 
     private void requestAlarm(SlackAlarmDto alarmDto) {
