@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.teatime.repository;
 
-import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -81,59 +80,5 @@ public class ScheduleRepositoryTest {
         // then
         List<Schedule> schedules = scheduleRepository.findAll();
         assertThat(schedules).hasSize(1);
-    }
-
-    @DisplayName("코치의 면담가능한 일정이 존재하는지 조회한다. - 가능한 일정이 있는 경우")
-    @Test
-    void existsIsPossibleByCoachId_true1() {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime dateTime1 = now.plusDays(1);
-        LocalDateTime dateTime2 = now.plusDays(2);
-
-        Coach coach = coachRepository.save(getCoachJason());
-        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, dateTime1));
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, dateTime2));
-        schedule1.reserve();
-
-        // when
-        boolean actual = scheduleRepository.existsIsPossibleByCoachId(coach.getId());
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @DisplayName("코치의 면담가능한 일정이 존재하는지 조회한다. - 가능한 일정이 없는 경우")
-    @Test
-    void existsIsPossibleByCoachId_false() {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime dateTime1 = now.plusDays(1);
-        LocalDateTime dateTime2 = now.plusDays(2);
-
-        Coach coach = coachRepository.save(getCoachJason());
-        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, dateTime1));
-        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, dateTime2));
-        schedule1.reserve();
-        schedule2.reserve();
-
-        // when
-        boolean actual = scheduleRepository.existsIsPossibleByCoachId(coach.getId());
-
-        // then
-        assertThat(actual).isFalse();
-    }
-
-    @DisplayName("코치의 면담가능한 일정이 존재하는지 조회한다. - 등록된 일정이 하나도 없는 경우")
-    @Test
-    void existsIsPossibleByCoachId_false2() {
-        // given
-        Coach coach = coachRepository.save(getCoachJason());
-
-        // when
-        boolean actual = scheduleRepository.existsIsPossibleByCoachId(coach.getId());
-
-        // then
-        assertThat(actual).isFalse();
     }
 }
