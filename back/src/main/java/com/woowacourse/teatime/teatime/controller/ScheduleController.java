@@ -43,8 +43,8 @@ public class ScheduleController {
 
     @PutMapping("/me/schedules")
     public ResponseEntity<Void> updateSchedules(@CoachAuthenticationPrincipal Long coachId,
-                                                @RequestBody ScheduleUpdateRequest request) {
-        scheduleService.update(coachId, request);
+                                                @RequestBody List<ScheduleUpdateRequest> requests) {
+        scheduleService.update(coachId, requests);
         return ResponseEntity.noContent().build();
     }
 }
