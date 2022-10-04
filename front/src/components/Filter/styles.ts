@@ -5,10 +5,10 @@ const Select = styled.select`
   height: 35px;
   margin: 20px 0 10px;
   font-size: 16px;
-  border: 2px solid gray;
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_500};
   border-radius: 5px;
   background: transparent;
-  color: #4b5563;
+  color: ${({ theme }) => theme.colors.GRAY_600};
   padding-left: 10px;
   outline: 0;
 `;
