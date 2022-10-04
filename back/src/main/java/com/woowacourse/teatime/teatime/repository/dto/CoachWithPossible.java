@@ -5,5 +5,5 @@ public interface CoachWithPossible {
     String getName();
     String getDescription();
     String getImage();
-    Boolean getPossible();
+    boolean getPossible();
 }
