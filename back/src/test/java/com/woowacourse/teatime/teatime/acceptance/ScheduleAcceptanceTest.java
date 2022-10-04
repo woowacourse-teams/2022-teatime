@@ -126,10 +126,10 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
         ExtractableResponse<Response> updateResponse = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + coachToken)
-                .body(request)
+                .body(List.of(request))
                 .filter(document("update-schedule", requestFields(
-                        fieldWithPath("date").description("날짜"),
-                        fieldWithPath("schedules").description("스케줄")
+                        fieldWithPath("[].date").description("날짜"),
+                        fieldWithPath("[].schedules").description("스케줄")
                 )))
                 .when().put("/api/v2/coaches/me/schedules")
                 .then().log().all()
