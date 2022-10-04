@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SlackAlarmDto {
 
-    private static final String DIRECT_LINK = "[티타임 바로가기](https://teatime.pe.kr/)";
+    private static final String DIRECT_LINK = "<https://teatime.pe.kr/|티타임 바로가기>";
 
     private String channel;
     private String text;
