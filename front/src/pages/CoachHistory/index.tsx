@@ -32,9 +32,22 @@ const historyStatus: HistoryStatus = {
 const CoachHistory = () => {
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<CoachHistoryType[]>([]);
+  const [category, setCategory] = useState('ALL');
 
   const handleShowSheet = (reservationId: number, crewId: number) => () => {
     navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: { crewId } });
+  };
+
+  const handleFilterStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategory(e.target.value);
+  };
+
+  const filteredHistory = () => {
+    if (category === 'ALL') {
+      return historyList;
+    }
+
+    return historyList.filter((v) => v.status === category);
   };
 
   useEffect(() => {
@@ -52,7 +65,26 @@ const CoachHistory = () => {
   }, []);
 
   return (
-    <>
+    <S.Container>
+      <select
+        onChange={handleFilterStatus}
+        style={{
+          width: 100,
+          height: 35,
+          margin: '20px 0 10px',
+          fontSize: 16,
+          border: '2px solid gray',
+          borderRadius: 5,
+          background: 'transparent',
+          color: '#4b5563',
+          paddingLeft: 10,
+          outline: 0,
+        }}
+      >
+        <option value="ALL">전체</option>
+        <option value="DONE">면담완료</option>
+        <option value="CANCELED">면담취소</option>
+      </select>
       <S.Table>
         <thead>
           <S.TheadRow>
@@ -64,7 +96,7 @@ const CoachHistory = () => {
           </S.TheadRow>
         </thead>
         <tbody>
-          {historyList.map((history) => {
+          {filteredHistory().map((history) => {
             const { reservationId, crewId, status, crewName, crewImage, dateTime } = history;
             const { statusName, color, backgroundColor } = historyStatus[history.status];
             return (
@@ -85,8 +117,8 @@ const CoachHistory = () => {
           })}
         </tbody>
       </S.Table>
-      {historyList.length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
-    </>
+      {filteredHistory().length === 0 && <EmptyContent text={'현재 히스토리가 없습니다.'} />}
+    </S.Container>
   );
 };
 
