@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
   padding: 15px;
   background-color: ${({ theme }) => theme.colors.GRAY_100};
