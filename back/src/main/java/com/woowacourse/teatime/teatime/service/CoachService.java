@@ -8,7 +8,7 @@ import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
-import java.util.LinkedList;
+import com.woowacourse.teatime.teatime.repository.dto.CoachWithPossible;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +24,8 @@ public class CoachService {
 
     @Transactional(readOnly = true)
     public List<CoachFindResponse> findAll() {
-        List<CoachFindResponse> response = new LinkedList<>();
-        List<Coach> coaches = coachRepository.findAll();
-        for (Coach coach : coaches) {
-            boolean isPossible = scheduleRepository.existsIsPossibleByCoachId(coach.getId());
-            response.add(new CoachFindResponse(coach, isPossible));
-        }
-        return response;
+        List<CoachWithPossible> coachWithPossibles = coachRepository.findCoaches();
+        return CoachFindResponse.of(coachWithPossibles);
     }
 
     public Long save(CoachSaveRequest request) {
