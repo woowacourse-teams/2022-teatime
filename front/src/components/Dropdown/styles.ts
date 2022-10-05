@@ -4,6 +4,7 @@ const ContentList = styled.ul<{ isActive: boolean }>`
   position: absolute;
   z-index: 100;
   width: 150px;
+  right: 0;
   top: 48px;
   padding: 0;
   background-color: ${({ theme }) => theme.colors.WHITE};
