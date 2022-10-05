@@ -8,15 +8,13 @@ import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.teatime.support.RepositoryTest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
+@RepositoryTest
 class ScheduleDaoTest {
 
     @Autowired
