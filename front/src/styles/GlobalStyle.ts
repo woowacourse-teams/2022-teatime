@@ -7,15 +7,15 @@ const GlobalStyle = createGlobalStyle`
       font-family: 'BMJUA';
     } 
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+      background-color: #f5f5f5;
+    }
+
     a {
       text-decoration: none;
     } 
-
-    body {
-      max-width: 100%;
-      overflow-x: hidden;
-      background-color: #f5f5f5;
-    }
 `;
 
 export default GlobalStyle;

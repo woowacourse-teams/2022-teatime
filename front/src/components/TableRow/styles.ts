@@ -12,6 +12,11 @@ const TbodyRow = styled.tr`
     grid-auto-rows: 60px;
     font-size: 14px;
   }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    font-size: 12px;
+    grid-template-columns: 1fr 1.5fr repeat(3, 1fr);
+  }
 `;
 
 const Span = styled.span<{ color: string; bgColor: string }>`
@@ -24,6 +29,10 @@ const Span = styled.span<{ color: string; bgColor: string }>`
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     padding: 4px;
     font-size: 14px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    font-size: 12px;
   }
 `;
 
@@ -47,6 +56,30 @@ const Profile = styled.div`
     img {
       width: 36px;
       height: 36px;
+      margin-right: 8px;
+    }
+
+    span {
+      max-width: 100px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    padding-left: 5px;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    span {
+      max-width: 60px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 `;
@@ -64,6 +97,11 @@ const Icon = styled.img`
     width: 18px;
     height: 18px;
     margin-left: 6px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    width: 15px;
+    height: 15px;
   }
 `;
 

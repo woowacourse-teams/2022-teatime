@@ -31,7 +31,7 @@ const LOCAL_DB = {
 
 const CACHE = {
   KEY: 'coaches',
-  TIME: 600000,
+  TIME: 300000,
 };
 
 const HOUR_MILLISECONDS = 60 * 60 * 1000;

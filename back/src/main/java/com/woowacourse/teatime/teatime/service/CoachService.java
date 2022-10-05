@@ -7,8 +7,9 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CoachProfileRespo
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
+import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.teatime.repository.dto.CoachWithPossible;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class CoachService {
 
     private final CoachRepository coachRepository;
+    private final ScheduleRepository scheduleRepository;
 
     @Transactional(readOnly = true)
     public List<CoachFindResponse> findAll() {
-        List<Coach> coaches = coachRepository.findAll();
-        return coaches.stream()
-                .map(CoachFindResponse::new)
-                .collect(Collectors.toList());
+        List<CoachWithPossible> coachWithPossibles = coachRepository.findCoaches();
+        return CoachFindResponse.of(coachWithPossibles);
     }
 
     public Long save(CoachSaveRequest request) {

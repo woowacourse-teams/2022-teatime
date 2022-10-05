@@ -5,14 +5,14 @@ type Item = {
   text: string;
 };
 
-interface SelectListProps {
+interface BoardSelectListProps {
   lists: Item[];
   hidden?: boolean;
   selectedItem: string;
   onSelect: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const SelectList = ({ lists, hidden, selectedItem, onSelect }: SelectListProps) => {
+const BoardSelectList = ({ lists, hidden, selectedItem, onSelect }: BoardSelectListProps) => {
   return (
     <S.Container onClick={onSelect} hidden={hidden}>
       {lists.map(({ id, text }) => (
@@ -24,4 +24,4 @@ const SelectList = ({ lists, hidden, selectedItem, onSelect }: SelectListProps) 
   );
 };
 
-export default SelectList;
+export default BoardSelectList;

@@ -44,9 +44,11 @@ public class ScheduleService {
         return ScheduleFindResponse.from(schedules);
     }
 
-    public void update(Long coachId, ScheduleUpdateRequest request) {
-        deleteAllByCoachAndDate(coachId, request);
-        saveAllByCoachAndDate(coachId, request);
+    public void update(Long coachId, List<ScheduleUpdateRequest> requests) {
+        for (ScheduleUpdateRequest request : requests) {
+            deleteAllByCoachAndDate(coachId, request);
+            saveAllByCoachAndDate(coachId, request);
+        }
     }
 
     private void deleteAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
@@ -60,8 +62,7 @@ public class ScheduleService {
 
     private void validateDeletable(Long coachId, ScheduleUpdateRequest request, LocalDateTime start,
                                    LocalDateTime end) {
-        Coach coach = findCoach(coachId);
-        List<Schedule> newSchedules = toSchedules(request, coach);
+        List<Schedule> newSchedules = toSchedules(request, findCoach(coachId));
         List<Schedule> oldSchedules = scheduleRepository
                 .findAllByCoachIdBetween(coachId, start, end);
 

@@ -11,7 +11,7 @@ const useCalendar = () => {
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
 
   const dateBoxLength =
-    monthYear.firstDOW + monthYear.lastDate < CALENDAR_DATE_LENGTH.MIN
+    monthYear.firstDOW + monthYear.lastDate <= CALENDAR_DATE_LENGTH.MIN
       ? CALENDAR_DATE_LENGTH.MIN
       : CALENDAR_DATE_LENGTH.MAX;
 

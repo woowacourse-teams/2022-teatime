@@ -125,7 +125,7 @@ class ScheduleServiceTest {
         LocalDate date = LocalDate.now();
         ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
                 List.of(LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59))));
-        scheduleService.update(coach.getId(), updateRequest);
+        scheduleService.update(coach.getId(), List.of(updateRequest));
 
         ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
         List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
@@ -144,7 +144,7 @@ class ScheduleServiceTest {
 
         ScheduleUpdateRequest scheduleUpdateRequest = new ScheduleUpdateRequest(date,
                 List.of(Date.findFirstTime(date)));
-        assertThatThrownBy(() -> scheduleService.update(coach.getId(), scheduleUpdateRequest))
+        assertThatThrownBy(() -> scheduleService.update(coach.getId(), List.of(scheduleUpdateRequest)))
                 .isInstanceOf(UnableToUpdateScheduleException.class);
     }
 
@@ -167,7 +167,7 @@ class ScheduleServiceTest {
         ScheduleUpdateRequest scheduleUpdateRequest
                 = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH,
                 List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2)));
-        scheduleService.update(coach.getId(), scheduleUpdateRequest);
+        scheduleService.update(coach.getId(), List.of(scheduleUpdateRequest));
         List<ScheduleFindResponse> responses
                 = scheduleService.find(coach.getId(),
                 new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));

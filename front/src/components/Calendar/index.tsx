@@ -1,6 +1,6 @@
 import DateBox from '@components/DateBox';
 import Conditional from '@components/Conditional';
-import { DAY_NUMBER, DAY_OF_WEEKS } from '@constants/index';
+import { DAY_OF_WEEKS, HOUR_MILLISECONDS } from '@constants/index';
 import { convertToFullDate, getCurrentFullDate } from '@utils/date';
 import type { MonthYear, MonthScheduleMap } from '@typings/domain';
 
@@ -11,8 +11,11 @@ import * as S from './styles';
 
 interface CalendarProps {
   isCoach?: boolean;
+  isMultipleSelecting?: boolean;
+  isOpenTimeList?: boolean;
+  selectedDayList?: string[];
   onUpdateMonth: (increment: number) => void;
-  onClickDate: (day: number, isWeekend: boolean) => void;
+  onClickDate: (day: number) => void;
   monthYear: MonthYear;
   dateBoxLength: number;
   selectedDay: number | null;
@@ -21,6 +24,9 @@ interface CalendarProps {
 
 const Calendar = ({
   isCoach,
+  isOpenTimeList,
+  isMultipleSelecting,
+  selectedDayList,
   onUpdateMonth,
   onClickDate,
   monthYear,
@@ -29,22 +35,23 @@ const Calendar = ({
   monthSchedule,
 }: CalendarProps) => {
   const { firstDOW, lastDate, year, month, startDate } = monthYear;
-  const currentDate = new Date();
+  const currentDateTime = new Date().getTime();
+  const startDateTime = startDate.getTime() - 9 * HOUR_MILLISECONDS;
 
   return (
-    <S.CalendarContainer>
+    <S.CalendarContainer isMultipleSelecting={isMultipleSelecting} isOpenTimeList={isOpenTimeList}>
       <S.YearMonthContainer>
         <span>
           {year}년 {month}월
         </span>
         <div>
-          <Conditional condition={startDate < currentDate}>
-            <img src={LeftArrowDisabled} alt="이전 버튼 비활성화 아이콘" />
+          <Conditional condition={startDateTime < currentDateTime}>
+            <img src={LeftArrowDisabled} alt="비활성화된 왼쪽 화살표" />
           </Conditional>
-          <Conditional condition={startDate >= currentDate}>
-            <img src={LeftArrow} alt="이전 버튼 아이콘" onClick={() => onUpdateMonth(-1)} />
+          <Conditional condition={startDateTime >= currentDateTime}>
+            <img src={LeftArrow} alt="왼쪽 화살표" onClick={() => onUpdateMonth(-1)} />
           </Conditional>
-          <img src={RightArrow} alt="다음 버튼 아이콘" onClick={() => onUpdateMonth(1)} />
+          <img src={RightArrow} alt="오른쪽 화살표" onClick={() => onUpdateMonth(1)} />
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
@@ -54,9 +61,9 @@ const Calendar = ({
         {Array.from({ length: dateBoxLength }, (_, index) => {
           const date = index - firstDOW + 1;
           const isOutOfCalendar = index < firstDOW || lastDate <= date - 1;
-          const dayNumber = convertToFullDate(year, month, date).getDay();
-          const isWeekend = dayNumber === DAY_NUMBER.SUNDAY || dayNumber === DAY_NUMBER.SATURDAY;
           const isPastDay = convertToFullDate(year, month, date) < getCurrentFullDate();
+          const dateString = `${year}-${month}-${String(date).padStart(2, '0')}`;
+          const isMultipleSelected = selectedDayList?.includes(dateString);
 
           return isOutOfCalendar ? (
             <DateBox key={index} />
@@ -65,11 +72,11 @@ const Calendar = ({
               key={index}
               date={date}
               daySchedule={monthSchedule[date]}
-              onClick={() => onClickDate(date, isWeekend)}
+              onClick={() => onClickDate(date)}
               selectedDay={selectedDay}
+              isMultipleSelected={isMultipleSelected}
               currentDay={convertToFullDate(year, month, date)}
               isCoach={isCoach}
-              isWeekend={isWeekend}
               isPastDay={isPastDay}
             />
           );

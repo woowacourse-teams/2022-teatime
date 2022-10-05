@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import ReservationTimeList from '@components/ReservationTimeList';
@@ -14,13 +14,15 @@ import { createReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import { theme } from '@styles/theme';
-import * as S from '@styles/common';
+import * as SS from '@styles/common';
+import * as S from './styles';
 
 import CheckCircle from '@assets/check-circle.svg';
 
 const Reservation = () => {
   const navigate = useNavigate();
   const { id: coachId } = useParams();
+  const { state: coachImage } = useLocation();
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [reservationId, setReservationId] = useState<number | null>(null);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
@@ -79,9 +81,7 @@ const Reservation = () => {
     updateMonthYear(increment);
   };
 
-  const handleClickDate = (day: number, isWeekend: boolean) => {
-    // if (isWeekend) return;
-
+  const handleClickDate = (day: number) => {
     openTimeList();
     selectDaySchedule(day);
     setSelectedDay(day);
@@ -128,15 +128,17 @@ const Reservation = () => {
 
   return (
     <Frame>
-      <S.ScheduleContainer>
+      <S.CoachImage src={coachImage as string} alt="코치 프로필 이미지" />
+      <SS.ScheduleContainer>
         <Title
           text="예약할"
           highlightText={isOpenTimeList ? '시간을' : '날짜를'}
           hightlightColor={theme.colors.GREEN_300}
           extraText="선택해주세요."
         />
-        <S.CalendarContainer>
+        <SS.CalendarContainer>
           <Calendar
+            isOpenTimeList={isOpenTimeList}
             monthSchedule={schedule.monthSchedule}
             monthYear={monthYear}
             dateBoxLength={dateBoxLength}
@@ -152,13 +154,13 @@ const Reservation = () => {
               onClickReservation={handleClickReservation}
             />
           )}
-        </S.CalendarContainer>
-      </S.ScheduleContainer>
+        </SS.CalendarContainer>
+      </SS.ScheduleContainer>
 
       {isOpenModal && (
         <Modal
           icon={CheckCircle}
-          title="예약완료"
+          title="예약 완료"
           firstButtonName="나중에"
           secondButtonName="작성하기"
           onClickFirstButton={() => navigate(ROUTES.CREW_HISTORY)}

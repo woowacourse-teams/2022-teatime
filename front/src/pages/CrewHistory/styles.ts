@@ -1,15 +1,27 @@
 import styled from 'styled-components';
 
-const Table = styled.table`
+const Container = styled.div`
   width: 55%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+
+  @media screen and (${({ theme }) => theme.devices.laptop}) {
+    width: 70%;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    width: 95%;
+  }
+`;
+
+const Table = styled.table`
+  width: 100%;
   border-collapse: collapse;
-  margin: 50px auto;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
-    width: 95%;
     font-size: 15px;
   }
 `;
@@ -20,6 +32,10 @@ const TheadRow = styled.tr`
   padding: 14px 0;
   background-color: ${({ theme }) => theme.colors.GRAY_200};
   color: ${({ theme }) => theme.colors.GRAY_600};
+
+  @media screen and (${({ theme }) => theme.devices.mobileM}) {
+    font-size: 12px;
+  }
 `;
 
-export { Table, TheadRow };
+export { Container, Table, TheadRow };

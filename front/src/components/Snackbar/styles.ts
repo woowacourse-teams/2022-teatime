@@ -14,6 +14,7 @@ const SnackBarWrapper = styled.div<{ type?: string }>`
   left: 50%;
   transform: translate(-50%);
   bottom: 30px;
+  white-space: pre;
   animation: ${FadeIn} 0.7s;
 `;
 

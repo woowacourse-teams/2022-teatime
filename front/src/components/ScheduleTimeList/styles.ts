@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-
+import { TimeBox } from '@components/TimeBox/styles';
 import { FadeIn } from '@styles/common';
 
 const TimeListContainer = styled.div`
@@ -33,18 +33,7 @@ const ScrollContainer = styled.div`
   }
 `;
 
-const TimeBox = styled.div<{ isPossible?: boolean; isSelected: boolean; isPastTime: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  margin-bottom: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
-  border-radius: 4px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-
+const ScheduleTimeBox = styled(TimeBox)`
   ${(props) =>
     (props.isPossible === false || props.isPastTime) &&
     css`
@@ -61,21 +50,13 @@ const TimeBox = styled.div<{ isPossible?: boolean; isSelected: boolean; isPastTi
       background-color: ${({ theme }) => theme.colors.GREEN_900};
       color: ${({ theme }) => theme.colors.WHITE};
     `}
-
-  &:hover {
-    border: 2px solid ${({ theme }) => theme.colors.GREEN_900};
-  }
-
-  @media screen and (${({ theme }) => theme.devices.tablet}) {
-    width: 100px;
-  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   position: absolute;
-  bottom: 1px;
+  bottom: 0;
   width: 250px;
 
   button {
@@ -96,4 +77,11 @@ const ConfirmButton = styled.button`
   color: ${({ theme }) => theme.colors.WHITE};
 `;
 
-export { TimeListContainer, ScrollContainer, TimeBox, ButtonContainer, CheckButton, ConfirmButton };
+export {
+  TimeListContainer,
+  ScrollContainer,
+  ScheduleTimeBox,
+  ButtonContainer,
+  CheckButton,
+  ConfirmButton,
+};

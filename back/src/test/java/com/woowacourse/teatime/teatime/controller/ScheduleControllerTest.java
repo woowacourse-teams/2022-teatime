@@ -32,7 +32,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/1/schedules?year=2022&month=07")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -48,7 +48,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/a/schedules?year=2022&month=07")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -67,7 +67,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/1/schedules?year=2022&month=07")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -90,7 +90,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/1/schedules?year=" + year + "&month=07")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -110,7 +110,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/1/schedules?year=2022&month=" + month)
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -129,7 +129,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
 
         //given
         ResultActions perform = mockMvc.perform(get("/api/v2/coaches/me/schedules?year=2022&month=07")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -146,8 +146,8 @@ class ScheduleControllerTest extends ControllerTestSupporter {
         //when
         LocalDate date = LocalDate.now();
         ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/schedules",
-                new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date))))
-                .header("Authorization", "Bearer " + token))
+                        List.of(new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date)))))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -162,13 +162,13 @@ class ScheduleControllerTest extends ControllerTestSupporter {
         코치의_토큰을_검증한다(token);
 
         doThrow(new UnableToUpdateScheduleException()).when(scheduleService)
-                .update(anyLong(), any(ScheduleUpdateRequest.class));
+                .update(anyLong(), any());
 
         //when
         LocalDate date = LocalDate.now();
         ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/schedules",
-                new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date))))
-                .header("Authorization", "Bearer " + token))
+                       List.of( new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date)))))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then

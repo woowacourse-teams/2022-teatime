@@ -33,6 +33,7 @@ interface Coach {
   name: string;
   description: string;
   image: string;
+  isPossible: boolean;
 }
 
 interface MonthYear {
@@ -101,6 +102,16 @@ interface ScheduleInfo {
   date: string;
 }
 
+interface MultipleTime {
+  id: number;
+  dateTime: string;
+  isSelected: boolean;
+}
+interface MultipleDaySchedule {
+  dates: string[];
+  times: MultipleTime[];
+}
+
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
@@ -116,6 +127,8 @@ export {
   DaySchedule,
   TimeSchedule,
   Reservation,
+  MultipleTime,
+  MultipleDaySchedule,
   MonthScheduleMap,
   CrewListMap,
   Sheets,

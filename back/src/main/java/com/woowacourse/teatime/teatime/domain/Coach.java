@@ -1,13 +1,17 @@
 package com.woowacourse.teatime.teatime.domain;
 
 import com.woowacourse.teatime.teatime.exception.InvalidProfileInfoException;
+import com.woowacourse.teatime.teatime.repository.dto.CoachWithPossible;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SqlResultSetMapping;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +19,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@SqlResultSetMapping(
+        name = "CoachWithPossibleMapping",
+        classes = @ConstructorResult(
+                targetClass = CoachWithPossible.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "description", type = String.class),
+                        @ColumnResult(name = "image", type = String.class),
+                        @ColumnResult(name = "possible", type = Boolean.class),
+                }
+        )
+)
+@NamedNativeQuery(
+        name = "findCoaches",
+        query = "SELECT c.id AS id, c.name AS name, c.description AS description, c.image AS image, EXISTS ("
+                + "SELECT * FROM schedule s2 WHERE s2.coach_id = c.id AND s2.local_date_time > NOW() AND s2.is_possible = TRUE ) AS possible "
+                + "FROM coach c",
+        resultSetMapping = "CoachWithPossibleMapping")
 public class Coach {
 
     public static final String PREFIX_DESCRIPTION = "안녕하세요~ ";
@@ -32,7 +55,7 @@ public class Coach {
     @Column(nullable = false)
     private String email;
 
-    @Lob
+    @Column(nullable = false, length = 60)
     private String description;
 
     private String image;
