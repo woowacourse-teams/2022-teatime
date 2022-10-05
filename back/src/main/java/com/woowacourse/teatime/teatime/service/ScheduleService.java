@@ -9,6 +9,7 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.exception.UnableToUpdateScheduleException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
+import com.woowacourse.teatime.teatime.repository.jdbc.ScheduleDao;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleDao scheduleDao;
     private final CoachRepository coachRepository;
 
     public Long save(Long coachId, LocalDateTime dateTime) {
@@ -80,7 +82,7 @@ public class ScheduleService {
     private void saveAllByCoachAndDate(Long coachId, ScheduleUpdateRequest request) {
         Coach coach = findCoach(coachId);
         List<Schedule> schedules = toSchedules(request, coach);
-        scheduleRepository.saveAll(schedules);
+        scheduleDao.saveAll(schedules);
     }
 
     private Coach findCoach(Long id) {
