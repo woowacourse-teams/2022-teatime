@@ -191,7 +191,6 @@ class ScheduleServiceTest {
                 .map(ScheduleFindResponse::getSchedules)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
-        totalSchedules.forEach(s -> System.out.println(s.getDateTime() + " " + "###"));
 
         assertThat(totalSchedules).hasSize(4);
     }
