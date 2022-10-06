@@ -3,7 +3,7 @@ package com.woowacourse.teatime.teatime.controller.dto.response;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.woowacourse.teatime.teatime.domain.Coach;
+import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.domain.Sheet;
@@ -22,19 +22,19 @@ public class CoachFindCrewSheetResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
-    private String coachName;
-    private String coachImage;
+    private String crewName;
+    private String crewImage;
     private SheetStatus status;
     private List<SheetDto> sheets;
 
     public static CoachFindCrewSheetResponse of(Reservation reservation, List<Sheet> sheets) {
         Schedule schedule = reservation.getSchedule();
-        Coach coach = schedule.getCoach();
+        Crew crew = reservation.getCrew();
         if (WRITING.equals(reservation.getSheetStatus())) {
-            return new CoachFindCrewSheetResponse(schedule.getLocalDateTime(), coach.getName(), coach.getImage(),
+            return new CoachFindCrewSheetResponse(schedule.getLocalDateTime(), crew.getName(), crew.getImage(),
                     reservation.getSheetStatus(), SheetDto.generateEmptySheet(sheets));
         }
-        return new CoachFindCrewSheetResponse(schedule.getLocalDateTime(), coach.getName(), coach.getImage(),
+        return new CoachFindCrewSheetResponse(schedule.getLocalDateTime(), crew.getName(), crew.getImage(),
                 reservation.getSheetStatus(), SheetDto.from(sheets));
     }
 }
