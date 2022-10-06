@@ -237,7 +237,7 @@ const Schedule = () => {
       schedule.monthSchedule[day].filter((v) => v.isPossible === false).length > 0;
 
     if (hasImPossibleDay) {
-      alert(`${day}일은 이미 예약된 시간이 존재하여 일괄 수정할 수 없어요.`);
+      showSnackbar({ message: '예약이 확정된 날짜는 선택할 수 없어요. ⛔️' });
       return;
     }
 
