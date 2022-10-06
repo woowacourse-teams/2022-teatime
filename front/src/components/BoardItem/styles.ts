@@ -4,11 +4,11 @@ const BoardItemContainer = styled.div<{ color: string; draggedColor: string; isD
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 160px;
+  height: 170px;
   margin: 10px 0px;
   padding: 15px;
   background-color: ${({ theme }) => theme.colors.WHITE};
-  border-left: 10px solid ${(props) => props.color};
+  border-left: 6px solid ${(props) => props.color};
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
@@ -37,12 +37,10 @@ const DateContainer = styled.div`
   flex-direction: column;
 
   div {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
   }
 
   img {
-    width: 18px;
-    height: 18px;
     vertical-align: top;
     margin-right: 5px;
   }
@@ -50,68 +48,50 @@ const DateContainer = styled.div`
   span {
     color: ${({ theme }) => theme.colors.BLUE_700};
     font-weight: 600;
-    font-size: 18px;
+    font-size: 15px;
     letter-spacing: 1px;
-  }
-`;
-
-const CloseIconWrapper = styled.div`
-  display: flex;
-
-  img {
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
 const ProfileImage = styled.img`
-  width: 25px;
-  height: 25px;
-  border-radius: 15px;
-  margin-right: 10px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
 `;
 
-const BottomSection = styled.div`
+const ButtonWrapper = styled.div`
   flex: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: flex-end;
 
-  div {
-    display: flex;
-    align-items: center;
-    width: calc(100% - 100px);
-    padding-right: 5px;
-    /* cursor: pointer; */
+  button {
+    width: 90px;
+    height: 25px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
 
-    /* &:hover {
+    &:hover {
       opacity: 0.5;
       transition: ease-in-out 0.2s;
-    } */
-
-    span {
-      overflow-x: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
   }
 `;
 
-const MenuButton = styled.button<{ color: string; isButtonDisabled?: boolean }>`
-  width: 100px;
-  height: 25px;
-  border: none;
-  border-radius: 15px;
-  color: ${({ theme }) => theme.colors.WHITE};
-  background-color: ${(props) => props.color};
-  font-weight: bold;
-  cursor: pointer;
+const FirstButton = styled.button<{ color: string }>`
+  background-color: ${({ theme }) => theme.colors.WHITE};
+  color: ${(props) => props.color};
+  border: 1px solid ${(props) => props.color};
+`;
 
-  &:hover {
-    opacity: 0.5;
-    transition: ease-in-out 0.2s;
-  }
+const SecondButton = styled.button<{ color: string; isButtonDisabled?: boolean }>`
+  background-color: ${(props) => props.color};
+  color: ${({ theme }) => theme.colors.WHITE};
+  border: none;
 
   ${(props) =>
     props.isButtonDisabled === true &&
@@ -127,8 +107,8 @@ export {
   BoardItemContainer,
   TopSection,
   DateContainer,
-  CloseIconWrapper,
   ProfileImage,
-  BottomSection,
-  MenuButton,
+  ButtonWrapper,
+  FirstButton,
+  SecondButton,
 };
