@@ -10,7 +10,7 @@ import { SnackbarContext } from '@context/SnackbarProvider';
 import { completeReservation } from '@api/reservation';
 import { getCrewReservationByCoach } from '@api/crew';
 import { ROUTES } from '@constants/index';
-import type { Reservation } from '@typings/domain';
+import type { ReservationByCoach } from '@typings/domain';
 import * as S from '@styles/common';
 import * as Styled from './styles';
 
@@ -28,7 +28,7 @@ const CoachSheet = () => {
   const {
     state: { crewId, hasCompleteButton },
   } = useLocation() as LocationState;
-  const [reservationInfo, setReservationInfo] = useState<Reservation>();
+  const [reservationInfo, setReservationInfo] = useState<ReservationByCoach>();
 
   const handleCompleteReservation = async () => {
     if (!confirm('면담을 완료하시겠습니까?')) return;
@@ -63,8 +63,8 @@ const CoachSheet = () => {
     <Frame>
       <S.InfoContainer>
         <ReservationInfo
-          image={reservationInfo.coachImage}
-          name={reservationInfo.coachName}
+          image={reservationInfo.crewImage}
+          name={reservationInfo.crewName}
           dateTime={reservationInfo.dateTime}
         />
       </S.InfoContainer>
