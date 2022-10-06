@@ -5,13 +5,22 @@ interface CardProps {
   name: string;
   description: string;
   buttonName: string;
-  isPossible: boolean;
-  onClick: () => void;
+  isPossible?: boolean;
+  onClick?: () => void;
+  isPreview?: boolean;
 }
 
-const Card = ({ name, image, description, buttonName, isPossible, onClick }: CardProps) => {
+const Card = ({
+  name,
+  image,
+  description,
+  buttonName,
+  isPossible,
+  onClick,
+  isPreview,
+}: CardProps) => {
   return (
-    <S.CardContainer onClick={onClick} isPossible={isPossible}>
+    <S.CardContainer onClick={onClick} isPossible={!!isPossible} isPreview={!!isPreview}>
       <div>
         <S.ImageWrapper>
           <img src={image} alt={`${name} 카드 이미지`} />
