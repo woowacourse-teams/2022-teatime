@@ -19,14 +19,14 @@ const ListItem = styled.li<{ isSelected?: boolean }>`
   text-align: center;
   color: ${({ isSelected, theme }) => (isSelected ? theme.colors.BLACK : theme.colors.GRAY_300)};
   background-color: ${({ isSelected, theme }) =>
-    isSelected ? theme.colors.YELLOW_200 : theme.colors.WHITE};
-  border: 2px solid ${({ theme }) => theme.colors.YELLOW_200};
+    isSelected ? theme.colors.BLUE_300 : theme.colors.WHITE};
+  border: 2px solid ${({ theme }) => theme.colors.BLUE_300};
   border-radius: 10px;
   cursor: pointer;
   font-size: 15px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.YELLOW_200};
+    background-color: ${({ theme }) => theme.colors.BLUE_300};
     color: ${({ theme }) => theme.colors.BLACK};
     transition: 0.2s;
   }

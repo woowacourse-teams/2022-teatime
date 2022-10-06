@@ -382,7 +382,7 @@ const Schedule = () => {
         />
         <SS.CalendarContainer>
           <div>
-            {/* <CalendarSelectList
+            <CalendarSelectList
               lists={[
                 { id: 'singleSelect', text: '개별 선택' },
                 { id: 'multiSelect', text: '다중 선택' },
@@ -392,7 +392,7 @@ const Schedule = () => {
                 setSelectedDay(0);
                 handleSelectCalendarMode(e);
               }}
-            /> */}
+            />
             <Calendar
               isCoach
               isOpenTimeList={isOpenTimeList}
