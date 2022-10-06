@@ -25,6 +25,7 @@ import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
@@ -121,15 +122,28 @@ class ScheduleServiceTest {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void update() {
+        // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();
+
+        // when
         ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
-                List.of(LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59))));
+                List.of(
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(13, 30)),
+                        LocalDateTime.of(YEAR, 10, 20, 14, 30)
+                ));
         scheduleService.update(coach.getId(), List.of(updateRequest));
 
+        // then
         ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
         List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
-        assertThat(responses).hasSize(1);
+        final List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        assertThat(totalSchedules).hasSize(3);
     }
 
     @DisplayName("코치가 예약되어 있는 스케줄을 삭제하면 예외를 발생시킨다.")
@@ -154,7 +168,7 @@ class ScheduleServiceTest {
         // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDateTime reservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 58));
-        LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
+        LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 50));
 
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
         scheduleRepository.save(new Schedule(coach, notReservedTime));
@@ -166,14 +180,19 @@ class ScheduleServiceTest {
         // when
         ScheduleUpdateRequest scheduleUpdateRequest
                 = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH,
-                List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2)));
+                List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2), reservedTime.minusDays(2)));
         scheduleService.update(coach.getId(), List.of(scheduleUpdateRequest));
+
+        // then
         List<ScheduleFindResponse> responses
                 = scheduleService.find(coach.getId(),
                 new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
-        List<ScheduleDto> schedules = responses.get(0).getSchedules();
+        List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        totalSchedules.forEach(s -> System.out.println(s.getDateTime() + " " + "###"));
 
-        // then
-        assertThat(schedules).hasSize(3);
+        assertThat(totalSchedules).hasSize(4);
     }
 }

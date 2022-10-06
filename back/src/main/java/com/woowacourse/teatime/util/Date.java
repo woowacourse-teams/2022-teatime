@@ -21,7 +21,7 @@ public class Date {
 
     public static LocalDateTime findFirstDateTime(List<LocalDateTime> localDateTimes) {
         LocalDateTime localDateTime = localDateTimes.get(0);
-        return findFirstDateTime(localDateTime.getYear(), localDateTime.getMonthValue());
+        return LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.MIN);
     }
 
     private static void validateYearAndMonth(int year, int month, LocalDate today) {
@@ -41,7 +41,7 @@ public class Date {
 
     public static LocalDateTime findLastDateTime(List<LocalDateTime> localDateTimes) {
         LocalDateTime localDateTime = localDateTimes.get(localDateTimes.size() - 1);
-        return findFirstDateTime(localDateTime.getYear(), localDateTime.getMonthValue());
+        return LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.MAX);
     }
 
     public static LocalDateTime findFirstTime(LocalDate date) {
