@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const CardContainer = styled.div<{ isPossible: boolean }>`
+const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
   background-color: ${({ theme }) => theme.colors.WHITE};
   border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
   overflow: hidden;
-  cursor: pointer;
+  cursor: ${({ isPreview }) => !isPreview && 'pointer'};
 
   div {
     display: flex;
@@ -48,11 +48,11 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
     border-radius: 20px;
     font-size: 18px;
     font-weight: bolder;
-    cursor: pointer;
+    cursor: ${({ isPreview }) => !isPreview && 'pointer'};
   }
 
   &:hover {
-    transform: scale(1.03);
+    transform: ${({ isPreview }) => !isPreview && 'scale(1.03)'};
   }
 
   ${(props) =>
