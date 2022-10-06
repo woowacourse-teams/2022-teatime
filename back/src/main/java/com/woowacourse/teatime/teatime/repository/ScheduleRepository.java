@@ -24,4 +24,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "AND s.localDateTime >= :start "
             + "AND s.localDateTime < :end")
     void deleteAllReservableByCoachIdBetween(Long coachId, LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT COUNT(s.id) > 0 FROM Schedule AS s "
+            + "WHERE s.coach.id = :coachId "
+            + "AND s.localDateTime in :localDateTimes "
+            + "AND s.isPossible = FALSE")
+    boolean isExistReservedSchedules(Long coachId, List<LocalDateTime> localDateTimes);
 }

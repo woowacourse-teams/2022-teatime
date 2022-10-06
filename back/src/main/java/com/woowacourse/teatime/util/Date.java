@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Date {
 
@@ -18,6 +19,11 @@ public class Date {
         return LocalDateTime.of(startDate, LocalTime.MIN);
     }
 
+    public static LocalDateTime findFirstDateTime(List<LocalDateTime> localDateTimes) {
+        LocalDateTime localDateTime = localDateTimes.get(0);
+        return findFirstDateTime(localDateTime.getYear(), localDateTime.getMonthValue());
+    }
+
     private static void validateYearAndMonth(int year, int month, LocalDate today) {
         if (year < today.getYear()) {
             throw new IllegalArgumentException("지난 년도에 대한 일정은 조회할 수 없습니다.");
@@ -27,10 +33,15 @@ public class Date {
         }
     }
 
-    public static LocalDateTime findLastDay(int year, int month) {
+    public static LocalDateTime findLastDateTime(int year, int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = YearMonth.from(startDate).atEndOfMonth();
         return LocalDateTime.of(endDate, LocalTime.MAX);
+    }
+
+    public static LocalDateTime findLastDateTime(List<LocalDateTime> localDateTimes) {
+        LocalDateTime localDateTime = localDateTimes.get(localDateTimes.size() - 1);
+        return findFirstDateTime(localDateTime.getYear(), localDateTime.getMonthValue());
     }
 
     public static LocalDateTime findFirstTime(LocalDate date) {
