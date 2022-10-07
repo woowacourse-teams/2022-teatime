@@ -121,7 +121,7 @@ class ScheduleServiceTest {
 
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
-    void update() {
+    void update_one() {
         // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();
@@ -130,8 +130,7 @@ class ScheduleServiceTest {
         ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
                 List.of(
                         LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)),
-                        LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(13, 30)),
-                        LocalDateTime.of(YEAR, 10, 20, 14, 30)
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(13, 30))
                 ));
         scheduleService.update(coach.getId(), List.of(updateRequest));
 
@@ -143,7 +142,39 @@ class ScheduleServiceTest {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        assertThat(totalSchedules).hasSize(3);
+        assertThat(totalSchedules).hasSize(2);
+    }
+
+    @DisplayName("코치의 날짜에 해당하는 스케줄을 일괄 업데이트한다.")
+    @Test
+    void update_total() {
+        // given
+        Coach coach = coachRepository.save(COACH_BROWN);
+        LocalDate date = LocalDate.now();
+
+        // when
+        final LocalTime time1 = LocalTime.of(13, 30);
+        final LocalTime time2 = LocalTime.of(23, 59);
+        ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
+                List.of(
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, time1),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, time2),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(1), time1),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(1), time2),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(2), time1),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(2), time2)
+                        ));
+        scheduleService.update(coach.getId(), List.of(updateRequest));
+
+        // then
+        ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
+        final List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        assertThat(totalSchedules).hasSize(6);
     }
 
     @DisplayName("코치가 예약되어 있는 스케줄을 삭제하면 예외를 발생시킨다.")
