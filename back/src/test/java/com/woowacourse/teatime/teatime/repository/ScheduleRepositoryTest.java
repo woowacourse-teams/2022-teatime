@@ -81,4 +81,64 @@ public class ScheduleRepositoryTest {
         List<Schedule> schedules = scheduleRepository.findAll();
         assertThat(schedules).hasSize(1);
     }
+
+    @DisplayName("들어온 코치 스케줄들 중 예약이 되어 있는 날짜가 있는지 확인한다. - 예약된 날짜가 하나 존재하면 true를 반환한다.")
+    @Test
+    void isExistReservedSchedules_hasOneReservedSchedule() {
+        //given
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime dateTime1 = start.plusDays(1);
+        LocalDateTime dateTime2 = start.plusDays(2);
+        Coach coach = coachRepository.save(DomainFixture.COACH_JASON);
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, dateTime1));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, dateTime2));
+        schedule1.reserve();
+
+        //when
+        List<LocalDateTime> localDateTimes = List.of(dateTime1, dateTime2);
+        boolean actual = scheduleRepository.isExistReservedSchedules(coach.getId(), localDateTimes);
+
+        //then
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("들어온 코치 스케줄들 중 예약이 되어 있는 날짜가 있는지 확인한다. - 모두 예약된 날짜라면 true를 반환한다.")
+    @Test
+    void isExistReservedSchedules_hasReservedSchedules() {
+        //given
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime dateTime1 = start.plusDays(1);
+        LocalDateTime dateTime2 = start.plusDays(2);
+        Coach coach = coachRepository.save(DomainFixture.COACH_JASON);
+        Schedule schedule1 = scheduleRepository.save(new Schedule(coach, dateTime1));
+        Schedule schedule2 = scheduleRepository.save(new Schedule(coach, dateTime2));
+        schedule1.reserve();
+        schedule2.reserve();
+
+        //when
+        List<LocalDateTime> localDateTimes = List.of(dateTime1, dateTime2);
+        boolean actual = scheduleRepository.isExistReservedSchedules(coach.getId(), localDateTimes);
+
+        //then
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("들어온 코치 스케줄들 중 예약이 되어 있는 날짜가 있는지 확인한다. - 예약된 날짜가 존재하지 않으면 false를 반환한다.")
+    @Test
+    void isExistReservedSchedules_false() {
+        //given
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime dateTime1 = start.plusDays(1);
+        LocalDateTime dateTime2 = start.plusDays(2);
+        Coach coach = coachRepository.save(DomainFixture.COACH_JASON);
+        scheduleRepository.save(new Schedule(coach, dateTime1));
+        scheduleRepository.save(new Schedule(coach, dateTime2));
+
+        //when
+        List<LocalDateTime> localDateTimes = List.of(dateTime1, dateTime2);
+        boolean actual = scheduleRepository.isExistReservedSchedules(coach.getId(), localDateTimes);
+
+        //then
+        assertThat(actual).isFalse();
+    }
 }
