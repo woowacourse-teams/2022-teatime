@@ -10,7 +10,12 @@ import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
 import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { confirmReservation, cancelReservation, rejectReservation } from '@api/reservation';
+import {
+  confirmReservation,
+  cancelReservation,
+  rejectReservation,
+  completeReservation,
+} from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
 import { ROUTES } from '@constants/index';
@@ -20,11 +25,17 @@ import * as S from './styles';
 
 interface BoardItemValue {
   title: string;
-  buttonName: string;
+  firstButton: string;
+  secondButton: string;
   color: string;
   draggedColor: string;
-  handleClickMenuButton: (index: number, reservationId: number, crewId?: number) => void;
-  handleClickCancelButton: (status: string, index: number, id: number) => void;
+  handleClickFirstButton: (status: string, index: number, id: number) => void;
+  handleClickSecondButton: (
+    index: number,
+    reservationId: number,
+    crewId: number,
+    status: string
+  ) => void;
 }
 
 interface BoardItem {
@@ -99,14 +110,26 @@ const CoachMain = () => {
     }
   };
 
-  const handleShowApprovedContents = (index: number, reservationId: number, crewId?: number) => {
+  const handleShowContents = (index: number, reservationId: number, crewId: number) => {
     navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: { crewId } });
   };
 
-  const handleShowInProgressContents = (index: number, reservationId: number, crewId?: number) => {
-    navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, {
-      state: { crewId, hasCompleteButton: true },
-    });
+  const handleCompleteReservation = async (
+    index: number,
+    reservationId: number,
+    crewId: number,
+    status: string
+  ) => {
+    try {
+      await completeReservation(reservationId);
+      showSnackbar({ message: '히스토리에 저장되었습니다. ✅' });
+      deleteBoardItem(status, index);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
   };
 
   const handleClickProfile = (crewId: number, crewName: string) => {
@@ -175,27 +198,30 @@ const CoachMain = () => {
   const boardItem: BoardItem = {
     beforeApproved: {
       title: '대기중인 일정',
-      buttonName: '승인하기',
+      firstButton: '거절하기',
+      secondButton: '승인하기',
       color: theme.colors.ORANGE_600,
       draggedColor: theme.colors.ORANGE_100,
-      handleClickMenuButton: handleApprove,
-      handleClickCancelButton: handleReject,
+      handleClickFirstButton: handleReject,
+      handleClickSecondButton: handleApprove,
     },
     approved: {
       title: '확정된 일정',
-      buttonName: '내용보기',
+      firstButton: '취소하기',
+      secondButton: '내용보기',
       color: theme.colors.PURPLE_300,
       draggedColor: theme.colors.PURPLE_100,
-      handleClickMenuButton: handleShowApprovedContents,
-      handleClickCancelButton: handleCancel,
+      handleClickFirstButton: handleCancel,
+      handleClickSecondButton: handleShowContents,
     },
     inProgress: {
-      title: '진행중인 일정',
-      buttonName: '내용보기',
+      title: '완료된 일정',
+      firstButton: '내용보기',
+      secondButton: '완료하기',
       color: theme.colors.GREEN_700,
       draggedColor: theme.colors.GREEN_100,
-      handleClickMenuButton: handleShowInProgressContents,
-      handleClickCancelButton: handleCancel,
+      handleClickFirstButton: handleShowContents,
+      handleClickSecondButton: handleCompleteReservation,
     },
   };
 
@@ -226,7 +252,7 @@ const CoachMain = () => {
         lists={[
           { id: 'beforeApproved', text: '대기중인 일정' },
           { id: 'approved', text: '확정된 일정' },
-          { id: 'inProgress', text: '진행중인 일정' },
+          { id: 'inProgress', text: '완료된 일정' },
         ]}
         hidden={width > size.tablet}
         selectedItem={selectedBoard}
@@ -236,11 +262,12 @@ const CoachMain = () => {
         {Object.keys(crews).map((status) => {
           const {
             title,
-            buttonName,
+            firstButton,
+            secondButton,
             color,
             draggedColor,
-            handleClickMenuButton,
-            handleClickCancelButton,
+            handleClickFirstButton,
+            handleClickSecondButton,
           } = boardItem[status];
 
           return (
@@ -259,13 +286,18 @@ const CoachMain = () => {
                   dateTime={crew.dateTime}
                   image={crew.crewImage}
                   personName={crew.crewName}
-                  buttonName={buttonName}
+                  firstButton={firstButton}
+                  secondButton={secondButton}
                   isButtonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
                   color={color}
                   draggedColor={draggedColor}
-                  onClickMenu={() => handleClickMenuButton(index, crew.reservationId, crew.crewId)}
+                  onClickSecondButton={() =>
+                    handleClickSecondButton(index, crew.reservationId, crew.crewId, status)
+                  }
                   onClickProfile={() => handleClickProfile(crew.crewId, crew.crewName)}
-                  onClickCancel={() => handleClickCancelButton(status, index, crew.reservationId)}
+                  onClickFirstButton={() =>
+                    handleClickFirstButton(status, index, crew.reservationId)
+                  }
                   onDragStart={(e) => handleDragStart(e, index)}
                 />
               ))}

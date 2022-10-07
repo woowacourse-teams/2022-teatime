@@ -8,7 +8,7 @@ const confirmReservation = (reservationId: number) =>
 const rejectReservation = (reservationId: number) =>
   api.post(`/api/v2/reservations/${reservationId}`, { isApproved: false });
 
-const completeReservation = (reservationId: string) =>
+const completeReservation = (reservationId: number) =>
   api.put(`/api/v2/reservations/${reservationId}`);
 
 const cancelReservation = (reservationId: number) =>
