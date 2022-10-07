@@ -69,8 +69,11 @@ const Schedule = () => {
     setTrue: openMultipleTimeList,
     setFalse: closeMultipleTimeList,
   } = useBoolean();
-  const { selectedItem: selectedCalendarMode, handleSelectItem: handleSelectCalendarMode } =
-    useSelectList('singleSelect');
+  const {
+    selectedItem: selectedCalendarMode,
+    setSeletedItem: setSelectedCalenderMode,
+    handleSelectItem: handleSelectCalendarMode,
+  } = useSelectList('singleSelect');
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [refetchCount, setRefetchCount] = useState(0);
@@ -325,6 +328,7 @@ const Schedule = () => {
       refetch();
       closeMultipleTimeList();
       initSelectedMutltipleDates();
+      setSelectedCalenderMode('singleSelect');
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
