@@ -29,12 +29,17 @@ interface BoardItemValue {
   secondButton: string;
   color: string;
   draggedColor: string;
-  handleClickFirstButton: (status: string, index: number, id: number) => void;
+  handleClickFirstButton: (
+    index: number,
+    status: string,
+    reservationId: number,
+    crewId: number
+  ) => void;
   handleClickSecondButton: (
     index: number,
+    status: string,
     reservationId: number,
-    crewId: number,
-    status: string
+    crewId: number
   ) => void;
 }
 
@@ -96,7 +101,7 @@ const CoachMain = () => {
     });
   };
 
-  const handleApprove = async (index: number, reservationId: number) => {
+  const handleApprove = async (index: number, status: string, reservationId: number) => {
     try {
       await confirmReservation(reservationId);
       moveBoardItem('beforeApproved', 'approved', index);
@@ -110,15 +115,19 @@ const CoachMain = () => {
     }
   };
 
-  const handleShowContents = (index: number, reservationId: number, crewId: number) => {
+  const handleShowContents = (
+    index: number,
+    status: string,
+    reservationId: number,
+    crewId: number
+  ) => {
     navigate(`${ROUTES.COACH_SHEET}/${reservationId}`, { state: { crewId } });
   };
 
   const handleCompleteReservation = async (
     index: number,
-    reservationId: number,
-    crewId: number,
-    status: string
+    status: string,
+    reservationId: number
   ) => {
     try {
       await completeReservation(reservationId);
@@ -136,7 +145,7 @@ const CoachMain = () => {
     navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`, { state: crewName });
   };
 
-  const handleReject = async (status: string, index: number, reservationId: number) => {
+  const handleReject = async (index: number, status: string, reservationId: number) => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
@@ -151,7 +160,7 @@ const CoachMain = () => {
     }
   };
 
-  const handleCancel = async (status: string, index: number, reservationId: number) => {
+  const handleCancel = async (index: number, status: string, reservationId: number) => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
@@ -192,7 +201,7 @@ const CoachMain = () => {
       return;
     }
 
-    handleApprove(itemId, draggedItem.reservationId);
+    handleApprove(itemId, '', draggedItem.reservationId);
   };
 
   const boardItem: BoardItem = {
@@ -215,7 +224,7 @@ const CoachMain = () => {
       handleClickSecondButton: handleShowContents,
     },
     inProgress: {
-      title: '완료된 일정',
+      title: '지난 일정',
       firstButton: '내용보기',
       secondButton: '완료하기',
       color: theme.colors.GREEN_700,
@@ -252,7 +261,7 @@ const CoachMain = () => {
         lists={[
           { id: 'beforeApproved', text: '대기중인 일정' },
           { id: 'approved', text: '확정된 일정' },
-          { id: 'inProgress', text: '완료된 일정' },
+          { id: 'inProgress', text: '지난 일정' },
         ]}
         hidden={width > size.tablet}
         selectedItem={selectedBoard}
@@ -280,27 +289,30 @@ const CoachMain = () => {
               length={crews[status].length}
               onDrop={handleDrop}
             >
-              {crews[status].map((crew, index) => (
-                <BoardItem
-                  key={crew.reservationId}
-                  dateTime={crew.dateTime}
-                  image={crew.crewImage}
-                  personName={crew.crewName}
-                  firstButton={firstButton}
-                  secondButton={secondButton}
-                  isButtonDisabled={status === 'approved' && crew.sheetStatus === 'WRITING'}
-                  color={color}
-                  draggedColor={draggedColor}
-                  onClickSecondButton={() =>
-                    handleClickSecondButton(index, crew.reservationId, crew.crewId, status)
-                  }
-                  onClickProfile={() => handleClickProfile(crew.crewId, crew.crewName)}
-                  onClickFirstButton={() =>
-                    handleClickFirstButton(status, index, crew.reservationId)
-                  }
-                  onDragStart={(e) => handleDragStart(e, index)}
-                />
-              ))}
+              {crews[status].map((crew, index) => {
+                const { crewId, reservationId, dateTime, crewImage, crewName, sheetStatus } = crew;
+                return (
+                  <BoardItem
+                    key={reservationId}
+                    dateTime={dateTime}
+                    image={crewImage}
+                    personName={crewName}
+                    firstButton={firstButton}
+                    secondButton={secondButton}
+                    isButtonDisabled={status === 'approved' && sheetStatus === 'WRITING'}
+                    color={color}
+                    draggedColor={draggedColor}
+                    onClickProfile={() => handleClickProfile(crewId, crewName)}
+                    onClickFirstButton={() =>
+                      handleClickFirstButton(index, status, reservationId, crewId)
+                    }
+                    onClickSecondButton={() =>
+                      handleClickSecondButton(index, status, reservationId, crewId)
+                    }
+                    onDragStart={(e) => handleDragStart(e, index)}
+                  />
+                );
+              })}
             </Board>
           );
         })}
