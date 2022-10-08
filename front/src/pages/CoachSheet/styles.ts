@@ -13,7 +13,7 @@ const CompleteButtonWrapper = styled.div`
     height: 50px;
     border-radius: 10px;
     border: none;
-    background-color: ${({ theme }) => theme.colors.YELLOW_200};
+    background-color: ${({ theme }) => theme.colors.BLUE_300};
     font-size: 20px;
     color: ${({ theme }) => theme.colors.BLACK};
     cursor: pointer;
