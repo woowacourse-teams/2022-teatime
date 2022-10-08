@@ -55,7 +55,7 @@ const ConfirmButton = styled.button`
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.YELLOW_200};
+  background-color: ${({ theme }) => theme.colors.BLUE_300};
   color: ${({ theme }) => theme.colors.BLACK};
 
   &:hover {

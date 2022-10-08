@@ -104,6 +104,10 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
     p {
       display: none;
     }
+
+    button {
+      width: 85%;
+    }
   }
 `;
 

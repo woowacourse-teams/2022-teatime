@@ -1,7 +1,6 @@
 package com.woowacourse.teatime.teatime.acceptance;
 
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_승인한다;
-import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_완료한다;
 import static com.woowacourse.teatime.teatime.acceptance.ReservationAcceptanceTest.예약을_한다;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.SUBMITTED;
 import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
@@ -23,7 +22,6 @@ import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApprove
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
-import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
