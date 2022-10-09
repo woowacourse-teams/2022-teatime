@@ -33,6 +33,9 @@ public class Sheet {
     @Column(nullable = false)
     private String questionContent;
 
+    @Column(nullable = false)
+    private Boolean isRequired;
+
     @Lob
     private String answerContent;
 
@@ -40,6 +43,15 @@ public class Sheet {
         this.reservation = reservation;
         this.number = number;
         this.questionContent = questionContent;
+        this.isRequired = true;
+        this.answerContent = null;
+    }
+
+    public Sheet(Reservation reservation, Integer number, String questionContent, Boolean isRequired) {
+        this.reservation = reservation;
+        this.number = number;
+        this.questionContent = questionContent;
+        this.isRequired = isRequired;
         this.answerContent = null;
     }
 
