@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.teatime.service;
 
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CUSTOM_QUESTION_CONTENT_1;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CUSTOM_QUESTION_CONTENT_3;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CUSTOM_SHEET_QUESTION_1;
@@ -14,6 +15,8 @@ import static com.woowacourse.teatime.teatime.fixture.DtoFixture.QUESTION_CONTEN
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateDto;
+import com.woowacourse.teatime.teatime.controller.dto.response.SheetQuestionResponse;
+import com.woowacourse.teatime.teatime.controller.dto.response.SheetQuestionsResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
@@ -38,6 +41,29 @@ public class QuestionServiceTest {
 
     @Autowired
     CoachRepository coachRepository;
+
+    @DisplayName("코치의 면담 시트를 조회한다.")
+    @Test
+    void get() {
+        //given
+        Coach coach = coachRepository.save(getCoachJason());
+        List<SheetQuestionUpdateDto> defaultQuestions =
+                List.of(DEFAULT_SHEET_QUESTION_1, DEFAULT_SHEET_QUESTION_2, DEFAULT_SHEET_QUESTION_3);
+        questionService.updateQuestions(coach.getId(), defaultQuestions);
+
+        //when
+        SheetQuestionsResponse sheetQuestionsResponse = questionService.get(coach.getId());
+
+        //then
+        List<String> contents = sheetQuestionsResponse.getQuestions().stream()
+                .map(SheetQuestionResponse::getQuestionContent)
+                .collect(Collectors.toList());
+        assertThat(contents).containsOnly(
+                QUESTION_CONTENT_1,
+                QUESTION_CONTENT_2,
+                QUESTION_CONTENT_3
+        );
+    }
 
     @DisplayName("코치의 면담 시트 디폴트 질문을 저장한다.")
     @Test

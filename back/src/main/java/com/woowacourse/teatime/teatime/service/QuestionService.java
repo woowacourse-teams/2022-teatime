@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.teatime.service;
 
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateDto;
+import com.woowacourse.teatime.teatime.controller.dto.response.SheetQuestionsResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
@@ -20,6 +21,11 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final CoachRepository coachRepository;
+
+    public SheetQuestionsResponse get(Long coachId) {
+        List<Question> savedQuestions = questionRepository.findAllByCoachId(coachId);
+        return SheetQuestionsResponse.from(savedQuestions);
+    }
 
     public void updateQuestions(Long coachId, List<SheetQuestionUpdateDto> request) {
         Coach coach = findCoach(coachId);
