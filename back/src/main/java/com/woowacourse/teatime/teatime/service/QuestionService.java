@@ -7,6 +7,7 @@ import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.QuestionRepository;
+import com.woowacourse.teatime.teatime.repository.jdbc.QuestionDao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionDao questionDao;
     private final CoachRepository coachRepository;
 
     public SheetQuestionsResponse get(Long coachId) {
@@ -61,6 +63,6 @@ public class QuestionService {
 
     private void saveNewQuestions(List<Question> savedQuestions, List<Question> requestQuestions) {
         requestQuestions.removeAll(savedQuestions);
-        questionRepository.saveAll(requestQuestions);
+        questionDao.saveAll(requestQuestions);
     }
 }
