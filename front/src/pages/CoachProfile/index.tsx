@@ -113,25 +113,23 @@ const CoachProfile = () => {
         </S.PreviewBorderBox>
 
         <S.QuestionBorderBox>
-          <S.QuestionNameWrapper>
-            <span>사전 질문</span>
-            <span>필수 여부</span>
-          </S.QuestionNameWrapper>
           <form>
-            <S.QuestionContainer>
-              <S.QuestionInput />
-              <S.CheckBox type="checkbox" />
-            </S.QuestionContainer>
-            <S.QuestionContainer>
-              <S.QuestionInput />
-              <S.CheckBox type="checkbox" />
-            </S.QuestionContainer>
-            <S.QuestionContainer>
-              <S.QuestionInput />
-              <S.CheckBox type="checkbox" />
-            </S.QuestionContainer>
+            <S.QuestionInner>
+              <S.QuestionInputContainer>
+                <S.BorderBoxName>사전 질문</S.BorderBoxName>
+                <input />
+                <input />
+                <input />
+              </S.QuestionInputContainer>
+              <S.QuestionCheckBoxContainer>
+                <S.BorderBoxName>필수 여부</S.BorderBoxName>
+                <input type="checkbox" />
+                <input type="checkbox" />
+                <input type="checkbox" />
+              </S.QuestionCheckBoxContainer>
+            </S.QuestionInner>
             <S.ButtonWrapper>
-              <button>등록하기</button>
+              <button>저장하기</button>
             </S.ButtonWrapper>
           </form>
         </S.QuestionBorderBox>

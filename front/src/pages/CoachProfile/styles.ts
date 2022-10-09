@@ -28,7 +28,7 @@ const Grid = styled.div`
 const BorderBox = styled.div`
   width: 100%;
   padding: 30px 20px;
-  border: 2px solid ${({ theme }) => theme.colors.GRAY_200};
+  border: 1.5px solid ${({ theme }) => theme.colors.GRAY_200};
 `;
 
 const BorderBoxName = styled.p`
@@ -74,13 +74,11 @@ const QuestionContainer = styled.div`
   display: flex;
 `;
 
-const QuestionBorderBox = styled(BorderBox)`
-  padding: 30px 10px;
-
-  input {
-    margin: 10px;
-  }
+const QuestionInner = styled.div`
+  display: flex;
 `;
+
+const QuestionBorderBox = styled(BorderBox)``;
 
 const QuestionNameWrapper = styled.div`
   display: flex;
@@ -90,12 +88,30 @@ const QuestionNameWrapper = styled.div`
   color: ${({ theme }) => theme.colors.GREEN_900};
 `;
 
-const QuestionInput = styled.input`
-  ${profileInput}
+const QuestionInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  input {
+    ${profileInput}
+    margin-bottom: 15px;
+    height: 40px;
+  }
 `;
 
-const CheckBox = styled.input`
-  width: 50px;
+const QuestionCheckBoxContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+
+  input {
+    margin-bottom: 15px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
 `;
 
 const CardWrapper = styled.div`
@@ -131,13 +147,14 @@ export {
   Grid,
   BorderBox,
   PreviewBorderBox,
+  QuestionContainer,
+  QuestionInner,
   QuestionBorderBox,
   QuestionNameWrapper,
-  QuestionInput,
-  CheckBox,
+  QuestionInputContainer,
+  QuestionCheckBoxContainer,
   BorderBoxName,
   LabelContainer,
-  QuestionContainer,
   CardWrapper,
   ButtonWrapper,
 };
