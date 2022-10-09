@@ -5,6 +5,9 @@ import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion1;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion2;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion3;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_THREE;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_TWO;
@@ -78,9 +81,9 @@ class SheetServiceTest {
         schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
         reservation = reservationRepository.save(new Reservation(schedule, crew));
 
-        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
-        questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
-        questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
     }
 
     @DisplayName("코치의 질문만큼의 시트를 만든 뒤 개수를 반환한다.")

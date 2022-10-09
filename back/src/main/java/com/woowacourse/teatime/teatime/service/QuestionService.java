@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,15 +32,20 @@ public class QuestionService {
         Coach coach = findCoach(coachId);
 
         List<Question> savedQuestions = questionRepository.findAllByCoachId(coach.getId());
-        List<Question> requestQuestions = request.stream()
+        List<Question> requestQuestions = toQuestions(request, coach);
+
+        deleteOldQuestions(savedQuestions, requestQuestions);
+        saveNewQuestions(savedQuestions, requestQuestions);
+    }
+
+    @NotNull
+    private static List<Question> toQuestions(List<SheetQuestionUpdateRequest> request, Coach coach) {
+        return request.stream()
                 .map(question -> new Question(coach,
                         question.getQuestionNumber(),
                         question.getQuestionContent(),
                         question.getIsRequired()))
                 .collect(Collectors.toList());
-
-        deleteOldQuestions(savedQuestions, requestQuestions);
-        saveNewQuestions(savedQuestions, requestQuestions);
     }
 
     private Coach findCoach(Long coachId) {
