@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
+import Card from '@components/Card';
 import { CoachData } from '@typings/domain';
 import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
@@ -68,38 +69,44 @@ const CoachProfile = () => {
 
   return (
     <S.Container>
-      <img src={image} alt="코치 프로필 이미지" />
-      <form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
-        <S.InputWrapper>
-          <div>
-            <label htmlFor="name">Nickname</label>
-            <span>{`${name.length} / ${MAX_LENGTH.NAME}`}</span>
-          </div>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            maxLength={MAX_LENGTH.NAME}
-            defaultValue={name}
-            required
-          />
-        </S.InputWrapper>
-        <S.InputWrapper>
-          <div>
-            <label htmlFor="description">Description</label>
-            <span>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</span>
-          </div>
-          <textarea
-            name="description"
-            id="description"
-            rows={7}
-            maxLength={MAX_LENGTH.DESCRIPTION}
-            defaultValue={description}
-            required
-          ></textarea>
-        </S.InputWrapper>
-        <S.EditButton>수정하기</S.EditButton>
-      </form>
+      <div>
+        <S.ProfileTitle>프로필 설정</S.ProfileTitle>
+        <form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
+          <S.InputWrapper>
+            <div>
+              <label htmlFor="name">Nickname</label>
+              <span>{`${name.length} / ${MAX_LENGTH.NAME}`}</span>
+            </div>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              maxLength={MAX_LENGTH.NAME}
+              defaultValue={name}
+              required
+            />
+          </S.InputWrapper>
+          <S.InputWrapper>
+            <div>
+              <label htmlFor="description">Description</label>
+              <span>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</span>
+            </div>
+            <textarea
+              name="description"
+              id="description"
+              rows={7}
+              maxLength={MAX_LENGTH.DESCRIPTION}
+              defaultValue={description}
+              required
+            ></textarea>
+          </S.InputWrapper>
+          <S.EditButton>수정하기</S.EditButton>
+        </form>
+      </div>
+      <S.CardWrapper>
+        <S.PreviewTitle>프로필 미리보기</S.PreviewTitle>
+        <Card name={name} image={image} description={description} buttonName="예약하기" isPreview />
+      </S.CardWrapper>
     </S.Container>
   );
 };
