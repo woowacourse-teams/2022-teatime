@@ -42,7 +42,6 @@ const CoachProfile = () => {
       });
       dispatch({ type: 'EDIT_USER', name });
       showSnackbar({ message: '변경되었습니다. ✅' });
-      navigate(ROUTES.COACH);
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
@@ -115,6 +114,13 @@ const CoachProfile = () => {
             />
           </S.CardWrapper>
         </S.PreviewBorderBox>
+
+        <S.BorderBox>
+          <S.BorderBoxName>사전 질문</S.BorderBoxName>
+          <S.ButtonWrapper>
+            <button>등록하기</button>
+          </S.ButtonWrapper>
+        </S.BorderBox>
       </S.Grid>
     </S.Container>
   );
