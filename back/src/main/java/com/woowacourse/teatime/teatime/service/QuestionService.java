@@ -26,14 +26,14 @@ public class QuestionService {
     private final CoachRepository coachRepository;
 
     public SheetQuestionsResponse get(Long coachId) {
-        List<Question> savedQuestions = questionRepository.findAllByCoachId(coachId);
+        List<Question> savedQuestions = questionRepository.findAllByCoachIdOrderByNumber(coachId);
         return SheetQuestionsResponse.from(savedQuestions);
     }
 
     public void update(Long coachId, List<SheetQuestionUpdateRequest> request) {
         Coach coach = findCoach(coachId);
 
-        List<Question> savedQuestions = questionRepository.findAllByCoachId(coach.getId());
+        List<Question> savedQuestions = questionRepository.findAllByCoachIdOrderByNumber(coach.getId());
         List<Question> requestQuestions = toQuestions(request, coach);
 
         deleteOldQuestions(savedQuestions, requestQuestions);

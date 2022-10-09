@@ -76,7 +76,7 @@ public class QuestionServiceTest {
     @Test
     void create() {
         //when
-        List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<String> contents = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
 
@@ -91,7 +91,7 @@ public class QuestionServiceTest {
     @Test
     void create_필수_여부_등록_확인() {
         //when
-        final List<Boolean> isRequired = questionRepository.findAllByCoachId(coach.getId()).stream()
+        final List<Boolean> isRequired = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getIsRequired)
                 .collect(Collectors.toList());
 
@@ -108,10 +108,10 @@ public class QuestionServiceTest {
         questionService.update(coach.getId(), newQuestions);
 
         //then
-        List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<String> contents = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
-        List<Boolean> isRequired = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<Boolean> isRequired = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getIsRequired)
                 .collect(Collectors.toList());
 
@@ -135,10 +135,10 @@ public class QuestionServiceTest {
         questionService.update(coach.getId(), newQuestions);
 
         //then
-        List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<String> contents = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
-        List<Boolean> isRequired = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<Boolean> isRequired = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getIsRequired)
                 .collect(Collectors.toList());
 
@@ -162,10 +162,10 @@ public class QuestionServiceTest {
         questionService.update(coach.getId(), newQuestions);
 
         //then
-        List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<String> contents = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
-        List<Boolean> isRequired = questionRepository.findAllByCoachId(coach.getId()).stream()
+        List<Boolean> isRequired = questionRepository.findAllByCoachIdOrderByNumber(coach.getId()).stream()
                 .map(Question::getIsRequired)
                 .collect(Collectors.toList());
 
