@@ -37,6 +37,7 @@ const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
     text-align: center;
     font-size: 15px;
     margin: 10px 0;
+    word-break: break-all;
   }
 
   button {
