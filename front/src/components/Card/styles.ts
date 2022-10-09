@@ -14,13 +14,55 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
   overflow: hidden;
   cursor: pointer;
 
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.GRAY_150};
+    transition: ease-in-out 0.3s;
   }
+
+  ${(props) =>
+    props.isPossible &&
+    css`
+      ::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: ${({ theme }) => theme.colors.GREEN_400};
+      }
+    `}
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    height: 250px;
+    padding: 20px 10px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    height: 200px;
+    padding: 20px 10px;
+  }
+`;
+
+const RequestIcon = styled.img`
+  position: absolute;
+  top: 15px;
+  left: 15px;
+
+  :hover {
+    transform: scale(1.2);
+    opacity: 0.7;
+    transition: ease-in-out 0.2s;
+  }
+`;
+
+const CardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 
   img {
     width: 100px;
@@ -51,29 +93,7 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
     cursor: pointer;
   }
 
-  &:hover {
-    transform: scale(1.03);
-  }
-
-  ${(props) =>
-    props.isPossible &&
-    css`
-      ::before {
-        content: '';
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background-color: ${({ theme }) => theme.colors.GREEN_400};
-      }
-    `}
-
   @media screen and (${({ theme }) => theme.devices.tablet}) {
-    height: 250px;
-    padding: 20px 10px;
-
     span {
       font-size: 16px;
     }
@@ -93,9 +113,6 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
   }
 
   @media screen and (${({ theme }) => theme.devices.mobileXL}) {
-    height: 200px;
-    padding: 20px 10px;
-
     img {
       width: 50px;
       height: 50px;
@@ -112,11 +129,21 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
 `;
 
 const ImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   margin-bottom: 10px;
 `;
 
 const ButtonWrapper = styled.div`
+  display: flex;
   justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `;
 
-export { CardContainer, ImageWrapper, ButtonWrapper };
+export { CardContainer, RequestIcon, CardWrapper, ImageWrapper, ButtonWrapper };
