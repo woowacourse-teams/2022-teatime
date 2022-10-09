@@ -28,9 +28,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByCoachIdAndStatusNot(Long coachId, ReservationStatus status);
 
     @Query("SELECT r FROM Reservation AS r "
-            + "INNER JOIN r.crew AS c "
-            + "ON c.id = :crewId "
-            + "INNER JOIN r.schedule AS s "
+            + "JOIN FETCH r.schedule AS s "
+            + "JOIN FETCH s.coach AS co "
+            + "INNER JOIN r.crew AS cr "
+            + "ON cr.id = :crewId "
             + "WHERE r.reservationStatus = :status "
             + "ORDER BY s.localDateTime DESC")
     List<Reservation> findAllByCrewIdAndReservationStatus(Long crewId, ReservationStatus status);
@@ -49,9 +50,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllApprovedReservationsBetween(LocalDateTime startTime, LocalDateTime endTime);
 
     @Query("SELECT r FROM Reservation AS r "
-            + "INNER JOIN r.schedule AS s "
-            + "INNER JOIN s.coach AS c "
-            + "ON c.id = :coachId "
-            + "AND r.reservationStatus = :status")
+            + "JOIN FETCH r.schedule AS s "
+            + "JOIN FETCH r.crew AS cr "
+            + "INNER JOIN s.coach AS co "
+            + "ON co.id = :coachId "
+            + "WHERE r.reservationStatus = :status")
     List<Reservation> findAllByCoachIdAndStatus(Long coachId, ReservationStatus status);
 }

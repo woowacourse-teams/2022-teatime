@@ -3,7 +3,7 @@ import { FadeIn } from '@styles/common';
 
 const SelectStatusButton = styled.button`
   width: 100%;
-  background-color: #ffe594;
+  background-color: ${({ theme }) => theme.colors.BLUE_300};
   margin: 20px 0;
   padding: 10px;
   border: none;

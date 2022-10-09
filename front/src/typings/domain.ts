@@ -53,6 +53,15 @@ interface Reservation {
   sheets: Sheets[];
 }
 
+interface ReservationByCoach {
+  dateTime: string;
+  crewName: string;
+  crewImage: string;
+  sheetStatus: SheetStatus;
+  reservationStatus: CrewHistoryStatus;
+  sheets: Sheets[];
+}
+
 interface CrewHistory {
   reservationId: number;
   coachName: string;
@@ -137,4 +146,5 @@ export {
   CoachHistory,
   CrewHistoryStatus,
   CoachHistoryStatus,
+  ReservationByCoach,
 };

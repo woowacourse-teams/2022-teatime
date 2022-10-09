@@ -9,7 +9,7 @@ const useSelectList = (initialValue: string) => {
     setSeletedItem(target.id);
   };
 
-  return { selectedItem, handleSelectItem };
+  return { selectedItem, setSeletedItem, handleSelectItem };
 };
 
 export default useSelectList;
