@@ -40,6 +40,11 @@ public class QuestionService {
         saveNewQuestions(savedQuestions, requestQuestions);
     }
 
+    private Coach findCoach(Long coachId) {
+        return coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+    }
+
     @NotNull
     private static List<Question> toQuestions(List<SheetQuestionUpdateRequest> request, Coach coach) {
         return request.stream()
@@ -48,11 +53,6 @@ public class QuestionService {
                         question.getQuestionContent(),
                         question.getIsRequired()))
                 .collect(Collectors.toList());
-    }
-
-    private Coach findCoach(Long coachId) {
-        return coachRepository.findById(coachId)
-                .orElseThrow(NotFoundCoachException::new);
     }
 
     private void deleteOldQuestions(List<Question> savedQuestions, List<Question> requestQuestions) {

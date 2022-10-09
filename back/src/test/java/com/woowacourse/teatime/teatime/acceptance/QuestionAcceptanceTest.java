@@ -76,7 +76,7 @@ public class QuestionAcceptanceTest extends AcceptanceTestSupporter {
         List<SheetQuestionUpdateRequest> request =
                 List.of(CUSTOM_SHEET_QUESTION_1, DEFAULT_SHEET_QUESTION_2, CUSTOM_SHEET_QUESTION_3,
                         CUSTOM_SHEET_QUESTION_4, CUSTOM_SHEET_QUESTION_5);
-        final ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
+        ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + coachToken)
                 .body(request)
