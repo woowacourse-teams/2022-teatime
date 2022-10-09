@@ -7,11 +7,10 @@ import { CoachData } from '@typings/domain';
 import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { ROUTES, MAX_LENGTH } from '@constants/index';
+import { MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
 
 const CoachProfile = () => {
-  const navigate = useNavigate();
   const dispatch = useContext(UserDispatchContext);
   const showSnackbar = useContext(SnackbarContext);
   const [coachProfile, setCoachProfile] = useState<CoachData>({
@@ -123,7 +122,7 @@ const CoachProfile = () => {
               </S.QuestionInputContainer>
               <S.QuestionCheckBoxContainer>
                 <S.BorderBoxName>필수 여부</S.BorderBoxName>
-                <input type="checkbox" />
+                <input type="checkbox" checked={true} />
                 <input type="checkbox" />
                 <input type="checkbox" />
               </S.QuestionCheckBoxContainer>
