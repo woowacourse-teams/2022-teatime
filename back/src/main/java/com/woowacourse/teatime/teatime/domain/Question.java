@@ -30,10 +30,21 @@ public class Question {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private Boolean isRequired;
+
     public Question(Coach coach, Integer number, String content) {
         this.coach = coach;
         this.number = number;
         this.content = content;
+        this.isRequired = true;
+    }
+
+    public Question(Coach coach, Integer number, String content, Boolean isRequired) {
+        this.coach = coach;
+        this.number = number;
+        this.content = content;
+        this.isRequired = isRequired;
     }
 
     @Override

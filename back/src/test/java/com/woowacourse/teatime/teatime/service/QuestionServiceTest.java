@@ -42,10 +42,15 @@ public class QuestionServiceTest {
     @DisplayName("코치의 면담 시트 디폴트 질문을 저장한다.")
     @Test
     void create() {
+        //given
         Coach coach = coachRepository.save(COACH_BROWN);
+
+        //when 
         List<SheetQuestionUpdateDto> defaultQuestions =
                 List.of(DEFAULT_SHEET_QUESTION_1, DEFAULT_SHEET_QUESTION_2, DEFAULT_SHEET_QUESTION_3);
         questionService.updateQuestions(coach.getId(), defaultQuestions);
+
+        //then
         List<String> contents = questionRepository.findAllByCoachId(coach.getId()).stream()
                 .map(Question::getContent)
                 .collect(Collectors.toList());
@@ -54,6 +59,24 @@ public class QuestionServiceTest {
                 QUESTION_CONTENT_1,
                 QUESTION_CONTENT_2,
                 QUESTION_CONTENT_3);
+    }
+
+    @DisplayName("코치의 면담 시트 디폴트 질문의 필수 여부가 true인지 확인한다.")
+    @Test
+    void create_필수_여부_등록_확인() {
+        //given
+        Coach coach = coachRepository.save(COACH_BROWN);
+
+        //when 
+        List<SheetQuestionUpdateDto> defaultQuestions =
+                List.of(DEFAULT_SHEET_QUESTION_1, DEFAULT_SHEET_QUESTION_2, DEFAULT_SHEET_QUESTION_3);
+        questionService.updateQuestions(coach.getId(), defaultQuestions);
+
+        //then
+        final List<Boolean> isRequired = questionRepository.findAllByCoachId(coach.getId()).stream()
+                .map(Question::getIsRequired)
+                .collect(Collectors.toList());
+        assertThat(isRequired).containsOnly(true, true, true);
     }
 
     @DisplayName("코치의 면담 시트 질문을 업데이트한다.")
