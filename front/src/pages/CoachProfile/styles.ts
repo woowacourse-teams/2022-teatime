@@ -4,37 +4,31 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   height: 80vh;
 
-  img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 50%;
+  form {
+    margin-right: 60px;
   }
 `;
 
-const EditButton = styled.button`
-  width: 100%;
-  height: 40px;
-  border-radius: 18px;
-  margin-right: 10px;
-  background-color: ${({ theme }) => theme.colors.GREEN_700};
-  color: ${({ theme }) => theme.colors.WHITE};
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
+const ProfileTitle = styled.h1`
+  font-size: 22px;
+`;
 
-  :hover {
-    opacity: 0.7;
-  }
+const CardWrapper = styled.div`
+  width: 250px;
+`;
+
+const PreviewTitle = styled.p`
+  margin-bottom: 4px;
+  padding-left: 10px;
+  color: ${({ theme }) => theme.colors.GRAY_600};
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 330px;
+  width: 420px;
   margin: 30px 0;
 
   div {
@@ -61,4 +55,19 @@ const InputWrapper = styled.div`
   }
 `;
 
-export { Container, EditButton, InputWrapper };
+const EditButton = styled.button`
+  width: 100%;
+  height: 42px;
+  border-radius: 18px;
+  background-color: ${({ theme }) => theme.colors.GREEN_700};
+  color: ${({ theme }) => theme.colors.WHITE};
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
+export { Container, ProfileTitle, CardWrapper, PreviewTitle, EditButton, InputWrapper };

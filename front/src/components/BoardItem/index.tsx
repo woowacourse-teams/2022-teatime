@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { getHourMinutes, getMonthDate } from '@utils/date';
 import ClockIcon from '@assets/clock.svg';
-import CloseIcon from '@assets/close.svg';
+import PersonIcon from '@assets/person.svg';
 import ScheduleIcon from '@assets/schedule.svg';
 import * as S from './styles';
 
@@ -10,13 +10,14 @@ interface BoardItemProps {
   dateTime: string;
   image: string;
   personName: string;
-  buttonName: string;
+  firstButton: string;
+  secondButton: string;
   isButtonDisabled?: boolean;
   color: string;
   draggedColor: string;
-  onClickMenu: () => void;
+  onClickSecondButton: () => void;
   onClickProfile: () => void;
-  onClickCancel: () => void;
+  onClickFirstButton: () => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
@@ -24,13 +25,14 @@ const BoardItem = ({
   dateTime,
   image,
   personName,
-  buttonName,
+  firstButton,
+  secondButton,
   isButtonDisabled,
   color,
   draggedColor,
-  onClickMenu,
+  onClickSecondButton,
   onClickProfile,
-  onClickCancel,
+  onClickFirstButton,
   onDragStart,
 }: BoardItemProps) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -65,20 +67,25 @@ const BoardItem = ({
             <img src={ClockIcon} alt="시계 아이콘" />
             <span>{time}</span>
           </div>
+          <div>
+            <img src={PersonIcon} alt="프로필 아이콘" />
+            <span>{personName}</span>
+          </div>
         </S.DateContainer>
-        <S.CloseIconWrapper>
-          <img src={CloseIcon} alt="취소 아이콘" onClick={onClickCancel} />
-        </S.CloseIconWrapper>
+        <S.ProfileImage src={image} alt={`${personName} 이미지`} />
       </S.TopSection>
-      <S.BottomSection>
-        <div>
-          <S.ProfileImage src={image} alt={`${personName} 이미지`} />
-          <span>{personName}</span>
-        </div>
-        <S.MenuButton onClick={onClickMenu} isButtonDisabled={isButtonDisabled} color={color}>
-          {buttonName}
-        </S.MenuButton>
-      </S.BottomSection>
+      <S.ButtonWrapper>
+        <S.FirstButton onClick={onClickFirstButton} color={color}>
+          {firstButton}
+        </S.FirstButton>
+        <S.SecondButton
+          onClick={onClickSecondButton}
+          isButtonDisabled={isButtonDisabled}
+          color={color}
+        >
+          {secondButton}
+        </S.SecondButton>
+      </S.ButtonWrapper>
     </S.BoardItemContainer>
   );
 };
