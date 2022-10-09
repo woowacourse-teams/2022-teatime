@@ -1,73 +1,110 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const profileInput = css`
+  width: 100%;
+  padding: 8px;
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
+  border-radius: 8px;
+  font-size: 16px;
+`;
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 80vh;
+  margin: 50px 20px;
+`;
 
-  form {
-    margin-right: 60px;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  width: 900px;
+  gap: 40px;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const ProfileTitle = styled.h1`
-  font-size: 22px;
+const BorderBox = styled.div`
+  width: 100%;
+  padding: 30px 20px;
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_200};
+`;
+
+const BorderBoxName = styled.p`
+  color: ${({ theme }) => theme.colors.GREEN_900};
+  margin-bottom: 10px;
+  font-size: 18px;
+`;
+
+const PreviewBorderBox = styled(BorderBox)`
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    display: none;
+  }
+`;
+
+const Form = styled.form`
+  input {
+    ${profileInput}
+    margin-bottom: 30px;
+  }
+
+  textarea {
+    ${profileInput}
+  }
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  label {
+    font-size: 18px;
+    color: ${({ theme }) => theme.colors.GREEN_900};
+  }
 `;
 
 const CardWrapper = styled.div`
   width: 250px;
 `;
 
-const PreviewTitle = styled.p`
-  margin-bottom: 4px;
-  padding-left: 10px;
-  color: ${({ theme }) => theme.colors.GRAY_600};
-`;
-
-const InputWrapper = styled.div`
+const ButtonWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  width: 420px;
-  margin: 30px 0;
-
-  div {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 0 2px;
-    color: ${({ theme }) => theme.colors.GRAY_600};
-  }
-
-  input {
-    padding: 8px;
-    height: 40px;
-    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
-    border-radius: 4px;
-    font-size: 16px;
-  }
-
-  textarea {
-    padding: 8px;
-    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
-    border-radius: 4px;
-    font-size: 16px;
-  }
-`;
-
-const EditButton = styled.button`
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 42px;
-  border-radius: 18px;
-  background-color: ${({ theme }) => theme.colors.GREEN_700};
-  color: ${({ theme }) => theme.colors.WHITE};
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
+  margin: 20px 0;
 
-  :hover {
-    opacity: 0.7;
+  button {
+    background-color: ${({ theme }) => theme.colors.GREEN_700};
+    color: ${({ theme }) => theme.colors.WHITE};
+    width: 50%;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+
+    :hover {
+      opacity: 0.7;
+    }
   }
 `;
 
-export { Container, ProfileTitle, CardWrapper, PreviewTitle, EditButton, InputWrapper };
+export {
+  Container,
+  Form,
+  Grid,
+  BorderBox,
+  PreviewBorderBox,
+  BorderBoxName,
+  InputContainer,
+  CardWrapper,
+  ButtonWrapper,
+};

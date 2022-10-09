@@ -69,28 +69,26 @@ const CoachProfile = () => {
 
   return (
     <S.Container>
-      <div>
-        <S.ProfileTitle>프로필 설정</S.ProfileTitle>
-        <form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
-          <S.InputWrapper>
-            <div>
-              <label htmlFor="name">Nickname</label>
-              <span>{`${name.length} / ${MAX_LENGTH.NAME}`}</span>
-            </div>
+      <S.Grid>
+        <S.BorderBox>
+          <S.Form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
+            <S.InputContainer>
+              <label htmlFor="name">닉네임</label>
+              <S.BorderBoxName>{`${name.length} / ${MAX_LENGTH.NAME}`}</S.BorderBoxName>
+            </S.InputContainer>
             <input
               id="name"
               name="name"
               type="text"
               maxLength={MAX_LENGTH.NAME}
               defaultValue={name}
+              autoComplete="off"
               required
             />
-          </S.InputWrapper>
-          <S.InputWrapper>
-            <div>
-              <label htmlFor="description">Description</label>
-              <span>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</span>
-            </div>
+            <S.InputContainer>
+              <label htmlFor="description">자기소개</label>
+              <S.BorderBoxName>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</S.BorderBoxName>
+            </S.InputContainer>
             <textarea
               name="description"
               id="description"
@@ -98,15 +96,26 @@ const CoachProfile = () => {
               maxLength={MAX_LENGTH.DESCRIPTION}
               defaultValue={description}
               required
-            ></textarea>
-          </S.InputWrapper>
-          <S.EditButton>수정하기</S.EditButton>
-        </form>
-      </div>
-      <S.CardWrapper>
-        <S.PreviewTitle>프로필 미리보기</S.PreviewTitle>
-        <Card name={name} image={image} description={description} buttonName="예약하기" isPreview />
-      </S.CardWrapper>
+            />
+            <S.ButtonWrapper>
+              <button>저장하기</button>
+            </S.ButtonWrapper>
+          </S.Form>
+        </S.BorderBox>
+
+        <S.PreviewBorderBox>
+          <S.BorderBoxName>프로필 미리보기</S.BorderBoxName>
+          <S.CardWrapper>
+            <Card
+              name={name}
+              image={image}
+              description={description}
+              buttonName="예약하기"
+              isPreview
+            />
+          </S.CardWrapper>
+        </S.PreviewBorderBox>
+      </S.Grid>
     </S.Container>
   );
 };
