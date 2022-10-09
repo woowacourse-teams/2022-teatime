@@ -4,7 +4,7 @@ const BoardContainer = styled.div<{ isDraggingOver: boolean; isSelected?: boolea
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 330px;
+  width: 340px;
   height: 100%;
   padding: 15px;
   background-color: ${({ theme }) => theme.colors.GRAY_150};

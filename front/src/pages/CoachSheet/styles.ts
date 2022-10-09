@@ -7,24 +7,4 @@ const SheetContainer = styled.div`
   flex-direction: column;
 `;
 
-const CompleteButtonWrapper = styled.div`
-  button {
-    width: 100%;
-    height: 50px;
-    border-radius: 10px;
-    border: none;
-    background-color: ${({ theme }) => theme.colors.BLUE_300};
-    font-size: 20px;
-    color: ${({ theme }) => theme.colors.BLACK};
-    cursor: pointer;
-    margin-top: 10px;
-    bottom: 20px;
-
-    :hover {
-      opacity: 0.7;
-      transition: ease-in-out 0.2s;
-    }
-  }
-`;
-
-export { CompleteButtonWrapper, SheetContainer };
+export { SheetContainer };
