@@ -2,18 +2,17 @@ import { useState, useEffect, useContext } from 'react';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
-import { CoachData } from '@typings/domain';
-import { editCoachProfile, getCoachProfile } from '@api/coach';
+import type { CoachData, Question } from '@typings/domain';
+import {
+  editCoachProfile,
+  getCoachProfile,
+  getCoachQuestions,
+  editCoachQuestions,
+} from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
-
-interface Question {
-  questionNumber: number;
-  questionContent: string;
-  isRequired: boolean;
-}
 
 const CoachProfile = () => {
   const dispatch = useContext(UserDispatchContext);
@@ -23,23 +22,7 @@ const CoachProfile = () => {
     name: '',
     description: '',
   });
-  const [questions, setQuestions] = useState<Question[]>([
-    // {
-    //   questionNumber: 1,
-    //   questionContent: '이름이 뭔가요',
-    //   isRequired: true,
-    // },
-    // {
-    //   questionNumber: 2,
-    //   questionContent: '별자리가 뭔가요?',
-    //   isRequired: false,
-    // },
-    // {
-    //   questionNumber: 3,
-    //   questionContent: '핸드폰 기종은요',
-    //   isRequired: true,
-    // },
-  ]);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   const { image, name, description } = coachProfile;
 
@@ -89,7 +72,7 @@ const CoachProfile = () => {
     console.log(questions);
 
     // try {
-    //   await await api.put<Question[]>(`/api/v2/coaches/me/questions`, questions);
+    // await editCoachQuestions(questions);
     //   showSnackbar({ message: '저장되었습니다. ✅' });
     // } catch (error) {
     //   if (error instanceof AxiosError) {
@@ -116,7 +99,7 @@ const CoachProfile = () => {
   // useEffect(() => {
   //   (async () => {
   //     try {
-  //       const { data } = await api.get<Question[]>(`/api/v2/coaches/me/questions`);
+  //       const { data } = await getCoachQuestions();
   //       console.log(data);
   //       setQuestions(data.questions);
   //     } catch (error) {
@@ -188,6 +171,7 @@ const CoachProfile = () => {
                   <input
                     key={index}
                     type="text"
+                    maxLength={100}
                     value={questions[index]?.questionContent}
                     onChange={(e) => handleChangeQuestionInput(index, e)}
                   />

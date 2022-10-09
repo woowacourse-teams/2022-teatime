@@ -121,6 +121,12 @@ interface MultipleDaySchedule {
   times: MultipleTime[];
 }
 
+interface Question {
+  questionNumber: number;
+  questionContent: string;
+  isRequired: boolean;
+}
+
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
@@ -147,4 +153,5 @@ export {
   CrewHistoryStatus,
   CoachHistoryStatus,
   ReservationByCoach,
+  Question,
 };
