@@ -10,11 +10,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class SheetQuestionUpdateDto {
+public class SheetQuestionUpdateRequest {
 
     @NotNull
     private Integer questionNumber;
 
     @NotBlank
     private String questionContent;
+
+    @NotNull
+    private Boolean isRequired;
+
+    public SheetQuestionUpdateRequest(Integer questionNumber, String questionContent) {
+        this.questionNumber = questionNumber;
+        this.questionContent = questionContent;
+        this.isRequired = true;
+    }
 }

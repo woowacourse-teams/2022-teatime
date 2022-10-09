@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.teatime.service;
 
-import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateDto;
+import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetQuestionsResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
@@ -27,12 +27,15 @@ public class QuestionService {
         return SheetQuestionsResponse.from(savedQuestions);
     }
 
-    public void updateQuestions(Long coachId, List<SheetQuestionUpdateDto> request) {
+    public void update(Long coachId, List<SheetQuestionUpdateRequest> request) {
         Coach coach = findCoach(coachId);
 
         List<Question> savedQuestions = questionRepository.findAllByCoachId(coach.getId());
         List<Question> requestQuestions = request.stream()
-                .map(question -> new Question(coach, question.getQuestionNumber(), question.getQuestionContent()))
+                .map(question -> new Question(coach,
+                        question.getQuestionNumber(),
+                        question.getQuestionContent(),
+                        question.getIsRequired()))
                 .collect(Collectors.toList());
 
         deleteOldQuestions(savedQuestions, requestQuestions);
