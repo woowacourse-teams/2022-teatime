@@ -35,9 +35,13 @@ const TopSection = styled.div`
 const DateContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: calc(100% - 35px);
 
   div {
     margin-bottom: 6px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   img {
@@ -50,9 +54,6 @@ const DateContainer = styled.div`
     font-weight: 600;
     font-size: 15px;
     letter-spacing: 1px;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 `;
 
