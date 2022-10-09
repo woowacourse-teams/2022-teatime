@@ -10,6 +10,12 @@ import { SnackbarContext } from '@context/SnackbarProvider';
 import { MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
 
+interface Question {
+  questionNumber: number;
+  questionContent: string;
+  isRequired: boolean;
+}
+
 const CoachProfile = () => {
   const dispatch = useContext(UserDispatchContext);
   const showSnackbar = useContext(SnackbarContext);
@@ -18,12 +24,45 @@ const CoachProfile = () => {
     name: '',
     description: '',
   });
+  const [questions, setQuestions] = useState<Question[]>([
+    // {
+    //   questionNumber: 1,
+    //   questionContent: '이름이 뭔가요',
+    //   isRequired: true,
+    // },
+    // {
+    //   questionNumber: 2,
+    //   questionContent: '별자리가 뭔가요?',
+    //   isRequired: false,
+    // },
+    // {
+    //   questionNumber: 3,
+    //   questionContent: '핸드폰 기종은요',
+    //   isRequired: true,
+    // },
+  ]);
 
   const { image, name, description } = coachProfile;
 
   const handleChangeProfile = (e: React.ChangeEvent<HTMLFormElement>) => {
     setCoachProfile((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const handleChangeQuestionInput = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestions((prev) => {
+      const newState = [...prev];
+      newState[index].questionContent = e.target.value;
+      return newState;
+    });
+  };
+
+  const handleChangeQuestionCheckBox = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestions((prev) => {
+      const newState = [...prev];
+      newState[index].isRequired = e.target.checked;
+      return newState;
     });
   };
 
@@ -59,6 +98,21 @@ const CoachProfile = () => {
       }
     })();
   }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const { data } = await api.get<Question[]>(`/api/v2/coaches/me/questions`);
+  //       console.log(data);
+  //       setQuestions(data.questions);
+  //     } catch (error) {
+  //       if (error instanceof AxiosError) {
+  //         alert(error.response?.data?.message);
+  //         console.log(error);
+  //       }
+  //     }
+  //   })();
+  // }, []);
 
   if (!coachProfile) return <></>;
 
@@ -116,15 +170,25 @@ const CoachProfile = () => {
             <S.QuestionInner>
               <S.QuestionInputContainer>
                 <S.BorderBoxName>사전 질문</S.BorderBoxName>
-                <input />
-                <input />
-                <input />
+                {Array.from({ length: 3 }, (_, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    value={questions[index]?.questionContent}
+                    onChange={(e) => handleChangeQuestionInput(index, e)}
+                  />
+                ))}
               </S.QuestionInputContainer>
               <S.QuestionCheckBoxContainer>
                 <S.BorderBoxName>필수 여부</S.BorderBoxName>
-                <input type="checkbox" checked={true} />
-                <input type="checkbox" />
-                <input type="checkbox" />
+                {Array.from({ length: 3 }, (_, index) => (
+                  <input
+                    key={index}
+                    type="checkbox"
+                    checked={questions[index]?.isRequired}
+                    onChange={(e) => handleChangeQuestionCheckBox(index, e)}
+                  />
+                ))}
               </S.QuestionCheckBoxContainer>
             </S.QuestionInner>
             <S.ButtonWrapper>
