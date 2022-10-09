@@ -18,7 +18,7 @@ const CrewMain = () => {
   const dispatch = useContext(UserDispatchContext);
   const [coaches, setCoaches] = useState<Coach[]>();
 
-  const handleClickCard = (id: number, image: string) => {
+  const handleClickCard = (e: React.MouseEvent, id: number, image: string) => {
     navigate(`${ROUTES.RESERVATION}/${id}`, { state: image });
   };
 
@@ -56,7 +56,7 @@ const CrewMain = () => {
               image={image}
               description={description}
               buttonName="예약하기"
-              onClick={() => handleClickCard(id, image)}
+              onClick={(e) => handleClickCard(e, id, image)}
               isPossible={isPossible}
             />
           );
