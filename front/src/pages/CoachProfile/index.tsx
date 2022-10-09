@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
@@ -76,13 +75,28 @@ const CoachProfile = () => {
     try {
       await editCoachProfile({ name, description });
       dispatch({ type: 'EDIT_USER', name });
-      showSnackbar({ message: '변경되었습니다. ✅' });
+      showSnackbar({ message: '저장되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
         console.log(error);
       }
     }
+  };
+
+  const handleSubmitQuestions = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(questions);
+
+    // try {
+    //   await await api.put<Question[]>(`/api/v2/coaches/me/questions`, questions);
+    //   showSnackbar({ message: '저장되었습니다. ✅' });
+    // } catch (error) {
+    //   if (error instanceof AxiosError) {
+    //     alert(error.response?.data?.message);
+    //     console.log(error);
+    //   }
+    // }
   };
 
   useEffect(() => {
@@ -166,7 +180,7 @@ const CoachProfile = () => {
         </S.PreviewBorderBox>
 
         <S.QuestionBorderBox>
-          <form>
+          <form onSubmit={handleSubmitQuestions}>
             <S.QuestionInner>
               <S.QuestionInputContainer>
                 <S.BorderBoxName>사전 질문</S.BorderBoxName>
