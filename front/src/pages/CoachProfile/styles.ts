@@ -49,7 +49,7 @@ const PreviewBorderBox = styled(BorderBox)`
   }
 `;
 
-const Form = styled.form`
+const ProfileForm = styled.form`
   input {
     ${profileInput}
     margin-bottom: 30px;
@@ -60,7 +60,7 @@ const Form = styled.form`
   }
 `;
 
-const InputContainer = styled.div`
+const LabelContainer = styled.div`
   display: flex;
   justify-content: space-between;
 
@@ -68,6 +68,34 @@ const InputContainer = styled.div`
     font-size: 18px;
     color: ${({ theme }) => theme.colors.GREEN_900};
   }
+`;
+
+const QuestionContainer = styled.div`
+  display: flex;
+`;
+
+const QuestionBorderBox = styled(BorderBox)`
+  padding: 30px 10px;
+
+  input {
+    margin: 10px;
+  }
+`;
+
+const QuestionNameWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.GREEN_900};
+`;
+
+const QuestionInput = styled.input`
+  ${profileInput}
+`;
+
+const CheckBox = styled.input`
+  width: 50px;
 `;
 
 const CardWrapper = styled.div`
@@ -99,12 +127,17 @@ const ButtonWrapper = styled.div`
 
 export {
   Container,
-  Form,
+  ProfileForm,
   Grid,
   BorderBox,
   PreviewBorderBox,
+  QuestionBorderBox,
+  QuestionNameWrapper,
+  QuestionInput,
+  CheckBox,
   BorderBoxName,
-  InputContainer,
+  LabelContainer,
+  QuestionContainer,
   CardWrapper,
   ButtonWrapper,
 };

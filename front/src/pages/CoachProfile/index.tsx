@@ -36,10 +36,7 @@ const CoachProfile = () => {
     }
 
     try {
-      await editCoachProfile({
-        name,
-        description,
-      });
+      await editCoachProfile({ name, description });
       dispatch({ type: 'EDIT_USER', name });
       showSnackbar({ message: '변경되었습니다. ✅' });
     } catch (error) {
@@ -70,11 +67,11 @@ const CoachProfile = () => {
     <S.Container>
       <S.Grid>
         <S.BorderBox>
-          <S.Form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
-            <S.InputContainer>
+          <S.ProfileForm onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
+            <S.LabelContainer>
               <label htmlFor="name">닉네임</label>
               <S.BorderBoxName>{`${name.length} / ${MAX_LENGTH.NAME}`}</S.BorderBoxName>
-            </S.InputContainer>
+            </S.LabelContainer>
             <input
               id="name"
               name="name"
@@ -84,10 +81,10 @@ const CoachProfile = () => {
               autoComplete="off"
               required
             />
-            <S.InputContainer>
+            <S.LabelContainer>
               <label htmlFor="description">자기소개</label>
               <S.BorderBoxName>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</S.BorderBoxName>
-            </S.InputContainer>
+            </S.LabelContainer>
             <textarea
               name="description"
               id="description"
@@ -99,7 +96,7 @@ const CoachProfile = () => {
             <S.ButtonWrapper>
               <button>저장하기</button>
             </S.ButtonWrapper>
-          </S.Form>
+          </S.ProfileForm>
         </S.BorderBox>
 
         <S.PreviewBorderBox>
@@ -115,12 +112,29 @@ const CoachProfile = () => {
           </S.CardWrapper>
         </S.PreviewBorderBox>
 
-        <S.BorderBox>
-          <S.BorderBoxName>사전 질문</S.BorderBoxName>
-          <S.ButtonWrapper>
-            <button>등록하기</button>
-          </S.ButtonWrapper>
-        </S.BorderBox>
+        <S.QuestionBorderBox>
+          <S.QuestionNameWrapper>
+            <span>사전 질문</span>
+            <span>필수 여부</span>
+          </S.QuestionNameWrapper>
+          <form>
+            <S.QuestionContainer>
+              <S.QuestionInput />
+              <S.CheckBox type="checkbox" />
+            </S.QuestionContainer>
+            <S.QuestionContainer>
+              <S.QuestionInput />
+              <S.CheckBox type="checkbox" />
+            </S.QuestionContainer>
+            <S.QuestionContainer>
+              <S.QuestionInput />
+              <S.CheckBox type="checkbox" />
+            </S.QuestionContainer>
+            <S.ButtonWrapper>
+              <button>등록하기</button>
+            </S.ButtonWrapper>
+          </form>
+        </S.QuestionBorderBox>
       </S.Grid>
     </S.Container>
   );
