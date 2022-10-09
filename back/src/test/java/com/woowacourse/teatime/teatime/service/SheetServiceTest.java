@@ -167,14 +167,24 @@ class SheetServiceTest {
     @DisplayName("크루가 자신의 취소된 면담 시트를 조회한다.")
     @Test
     void findOwnCanceledSheetByCrew() {
+        //given
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
         Long reservationId = reservationService.save(crew.getId(), new ReservationReserveRequest(schedule1.getId()));
         reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), Role.COACH.name()));
 
+        //when
         CrewFindOwnCanceledSheetResponse canceledSheet = sheetService.findOwnCanceledSheetByCrew(crew.getId(),
                 reservationId);
 
-        assertThat(canceledSheet.getSheets()).hasSize(3);
+        //then
+        List<SheetDto> sheets = canceledSheet.getSheets();
+        List<Boolean> isRequired = sheets.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
+        assertAll(
+                () -> assertThat(sheets).hasSize(3),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
+        );
     }
 
     @DisplayName("코치가 크루의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")

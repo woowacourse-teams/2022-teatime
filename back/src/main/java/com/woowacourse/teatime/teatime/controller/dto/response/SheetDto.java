@@ -29,6 +29,7 @@ public class SheetDto {
         this.questionNumber = sheet.getNumber();
         this.questionContent = sheet.getQuestionContent();
         this.answerContent = sheet.getAnswerContent();
+        this.isRequired = sheet.getIsRequired();
     }
 
     public static List<SheetDto> from(List<Sheet> sheets) {
