@@ -69,8 +69,11 @@ const Schedule = () => {
     setTrue: openMultipleTimeList,
     setFalse: closeMultipleTimeList,
   } = useBoolean();
-  const { selectedItem: selectedCalendarMode, handleSelectItem: handleSelectCalendarMode } =
-    useSelectList('singleSelect');
+  const {
+    selectedItem: selectedCalendarMode,
+    setSeletedItem: setSelectedCalenderMode,
+    handleSelectItem: handleSelectCalendarMode,
+  } = useSelectList('singleSelect');
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const { lastDate, year, month } = monthYear;
   const [refetchCount, setRefetchCount] = useState(0);
@@ -237,7 +240,7 @@ const Schedule = () => {
       schedule.monthSchedule[day].filter((v) => v.isPossible === false).length > 0;
 
     if (hasImPossibleDay) {
-      alert(`${day}일은 이미 예약된 시간이 존재하여 일괄 수정할 수 없어요.`);
+      showSnackbar({ message: '예약이 확정된 날짜는 선택할 수 없어요. ⛔️' });
       return;
     }
 
@@ -325,6 +328,7 @@ const Schedule = () => {
       refetch();
       closeMultipleTimeList();
       initSelectedMutltipleDates();
+      setSelectedCalenderMode('singleSelect');
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -382,7 +386,7 @@ const Schedule = () => {
         />
         <SS.CalendarContainer>
           <div>
-            {/* <CalendarSelectList
+            <CalendarSelectList
               lists={[
                 { id: 'singleSelect', text: '개별 선택' },
                 { id: 'multiSelect', text: '다중 선택' },
@@ -392,7 +396,7 @@ const Schedule = () => {
                 setSelectedDay(0);
                 handleSelectCalendarMode(e);
               }}
-            /> */}
+            />
             <Calendar
               isCoach
               isOpenTimeList={isOpenTimeList}

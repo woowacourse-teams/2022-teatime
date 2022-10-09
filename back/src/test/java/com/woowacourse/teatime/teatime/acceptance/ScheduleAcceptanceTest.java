@@ -118,8 +118,10 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
     void updateByCoachAndDate() {
+        //given
         scheduleService.save(coachId, Date.findFirstDateTime(YEAR, MONTH).plusHours(1));
 
+        //when
         LocalDateTime localDateTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
         ScheduleUpdateRequest request = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of(localDateTime));
 
@@ -135,6 +137,7 @@ class ScheduleAcceptanceTest extends AcceptanceTestSupporter {
                 .then().log().all()
                 .extract();
 
+        //then
         ExtractableResponse<Response> findResponse = 코치가_자신의_스케쥴_조회_요청됨(YEAR, MONTH, coachToken);
         List<ScheduleFindResponse> result = findResponse.jsonPath().getList(".", ScheduleFindResponse.class);
 
