@@ -40,7 +40,10 @@ const MAX_LENGTH = {
   SHEET: 2000,
   NAME: 20,
   DESCRIPTION: 60,
+  QUESTION: 50,
 };
+
+const QUESTIONS_LENGTH = 3;
 
 export {
   ROUTES,
@@ -51,4 +54,5 @@ export {
   CACHE,
   HOUR_MILLISECONDS,
   MAX_LENGTH,
+  QUESTIONS_LENGTH,
 };

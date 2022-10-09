@@ -100,6 +100,13 @@ const QuestionInputContainer = styled.div`
   }
 `;
 
+const QuestionLength = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+  color: ${({ theme }) => theme.colors.GREEN_900};
+`;
+
 const QuestionCheckBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,6 +118,7 @@ const QuestionCheckBoxContainer = styled.div`
     width: 40px;
     height: 40px;
     cursor: pointer;
+    margin-top: 16.5px;
   }
 `;
 
@@ -152,6 +160,7 @@ export {
   QuestionBorderBox,
   QuestionNameWrapper,
   QuestionInputContainer,
+  QuestionLength,
   QuestionCheckBoxContainer,
   BorderBoxName,
   LabelContainer,

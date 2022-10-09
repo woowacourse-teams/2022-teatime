@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, Fragment } from 'react';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
@@ -11,7 +11,7 @@ import {
 } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { MAX_LENGTH } from '@constants/index';
+import { MAX_LENGTH, QUESTIONS_LENGTH } from '@constants/index';
 import * as S from './styles';
 
 const CoachProfile = () => {
@@ -33,19 +33,19 @@ const CoachProfile = () => {
   };
 
   const handleChangeQuestionInput = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestions((prev) => {
-      const newState = [...prev];
-      newState[index].questionContent = e.target.value;
-      return newState;
-    });
+    // setQuestions((prev) => {
+    //   const newState = [...prev];
+    //   newState[index].questionContent = e.target.value;
+    //   return newState;
+    // });
   };
 
   const handleChangeQuestionCheckBox = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestions((prev) => {
-      const newState = [...prev];
-      newState[index].isRequired = e.target.checked;
-      return newState;
-    });
+    // setQuestions((prev) => {
+    //   const newState = [...prev];
+    //   newState[index].isRequired = e.target.checked;
+    //   return newState;
+    // });
   };
 
   const handleSubmitProfile = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -167,19 +167,23 @@ const CoachProfile = () => {
             <S.QuestionInner>
               <S.QuestionInputContainer>
                 <S.BorderBoxName>사전 질문</S.BorderBoxName>
-                {Array.from({ length: 3 }, (_, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    maxLength={100}
-                    value={questions[index]?.questionContent}
-                    onChange={(e) => handleChangeQuestionInput(index, e)}
-                  />
+                {Array.from({ length: QUESTIONS_LENGTH }, (_, index) => (
+                  <Fragment key={index}>
+                    <S.QuestionLength>
+                      {`${questions[index]?.questionContent.length} / ${MAX_LENGTH.QUESTION}`}
+                    </S.QuestionLength>
+                    <input
+                      type="text"
+                      maxLength={MAX_LENGTH.QUESTION}
+                      value={questions[index]?.questionContent}
+                      onChange={(e) => handleChangeQuestionInput(index, e)}
+                    />
+                  </Fragment>
                 ))}
               </S.QuestionInputContainer>
               <S.QuestionCheckBoxContainer>
                 <S.BorderBoxName>필수 여부</S.BorderBoxName>
-                {Array.from({ length: 3 }, (_, index) => (
+                {Array.from({ length: QUESTIONS_LENGTH }, (_, index) => (
                   <input
                     key={index}
                     type="checkbox"
