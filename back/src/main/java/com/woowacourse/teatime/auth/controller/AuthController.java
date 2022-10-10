@@ -1,15 +1,23 @@
 package com.woowacourse.teatime.auth.controller;
 
+import com.woowacourse.teatime.auth.controller.dto.GenerateTokenDto;
 import com.woowacourse.teatime.auth.controller.dto.LoginRequest;
 import com.woowacourse.teatime.auth.controller.dto.LoginResponse;
+import com.woowacourse.teatime.auth.controller.dto.RefreshAccessTokenResponse;
 import com.woowacourse.teatime.auth.controller.dto.UserAuthDto;
 import com.woowacourse.teatime.auth.infrastructure.ResponseCookieTokenProvider;
 import com.woowacourse.teatime.auth.service.AuthService;
 import com.woowacourse.teatime.auth.service.LoginService;
+import com.woowacourse.teatime.auth.service.UserAuthService;
+import com.woowacourse.teatime.auth.support.UserAuthenticationPrincipal;
+import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +30,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final LoginService loginService;
+    private final UserAuthService userAuthService;
     private final ResponseCookieTokenProvider cookieTokenProvider;
 
     @PostMapping("/login")
@@ -36,5 +45,15 @@ public class AuthController {
         UserAuthDto userAuthDto = loginService.login(request);
         cookieTokenProvider.setCookie(response, userAuthDto.getRefreshToken());
         return ResponseEntity.ok(LoginResponse.from(userAuthDto));
+    }
+
+    @GetMapping("/refresh-token")
+    public ResponseEntity<RefreshAccessTokenResponse> generateToken(
+            @CookieValue(value = "refreshToken", required = false) Cookie cookie,
+            @UserAuthenticationPrincipal UserRoleDto userRoleDto,
+            HttpServletResponse response) {
+        GenerateTokenDto generateTokenDto = userAuthService.generateToken(cookie, userRoleDto);
+        cookieTokenProvider.setCookie(response, generateTokenDto.getRefreshToken());
+        return ResponseEntity.ok(new RefreshAccessTokenResponse(generateTokenDto.getAccessToken()));
     }
 }

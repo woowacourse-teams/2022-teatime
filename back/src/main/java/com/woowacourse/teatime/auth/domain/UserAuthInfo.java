@@ -17,4 +17,10 @@ public class UserAuthInfo {
     private String refreshToken;
     private Long userId;
     private String role;
+
+    public boolean isSameInfo(String refreshToken, Long userId, String role) {
+        return this.refreshToken.equals(refreshToken)
+                && this.userId.equals(userId)
+                && this.role.equals(role);
+    }
 }
