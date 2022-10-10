@@ -16,5 +16,5 @@ public class UserAuthInfo {
     @Id
     private String refreshToken;
     private Long userId;
-    private String clientIp;
+    private String role;
 }

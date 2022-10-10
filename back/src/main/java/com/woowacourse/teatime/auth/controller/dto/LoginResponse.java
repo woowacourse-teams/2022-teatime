@@ -15,4 +15,9 @@ public class LoginResponse {
     private Role role;
     private String image;
     private String name;
+
+    public static LoginResponse from(UserAuthDto userAuthDto) {
+        return new LoginResponse(userAuthDto.getAccessToken(), userAuthDto.getRole(), userAuthDto.getImage(),
+                userAuthDto.getName());
+    }
 }
