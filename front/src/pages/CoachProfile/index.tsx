@@ -13,13 +13,12 @@ import * as S from './styles';
 const CoachProfile = () => {
   const dispatch = useContext(UserDispatchContext);
   const showSnackbar = useContext(SnackbarContext);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [coachProfile, setCoachProfile] = useState<CoachData>({
     image: '',
     name: '',
     description: '',
   });
-  const [questions, setQuestions] = useState<Question[]>([]);
-
   const { image, name, description } = coachProfile;
 
   const handleChangeProfile = (e: React.ChangeEvent<HTMLFormElement>) => {
