@@ -7,6 +7,10 @@ const TextareaContainer = styled.div`
 const Label = styled.label`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.BLUE_800};
+
+  span {
+    color: ${({ theme }) => theme.colors.RED_400};
+  }
 `;
 
 const Textarea = styled.textarea<{ isFocus: boolean; isReadOnly: boolean }>`

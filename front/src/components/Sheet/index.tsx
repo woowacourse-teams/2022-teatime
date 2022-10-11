@@ -54,6 +54,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isReadOnly={isReadOnly}
+            isRequired={contents[0].isRequired}
           />
           <Textarea
             id="1"
@@ -62,6 +63,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isReadOnly={isReadOnly}
+            isRequired={contents[1].isRequired}
           />
           <Textarea
             id="2"
@@ -70,6 +72,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isReadOnly={isReadOnly}
+            isRequired={contents[2].isRequired}
           />
           {!isReadOnly && (
             <S.ButtonContainer>
