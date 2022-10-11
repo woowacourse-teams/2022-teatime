@@ -96,7 +96,7 @@ public class QuestionServiceTest {
                 .collect(Collectors.toList());
 
         //then
-        assertThat(isRequired).containsOnly(true, true, true);
+        assertThat(isRequired).containsExactly(true, true, true);
     }
 
     @DisplayName("코치의 면담 시트 질문을 업데이트한다.")
@@ -120,7 +120,7 @@ public class QuestionServiceTest {
                         CUSTOM_QUESTION_CONTENT_1,
                         QUESTION_CONTENT_2,
                         CUSTOM_QUESTION_CONTENT_3),
-                () -> assertThat(isRequired).containsOnly(true, true, true)
+                () -> assertThat(isRequired).containsExactly(true, true, true)
         );
 
     }
@@ -149,7 +149,7 @@ public class QuestionServiceTest {
                         CUSTOM_QUESTION_CONTENT_3,
                         CUSTOM_QUESTION_CONTENT_4,
                         CUSTOM_QUESTION_CONTENT_5),
-                () -> assertThat(isRequired).containsOnly(true, true, true, false, true)
+                () -> assertThat(isRequired).containsExactly(true, true, true, false, true)
         );
     }
 
@@ -171,7 +171,7 @@ public class QuestionServiceTest {
 
         assertAll(
                 () -> assertThat(contents).containsOnly(CUSTOM_QUESTION_CONTENT_1),
-                () -> assertThat(isRequired).containsOnly(true)
+                () -> assertThat(isRequired).containsExactly(true)
         );
     }
 
