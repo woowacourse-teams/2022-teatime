@@ -43,7 +43,7 @@ public class SheetService {
     public int save(Long reservationId) {
         Reservation reservation = findReservation(reservationId);
         Coach coach = reservation.getCoach();
-        List<Question> questions = questionRepository.findAllByCoachId(coach.getId());
+        List<Question> questions = questionRepository.findAllByCoachIdOrderByNumber(coach.getId());
 
         List<Sheet> sheets = questions.stream()
                 .map(question -> new Sheet(reservation, question.getNumber(), question.getContent()))
