@@ -124,11 +124,12 @@ public class SheetService {
     }
 
     private void validateAnswer(List<SheetAnswerUpdateDto> sheetDtos) {
-        for (SheetAnswerUpdateDto sheetDto : sheetDtos) {
-            String answerContent = sheetDto.getAnswerContent();
-            if (answerContent == null || answerContent.isBlank()) {
-                throw new CannotSubmitBlankException();
-            }
+        boolean hasEmptyAnswer = sheetDtos.stream()
+                .filter(SheetAnswerUpdateDto::getIsRequired)
+                .map(SheetAnswerUpdateDto::getAnswerContent)
+                .anyMatch(answerContent -> answerContent == null || answerContent.isBlank());
+        if (hasEmptyAnswer) {
+            throw new CannotSubmitBlankException();
         }
     }
 

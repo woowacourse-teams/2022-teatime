@@ -343,7 +343,7 @@ class CrewControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/crews/me/reservations/a",
-                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(null, "a", "a"))))
+                        new SheetAnswerUpdateRequest(SUBMITTED, List.of(new SheetAnswerUpdateDto(null, "a", "a", true))))
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 

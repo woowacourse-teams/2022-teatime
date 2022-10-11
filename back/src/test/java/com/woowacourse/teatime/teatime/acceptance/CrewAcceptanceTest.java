@@ -251,9 +251,9 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
         예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "별자리가 뭔가요?", "물고기 자리"),
-                new SheetAnswerUpdateDto(1, "이름이 뭔가요?", "야호"),
-                new SheetAnswerUpdateDto(3, "mbti는 뭔가요?", "entp"));
+                new SheetAnswerUpdateDto(2, "별자리가 뭔가요?", "물고기 자리", true),
+                new SheetAnswerUpdateDto(1, "이름이 뭔가요?", "야호", true),
+                new SheetAnswerUpdateDto(3, "mbti는 뭔가요?", "entp", true));
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(WRITING, updateDtos);
 
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()

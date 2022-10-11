@@ -18,11 +18,11 @@ public class DtoFixture {
             = new CrewSaveRequest("maru", "maru", "maru@email.com", "image");
 
     public static final SheetAnswerUpdateDto SHEET_ANSWER_UPDATE_REQUEST_ONE
-            = new SheetAnswerUpdateDto(1, "당신의 혈액형은?", "B형");
+            = new SheetAnswerUpdateDto(1, "당신의 혈액형은?", "B형", true);
     public static final SheetAnswerUpdateDto SHEET_ANSWER_UPDATE_REQUEST_TWO
-            = new SheetAnswerUpdateDto(2, "당신의 별자리는?", "물고기 자리");
+            = new SheetAnswerUpdateDto(2, "당신의 별자리는?", "물고기 자리", true);
     public static final SheetAnswerUpdateDto SHEET_ANSWER_UPDATE_REQUEST_THREE
-            = new SheetAnswerUpdateDto(3, "mbti는 뭔가요?", "entp");
+            = new SheetAnswerUpdateDto(3, "mbti는 뭔가요?", "entp", true);
 
     public static final String QUESTION_CONTENT_1 = "이번 면담을 통해 논의하고 싶은 내용";
     public static final String QUESTION_CONTENT_2 = "최근에 자신이 긍정적으로 보는 시도와 변화";
