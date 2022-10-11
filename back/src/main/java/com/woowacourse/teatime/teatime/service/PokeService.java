@@ -26,13 +26,14 @@ public class PokeService {
 
     public Long save(Long crewId, PokeSaveRequest request) {
         Long coachId = request.getCoachId();
-        Poke savedPoke = pokeRepository.save(new Poke(crewId, coachId));
 
-        Coach coach = coachRepository.findById(coachId)
-                .orElseThrow(NotFoundCoachException::new);
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
-        alarmService.sendPoke(PokeAlarmInfoDto.of(coach, crew));
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(NotFoundCoachException::new);
+
+        Poke savedPoke = pokeRepository.save(new Poke(crew, coach));
+        alarmService.sendPoke(PokeAlarmInfoDto.of(crew, coach));
 
         return savedPoke.getId();
     }

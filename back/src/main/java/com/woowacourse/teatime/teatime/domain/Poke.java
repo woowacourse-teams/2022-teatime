@@ -3,9 +3,12 @@ package com.woowacourse.teatime.teatime.domain;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,18 +23,20 @@ public class Poke {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long crewId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "crew_id")
+    private Crew crew;
 
-    @Column(nullable = false)
-    private Long coachId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
 
     @CreatedDate
-    @Column(nullable = false)
+    @Column
     private LocalDateTime createdAt;
 
-    public Poke(Long crewId, Long coachId) {
-        this.crewId = crewId;
-        this.coachId = coachId;
+    public Poke(Crew crew, Coach coach) {
+        this.crew = crew;
+        this.coach = coach;
     }
 }
