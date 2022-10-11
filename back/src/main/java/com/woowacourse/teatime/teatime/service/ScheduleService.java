@@ -58,10 +58,14 @@ public class ScheduleService {
     }
 
     private void deleteAllByCoachAndDate(Long coachId, List<LocalDateTime> localDateTimes) {
-        LocalDateTime start = Date.findFirstDateTime(localDateTimes);
-        LocalDateTime end = Date.findLastDateTime(localDateTimes);
         validateDeletable(coachId, localDateTimes);
-        scheduleRepository.deleteAllReservableByCoachIdBetween(coachId, start, end);
+        List<String> localDates = localDateTimes.stream()
+                .map(LocalDateTime::toLocalDate)
+                .distinct()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
+
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coachId, localDates);
     }
 
     private void validateDeletable(Long coachId, List<LocalDateTime> localDateTimes) {

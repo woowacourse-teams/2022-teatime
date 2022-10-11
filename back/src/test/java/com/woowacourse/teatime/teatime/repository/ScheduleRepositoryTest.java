@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
-import com.woowacourse.teatime.util.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -72,10 +70,7 @@ public class ScheduleRepositoryTest {
         schedule2.reserve();
 
         // when
-        LocalDate localDate = LocalDate.of(2022, 7, 1);
-        LocalDateTime start = Date.findFirstTime(localDate);
-        LocalDateTime end = Date.findLastTime(localDate);
-        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), start, end);
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), List.of("2022-07-01"));
 
         // then
         List<Schedule> schedules = scheduleRepository.findAll();
