@@ -29,11 +29,11 @@ public class DtoFixture {
     public static final String QUESTION_CONTENT_3 = "이번 면담을 통해 생기기를 원하는 변화";
 
     public static final SheetQuestionUpdateRequest DEFAULT_SHEET_QUESTION_1
-            = new SheetQuestionUpdateRequest(1, QUESTION_CONTENT_1);
+            = new SheetQuestionUpdateRequest(1, QUESTION_CONTENT_1, true);
     public static final SheetQuestionUpdateRequest DEFAULT_SHEET_QUESTION_2
-            = new SheetQuestionUpdateRequest(2, QUESTION_CONTENT_2);
+            = new SheetQuestionUpdateRequest(2, QUESTION_CONTENT_2, true);
     public static final SheetQuestionUpdateRequest DEFAULT_SHEET_QUESTION_3
-            = new SheetQuestionUpdateRequest(3, QUESTION_CONTENT_3);
+            = new SheetQuestionUpdateRequest(3, QUESTION_CONTENT_3, true);
 
     public static final String CUSTOM_QUESTION_CONTENT_1 = "첫번째 질문을 수정하였습니다:)";
     public static final String CUSTOM_QUESTION_CONTENT_2 = "두번째 질문을 수정하였습니다:)";
@@ -43,15 +43,15 @@ public class DtoFixture {
     public static final String CUSTOM_QUESTION_CONTENT_5 = "다섯 번째 질문";
 
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_1
-            = new SheetQuestionUpdateRequest(1, CUSTOM_QUESTION_CONTENT_1);
+            = new SheetQuestionUpdateRequest(1, CUSTOM_QUESTION_CONTENT_1,true);
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_2
-            = new SheetQuestionUpdateRequest(2, CUSTOM_QUESTION_CONTENT_2);
+            = new SheetQuestionUpdateRequest(2, CUSTOM_QUESTION_CONTENT_2,true);
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_3
-            = new SheetQuestionUpdateRequest(3, CUSTOM_QUESTION_CONTENT_3);
+            = new SheetQuestionUpdateRequest(3, CUSTOM_QUESTION_CONTENT_3,true);
 
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_4
             = new SheetQuestionUpdateRequest(4, CUSTOM_QUESTION_CONTENT_4, false);
 
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_5
-            = new SheetQuestionUpdateRequest(5, CUSTOM_QUESTION_CONTENT_5);
+            = new SheetQuestionUpdateRequest(5, CUSTOM_QUESTION_CONTENT_5,true);
 }
