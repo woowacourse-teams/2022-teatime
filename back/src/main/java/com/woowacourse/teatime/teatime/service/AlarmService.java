@@ -48,6 +48,7 @@ public class AlarmService {
         }
     }
 
+    @Async
     public void alertSheetSubmitted(Reservation reservation) {
         SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.SUBMIT_SHEET_TO_CREW);
         requestAlarm(crewAlarmDto);
