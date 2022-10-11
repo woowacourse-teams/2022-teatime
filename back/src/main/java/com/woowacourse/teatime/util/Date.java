@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class Date {
 
@@ -17,11 +16,6 @@ public class Date {
             return LocalDateTime.of(LocalDate.now(), LocalTime.now());
         }
         return LocalDateTime.of(startDate, LocalTime.MIN);
-    }
-
-    public static LocalDateTime findFirstDateTime(List<LocalDateTime> localDateTimes) {
-        LocalDateTime localDateTime = localDateTimes.get(0);
-        return LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.MIN);
     }
 
     private static void validateYearAndMonth(int year, int month, LocalDate today) {
@@ -37,11 +31,6 @@ public class Date {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = YearMonth.from(startDate).atEndOfMonth();
         return LocalDateTime.of(endDate, LocalTime.MAX);
-    }
-
-    public static LocalDateTime findLastDateTime(List<LocalDateTime> localDateTimes) {
-        LocalDateTime localDateTime = localDateTimes.get(localDateTimes.size() - 1);
-        return LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.MAX);
     }
 
     public static LocalDateTime findFirstTime(LocalDate date) {
