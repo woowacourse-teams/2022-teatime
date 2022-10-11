@@ -16,16 +16,20 @@ public class SheetDto {
     private String questionContent;
     private String answerContent;
 
+    private Boolean isRequired;
+
     private SheetDto(Sheet sheet) {
         this.questionNumber = sheet.getNumber();
         this.questionContent = sheet.getQuestionContent();
         this.answerContent = sheet.getAnswerContent();
+        this.isRequired = sheet.getIsRequired();
     }
 
     private SheetDto(CanceledSheet sheet) {
         this.questionNumber = sheet.getNumber();
         this.questionContent = sheet.getQuestionContent();
         this.answerContent = sheet.getAnswerContent();
+        this.isRequired = sheet.getIsRequired();
     }
 
     public static List<SheetDto> from(List<Sheet> sheets) {

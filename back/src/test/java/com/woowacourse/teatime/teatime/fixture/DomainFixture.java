@@ -30,6 +30,10 @@ public class DomainFixture {
         return new Question(coach, 3, "mbti는 뭔가요?", true);
     }
 
+    public static Question getQuestionIsRequiredFalse(Coach coach) {
+        return new Question(coach, 4, "부모님 직업은 뭔가요?", false);
+    }
+
     public static Coach getCoachJason() {
         return new Coach("제이슨", "제이슨", "jason@email.com", "i am legend", "image");
     }

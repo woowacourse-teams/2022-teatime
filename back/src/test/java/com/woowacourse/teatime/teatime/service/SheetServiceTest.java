@@ -8,6 +8,7 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion2;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion3;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestionIsRequiredFalse;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_ONE;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_THREE;
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.SHEET_ANSWER_UPDATE_REQUEST_TWO;
@@ -25,7 +26,6 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnSheetR
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
-import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.domain.Schedule;
@@ -38,6 +38,7 @@ import com.woowacourse.teatime.teatime.repository.QuestionRepository;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,12 +98,58 @@ class SheetServiceTest {
     @DisplayName("크루가 자신의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
     @Test
     void findOwnSheetByCrew() {
+        //given
         int expected = sheetService.save(reservation.getId());
 
+        //when
         CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(crew.getId(), reservation.getId());
-        List<SheetDto> sheets = response.getSheets();
 
+        //then
+        List<SheetDto> sheets = response.getSheets();
         assertThat(sheets).hasSize(expected);
+    }
+
+    @DisplayName("크루가 자신의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
+    @Test
+    void findOwnSheetByCrew_필수_여부_확인() {
+        //given
+        int expected = sheetService.save(reservation.getId());
+
+        //when
+        CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(crew.getId(), reservation.getId());
+
+        //then
+        List<SheetDto> sheets = response.getSheets();
+        List<Boolean> isRequired = sheets.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
+
+        assertAll(
+                () -> assertThat(sheets).hasSize(expected),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
+        );
+    }
+
+    @DisplayName("크루가 자신의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
+    @Test
+    void findOwnSheetByCrew_필수_여부_확인_false가_포함된_경우() {
+        //given
+        questionRepository.save(getQuestionIsRequiredFalse(coach));
+        int expected = sheetService.save(reservation.getId());
+
+        //when
+        CrewFindOwnSheetResponse response = sheetService.findOwnSheetByCrew(crew.getId(), reservation.getId());
+
+        //then
+        List<SheetDto> sheets = response.getSheets();
+        List<Boolean> isRequired = sheets.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
+
+        assertAll(
+                () -> assertThat(sheets).hasSize(expected),
+                () -> assertThat(isRequired).containsOnly(true, true, true, false)
+        );
     }
 
     @DisplayName("크루가 자신의 면담 시트 조회 - 존재하지 않는 면담 아이디로 조회하면 예외를 반환한다.")
@@ -119,14 +166,24 @@ class SheetServiceTest {
     @DisplayName("크루가 자신의 취소된 면담 시트를 조회한다.")
     @Test
     void findOwnCanceledSheetByCrew() {
+        //given
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, DATE_TIME));
         Long reservationId = reservationService.save(crew.getId(), new ReservationReserveRequest(schedule1.getId()));
         reservationService.cancel(reservationId, new UserRoleDto(coach.getId(), Role.COACH.name()));
 
+        //when
         CrewFindOwnCanceledSheetResponse canceledSheet = sheetService.findOwnCanceledSheetByCrew(crew.getId(),
                 reservationId);
 
-        assertThat(canceledSheet.getSheets()).hasSize(3);
+        //then
+        List<SheetDto> sheets = canceledSheet.getSheets();
+        List<Boolean> isRequired = sheets.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
+        assertAll(
+                () -> assertThat(sheets).hasSize(3),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
+        );
     }
 
     @DisplayName("코치가 크루의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
@@ -138,6 +195,27 @@ class SheetServiceTest {
         List<SheetDto> sheets = response.getSheets();
 
         assertThat(sheets).hasSize(expected);
+    }
+
+    @DisplayName("코치가 크루의 면담 시트 조회 - 면담에 해당되는 시트들을 반환한다.")
+    @Test
+    void findCrewSheetByCoach_필수_여부_확인() {
+        //given
+        int expected = sheetService.save(reservation.getId());
+
+        //when
+        CoachFindCrewSheetResponse response = sheetService.findCrewSheetByCoach(crew.getId(), reservation.getId());
+
+        //then
+        List<SheetDto> sheets = response.getSheets();
+        List<Boolean> isRequired = sheets.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
+
+        assertAll(
+                () -> assertThat(sheets).hasSize(expected),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
+        );
     }
 
     @DisplayName("코치가 크루의 면담 시트 조회 - 존재하지 않는 크루 아이디로 조회하면 예외를 반환한다.")

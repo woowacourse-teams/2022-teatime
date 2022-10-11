@@ -158,16 +158,20 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 .extract();
 
         List<SheetDto> result = response.jsonPath().getList("sheets.", SheetDto.class);
-
+        final List<Boolean> isRequired = result.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(result).hasSize(3)
+                () -> assertThat(result).hasSize(3),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
         );
     }
 
     @DisplayName("크루가 자신의 취소 면담 시트 하나를 조회한다.")
     @Test
     void findOwnCanceledSheet() {
+        //given
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
         questionRepository.save(getQuestion1(coach));
@@ -176,6 +180,7 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
         Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
         예약을_승인한다(reservationId, new ReservationApproveRequest(false), coachToken);
 
+        //when
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("originId", reservationId)
@@ -185,17 +190,22 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 .then().log().all()
                 .extract();
 
+        //then
         List<SheetDto> result = response.jsonPath().getList("sheets.", SheetDto.class);
-
+        final List<Boolean> isRequired = result.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(result).hasSize(3)
+                () -> assertThat(result).hasSize(3),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
         );
     }
 
     @DisplayName("코치가 크루의 면담 시트 하나를 조회한다.")
     @Test
     void findCrewSheets() {
+        //given
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
         questionRepository.save(getQuestion1(coach));
@@ -204,6 +214,7 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
         Long reservationId = 예약을_한다(new ReservationReserveRequest(scheduleId), crewToken);
         예약을_승인한다(reservationId, new ReservationApproveRequest(true), coachToken);
 
+        //when
         ExtractableResponse<Response> response = RestAssured.given(super.spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("crewId", crewId)
@@ -214,13 +225,17 @@ class CrewAcceptanceTest extends AcceptanceTestSupporter {
                 .then().log().all()
                 .extract();
 
+        //then
         String sheetStatus = response.jsonPath().getObject("status", String.class);
         List<SheetDto> sheets = response.jsonPath().getList("sheets.", SheetDto.class);
-
+        final List<Boolean> isRequired = sheets.stream()
+                .map(SheetDto::getIsRequired)
+                .collect(Collectors.toList());
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(sheetStatus).isEqualTo(WRITING.name()),
-                () -> assertThat(sheets).hasSize(3)
+                () -> assertThat(sheets).hasSize(3),
+                () -> assertThat(isRequired).containsOnly(true, true, true)
         );
     }
 
