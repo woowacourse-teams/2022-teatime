@@ -127,6 +127,10 @@ interface Question {
   isRequired: boolean;
 }
 
+interface Questions {
+  questions: Question[];
+}
+
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
@@ -154,4 +158,5 @@ export {
   CoachHistoryStatus,
   ReservationByCoach,
   Question,
+  Questions,
 };

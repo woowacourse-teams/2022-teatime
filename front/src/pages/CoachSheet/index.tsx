@@ -28,6 +28,7 @@ const CoachSheet = () => {
       try {
         const { data } = await getCrewReservationByCoach(crewId, reservationId as string);
         setReservationInfo(data);
+        console.log(data);
       } catch (error) {
         if (error instanceof AxiosError) {
           alert(error.response?.data?.message);

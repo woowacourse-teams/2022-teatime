@@ -3,12 +3,8 @@ import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
 import type { CoachData, Question } from '@typings/domain';
-import {
-  editCoachProfile,
-  getCoachProfile,
-  getCoachQuestions,
-  editCoachQuestions,
-} from '@api/coach';
+import { editCoachProfile, getCoachProfile } from '@api/coach';
+import { getQuestions, editQuestions } from '@api/question';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { MAX_LENGTH, QUESTIONS_LENGTH } from '@constants/index';
@@ -33,19 +29,19 @@ const CoachProfile = () => {
   };
 
   const handleChangeQuestionInput = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    // setQuestions((prev) => {
-    //   const newState = [...prev];
-    //   newState[index].questionContent = e.target.value;
-    //   return newState;
-    // });
+    setQuestions((prev) => {
+      const newState = [...prev];
+      newState[index].questionContent = e.target.value;
+      return newState;
+    });
   };
 
   const handleChangeQuestionCheckBox = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    // setQuestions((prev) => {
-    //   const newState = [...prev];
-    //   newState[index].isRequired = e.target.checked;
-    //   return newState;
-    // });
+    setQuestions((prev) => {
+      const newState = [...prev];
+      newState[index].isRequired = e.target.checked;
+      return newState;
+    });
   };
 
   const handleSubmitProfile = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,17 +65,16 @@ const CoachProfile = () => {
 
   const handleSubmitQuestions = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(questions);
 
-    // try {
-    // await editCoachQuestions(questions);
-    //   showSnackbar({ message: '저장되었습니다. ✅' });
-    // } catch (error) {
-    //   if (error instanceof AxiosError) {
-    //     alert(error.response?.data?.message);
-    //     console.log(error);
-    //   }
-    // }
+    try {
+      await editQuestions(questions);
+      showSnackbar({ message: '저장되었습니다. ✅' });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -96,20 +91,19 @@ const CoachProfile = () => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const { data } = await getCoachQuestions();
-  //       console.log(data);
-  //       setQuestions(data.questions);
-  //     } catch (error) {
-  //       if (error instanceof AxiosError) {
-  //         alert(error.response?.data?.message);
-  //         console.log(error);
-  //       }
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await getQuestions();
+        setQuestions(data.questions);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
+      }
+    })();
+  }, []);
 
   if (!coachProfile) return <></>;
 
@@ -170,12 +164,12 @@ const CoachProfile = () => {
                 {Array.from({ length: QUESTIONS_LENGTH }, (_, index) => (
                   <Fragment key={index}>
                     <S.QuestionLength>
-                      {`${questions[index]?.questionContent.length} / ${MAX_LENGTH.QUESTION}`}
+                      {`${questions[index]?.questionContent.length ?? 0} / ${MAX_LENGTH.QUESTION}`}
                     </S.QuestionLength>
                     <input
                       type="text"
                       maxLength={MAX_LENGTH.QUESTION}
-                      value={questions[index]?.questionContent}
+                      value={questions[index]?.questionContent ?? ''}
                       onChange={(e) => handleChangeQuestionInput(index, e)}
                     />
                   </Fragment>
@@ -187,7 +181,7 @@ const CoachProfile = () => {
                   <input
                     key={index}
                     type="checkbox"
-                    checked={questions[index]?.isRequired}
+                    checked={questions[index]?.isRequired ?? true}
                     onChange={(e) => handleChangeQuestionCheckBox(index, e)}
                   />
                 ))}

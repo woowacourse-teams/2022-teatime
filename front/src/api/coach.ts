@@ -28,10 +28,6 @@ const editCoachProfile = (data: { name: string; description: string }) =>
 const editCoachSchedule = (data: { date: string; schedules: string[] }[]) =>
   api.put(`/api/v2/coaches/me/schedules`, data);
 
-const getCoachQuestions = () => api.get<Question[]>(`/api/v2/coaches/me/questions`);
-
-const editCoachQuestions = (data: Question[]) => api.put(`/api/v2/coaches/me/questions`, data);
-
 export {
   getCoaches,
   getCoachProfile,
@@ -41,6 +37,4 @@ export {
   getCoachHistories,
   editCoachSchedule,
   editCoachProfile,
-  getCoachQuestions,
-  editCoachQuestions,
 };
