@@ -8,6 +8,8 @@ import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +70,14 @@ public class ScheduleRepositoryTest {
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, july1_1));
         Schedule schedule2 = scheduleRepository.save(new Schedule(coach, july1_2));
         schedule2.reserve();
+        List<String> localDates = Stream.of(july1_1, july1_2)
+                .map(LocalDateTime::toLocalDate)
+                .distinct()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
 
         // when
-        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), List.of(july1_1.toLocalDate().toString()));
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), localDates);
 
         // then
         List<Schedule> schedules = scheduleRepository.findAll();
