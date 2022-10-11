@@ -26,7 +26,6 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnSheetR
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetDto;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
-import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.Role;
 import com.woowacourse.teatime.teatime.domain.Schedule;

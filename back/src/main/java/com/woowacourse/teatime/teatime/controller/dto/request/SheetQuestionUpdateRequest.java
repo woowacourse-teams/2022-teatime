@@ -20,10 +20,4 @@ public class SheetQuestionUpdateRequest {
 
     @NotNull
     private Boolean isRequired;
-
-    public SheetQuestionUpdateRequest(Integer questionNumber, String questionContent) {
-        this.questionNumber = questionNumber;
-        this.questionContent = questionContent;
-        this.isRequired = true;
-    }
 }

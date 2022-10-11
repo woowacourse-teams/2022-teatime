@@ -87,9 +87,9 @@ public class AuthService {
                 userInfo.getImage()));
 
         List<SheetQuestionUpdateRequest> defaultQuestionDtos = List.of(
-                new SheetQuestionUpdateRequest(1, DEFAULT_QUESTION_1),
-                new SheetQuestionUpdateRequest(2, DEFAULT_QUESTION_2),
-                new SheetQuestionUpdateRequest(3, DEFAULT_QUESTION_3));
+                new SheetQuestionUpdateRequest(1, DEFAULT_QUESTION_1, true),
+                new SheetQuestionUpdateRequest(2, DEFAULT_QUESTION_2, true),
+                new SheetQuestionUpdateRequest(3, DEFAULT_QUESTION_3, true));
 
         questionService.update(coach.getId(), defaultQuestionDtos);
         return coach;

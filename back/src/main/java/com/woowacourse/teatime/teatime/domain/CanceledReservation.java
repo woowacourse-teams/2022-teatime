@@ -53,7 +53,11 @@ public class CanceledReservation {
 
     public static CanceledReservation from(Reservation reservation) {
         return new CanceledReservation(
-                reservation.getId(), reservation.getCoach(), reservation.getCrew(), reservation.getScheduleDateTime());
+                reservation.getId(),
+                reservation.getCoach(),
+                reservation.getCrew(),
+                reservation.getScheduleDateTime()
+        );
     }
 
     public boolean isSameCrew(Long crewId) {

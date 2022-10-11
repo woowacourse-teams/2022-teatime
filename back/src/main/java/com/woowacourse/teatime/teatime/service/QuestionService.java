@@ -46,7 +46,7 @@ public class QuestionService {
     }
 
     @NotNull
-    private static List<Question> toQuestions(List<SheetQuestionUpdateRequest> request, Coach coach) {
+    private List<Question> toQuestions(List<SheetQuestionUpdateRequest> request, Coach coach) {
         return request.stream()
                 .map(question -> new Question(coach,
                         question.getQuestionNumber(),

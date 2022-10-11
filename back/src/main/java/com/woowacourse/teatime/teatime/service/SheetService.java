@@ -52,7 +52,7 @@ public class SheetService {
     }
 
     @NotNull
-    private static List<Sheet> toSheets(Reservation reservation, List<Question> questions) {
+    private List<Sheet> toSheets(Reservation reservation, List<Question> questions) {
         return questions.stream()
                 .map(question -> new Sheet(reservation,
                         question.getNumber(),
