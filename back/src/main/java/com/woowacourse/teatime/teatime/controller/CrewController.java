@@ -4,7 +4,6 @@ import com.woowacourse.teatime.auth.support.CoachAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.CrewAuthenticationPrincipal;
 import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
-import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnCanceledSheetResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
@@ -60,7 +59,8 @@ public class CrewController {
     public ResponseEntity<CrewFindOwnCanceledSheetResponse> findOwnCanceledSheets(
             @CrewAuthenticationPrincipal Long crewId,
             @PathVariable @NotNull Long originReservationId) {
-        CrewFindOwnCanceledSheetResponse response = sheetService.findOwnCanceledSheetByCrew(crewId, originReservationId);
+        CrewFindOwnCanceledSheetResponse response = sheetService.findOwnCanceledSheetByCrew(crewId,
+                originReservationId);
         return ResponseEntity.ok(response);
     }
 
@@ -82,8 +82,8 @@ public class CrewController {
     }
 
     @PutMapping("/me/profile")
-    public ResponseEntity<Void> updateProfile(
-            @CrewAuthenticationPrincipal Long crewId, @Valid @RequestBody CrewUpdateProfileRequest request) {
+    public ResponseEntity<Void> updateProfile(@CrewAuthenticationPrincipal Long crewId,
+                                              @Valid @RequestBody CrewUpdateProfileRequest request) {
         crewService.updateProfile(crewId, request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -311,7 +311,7 @@ class SheetServiceTest {
         sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "당신의 별자리는?", answer),
+                new SheetAnswerUpdateDto(2, "당신의 별자리는?", answer, true),
                 SHEET_ANSWER_UPDATE_REQUEST_ONE,
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
@@ -326,7 +326,7 @@ class SheetServiceTest {
         sheetService.save(reservation.getId());
 
         List<SheetAnswerUpdateDto> updateDtos = List.of(
-                new SheetAnswerUpdateDto(2, "당신의 별자리는?", null),
+                new SheetAnswerUpdateDto(2, "당신의 별자리는?", null, true),
                 SHEET_ANSWER_UPDATE_REQUEST_ONE,
                 SHEET_ANSWER_UPDATE_REQUEST_THREE);
         SheetAnswerUpdateRequest request = new SheetAnswerUpdateRequest(SUBMITTED, updateDtos);
