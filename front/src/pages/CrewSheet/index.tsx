@@ -44,7 +44,6 @@ const CrewSheet = () => {
           ? await getCrewCanceledReservation(reservationId as string)
           : await getCrewReservationByMe(reservationId as string);
         setReservationInfo(data);
-        console.log('data', data);
       } catch (error) {
         if (error instanceof AxiosError) {
           alert(error.response?.data?.message);
