@@ -70,8 +70,7 @@ public class ScheduleRepositoryTest {
         schedule2.reserve();
 
         // when
-        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(),
-                List.of(july1_1.toLocalDate().toString()));
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coach.getId(), List.of(july1_1.toLocalDate().toString()));
 
         // then
         List<Schedule> schedules = scheduleRepository.findAll();
