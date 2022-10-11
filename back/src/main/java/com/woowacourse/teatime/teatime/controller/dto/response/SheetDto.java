@@ -15,7 +15,6 @@ public class SheetDto {
     private Integer questionNumber;
     private String questionContent;
     private String answerContent;
-
     private Boolean isRequired;
 
     private SheetDto(Sheet sheet) {
@@ -46,7 +45,7 @@ public class SheetDto {
 
     public static List<SheetDto> generateEmptySheet(List<Sheet> sheets) {
         return sheets.stream()
-                .map(sheet -> new Sheet(sheet.getReservation(), sheet.getNumber(), sheet.getQuestionContent()))
+                .map(sheet -> new Sheet(sheet.getReservation(), sheet.getNumber(), sheet.getQuestionContent(), sheet.getIsRequired()))
                 .map(SheetDto::new)
                 .collect(Collectors.toList());
     }
