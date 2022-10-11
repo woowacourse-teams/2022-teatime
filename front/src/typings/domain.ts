@@ -91,6 +91,7 @@ interface Sheets {
   questionNumber: number;
   questionContent: string;
   answerContent: string | null;
+  isRequired?: boolean;
 }
 
 interface TimeSchedule {
