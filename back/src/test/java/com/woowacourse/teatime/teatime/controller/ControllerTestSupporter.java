@@ -8,7 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.PayloadDto;
 import com.woowacourse.teatime.auth.infrastructure.PayloadExtractor;
+import com.woowacourse.teatime.auth.infrastructure.ResponseCookieTokenProvider;
 import com.woowacourse.teatime.auth.service.AuthService;
+import com.woowacourse.teatime.auth.service.LoginService;
+import com.woowacourse.teatime.auth.service.UserAuthService;
 import com.woowacourse.teatime.teatime.aspect.QueryCountInspector;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
@@ -57,6 +60,15 @@ public class ControllerTestSupporter extends RestDocsSupporter {
 
     @MockBean
     protected AuthService authService;
+
+    @MockBean
+    protected UserAuthService userAuthService;
+
+    @MockBean
+    protected LoginService loginService;
+
+    @MockBean
+    protected ResponseCookieTokenProvider responseCookieTokenProvider;
 
     protected MockHttpServletRequestBuilder get(String url) {
         return MockMvcRequestBuilders.get(url)
