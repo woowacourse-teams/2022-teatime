@@ -170,6 +170,7 @@ const CoachProfile = () => {
                       maxLength={MAX_LENGTH.QUESTION}
                       value={questions[index]?.questionContent ?? ''}
                       onChange={(e) => handleChangeQuestionInput(index, e)}
+                      required
                     />
                   </Fragment>
                 ))}
