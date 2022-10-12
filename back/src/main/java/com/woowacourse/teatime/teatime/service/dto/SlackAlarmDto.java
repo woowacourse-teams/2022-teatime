@@ -47,6 +47,12 @@ public class SlackAlarmDto {
         return new SlackAlarmDto(crew.getSlackId(), alarmTitle.getMessage(), List.of(attachmentDto));
     }
 
+    public static SlackAlarmDto alarmTo(AlarmTargetDto alarmDto, AlarmTitle alarmTitle) {
+        String message = getMessage(alarmDto.getCrewName(), alarmDto.getCoachName(), alarmDto.getScheduleDateTime());
+        AttachmentDto attachmentDto = new AttachmentDto(alarmTitle.getBarColor(), message);
+        return new SlackAlarmDto(alarmDto.getSlackId(), alarmTitle.getMessage(), List.of(attachmentDto));
+    }
+
     private static String getMessage(String crewName, String coachName, LocalDateTime dateTime) {
         return String.join("\r\n",
                 DIRECT_LINK,

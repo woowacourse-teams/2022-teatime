@@ -7,6 +7,7 @@ import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
+import com.woowacourse.teatime.teatime.service.dto.AlarmTargetDto;
 import com.woowacourse.teatime.teatime.service.dto.SlackAlarmDto;
 import java.time.LocalDate;
 import java.util.List;
@@ -49,11 +50,11 @@ public class AlarmService {
     }
 
     @Async
-    public void alertSheetSubmitted(Reservation reservation) {
-        SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.SUBMIT_SHEET_TO_CREW);
-        requestAlarm(crewAlarmDto);
-        SlackAlarmDto coachAlarmDto = SlackAlarmDto.alarmToCoach(reservation, AlarmTitle.SUBMIT_SHEET_TO_COACH);
-        requestAlarm(coachAlarmDto);
+    public void alertSheetSubmitted(List<AlarmTargetDto> alarmTargets) {
+        for (AlarmTargetDto alarmTarget : alarmTargets) {
+            SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmTo(alarmTarget, AlarmTitle.SUBMIT_SHEET_TO_CREW);
+            requestAlarm(crewAlarmDto);
+        }
     }
 
     private void requestAlarm(SlackAlarmDto alarmDto) {
