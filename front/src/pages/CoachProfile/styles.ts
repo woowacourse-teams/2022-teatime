@@ -1,64 +1,169 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const profileInput = css`
+  width: 100%;
+  padding: 8px;
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
+  border-radius: 8px;
+  font-size: 16px;
+`;
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 80vh;
+  margin: 50px 20px;
+`;
 
-  img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 50%;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  width: 900px;
+  gap: 40px;
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const EditButton = styled.button`
+const BorderBox = styled.div`
   width: 100%;
-  height: 40px;
-  border-radius: 18px;
-  margin-right: 10px;
-  background-color: ${({ theme }) => theme.colors.GREEN_700};
-  color: ${({ theme }) => theme.colors.WHITE};
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
+  padding: 30px 20px;
+  border: 1.5px solid ${({ theme }) => theme.colors.GRAY_200};
+`;
 
-  :hover {
-    opacity: 0.7;
+const BorderBoxName = styled.p`
+  color: ${({ theme }) => theme.colors.GREEN_900};
+  margin-bottom: 10px;
+  font-size: 18px;
+`;
+
+const PreviewBorderBox = styled(BorderBox)`
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    display: none;
   }
 `;
 
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 330px;
-  margin: 30px 0;
-
-  div {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 0 2px;
-    color: ${({ theme }) => theme.colors.GRAY_600};
-  }
-
+const ProfileForm = styled.form`
   input {
-    padding: 8px;
-    height: 40px;
-    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
-    border-radius: 4px;
-    font-size: 16px;
+    ${profileInput}
+    margin-bottom: 30px;
   }
 
   textarea {
-    padding: 8px;
-    border: 1px solid ${({ theme }) => theme.colors.GRAY_300};
-    border-radius: 4px;
-    font-size: 16px;
+    ${profileInput}
   }
 `;
 
-export { Container, EditButton, InputWrapper };
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  label {
+    font-size: 18px;
+    color: ${({ theme }) => theme.colors.GREEN_900};
+  }
+`;
+
+const QuestionContainer = styled.div`
+  display: flex;
+`;
+
+const QuestionInner = styled.div`
+  display: flex;
+`;
+
+const QuestionBorderBox = styled(BorderBox)``;
+
+const QuestionNameWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.GREEN_900};
+`;
+
+const QuestionInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  input {
+    ${profileInput}
+    margin-bottom: 15px;
+    height: 40px;
+  }
+`;
+
+const QuestionLength = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+  color: ${({ theme }) => theme.colors.GREEN_900};
+`;
+
+const QuestionCheckBoxContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+
+  input {
+    margin-bottom: 15px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-top: 16.5px;
+  }
+`;
+
+const CardWrapper = styled.div`
+  width: 250px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0;
+
+  button {
+    background-color: ${({ theme }) => theme.colors.GREEN_700};
+    color: ${({ theme }) => theme.colors.WHITE};
+    width: 50%;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+
+    :hover {
+      opacity: 0.7;
+    }
+  }
+`;
+
+export {
+  Container,
+  ProfileForm,
+  Grid,
+  BorderBox,
+  PreviewBorderBox,
+  QuestionContainer,
+  QuestionInner,
+  QuestionBorderBox,
+  QuestionNameWrapper,
+  QuestionInputContainer,
+  QuestionLength,
+  QuestionCheckBoxContainer,
+  BorderBoxName,
+  LabelContainer,
+  CardWrapper,
+  ButtonWrapper,
+};

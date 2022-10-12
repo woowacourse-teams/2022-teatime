@@ -25,6 +25,8 @@ import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
@@ -120,16 +122,91 @@ class ScheduleServiceTest {
 
     @DisplayName("코치의 날짜에 해당하는 하루 스케줄을 업데이트한다.")
     @Test
-    void update() {
+    void update_one() {
+        // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDate date = LocalDate.now();
+
+        // when
         ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
-                List.of(LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59))));
+                List.of(
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59)),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(13, 30))
+                ));
         scheduleService.update(coach.getId(), List.of(updateRequest));
 
+        // then
         ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
         List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
-        assertThat(responses).hasSize(1);
+        final List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        assertThat(totalSchedules).hasSize(2);
+    }
+
+    @DisplayName("코치의 날짜에 해당하는 스케줄을 일괄 업데이트한다.")
+    @Test
+    void update_total() {
+        // given
+        Coach coach = coachRepository.save(COACH_BROWN);
+        LocalDate date = LocalDate.now();
+
+        // when
+        final LocalTime time1 = LocalTime.of(13, 30);
+        final LocalTime time2 = LocalTime.of(23, 59);
+        ScheduleUpdateRequest updateRequest = new ScheduleUpdateRequest(date,
+                List.of(
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, time1),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH, time2),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(1), time1),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(1), time2),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(2), time1),
+                        LocalDateTime.of(LAST_DATE_OF_MONTH.minusDays(2), time2)
+                ));
+        scheduleService.update(coach.getId(), List.of(updateRequest));
+
+        // then
+        ScheduleFindRequest request = new ScheduleFindRequest(date.getYear(), date.getMonthValue());
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
+        final List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        assertThat(totalSchedules).hasSize(6);
+    }
+
+    @DisplayName("전 날짜가 포함되지 않은 스케쥴들을 일괄 업데이트해도 기존 날짜가 삭제되지 않는다.")
+    @Test
+    void update_total2() {
+        // given
+        Coach coach = coachRepository.save(COACH_BROWN);
+        LocalDate nextMonthDate = LocalDate.now().plusMonths(1);
+        int year = nextMonthDate.plusMonths(1).getYear();
+        Month month = nextMonthDate.plusMonths(1).getMonth();
+        LocalDateTime day2 = LocalDateTime.of(year, month, 2, 13, 30);
+        LocalDateTime day3 = LocalDateTime.of(year, month, 3, 13, 30);
+        ScheduleUpdateRequest updateRequest1 = new ScheduleUpdateRequest(nextMonthDate, List.of(day2, day3));
+        scheduleService.update(coach.getId(), List.of(updateRequest1));
+
+        // when
+        LocalDateTime day1 = LocalDateTime.of(year, month, 1, 13, 30);
+        LocalDateTime day8 = LocalDateTime.of(year, month, 8, 13, 30);
+        LocalDateTime day9 = LocalDateTime.of(year, month, 9, 13, 30);
+        ScheduleUpdateRequest updateRequest2 = new ScheduleUpdateRequest(nextMonthDate, List.of(day1, day8, day9));
+        scheduleService.update(coach.getId(), List.of(updateRequest2));
+
+        // then
+        ScheduleFindRequest request = new ScheduleFindRequest(year, month.getValue());
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(), request);
+        final List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        assertThat(totalSchedules).hasSize(5);
     }
 
     @DisplayName("코치가 예약되어 있는 스케줄을 삭제하면 예외를 발생시킨다.")
@@ -154,7 +231,7 @@ class ScheduleServiceTest {
         // given
         Coach coach = coachRepository.save(COACH_BROWN);
         LocalDateTime reservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 58));
-        LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 59));
+        LocalDateTime notReservedTime = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(23, 50));
 
         Schedule schedule1 = scheduleRepository.save(new Schedule(coach, reservedTime));
         scheduleRepository.save(new Schedule(coach, notReservedTime));
@@ -166,14 +243,18 @@ class ScheduleServiceTest {
         // when
         ScheduleUpdateRequest scheduleUpdateRequest
                 = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH,
-                List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2)));
+                List.of(reservedTime.minusMinutes(1), reservedTime.minusMinutes(2), reservedTime.minusDays(2)));
         scheduleService.update(coach.getId(), List.of(scheduleUpdateRequest));
+
+        // then
         List<ScheduleFindResponse> responses
                 = scheduleService.find(coach.getId(),
                 new ScheduleFindRequest(reservedTime.getYear(), reservedTime.getMonthValue()));
-        List<ScheduleDto> schedules = responses.get(0).getSchedules();
+        List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
 
-        // then
-        assertThat(schedules).hasSize(3);
+        assertThat(totalSchedules).hasSize(4);
     }
 }

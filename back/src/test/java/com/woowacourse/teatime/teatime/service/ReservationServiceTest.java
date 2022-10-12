@@ -6,6 +6,9 @@ import static com.woowacourse.teatime.teatime.domain.SheetStatus.WRITING;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.COACH_BROWN;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.CREW1;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion1;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion2;
+import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion3;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -91,9 +94,9 @@ class ReservationServiceTest {
         coach = coachRepository.save(COACH_BROWN);
         schedule = scheduleRepository.save(new Schedule(coach, DATE_TIME));
 
-        questionRepository.save(new Question(coach, 1, "당신의 혈액형은?"));
-        questionRepository.save(new Question(coach, 2, "당신의 별자리는?"));
-        questionRepository.save(new Question(coach, 3, "당신의 mbti는?"));
+        questionRepository.save(getQuestion1(coach));
+        questionRepository.save(getQuestion2(coach));
+        questionRepository.save(getQuestion3(coach));
     }
 
     @DisplayName("예약을 한다.")

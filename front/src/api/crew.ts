@@ -1,5 +1,5 @@
 import { api } from '@api/index';
-import { CrewHistory, HistoryList, Reservation, Sheets } from '@typings/domain';
+import { CrewHistory, HistoryList, Reservation, Sheets, ReservationByCoach } from '@typings/domain';
 
 const getCrewHistoriesByMe = () => api.get<CrewHistory[]>('/api/v2/crews/me/reservations');
 
@@ -13,7 +13,7 @@ const getCrewCanceledReservation = (reservationId: string) =>
   api.get<Reservation>(`/api/v2/crews/me/canceled-reservations/${reservationId}`);
 
 const getCrewReservationByCoach = (crewId: number, reservationId: string) =>
-  api.get<Reservation>(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
+  api.get<ReservationByCoach>(`/api/v2/crews/${crewId}/reservations/${reservationId}`);
 
 const editCrewReservation = (reservationId: string, isSubmitted: boolean, sheets: Sheets[]) =>
   api.put(`/api/v2/crews/me/reservations/${reservationId}`, {

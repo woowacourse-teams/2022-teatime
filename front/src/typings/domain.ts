@@ -53,6 +53,15 @@ interface Reservation {
   sheets: Sheets[];
 }
 
+interface ReservationByCoach {
+  dateTime: string;
+  crewName: string;
+  crewImage: string;
+  sheetStatus: SheetStatus;
+  reservationStatus: CrewHistoryStatus;
+  sheets: Sheets[];
+}
+
 interface CrewHistory {
   reservationId: number;
   coachName: string;
@@ -82,6 +91,7 @@ interface Sheets {
   questionNumber: number;
   questionContent: string;
   answerContent: string | null;
+  isRequired?: boolean;
 }
 
 interface TimeSchedule {
@@ -112,6 +122,16 @@ interface MultipleDaySchedule {
   times: MultipleTime[];
 }
 
+interface Question {
+  questionNumber: number;
+  questionContent: string;
+  isRequired: boolean;
+}
+
+interface Questions {
+  questions: Question[];
+}
+
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
@@ -137,4 +157,7 @@ export {
   CoachHistory,
   CrewHistoryStatus,
   CoachHistoryStatus,
+  ReservationByCoach,
+  Question,
+  Questions,
 };
