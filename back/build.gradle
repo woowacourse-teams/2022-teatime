@@ -80,6 +80,7 @@ dependencies {
 
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    testImplementation 'org.testcontainers:junit-jupiter:1.17.4'
 
     // actuator for monitoring
     implementation 'org.springframework.boot:spring-boot-starter-actuator'

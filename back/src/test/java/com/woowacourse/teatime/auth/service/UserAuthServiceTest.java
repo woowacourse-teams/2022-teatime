@@ -8,6 +8,7 @@ import com.woowacourse.teatime.auth.controller.dto.GenerateTokenDto;
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
+import com.woowacourse.teatime.auth.support.TestContainerConfig;
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class UserAuthServiceTest {
+class UserAuthServiceTest extends TestContainerConfig {
 
     @Autowired
     private UserAuthInfoRepository userAuthInfoRepository;
