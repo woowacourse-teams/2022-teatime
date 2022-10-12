@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BlockDto1 {
+public class TextBlock {
 
     private String type;
     private TextDto text;

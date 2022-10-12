@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BlockDto2 {
+public class DividerBlock {
 
     private String type;
 }

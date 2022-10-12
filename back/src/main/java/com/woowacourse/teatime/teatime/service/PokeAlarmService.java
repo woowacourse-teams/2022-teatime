@@ -1,7 +1,6 @@
 package com.woowacourse.teatime.teatime.service;
 
 import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
-import com.woowacourse.teatime.teatime.service.dto.poke.PokeAlarmInfoDto;
 import com.woowacourse.teatime.teatime.service.dto.poke.PokeSlackAlarmDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,8 @@ public class PokeAlarmService {
     private final WebClient botClient;
 
     @Async
-    public void sendPoke(PokeAlarmInfoDto pokeAlarmDto) {
-        PokeSlackAlarmDto pokeSlackAlarmDto = PokeSlackAlarmDto.pokeToCoach(pokeAlarmDto);
+    public void sendPoke(String crewName, String coachSlackId) {
+        PokeSlackAlarmDto pokeSlackAlarmDto = PokeSlackAlarmDto.pokeToCoach(crewName, coachSlackId);
         requestAlarm(pokeSlackAlarmDto);
     }
 

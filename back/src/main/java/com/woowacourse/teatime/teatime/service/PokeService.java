@@ -9,7 +9,6 @@ import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.CrewRepository;
 import com.woowacourse.teatime.teatime.repository.PokeRepository;
-import com.woowacourse.teatime.teatime.service.dto.poke.PokeAlarmInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +25,13 @@ public class PokeService {
 
     public Long save(Long crewId, PokeSaveRequest request) {
         Long coachId = request.getCoachId();
-
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(NotFoundCrewException::new);
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
 
         Poke savedPoke = pokeRepository.save(new Poke(crew, coach));
-        alarmService.sendPoke(PokeAlarmInfoDto.of(crew, coach));
+        alarmService.sendPoke(crew.getName(), coach.getSlackId());
 
         return savedPoke.getId();
     }
