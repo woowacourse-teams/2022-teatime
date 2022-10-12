@@ -9,7 +9,7 @@ import com.woowacourse.teatime.auth.controller.dto.UserAuthDto;
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.infrastructure.OpenIdAuth;
-import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateDto;
+import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdateRequest;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
@@ -91,12 +91,12 @@ public class LoginService {
                 userInfo.getEmail(),
                 userInfo.getImage()));
 
-        List<SheetQuestionUpdateDto> defaultQuestionDtos = List.of(
-                new SheetQuestionUpdateDto(1, DEFAULT_QUESTION_1),
-                new SheetQuestionUpdateDto(2, DEFAULT_QUESTION_2),
-                new SheetQuestionUpdateDto(3, DEFAULT_QUESTION_3));
+        List<SheetQuestionUpdateRequest> defaultQuestionDtos = List.of(
+                new SheetQuestionUpdateRequest(1, DEFAULT_QUESTION_1, true),
+                new SheetQuestionUpdateRequest(2, DEFAULT_QUESTION_2, true),
+                new SheetQuestionUpdateRequest(3, DEFAULT_QUESTION_3, true));
 
-        questionService.updateQuestions(coach.getId(), defaultQuestionDtos);
+        questionService.update(coach.getId(), defaultQuestionDtos);
         return coach;
     }
 
