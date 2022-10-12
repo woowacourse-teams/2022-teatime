@@ -5,12 +5,11 @@ import { LOCAL_DB } from '@constants/index';
 
 const BASE_URL = process.env.BACK_URL;
 
+axios.defaults.withCredentials = true;
+
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
 });
-
-axios.defaults.withCredentials = true;
 
 api.interceptors.request.use(
   (config) => {
