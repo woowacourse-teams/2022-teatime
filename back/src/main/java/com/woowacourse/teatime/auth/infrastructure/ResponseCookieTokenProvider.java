@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ResponseCookieTokenProvider {
 
-    private final Long day;
+    private final Long expireLength;
 
-    public ResponseCookieTokenProvider(@Value("${refresh-token.expire-day-length}") String day) {
-        this.day = Long.parseLong(day);
+    public ResponseCookieTokenProvider(@Value("${refresh-token.expire-length}") String expireLength) {
+        this.expireLength = Long.parseLong(expireLength);
     }
 
     public void setCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-                .maxAge(day * 24 * 60 * 60)
+                .maxAge(expireLength)
                 .path("/")
                 .secure(true)
                 .sameSite(SameSite.NONE.name())

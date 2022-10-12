@@ -35,6 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://teatime.pe.kr",
                         "http://teatime.pe.kr"
                 )
+                .allowCredentials(true)
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .exposedHeaders(HttpHeaders.LOCATION);
     }
