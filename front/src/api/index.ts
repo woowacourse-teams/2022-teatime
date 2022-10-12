@@ -7,8 +7,9 @@ const BASE_URL = process.env.BACK_URL;
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
 });
+
+axios.defaults.withCredentials = true;
 
 api.interceptors.request.use(
   (config) => {
