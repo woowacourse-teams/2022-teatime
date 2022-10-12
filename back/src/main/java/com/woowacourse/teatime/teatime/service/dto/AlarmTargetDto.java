@@ -4,7 +4,6 @@ import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,18 +17,17 @@ public class AlarmTargetDto {
     private String slackId;
     private LocalDateTime scheduleDateTime;
 
-    public static List<AlarmTargetDto> from(Reservation reservation) {
+    public static AlarmTargetDto alarmToCoach(Reservation reservation) {
         Crew crew = reservation.getCrew();
         Coach coach = reservation.getCoach();
-        LocalDateTime dateTime = reservation.getScheduleDateTime();
-        return List.of(alarmToCoach(crew, coach, dateTime), alarmToCrew(crew, coach, dateTime));
+        return new AlarmTargetDto(crew.getName(), coach.getName(), coach.getSlackId(),
+                reservation.getScheduleDateTime());
     }
 
-    private static AlarmTargetDto alarmToCoach(Crew crew, Coach coach, LocalDateTime dateTime) {
-        return new AlarmTargetDto(crew.getName(), coach.getName(), coach.getSlackId(), dateTime);
-    }
-
-    private static AlarmTargetDto alarmToCrew(Crew crew, Coach coach, LocalDateTime dateTime) {
-        return new AlarmTargetDto(crew.getName(), coach.getName(), crew.getSlackId(), dateTime);
+    public static AlarmTargetDto alarmToCrew(Reservation reservation) {
+        Crew crew = reservation.getCrew();
+        Coach coach = reservation.getCoach();
+        return new AlarmTargetDto(crew.getName(), coach.getName(), crew.getSlackId(),
+                reservation.getScheduleDateTime());
     }
 }

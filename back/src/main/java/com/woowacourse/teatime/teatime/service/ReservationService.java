@@ -209,7 +209,9 @@ public class ReservationService {
 
         if (SUBMITTED.equals(status)) {
             reservation.updateSheetStatusToSubmitted();
-            alarmService.alertSheetSubmitted(AlarmTargetDto.from(reservation));
+            AlarmTargetDto coachDto = AlarmTargetDto.alarmToCoach(reservation);
+            AlarmTargetDto crewDto = AlarmTargetDto.alarmToCrew(reservation);
+            alarmService.alertSheetSubmitted(coachDto, crewDto);
         }
     }
 

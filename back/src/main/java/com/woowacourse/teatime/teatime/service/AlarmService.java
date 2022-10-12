@@ -50,11 +50,11 @@ public class AlarmService {
     }
 
     @Async
-    public void alertSheetSubmitted(List<AlarmTargetDto> alarmTargets) {
-        for (AlarmTargetDto alarmTarget : alarmTargets) {
-            SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmTo(alarmTarget, AlarmTitle.SUBMIT_SHEET_TO_CREW);
-            requestAlarm(crewAlarmDto);
-        }
+    public void alertSheetSubmitted(AlarmTargetDto coachDto, AlarmTargetDto crewDto) {
+        SlackAlarmDto coachAlarmDto = SlackAlarmDto.alarmTo(coachDto, AlarmTitle.SUBMIT_SHEET_TO_COACH);
+        requestAlarm(coachAlarmDto);
+        SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmTo(crewDto, AlarmTitle.SUBMIT_SHEET_TO_CREW);
+        requestAlarm(crewAlarmDto);
     }
 
     private void requestAlarm(SlackAlarmDto alarmDto) {
