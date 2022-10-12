@@ -1,29 +1,45 @@
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useContext, Fragment } from 'react';
 import { AxiosError } from 'axios';
 
-import { CoachData } from '@typings/domain';
+import Card from '@components/Card';
+import type { CoachData, Question } from '@typings/domain';
 import { editCoachProfile, getCoachProfile } from '@api/coach';
+import { getQuestions, editQuestions } from '@api/question';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { ROUTES, MAX_LENGTH } from '@constants/index';
+import { MAX_LENGTH, QUESTIONS_LENGTH } from '@constants/index';
 import * as S from './styles';
 
 const CoachProfile = () => {
-  const navigate = useNavigate();
   const dispatch = useContext(UserDispatchContext);
   const showSnackbar = useContext(SnackbarContext);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [coachProfile, setCoachProfile] = useState<CoachData>({
     image: '',
     name: '',
     description: '',
   });
-
   const { image, name, description } = coachProfile;
 
   const handleChangeProfile = (e: React.ChangeEvent<HTMLFormElement>) => {
     setCoachProfile((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const handleChangeQuestionInput = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestions((prev) => {
+      const newState = [...prev];
+      newState[index].questionContent = e.target.value;
+      return newState;
+    });
+  };
+
+  const handleChangeQuestionCheckBox = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestions((prev) => {
+      const newState = [...prev];
+      newState[index].isRequired = e.target.checked;
+      return newState;
     });
   };
 
@@ -35,13 +51,23 @@ const CoachProfile = () => {
     }
 
     try {
-      await editCoachProfile({
-        name,
-        description,
-      });
+      await editCoachProfile({ name, description });
       dispatch({ type: 'EDIT_USER', name });
-      showSnackbar({ message: '변경되었습니다. ✅' });
-      navigate(ROUTES.COACH);
+      showSnackbar({ message: '저장되었습니다. ✅' });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
+  };
+
+  const handleSubmitQuestions = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await editQuestions(questions);
+      showSnackbar({ message: '저장되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
@@ -64,42 +90,109 @@ const CoachProfile = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await getQuestions();
+        setQuestions(data.questions);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message);
+          console.log(error);
+        }
+      }
+    })();
+  }, []);
+
   if (!coachProfile) return <></>;
 
   return (
     <S.Container>
-      <img src={image} alt="코치 프로필 이미지" />
-      <form onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
-        <S.InputWrapper>
-          <div>
-            <label htmlFor="name">Nickname</label>
-            <span>{`${name.length} / ${MAX_LENGTH.NAME}`}</span>
-          </div>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            maxLength={MAX_LENGTH.NAME}
-            defaultValue={name}
-            required
-          />
-        </S.InputWrapper>
-        <S.InputWrapper>
-          <div>
-            <label htmlFor="description">Description</label>
-            <span>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</span>
-          </div>
-          <textarea
-            name="description"
-            id="description"
-            rows={7}
-            maxLength={MAX_LENGTH.DESCRIPTION}
-            defaultValue={description}
-            required
-          ></textarea>
-        </S.InputWrapper>
-        <S.EditButton>수정하기</S.EditButton>
-      </form>
+      <S.Grid>
+        <S.BorderBox>
+          <S.ProfileForm onChange={handleChangeProfile} onSubmit={handleSubmitProfile}>
+            <S.LabelContainer>
+              <label htmlFor="name">닉네임</label>
+              <S.BorderBoxName>{`${name.length} / ${MAX_LENGTH.NAME}`}</S.BorderBoxName>
+            </S.LabelContainer>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              maxLength={MAX_LENGTH.NAME}
+              defaultValue={name}
+              autoComplete="off"
+              required
+            />
+            <S.LabelContainer>
+              <label htmlFor="description">자기소개</label>
+              <S.BorderBoxName>{`${description.length} / ${MAX_LENGTH.DESCRIPTION}`}</S.BorderBoxName>
+            </S.LabelContainer>
+            <textarea
+              name="description"
+              id="description"
+              rows={7}
+              maxLength={MAX_LENGTH.DESCRIPTION}
+              defaultValue={description}
+              required
+            />
+            <S.ButtonWrapper>
+              <button>저장하기</button>
+            </S.ButtonWrapper>
+          </S.ProfileForm>
+        </S.BorderBox>
+
+        <S.PreviewBorderBox>
+          <S.BorderBoxName>프로필 미리보기</S.BorderBoxName>
+          <S.CardWrapper>
+            <Card
+              name={name}
+              image={image}
+              description={description}
+              buttonName="예약하기"
+              isPreview
+            />
+          </S.CardWrapper>
+        </S.PreviewBorderBox>
+
+        <S.QuestionBorderBox>
+          <form onSubmit={handleSubmitQuestions}>
+            <S.QuestionInner>
+              <S.QuestionInputContainer>
+                <S.BorderBoxName>사전 질문</S.BorderBoxName>
+                {Array.from({ length: QUESTIONS_LENGTH }, (_, index) => (
+                  <Fragment key={index}>
+                    <S.QuestionLength>
+                      {`${questions[index]?.questionContent.length ?? 0} / ${MAX_LENGTH.QUESTION}`}
+                    </S.QuestionLength>
+                    <input
+                      type="text"
+                      maxLength={MAX_LENGTH.QUESTION}
+                      value={questions[index]?.questionContent ?? ''}
+                      onChange={(e) => handleChangeQuestionInput(index, e)}
+                      required
+                    />
+                  </Fragment>
+                ))}
+              </S.QuestionInputContainer>
+              <S.QuestionCheckBoxContainer>
+                <S.BorderBoxName>필수 여부</S.BorderBoxName>
+                {Array.from({ length: QUESTIONS_LENGTH }, (_, index) => (
+                  <input
+                    key={index}
+                    type="checkbox"
+                    checked={questions[index]?.isRequired ?? true}
+                    onChange={(e) => handleChangeQuestionCheckBox(index, e)}
+                  />
+                ))}
+              </S.QuestionCheckBoxContainer>
+            </S.QuestionInner>
+            <S.ButtonWrapper>
+              <button>저장하기</button>
+            </S.ButtonWrapper>
+          </form>
+        </S.QuestionBorderBox>
+      </S.Grid>
     </S.Container>
   );
 };

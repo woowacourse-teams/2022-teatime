@@ -30,10 +30,14 @@ public class Question {
     @Column(nullable = false)
     private String content;
 
-    public Question(Coach coach, Integer number, String content) {
+    @Column(nullable = false)
+    private Boolean isRequired;
+
+    public Question(Coach coach, Integer number, String content, Boolean isRequired) {
         this.coach = coach;
         this.number = number;
         this.content = content;
+        this.isRequired = isRequired;
     }
 
     @Override
@@ -46,7 +50,8 @@ public class Question {
         }
         Question question = (Question) o;
         return Objects.equals(getCoach(), question.getCoach()) && Objects.equals(getNumber(), question.getNumber())
-                && Objects.equals(getContent(), question.getContent());
+                && Objects.equals(getContent(), question.getContent()) && Objects.equals(getIsRequired(),
+                question.getIsRequired());
     }
 
     @Override

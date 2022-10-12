@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    List<Question> findAllByCoachId(Long coachId);
+    List<Question> findAllByCoachIdOrderByNumber(Long coachId);
 }

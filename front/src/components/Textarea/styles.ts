@@ -4,9 +4,14 @@ const TextareaContainer = styled.div`
   margin: 28px 0;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{ isRequired?: boolean }>`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.BLUE_800};
+
+  span {
+    color: ${({ theme, isRequired }) =>
+      isRequired ? theme.colors.RED_400 : theme.colors.GRAY_600};
+  }
 `;
 
 const Textarea = styled.textarea<{ isFocus: boolean; isReadOnly: boolean }>`

@@ -27,7 +27,7 @@ public class Date {
         }
     }
 
-    public static LocalDateTime findLastDay(int year, int month) {
+    public static LocalDateTime findLastDateTime(int year, int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = YearMonth.from(startDate).atEndOfMonth();
         return LocalDateTime.of(endDate, LocalTime.MAX);
