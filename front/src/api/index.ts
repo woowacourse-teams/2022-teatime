@@ -10,6 +10,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
+axios.defaults.withCredentials = true;
+
 api.interceptors.request.use(
   (config) => {
     const token = getStorage(LOCAL_DB.USER)?.token;
