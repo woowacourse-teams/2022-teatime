@@ -31,7 +31,7 @@ const Textarea = ({
 
   return (
     <S.TextareaContainer>
-      <S.Label htmlFor={id}>
+      <S.Label htmlFor={id} isRequired={isRequired}>
         {label} <span>{isRequired ? '(필수)' : '(선택)'}</span>
       </S.Label>
       <S.Textarea
