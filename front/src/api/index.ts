@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { getStorage, setStorage } from '@utils/localStorage';
+import { clearStorage, getStorage, setStorage } from '@utils/localStorage';
 import { LOCAL_DB } from '@constants/index';
 import { getAccessToken } from './auth';
 
@@ -38,9 +38,7 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       if (error.response.data.message === '유효하지 않은 토큰입니다.') {
         const { config } = error;
-        console.log('config', config);
-
-        const originalRequest = config;
+        const originalRequest = { ...config };
         console.log('originalRequest', originalRequest);
 
         const { data } = await getAccessToken();
@@ -54,6 +52,17 @@ api.interceptors.response.use(
         setStorage(LOCAL_DB.USER, newUser);
 
         return api(originalRequest);
+      }
+    }
+
+    if (error.response.status === 400) {
+      if (
+        error.response.data.message === '쿠키에 담긴 토큰이 잘못되었습니다.' ||
+        error.response.data.message === '헤더에 토큰이 존재하지 않습니다.'
+      ) {
+        clearStorage(LOCAL_DB.USER);
+        location.href = `${process.env.REDIRECT_URL}`;
+        return;
       }
     }
 
