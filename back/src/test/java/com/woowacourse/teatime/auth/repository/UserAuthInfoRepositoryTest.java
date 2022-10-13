@@ -4,6 +4,7 @@ import static com.woowacourse.teatime.teatime.domain.Role.COACH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
+import com.woowacourse.teatime.auth.support.TestContainerConfig;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserAuthInfoRepositoryTest {
+class UserAuthInfoRepositoryTest extends TestContainerConfig {
 
     @Autowired
     private UserAuthInfoRepository userAuthInfoRepository;
