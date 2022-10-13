@@ -2,7 +2,6 @@ package com.woowacourse.teatime.teatime.controller.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,11 +23,5 @@ public class CoachSaveRequest {
     private String email;
 
     @NotBlank
-    private String description;
-
-    @NotBlank
     private String image;
-
-    @NotNull
-    private Boolean isPokable;
 }

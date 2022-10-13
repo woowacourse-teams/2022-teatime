@@ -30,9 +30,7 @@ public class CoachService {
         Coach coach = new Coach(request.getSlackId(),
                 request.getName(),
                 request.getEmail(),
-                request.getDescription(),
-                request.getImage(),
-                request.getIsPokable());
+                request.getImage());
         return coachRepository.save(coach).getId();
     }
 

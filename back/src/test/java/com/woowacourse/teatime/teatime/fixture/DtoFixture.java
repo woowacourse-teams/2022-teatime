@@ -8,11 +8,11 @@ import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdat
 public class DtoFixture {
 
     public static final CoachSaveRequest COACH_BROWN_SAVE_REQUEST
-            = new CoachSaveRequest("brown", "brown", "brown@email.com", "i am legend", "image", true);
+            = new CoachSaveRequest("brown", "brown", "brown@email.com", "image");
     public static final CoachSaveRequest COACH_JUNE_SAVE_REQUEST
-            = new CoachSaveRequest("june", "june", "june@email.com", "i am legend", "image", true);
+            = new CoachSaveRequest("june", "june", "june@email.com", "image");
     public static final CoachSaveRequest COACH_WOOWAHAN_SAVE_REQUEST
-            = new CoachSaveRequest("john", "john", "john@woowahan.com", "i am legend", "image", true);
+            = new CoachSaveRequest("john", "john", "john@woowahan.com", "image");
 
     public static final CrewSaveRequest CREW_SAVE_REQUEST
             = new CrewSaveRequest("maru", "maru", "maru@email.com", "image");

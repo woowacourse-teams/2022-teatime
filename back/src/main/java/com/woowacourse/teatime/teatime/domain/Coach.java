@@ -65,16 +65,12 @@ public class Coach {
     private Boolean isPokable;
 
     public Coach(String slackId, String name, String email, String image) {
-        this(slackId, name, email, PREFIX_DESCRIPTION + name + SUFFIX_DESCRIPTION, image, true);
-    }
-
-    public Coach(String slackId, String name, String email, String description, String image, Boolean isPokable) {
         this.slackId = slackId;
         this.name = name;
         this.email = email;
-        this.description = description;
+        this.description = PREFIX_DESCRIPTION + name + SUFFIX_DESCRIPTION;
         this.image = image;
-        this.isPokable = isPokable;
+        this.isPokable = true;
     }
 
     public void modifyProfile(String name, String description, Boolean isPokable) {
