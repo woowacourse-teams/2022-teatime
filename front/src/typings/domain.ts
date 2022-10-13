@@ -17,6 +17,7 @@ interface CoachData {
   image: string;
   name: string;
   description: string;
+  isPokable: boolean;
 }
 
 interface Crew {
