@@ -6,7 +6,7 @@ const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 350px;
+  height: 320px;
   padding: 35px 16px;
   border-radius: 20px;
   background-color: ${({ theme }) => theme.colors.WHITE};
@@ -83,14 +83,14 @@ const CardWrapper = styled.div`
   }
 
   button {
-    width: 67%;
-    height: 35px;
+    width: 90%;
+    height: 32px;
     background-color: ${({ theme }) => theme.colors.GREEN_700};
     color: ${({ theme }) => theme.colors.WHITE};
     border: none;
-    border-radius: 20px;
-    font-size: 18px;
-    font-weight: bolder;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
@@ -123,7 +123,7 @@ const CardWrapper = styled.div`
     }
 
     button {
-      width: 85%;
+      height: 25px;
     }
   }
 `;

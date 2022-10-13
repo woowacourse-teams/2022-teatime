@@ -11,7 +11,9 @@ import com.woowacourse.teatime.auth.service.LoginService;
 import com.woowacourse.teatime.auth.service.UserAuthService;
 import com.woowacourse.teatime.auth.support.UserAuthenticationPrincipal;
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.util.AuthorizationExtractor;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +52,10 @@ public class AuthController {
     @GetMapping("/refresh-token")
     public ResponseEntity<RefreshAccessTokenResponse> generateToken(
             @CookieValue(value = "refreshToken", required = false) Cookie cookie,
-            @UserAuthenticationPrincipal UserRoleDto userRoleDto,
+            HttpServletRequest request,
             HttpServletResponse response) {
-        GenerateTokenDto generateTokenDto = userAuthService.generateToken(cookie, userRoleDto);
+        String token = AuthorizationExtractor.extract(request);
+        GenerateTokenDto generateTokenDto = userAuthService.generateToken(cookie, token);
         cookieTokenProvider.setCookie(response, generateTokenDto.getRefreshToken());
         return ResponseEntity.ok(new RefreshAccessTokenResponse(generateTokenDto.getAccessToken()));
     }

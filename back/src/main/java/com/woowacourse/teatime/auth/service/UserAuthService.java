@@ -27,18 +27,19 @@ public class UserAuthService {
         userAuthInfoRepository.save(userAuthInfo);
     }
 
-    public GenerateTokenDto generateToken(Cookie cookie, UserRoleDto userRoleDto) {
+    public GenerateTokenDto generateToken(Cookie cookie, String accessToken) {
         String refreshToken = getRefreshToken(cookie);
         UserAuthInfo userAuthInfo = find(refreshToken);
 
-        validateUserAuthInfo(userAuthInfo, refreshToken, userRoleDto);
+        validateUserAuthInfo(userAuthInfo, refreshToken, accessToken);
         userAuthInfoRepository.delete(userAuthInfo);
 
         String newRefreshToken = UUID.randomUUID().toString();
-        save(new UserAuthInfo(newRefreshToken, userRoleDto.getId(), userRoleDto.getRole()));
+        String newAccessToken = generateAccessToken(userAuthInfo);
 
-        String accessToken = generateAccessToken(userRoleDto);
-        return new GenerateTokenDto(accessToken, newRefreshToken);
+        save(new UserAuthInfo(newRefreshToken, newAccessToken, userAuthInfo.getUserId(), userAuthInfo.getRole()));
+
+        return new GenerateTokenDto(newAccessToken, newRefreshToken);
     }
 
     private String getRefreshToken(Cookie cookie) {
@@ -53,15 +54,15 @@ public class UserAuthService {
                 .orElseThrow(WrongCookieTokenException::new);
     }
 
-    private void validateUserAuthInfo(UserAuthInfo userAuthInfo, String refreshToken, UserRoleDto userRoleDto) {
-        if (!userAuthInfo.isSameInfo(refreshToken, userRoleDto.getId(), userRoleDto.getRole())) {
+    private void validateUserAuthInfo(UserAuthInfo userAuthInfo, String refreshToken, String accessToken) {
+        if (!userAuthInfo.isSameToken(refreshToken, accessToken)) {
             throw new UnAuthorizedException();
         }
     }
 
-    private String generateAccessToken(UserRoleDto userRoleDto) {
+    private String generateAccessToken(UserAuthInfo userAuthInfo) {
         Map<String, Object> claims =
-                Map.of("id", userRoleDto.getId(), "role", Role.valueOf(userRoleDto.getRole()));
+                Map.of("id", userAuthInfo.getUserId(), "role", Role.valueOf(userAuthInfo.getRole()));
         return jwtTokenProvider.createToken(claims);
     }
 }

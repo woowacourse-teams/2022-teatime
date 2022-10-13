@@ -141,7 +141,7 @@ class CoachControllerTest extends ControllerTestSupporter {
         코치의_토큰을_검증한다(token);
 
         //when
-        CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨", "안녕하세요 티타임 코치입니다.");
+        CoachUpdateProfileRequest request = new CoachUpdateProfileRequest("제이슨", "안녕하세요 티타임 코치입니다.", true);
         ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/profile", request)
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
@@ -160,7 +160,7 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc
-                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name, "안녕하세요 티타임 코치입니다."))
+                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name, "안녕하세요 티타임 코치입니다.", true))
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
@@ -178,7 +178,24 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc
-                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest("브라운", description))
+                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest("브라운", description, true))
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print());
+
+        //then
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("코치가 자신의 프로필 수정에 실패한다. - 콕찔러보기 온오프 여부가 null인 경우 400 에러가 난다.")
+    @Test
+    void updateProfile_invalidIsPokable() throws Exception {
+        // given
+        String token = "나 코치다.";
+        코치의_토큰을_검증한다(token);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest("브라운", "안녕하세요", null))
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 

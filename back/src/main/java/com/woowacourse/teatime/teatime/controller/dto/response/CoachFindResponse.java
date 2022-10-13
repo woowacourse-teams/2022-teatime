@@ -19,15 +19,17 @@ public class CoachFindResponse {
     private String description;
     private String image;
     private Boolean isPossible;
+    private Boolean isPokable;
 
     public CoachFindResponse(Coach coach, boolean isPossible) {
-        this(coach.getId(), coach.getName(), coach.getDescription(), coach.getImage(), isPossible);
+        this(coach.getId(), coach.getName(), coach.getDescription(), coach.getImage(), isPossible,
+                coach.getIsPokable());
     }
 
     public static List<CoachFindResponse> of(List<CoachWithPossible> coachWithPossibles) {
         return coachWithPossibles.stream()
                 .map(c -> new CoachFindResponse(c.getId(), c.getName(), c.getDescription(), c.getImage(),
-                        c.getPossible()))
+                        c.getIsPossible(), c.getIsPokable()))
                 .collect(Collectors.toList());
     }
 }

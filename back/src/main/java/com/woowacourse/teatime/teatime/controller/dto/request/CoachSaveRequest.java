@@ -23,8 +23,5 @@ public class CoachSaveRequest {
     private String email;
 
     @NotBlank
-    private String description;
-
-    @NotBlank
     private String image;
 }

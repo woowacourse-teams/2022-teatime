@@ -26,10 +26,10 @@ import org.springframework.web.reactive.function.client.WebClientException;
 @Service
 public class AlarmService {
 
-    @Value("${slack.bot.secret-key}")
-    private String botSecretKey;
     private final WebClient botClient;
     private final ReservationRepository reservationRepository;
+    @Value("${slack.bot.secret-key}")
+    private String botSecretKey;
 
     @Async
     public void send(AlarmInfoDto alarmInfoDto, AlarmTitle alarmTitle) {

@@ -94,7 +94,7 @@ const CrewMain = () => {
           title="콕! 찔러보기"
           firstButtonName="뒤로가기"
           secondButtonName="보내기"
-          onClickFirstButton={() => navigate(ROUTES.CREW_HISTORY)}
+          onClickFirstButton={() => navigate(-1)}
           onClickSecondButton={() => handleReservationRequest()}
           closeModal={closeModal}
         >

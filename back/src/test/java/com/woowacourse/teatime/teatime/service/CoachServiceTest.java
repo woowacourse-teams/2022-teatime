@@ -47,7 +47,8 @@ public class CoachServiceTest {
         // when
         String expectedName = "name";
         String expectedDescription = "안뇽하세요.";
-        coachService.updateProfile(coach.getId(), new CoachUpdateProfileRequest(expectedName, expectedDescription));
+        coachService.updateProfile(coach.getId(),
+                new CoachUpdateProfileRequest(expectedName, expectedDescription, true));
 
         // then
         assertAll(
@@ -67,9 +68,9 @@ public class CoachServiceTest {
 
         // then
         assertAll(
-                () -> assertThat(response.getImage()).isEqualTo("image"),
                 () -> assertThat(response.getName()).isEqualTo("제이슨"),
-                () -> assertThat(response.getDescription()).isEqualTo("i am legend")
+                () -> assertThat(response.getImage()).isEqualTo("image"),
+                () -> assertThat(response.getDescription()).isEqualTo("안녕하세요~ 제이슨입니다:)")
         );
     }
 }
