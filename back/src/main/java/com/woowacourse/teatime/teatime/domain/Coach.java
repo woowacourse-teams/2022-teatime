@@ -28,14 +28,15 @@ import lombok.NoArgsConstructor;
                         @ColumnResult(name = "name", type = String.class),
                         @ColumnResult(name = "description", type = String.class),
                         @ColumnResult(name = "image", type = String.class),
-                        @ColumnResult(name = "possible", type = Boolean.class),
+                        @ColumnResult(name = "isPossible", type = Boolean.class),
+                        @ColumnResult(name = "isPokable", type = Boolean.class),
                 }
         )
 )
 @NamedNativeQuery(
         name = "findCoaches",
-        query = "SELECT c.id AS id, c.name AS name, c.description AS description, c.image AS image, EXISTS ("
-                + "SELECT * FROM schedule s2 WHERE s2.coach_id = c.id AND s2.local_date_time > NOW() AND s2.is_possible = TRUE ) AS possible "
+        query = "SELECT c.id AS id, c.name AS name, c.description AS description, c.image AS image, c.is_pokable AS isPokable, EXISTS ("
+                + "SELECT * FROM schedule s2 WHERE s2.coach_id = c.id AND s2.local_date_time > NOW() AND s2.is_possible = TRUE ) AS isPossible "
                 + "FROM coach c",
         resultSetMapping = "CoachWithPossibleMapping")
 public class Coach {
