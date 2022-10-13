@@ -79,7 +79,7 @@ public class LoginService {
         Map<String, Object> claims = Map.of("id", coach.getId(), "role", COACH);
         String accessToken = jwtTokenProvider.createToken(claims);
         String refreshToken = UUID.randomUUID().toString();
-        userAuthService.save(new UserAuthInfo(refreshToken, coach.getId(), COACH.name()));
+        userAuthService.save(new UserAuthInfo(refreshToken, accessToken, coach.getId(), COACH.name()));
         return new UserAuthDto(accessToken, refreshToken, COACH, coach.getImage(), coach.getName());
     }
 
@@ -109,7 +109,7 @@ public class LoginService {
         Map<String, Object> claims = Map.of("id", crew.getId(), "role", CREW);
         String accessToken = jwtTokenProvider.createToken(claims);
         String refreshToken = UUID.randomUUID().toString();
-        userAuthService.save(new UserAuthInfo(refreshToken, crew.getId(), CREW.name()));
+        userAuthService.save(new UserAuthInfo(refreshToken, accessToken, crew.getId(), CREW.name()));
         return new UserAuthDto(accessToken, refreshToken, CREW, crew.getImage(), crew.getName());
     }
 

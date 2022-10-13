@@ -10,17 +10,17 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-@RedisHash(value = "refreshToken")
+@RedisHash(value = "refreshToken", timeToLive = 1209600)
 public class UserAuthInfo {
 
     @Id
     private String refreshToken;
+    private String accessToken;
     private Long userId;
     private String role;
 
-    public boolean isSameInfo(String refreshToken, Long userId, String role) {
+    public boolean isSameToken(String refreshToken, String accessToken) {
         return this.refreshToken.equals(refreshToken)
-                && this.userId.equals(userId)
-                && this.role.equals(role);
+                && this.accessToken.equals(accessToken);
     }
 }
