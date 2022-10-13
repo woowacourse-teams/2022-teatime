@@ -60,26 +60,33 @@ public class Coach {
 
     private String image;
 
+    @Column(nullable = false)
+    private Boolean isPokable;
+
     public Coach(String slackId, String name, String email, String image) {
-        this(slackId, name, email, PREFIX_DESCRIPTION + name + SUFFIX_DESCRIPTION, image);
+        this(slackId, name, email, PREFIX_DESCRIPTION + name + SUFFIX_DESCRIPTION, image, true);
     }
 
-    public Coach(String slackId, String name, String email, String description, String image) {
+    public Coach(String slackId, String name, String email, String description, String image, Boolean isPokable) {
         this.slackId = slackId;
         this.name = name;
         this.email = email;
         this.description = description;
         this.image = image;
+        this.isPokable = isPokable;
     }
 
-    public void modifyProfile(String name, String description) {
-        validateProfile(name, description);
+    public void modifyProfile(String name, String description, Boolean isPokable) {
+        validateProfile(name, description, isPokable);
         this.name = name.trim();
         this.description = description.trim();
+        this.isPokable = isPokable;
     }
 
-    private void validateProfile(String name, String description) {
-        if ((name == null || name.isBlank()) || (description == null || description.isBlank())) {
+    private void validateProfile(String name, String description, Boolean isPokable) {
+        if ((name == null || name.isBlank())
+                || (description == null || description.isBlank())
+                || isPokable == null) {
             throw new InvalidProfileInfoException();
         }
     }

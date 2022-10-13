@@ -29,14 +29,19 @@ public class CoachService {
     }
 
     public Long save(CoachSaveRequest request) {
-        Coach coach = new Coach(request.getSlackId(), request.getName(), request.getDescription(), request.getImage());
+        Coach coach = new Coach(request.getSlackId(),
+                request.getName(),
+                request.getEmail(),
+                request.getDescription(),
+                request.getImage(),
+                request.getIsPokable());
         return coachRepository.save(coach).getId();
     }
 
     public void updateProfile(Long coachId, CoachUpdateProfileRequest request) {
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
-        coach.modifyProfile(request.getName(), request.getDescription());
+        coach.modifyProfile(request.getName(), request.getDescription(), request.getIsPokable());
     }
 
     public CoachProfileResponse getProfile(Long coachId) {

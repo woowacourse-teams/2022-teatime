@@ -47,7 +47,7 @@ public class CoachServiceTest {
         // when
         String expectedName = "name";
         String expectedDescription = "안뇽하세요.";
-        coachService.updateProfile(coach.getId(), new CoachUpdateProfileRequest(expectedName, expectedDescription));
+        coachService.updateProfile(coach.getId(), new CoachUpdateProfileRequest(expectedName, expectedDescription, true));
 
         // then
         assertAll(

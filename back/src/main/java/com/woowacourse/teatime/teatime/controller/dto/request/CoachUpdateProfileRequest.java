@@ -1,6 +1,7 @@
 package com.woowacourse.teatime.teatime.controller.dto.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,4 +17,7 @@ public class CoachUpdateProfileRequest {
 
     @NotBlank
     private String description;
+
+    @NotNull
+    private Boolean isPokable;
 }
