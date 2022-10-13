@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -36,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
                 )
                 .allowCredentials(true)
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
-                .exposedHeaders("*");
+                .exposedHeaders(HttpHeaders.LOCATION, HttpHeaders.SET_COOKIE);
     }
 
     @Override
