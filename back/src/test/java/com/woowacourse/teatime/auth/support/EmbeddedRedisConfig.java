@@ -1,18 +1,14 @@
 package com.woowacourse.teatime.auth.support;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.core.io.ClassPathResource;
 import redis.embedded.RedisServer;
-import redis.embedded.exceptions.EmbeddedRedisException;
 
 @TestConfiguration
 public class EmbeddedRedisConfig {
@@ -25,15 +21,10 @@ public class EmbeddedRedisConfig {
     @PostConstruct
     public void redisServer() throws IOException {
         int port = isRedisRunning() ? findAvailablePort() : redisPort;
-
-        if (isArmMac()) {
-            redisServer = new RedisServer(Objects.requireNonNull(getRedisFileForArcMac()),
-                    port);
-        }
-        if (!isArmMac()) {
-            redisServer = new RedisServer(port);
-        }
-
+        redisServer = RedisServer.builder()
+                .port(port)
+                .setting("maxmemory 16MB")
+                .build();
         redisServer.start();
     }
 
@@ -92,18 +83,5 @@ public class EmbeddedRedisConfig {
         }
 
         return !StringUtils.isEmpty(pidInfo.toString());
-    }
-
-    private boolean isArmMac() {
-        return Objects.equals(System.getProperty("os.arch"), "aarch64") &&
-                Objects.equals(System.getProperty("os.name"), "Mac OS X");
-    }
-
-    private File getRedisFileForArcMac() {
-        try {
-            return new ClassPathResource("binary/redis/redis-server-6.2.5-mac-arm64").getFile();
-        } catch (Exception e) {
-            throw new EmbeddedRedisException(e.getMessage());
-        }
     }
 }
