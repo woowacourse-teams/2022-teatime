@@ -80,7 +80,7 @@ dependencies {
 
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    testImplementation 'org.testcontainers:junit-jupiter:1.17.4'
+    testImplementation 'it.ozimov:embedded-redis:0.7.3'
 
     // actuator for monitoring
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
