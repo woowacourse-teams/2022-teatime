@@ -8,6 +8,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
 import com.woowacourse.teatime.auth.service.UserAuthService;
+import com.woowacourse.teatime.auth.support.EmbeddedRedisConfig;
 import com.woowacourse.teatime.teatime.acceptance.AcceptanceTestSupporter;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import io.restassured.RestAssured;
@@ -18,9 +19,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@Import(EmbeddedRedisConfig.class)
 public class AuthAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
