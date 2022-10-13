@@ -6,7 +6,7 @@ const Motion = keyframes`
   }
 
 	100% {
-    margin-top: 20px;
+    margin-top: 25px;
   } 
 `;
 
@@ -45,6 +45,7 @@ const CardListContainer = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
+  margin-bottom: 20px;
 
   img {
     width: 80px;
@@ -58,4 +59,11 @@ const ImageWrapper = styled.div`
   }
 `;
 
-export { CardListContainer, Layout, ImageWrapper };
+const RequestText = styled.p`
+  padding: 20px 0;
+  border-radius: 8px;
+  line-height: 20px;
+  background-color: ${({ theme }) => theme.colors.GRAY_100};
+`;
+
+export { CardListContainer, Layout, ImageWrapper, RequestText };

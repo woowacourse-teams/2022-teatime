@@ -24,23 +24,31 @@ const CrewMain = () => {
   const [coaches, setCoaches] = useState<Coach[]>();
   const [selectedCoach, setSelectedCoach] = useState({
     id: 0,
-    image: 'https://i.pinimg.com/564x/8f/e9/9f/8fe99f6f8549200d77c8ce62cee1903c.jpg',
+    image: '',
   });
 
-  const handleClickCard = (e: React.MouseEvent, id: number, image: string) => {
+  const handleClickCard = (e: React.MouseEvent, id: number, image: string, isPokable: boolean) => {
     const target = (e.target as HTMLImageElement).id;
-    if (target === 'request-icon') {
+    if (target === 'request') {
+      if (!isPokable) return showSnackbar({ message: '상대방이 OFF 상태 입니다.' });
+
       setSelectedCoach({ id, image });
       openModal();
       return;
     }
+    if (target === 'subscribe') {
+      showSnackbar({ message: '구독 기능 준비 중입니다. ㅠㅠ' });
+      return;
+    }
+
     navigate(`${ROUTES.RESERVATION}/${id}`, { state: image });
   };
 
   const handleReservationRequest = async () => {
     try {
       await postReservationRequest(selectedCoach.id);
-      showSnackbar({ message: '알림을 보냈습니다. ✅' });
+      showSnackbar({ message: '요청 보냈습니다. 💌' });
+      closeModal();
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data?.message);
@@ -75,7 +83,7 @@ const CrewMain = () => {
     <S.Layout>
       <S.CardListContainer>
         {coaches.map((coach) => {
-          const { id, name, image, description, isPossible } = coach;
+          const { id, name, image, description, isPossible, isPokable } = coach;
           return (
             <Card
               key={id}
@@ -83,7 +91,7 @@ const CrewMain = () => {
               image={image}
               description={description}
               buttonName="예약하기"
-              onClick={(e) => handleClickCard(e, id, image)}
+              onClick={(e) => handleClickCard(e, id, image, isPokable)}
               isPossible={isPossible}
             />
           );
@@ -92,17 +100,24 @@ const CrewMain = () => {
       {isOpenModal && (
         <Modal
           title="콕! 찔러보기"
-          firstButtonName="뒤로가기"
-          secondButtonName="보내기"
-          onClickFirstButton={() => navigate(-1)}
+          firstButtonName="취소하기"
+          secondButtonName="요청하기"
+          onClickFirstButton={() => closeModal()}
           onClickSecondButton={() => handleReservationRequest()}
           closeModal={closeModal}
         >
-          <S.ImageWrapper>
-            <img src={selectedCoach.image} alt="코치 이미지" />
-            <span>💌</span>
-            <img src={userData?.image} alt="크루 이미지" />
-          </S.ImageWrapper>
+          <div>
+            <S.ImageWrapper>
+              <img src={selectedCoach.image} alt="코치 이미지" />
+              <span>💌</span>
+              <img src={userData?.image} alt="크루 이미지" />
+            </S.ImageWrapper>
+            <S.RequestText>
+              가능한 시간이 없나요?
+              <br />
+              상대방에게 알림을 보내보세요 ☕️
+            </S.RequestText>
+          </div>
         </Modal>
       )}
     </S.Layout>

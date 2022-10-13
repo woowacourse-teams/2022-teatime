@@ -34,6 +34,7 @@ interface Coach {
   description: string;
   image: string;
   isPossible: boolean;
+  isPokable: boolean;
 }
 
 interface MonthYear {
