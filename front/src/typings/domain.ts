@@ -132,6 +132,10 @@ interface Questions {
   questions: Question[];
 }
 
+interface AccessToken {
+  accessToken: string;
+}
+
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
@@ -160,4 +164,5 @@ export {
   ReservationByCoach,
   Question,
   Questions,
+  AccessToken,
 };
