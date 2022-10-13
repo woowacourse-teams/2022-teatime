@@ -1,6 +1,6 @@
 package com.woowacourse.teatime.teatime.controller.dto.request;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,14 +10,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class CoachUpdateProfileRequest {
-
-    @NotBlank
-    private String name;
-
-    @NotBlank
-    private String description;
+public class PokeSaveRequest {
 
     @NotNull
-    private Boolean isPokable;
+    @Min(1)
+    private Long coachId;
 }

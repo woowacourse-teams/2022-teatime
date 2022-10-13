@@ -14,5 +14,6 @@ public class CoachWithPossible {
     private String name;
     private String description;
     private String image;
-    private Boolean possible;
+    private Boolean isPossible;
+    private Boolean isPokable;
 }

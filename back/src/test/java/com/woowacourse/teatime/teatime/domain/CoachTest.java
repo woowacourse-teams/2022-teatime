@@ -22,7 +22,7 @@ class CoachTest {
         //when
         String expectedName = "뉴이슨";
         String expectedDescription = "안녕하세요 뉴이슨입니다.";
-        coach.modifyProfile(expectedName, expectedDescription);
+        coach.modifyProfile(expectedName, expectedDescription, false);
 
         //then
         assertAll(
@@ -40,7 +40,7 @@ class CoachTest {
         //when
         String expectedName = "   뉴이슨   ";
         String expectedDescription = "   안녕하세요 뉴이슨입니다.   ";
-        coach.modifyProfile(expectedName, expectedDescription);
+        coach.modifyProfile(expectedName, expectedDescription, false);
 
         //then
         assertAll(
@@ -57,7 +57,32 @@ class CoachTest {
         Coach coach = getCoachJason();
 
         //when, then
-        assertThatThrownBy(() -> coach.modifyProfile(name, "안녕하세요"))
+        assertThatThrownBy(() -> coach.modifyProfile(name, "안녕하세요", false))
                 .isInstanceOf(InvalidProfileInfoException.class);
+    }
+
+    @DisplayName("자신의 이름을 수정한다. - 콕찔러보기 온오프 여부가 null인 경우 에러가 발생한다.")
+    @Test
+    void modifyName_invalidIsPokable() {
+        //given
+        Coach coach = getCoachJason();
+
+        //when, then
+        assertThatThrownBy(() -> coach.modifyProfile("Jason", "안녕하세요", null))
+                .isInstanceOf(InvalidProfileInfoException.class);
+    }
+
+    @DisplayName("콕 찔러보기 기능을 오프한다.")
+    @Test
+    void modifyIsPokable() {
+        //given
+        Coach coach = getCoachJason();
+
+        //when
+        Boolean expectedIsPokable = false;
+        coach.modifyProfile(coach.getName(), coach.getDescription(), expectedIsPokable);
+
+        //then
+        assertThat(coach.getIsPokable()).isEqualTo(expectedIsPokable);
     }
 }
