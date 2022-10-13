@@ -26,7 +26,7 @@ public class PokeSlackAlarmDto {
     public static PokeSlackAlarmDto pokeToCoach(String crewName, String coachSlackId) {
         List<Object> blocks = new ArrayList<>();
         TextBlock textBlock = new TextBlock(TYPE_SECTION,
-                new TextDto(MARK_DOWN, ":point_left: *아얏! " + crewName + "님이 방금 쿡 찔렀어요!!*"));
+                new TextDto(MARK_DOWN, ":point_left: *아얏! " + crewName + "님이 방금 콕 찔렀어요!!*"));
         DividerBlock dividerBlock = new DividerBlock(TYPE_DIVIDER);
         TextWithImageBlock textWithImageBlock = new TextWithImageBlock(TYPE_SECTION,
                 new TextDto(MARK_DOWN, ":date: *" + crewName
