@@ -7,6 +7,7 @@ import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
+import com.woowacourse.teatime.teatime.service.dto.AlarmTargetDto;
 import com.woowacourse.teatime.teatime.service.dto.SlackAlarmDto;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,10 +26,10 @@ import org.springframework.web.reactive.function.client.WebClientException;
 @Service
 public class AlarmService {
 
-    @Value("${slack.bot.secret-key}")
-    private String botSecretKey;
     private final WebClient botClient;
     private final ReservationRepository reservationRepository;
+    @Value("${slack.bot.secret-key}")
+    private String botSecretKey;
 
     @Async
     public void send(AlarmInfoDto alarmInfoDto, AlarmTitle alarmTitle) {
@@ -48,11 +49,12 @@ public class AlarmService {
         }
     }
 
-    public void alertSheetSubmitted(Reservation reservation) {
-        SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmToCrew(reservation, AlarmTitle.SUBMIT_SHEET_TO_CREW);
-        requestAlarm(crewAlarmDto);
-        SlackAlarmDto coachAlarmDto = SlackAlarmDto.alarmToCoach(reservation, AlarmTitle.SUBMIT_SHEET_TO_COACH);
+    @Async
+    public void alertSheetSubmitted(AlarmTargetDto coachDto, AlarmTargetDto crewDto) {
+        SlackAlarmDto coachAlarmDto = SlackAlarmDto.alarmTo(coachDto, AlarmTitle.SUBMIT_SHEET_TO_COACH);
         requestAlarm(coachAlarmDto);
+        SlackAlarmDto crewAlarmDto = SlackAlarmDto.alarmTo(crewDto, AlarmTitle.SUBMIT_SHEET_TO_CREW);
+        requestAlarm(crewAlarmDto);
     }
 
     private void requestAlarm(SlackAlarmDto alarmDto) {

@@ -34,7 +34,9 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
     const isSubmitted = e.currentTarget.innerText === '제출하기';
     if (isSubmitted) {
       setIsSubmit(true);
-      const checkValidation = contents.some((content) => !content.answerContent);
+      const checkValidation = contents.some(
+        (content) => !!content.isRequired && !content.answerContent
+      );
       if (checkValidation) return;
 
       if (!confirm('⛔️제출 시 수정은 불가합니다.⛔️\n\n 정말로 제출하시겠습니까?')) return;
@@ -54,6 +56,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isReadOnly={isReadOnly}
+            isRequired={contents[0].isRequired}
           />
           <Textarea
             id="1"
@@ -62,6 +65,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isReadOnly={isReadOnly}
+            isRequired={contents[1].isRequired}
           />
           <Textarea
             id="2"
@@ -70,6 +74,7 @@ const Sheet = ({ title, sheets, onSubmit, isReadOnly }: SheetProps) => {
             handleChangeContent={handleChangeContent}
             isSubmit={isSubmit}
             isReadOnly={isReadOnly}
+            isRequired={contents[2].isRequired}
           />
           {!isReadOnly && (
             <S.ButtonContainer>

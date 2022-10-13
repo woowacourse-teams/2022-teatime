@@ -54,7 +54,7 @@ include::{snippets}/find-crew-sheets-notFoundCrew/http-response.adoc[]
 
 === 코치가 크루의 면담시트 조회 성공
 
-operation::find-crew-reservations[]
+operation::find-crew-sheets[]
 
 === 코치가 크루의 면담시트 조회 실패
 

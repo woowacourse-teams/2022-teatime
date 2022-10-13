@@ -1,6 +1,5 @@
 package com.woowacourse.teatime.teatime.config;
 
-import com.google.common.net.HttpHeaders;
 import com.woowacourse.teatime.auth.support.CoachArgumentResolver;
 import com.woowacourse.teatime.auth.support.CrewArgumentResolver;
 import com.woowacourse.teatime.auth.support.UserArgumentResolver;
@@ -35,8 +34,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://teatime.pe.kr",
                         "http://teatime.pe.kr"
                 )
+                .allowCredentials(true)
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
-                .exposedHeaders(HttpHeaders.LOCATION);
+                .exposedHeaders("*");
     }
 
     @Override
