@@ -35,6 +35,7 @@ import com.woowacourse.teatime.teatime.repository.ReservationRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
+import com.woowacourse.teatime.teatime.service.dto.AlarmTargetDto;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -208,7 +209,9 @@ public class ReservationService {
 
         if (SUBMITTED.equals(status)) {
             reservation.updateSheetStatusToSubmitted();
-            alarmService.alertSheetSubmitted(reservation);
+            AlarmTargetDto coachDto = AlarmTargetDto.alarmToCoach(reservation);
+            AlarmTargetDto crewDto = AlarmTargetDto.alarmToCrew(reservation);
+            alarmService.alertSheetSubmitted(coachDto, crewDto);
         }
     }
 

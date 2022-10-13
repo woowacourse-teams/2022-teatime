@@ -7,6 +7,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
+import com.woowacourse.teatime.teatime.service.AlarmService;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import com.woowacourse.teatime.teatime.service.ReservationService;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -30,6 +32,9 @@ class ReservationAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
     private ReservationService reservationService;
+
+    @MockBean
+    private AlarmService alarmService;
 
     @Autowired
     private CrewService crewService;

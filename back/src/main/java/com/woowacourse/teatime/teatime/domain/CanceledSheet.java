@@ -33,12 +33,16 @@ public class CanceledSheet {
     @Lob
     private String answerContent;
 
+    @Column(nullable = false)
+    private Boolean isRequired;
+
     private CanceledSheet(CanceledReservation canceledReservation, Integer number, String questionContent,
-                          String answerContent) {
+                          String answerContent, Boolean isRequired) {
         this.canceledReservation = canceledReservation;
         this.number = number;
         this.questionContent = questionContent;
         this.answerContent = answerContent;
+        this.isRequired = isRequired;
     }
 
     public static CanceledSheet from(CanceledReservation canceledReservation, Sheet sheet) {
@@ -46,6 +50,7 @@ public class CanceledSheet {
                 canceledReservation,
                 sheet.getNumber(),
                 sheet.getQuestionContent(),
-                sheet.getAnswerContent());
+                sheet.getAnswerContent(),
+                sheet.getIsRequired());
     }
 }

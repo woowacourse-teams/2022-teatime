@@ -25,6 +25,7 @@ import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,14 +44,21 @@ public class SheetService {
     public int save(Long reservationId) {
         Reservation reservation = findReservation(reservationId);
         Coach coach = reservation.getCoach();
-        List<Question> questions = questionRepository.findAllByCoachId(coach.getId());
+        List<Question> questions = questionRepository.findAllByCoachIdOrderByNumber(coach.getId());
 
-        List<Sheet> sheets = questions.stream()
-                .map(question -> new Sheet(reservation, question.getNumber(), question.getContent()))
-                .collect(Collectors.toList());
-
+        List<Sheet> sheets = toSheets(reservation, questions);
         List<Sheet> savedSheets = sheetRepository.saveAll(sheets);
         return savedSheets.size();
+    }
+
+    @NotNull
+    private List<Sheet> toSheets(Reservation reservation, List<Question> questions) {
+        return questions.stream()
+                .map(question -> new Sheet(reservation,
+                        question.getNumber(),
+                        question.getContent(),
+                        question.getIsRequired()))
+                .collect(Collectors.toList());
     }
 
     public CrewFindOwnSheetResponse findOwnSheetByCrew(Long crewId, Long reservationId) {
@@ -116,11 +124,12 @@ public class SheetService {
     }
 
     private void validateAnswer(List<SheetAnswerUpdateDto> sheetDtos) {
-        for (SheetAnswerUpdateDto sheetDto : sheetDtos) {
-            String answerContent = sheetDto.getAnswerContent();
-            if (answerContent == null || answerContent.isBlank()) {
-                throw new CannotSubmitBlankException();
-            }
+        boolean hasEmptyAnswer = sheetDtos.stream()
+                .filter(SheetAnswerUpdateDto::getIsRequired)
+                .map(SheetAnswerUpdateDto::getAnswerContent)
+                .anyMatch(answerContent -> answerContent == null || answerContent.isBlank());
+        if (hasEmptyAnswer) {
+            throw new CannotSubmitBlankException();
         }
     }
 

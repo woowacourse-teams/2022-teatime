@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const CardContainer = styled.div<{ isPossible: boolean }>`
+const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,10 +12,10 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
   background-color: ${({ theme }) => theme.colors.WHITE};
   border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
   overflow: hidden;
-  cursor: pointer;
+  cursor: ${({ isPreview }) => !isPreview && 'pointer'};
 
   &:hover {
-    transform: scale(1.02);
+    transform: ${({ isPreview }) => !isPreview && 'scale(1.02)'};
     transition: ease-in-out 0.2s;
   }
 
@@ -79,6 +79,7 @@ const CardWrapper = styled.div`
     text-align: center;
     font-size: 15px;
     margin: 10px 0;
+    word-break: break-all;
   }
 
   button {
@@ -90,7 +91,6 @@ const CardWrapper = styled.div`
     border-radius: 20px;
     font-size: 18px;
     font-weight: bolder;
-    cursor: pointer;
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {

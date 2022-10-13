@@ -21,4 +21,7 @@ public class SheetAnswerUpdateDto {
 
     @NotBlank
     private String answerContent;
+
+    @NotNull
+    private Boolean isRequired;
 }
