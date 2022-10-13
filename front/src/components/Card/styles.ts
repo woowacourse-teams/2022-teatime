@@ -45,15 +45,29 @@ const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
   }
 `;
 
-const RequestIcon = styled.img`
+const IconWrapper = styled.div`
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 12px;
+  left: 12px;
 
-  :hover {
-    transform: scale(1.2);
-    opacity: 0.7;
-    transition: ease-in-out 0.2s;
+  img {
+    margin-right: 8px;
+    :hover {
+      transform: scale(1.2);
+      opacity: 0.7;
+      transition: ease-in-out 0.1s;
+    }
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    display: flex;
+    flex-direction: column;
+
+    img {
+      width: 18px;
+      height: 18px;
+      margin-bottom: 6px;
+    }
   }
 `;
 
@@ -83,7 +97,7 @@ const CardWrapper = styled.div`
   }
 
   button {
-    width: 90%;
+    width: 80%;
     height: 32px;
     background-color: ${({ theme }) => theme.colors.GREEN_700};
     color: ${({ theme }) => theme.colors.WHITE};
@@ -124,6 +138,7 @@ const CardWrapper = styled.div`
 
     button {
       height: 25px;
+      border-radius: 4px;
     }
   }
 `;
@@ -146,4 +161,4 @@ const ButtonWrapper = styled.div`
   height: 100%;
 `;
 
-export { CardContainer, RequestIcon, CardWrapper, ImageWrapper, ButtonWrapper };
+export { CardContainer, IconWrapper, CardWrapper, ImageWrapper, ButtonWrapper };

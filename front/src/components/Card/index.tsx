@@ -1,13 +1,14 @@
 import * as S from './styles';
 import RequestIcon from '@assets/request.svg';
+import SubscribeIcon from '@assets/subscribe.svg';
 
 interface CardProps {
   image: string;
   name: string;
   description: string;
   buttonName: string;
-  isPossible: boolean;
-  onClick: (e: React.MouseEvent) => void;
+  isPossible?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
   isPreview?: boolean;
 }
 
@@ -22,7 +23,10 @@ const Card = ({
 }: CardProps) => {
   return (
     <S.CardContainer onClick={onClick} isPossible={!!isPossible} isPreview={!!isPreview}>
-      <S.RequestIcon id="request-icon" src={RequestIcon} alt="티타임 요청 보내기" />
+      <S.IconWrapper>
+        <img id="request" src={RequestIcon} alt="티타임 요청 보내기" />
+        <img id="subscribe" src={SubscribeIcon} alt="구독 하기" />
+      </S.IconWrapper>
       <S.CardWrapper>
         <S.ImageWrapper>
           <img src={image} alt={`${name} 카드 이미지`} />
