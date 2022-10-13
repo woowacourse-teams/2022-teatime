@@ -15,8 +15,8 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.GRAY_150};
-    transition: ease-in-out 0.3s;
+    transform: scale(1.02);
+    transition: ease-in-out 0.2s;
   }
 
   ${(props) =>
@@ -47,8 +47,8 @@ const CardContainer = styled.div<{ isPossible: boolean }>`
 
 const RequestIcon = styled.img`
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 16px;
+  left: 16px;
 
   :hover {
     transform: scale(1.2);

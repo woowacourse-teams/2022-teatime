@@ -4,22 +4,49 @@ import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
 import EmptyContent from '@components/EmptyContent';
-import { UserDispatchContext } from '@context/UserProvider';
+import Modal from '@components/Modal';
+import useBoolean from '@hooks/useBoolean';
+import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { CACHE, ROUTES } from '@constants/index';
 import { cacheFetch } from '@utils/cacheFetch';
 import { getCoaches } from '@api/coach';
+import { postReservationRequest } from '@api/crew';
 import type { Coach } from '@typings/domain';
 import * as S from './styles';
 
 const CrewMain = () => {
   const navigate = useNavigate();
+  const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
+  const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [coaches, setCoaches] = useState<Coach[]>();
+  const [selectedCoach, setSelectedCoach] = useState({
+    id: 0,
+    image: 'https://i.pinimg.com/564x/8f/e9/9f/8fe99f6f8549200d77c8ce62cee1903c.jpg',
+  });
 
   const handleClickCard = (e: React.MouseEvent, id: number, image: string) => {
+    const target = (e.target as HTMLImageElement).id;
+    if (target === 'request-icon') {
+      setSelectedCoach({ id, image });
+      openModal();
+      return;
+    }
     navigate(`${ROUTES.RESERVATION}/${id}`, { state: image });
+  };
+
+  const handleReservationRequest = async () => {
+    try {
+      await postReservationRequest(selectedCoach.id);
+      showSnackbar({ message: '알림을 보냈습니다. ✅' });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.response?.data?.message);
+        console.log(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -62,6 +89,22 @@ const CrewMain = () => {
           );
         })}
       </S.CardListContainer>
+      {isOpenModal && (
+        <Modal
+          title="콕! 찔러보기"
+          firstButtonName="뒤로가기"
+          secondButtonName="보내기"
+          onClickFirstButton={() => navigate(ROUTES.CREW_HISTORY)}
+          onClickSecondButton={() => handleReservationRequest()}
+          closeModal={closeModal}
+        >
+          <S.ImageWrapper>
+            <img src={selectedCoach.image} alt="코치 이미지" />
+            <span>💌</span>
+            <img src={userData?.image} alt="크루 이미지" />
+          </S.ImageWrapper>
+        </Modal>
+      )}
     </S.Layout>
   );
 };

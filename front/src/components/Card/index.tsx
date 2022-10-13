@@ -13,11 +13,7 @@ interface CardProps {
 const Card = ({ name, image, description, buttonName, isPossible, onClick }: CardProps) => {
   return (
     <S.CardContainer onClick={onClick} isPossible={isPossible}>
-      <S.RequestIcon
-        src={RequestIcon}
-        alt="티타임 요청 보내기"
-        onClick={() => console.log('click')}
-      />
+      <S.RequestIcon id="request-icon" src={RequestIcon} alt="티타임 요청 보내기" />
       <S.CardWrapper>
         <S.ImageWrapper>
           <img src={image} alt={`${name} 카드 이미지`} />
