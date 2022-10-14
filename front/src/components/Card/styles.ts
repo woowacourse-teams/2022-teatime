@@ -48,8 +48,8 @@ const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
 
 const IconWrapper = styled.div`
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 15px;
+  left: 15px;
 
   img {
     margin-right: 8px;
