@@ -8,11 +8,11 @@ import com.woowacourse.teatime.teatime.controller.dto.request.SheetQuestionUpdat
 public class DtoFixture {
 
     public static final CoachSaveRequest COACH_BROWN_SAVE_REQUEST
-            = new CoachSaveRequest("brown", "brown", "brown@email.com", "i am legend", "image");
+            = new CoachSaveRequest("brown", "brown", "brown@email.com", "image");
     public static final CoachSaveRequest COACH_JUNE_SAVE_REQUEST
-            = new CoachSaveRequest("june", "june", "june@email.com", "i am legend", "image");
+            = new CoachSaveRequest("june", "june", "june@email.com", "image");
     public static final CoachSaveRequest COACH_WOOWAHAN_SAVE_REQUEST
-            = new CoachSaveRequest("john", "john", "john@woowahan.com", "i am legend", "image");
+            = new CoachSaveRequest("john", "john", "john@woowahan.com", "image");
 
     public static final CrewSaveRequest CREW_SAVE_REQUEST
             = new CrewSaveRequest("maru", "maru", "maru@email.com", "image");
@@ -43,15 +43,15 @@ public class DtoFixture {
     public static final String CUSTOM_QUESTION_CONTENT_5 = "다섯 번째 질문";
 
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_1
-            = new SheetQuestionUpdateRequest(1, CUSTOM_QUESTION_CONTENT_1,true);
+            = new SheetQuestionUpdateRequest(1, CUSTOM_QUESTION_CONTENT_1, true);
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_2
-            = new SheetQuestionUpdateRequest(2, CUSTOM_QUESTION_CONTENT_2,true);
+            = new SheetQuestionUpdateRequest(2, CUSTOM_QUESTION_CONTENT_2, true);
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_3
-            = new SheetQuestionUpdateRequest(3, CUSTOM_QUESTION_CONTENT_3,true);
+            = new SheetQuestionUpdateRequest(3, CUSTOM_QUESTION_CONTENT_3, true);
 
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_4
             = new SheetQuestionUpdateRequest(4, CUSTOM_QUESTION_CONTENT_4, false);
 
     public static final SheetQuestionUpdateRequest CUSTOM_SHEET_QUESTION_5
-            = new SheetQuestionUpdateRequest(5, CUSTOM_QUESTION_CONTENT_5,true);
+            = new SheetQuestionUpdateRequest(5, CUSTOM_QUESTION_CONTENT_5, true);
 }

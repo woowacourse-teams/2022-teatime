@@ -17,6 +17,7 @@ interface CoachData {
   image: string;
   name: string;
   description: string;
+  isPokable: boolean;
 }
 
 interface Crew {
@@ -34,6 +35,7 @@ interface Coach {
   description: string;
   image: string;
   isPossible: boolean;
+  isPokable: boolean;
 }
 
 interface MonthYear {
@@ -132,6 +134,10 @@ interface Questions {
   questions: Question[];
 }
 
+interface AccessToken {
+  accessToken: string;
+}
+
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
 type CrewListMap = Record<string, Crew[]>;
@@ -160,4 +166,5 @@ export {
   ReservationByCoach,
   Question,
   Questions,
+  AccessToken,
 };

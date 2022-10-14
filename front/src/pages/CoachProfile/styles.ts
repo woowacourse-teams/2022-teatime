@@ -57,6 +57,7 @@ const ProfileForm = styled.form`
 
   textarea {
     ${profileInput}
+    margin-bottom: 20px;
   }
 `;
 
@@ -69,59 +70,7 @@ const LabelContainer = styled.div`
     color: ${({ theme }) => theme.colors.GREEN_900};
   }
 `;
-
-const QuestionContainer = styled.div`
-  display: flex;
-`;
-
-const QuestionInner = styled.div`
-  display: flex;
-`;
-
-const QuestionBorderBox = styled(BorderBox)``;
-
-const QuestionNameWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 10px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.GREEN_900};
-`;
-
-const QuestionInputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  input {
-    ${profileInput}
-    margin-bottom: 15px;
-    height: 40px;
-  }
-`;
-
-const QuestionLength = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 10px;
-  color: ${({ theme }) => theme.colors.GREEN_900};
-`;
-
-const QuestionCheckBoxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100px;
-
-  input {
-    margin-bottom: 15px;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    margin-top: 16.5px;
-  }
-`;
-
+ 
 const CardWrapper = styled.div`
   width: 250px;
 `;
@@ -131,13 +80,13 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 20px 0;
+  margin-top: 40px;
 
   button {
     background-color: ${({ theme }) => theme.colors.GREEN_700};
     color: ${({ theme }) => theme.colors.WHITE};
-    width: 50%;
-    height: 42px;
+    width: 100%;
+    height: 40px;
     border: none;
     border-radius: 10px;
     font-size: 18px;
@@ -149,21 +98,56 @@ const ButtonWrapper = styled.div`
   }
 `;
 
+const ToggleWrapper = styled.div<{ isPokable: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    font-size: 18px;
+    color: ${({ theme }) => theme.colors.GREEN_900};
+  }
+
+  button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 25px;
+    border-radius: 20px;
+    border: none;
+    background-color: ${({ isPokable, theme }) =>
+      isPokable ? theme.colors.BLUE_600 : theme.colors.GRAY_500};
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+  }
+
+  div {
+    position: absolute;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50px;
+    background-color: white;
+    transition: all 0.3s ease-out;
+    ${({ isPokable }) =>
+      isPokable &&
+      css`
+        transform: translate(25px, 0);
+      `}
+  }
+`;
+
 export {
   Container,
   ProfileForm,
   Grid,
   BorderBox,
   PreviewBorderBox,
-  QuestionContainer,
-  QuestionInner,
-  QuestionBorderBox,
-  QuestionNameWrapper,
-  QuestionInputContainer,
-  QuestionLength,
-  QuestionCheckBoxContainer,
   BorderBoxName,
   LabelContainer,
   CardWrapper,
   ButtonWrapper,
+  ToggleWrapper,
 };
