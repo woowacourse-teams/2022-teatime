@@ -37,7 +37,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<ErrorResponse> unAuthorizedExceptionHandler(UnAuthorizedException e) {
-        log.warn(e.getMessage(), e);
+        log.info(e.getMessage(), e);
         return ResponseEntity.status(UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
     }
 
