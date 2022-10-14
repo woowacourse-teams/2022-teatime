@@ -17,7 +17,7 @@ public class PokeSlackAlarmDto {
     private static final String TYPE_DIVIDER = "divider";
     private static final String TYPE_IMAGE = "image";
     private static final String MARK_DOWN = "mrkdwn";
-    private static final String IMAGE_URL = "https://user-images.githubusercontent.com/82227098/195831157-009353e4-3e02-44ea-abdc-c34fd073e53c.png";
+    private static final String IMAGE_URL = "https://user-images.githubusercontent.com/52141636/195832482-f11381d0-d13b-4243-b5d1-4da9f8eb6643.png";
     private static final String ALT_TEXT = "postman";
 
     private String channel;
