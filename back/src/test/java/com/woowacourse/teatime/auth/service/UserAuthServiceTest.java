@@ -4,34 +4,34 @@ import static com.woowacourse.teatime.teatime.domain.Role.COACH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.when;
 
 import com.woowacourse.teatime.auth.controller.dto.GenerateTokenDto;
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
+import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
+@ExtendWith({MockitoExtension.class})
 class UserAuthServiceTest {
 
     @Mock
-    RedisTemplate<String, Object> template;
+    private UserAuthInfoRepository userAuthInfoRepository;
 
-    @Mock
-    ValueOperations<String, Object> valueOperations;
-
+    @InjectMocks
     @Autowired
     private UserAuthService userAuthService;
 
@@ -44,15 +44,11 @@ class UserAuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(template.opsForValue()).thenReturn(valueOperations);
-
         refreshToken = UUID.randomUUID().toString();
         Map<String, Object> claims =
                 Map.of("id", 1L, "role", COACH.name());
         accessToken = jwtTokenProvider.createToken(claims);
         userAuthInfo = new UserAuthInfo(refreshToken, accessToken, 1L, COACH.name());
-
-        template.opsForValue().set(refreshToken, userAuthInfo);
     }
 
     @DisplayName("유저 인증 정보를 저장한다.")

@@ -3,10 +3,10 @@ package com.woowacourse.teatime.auth.acceptance;
 import static com.woowacourse.teatime.teatime.domain.Role.CREW;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
+import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
 import com.woowacourse.teatime.auth.service.UserAuthService;
 import com.woowacourse.teatime.teatime.acceptance.AcceptanceTestSupporter;
 import io.restassured.RestAssured;
@@ -15,31 +15,27 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@ExtendWith({MockitoExtension.class})
 public class AuthAcceptanceTest extends AcceptanceTestSupporter {
 
     @Mock
-    RedisTemplate<String, Object> template;
-
-    @Mock
-    ValueOperations<String, Object> valueOperations;
+    private UserAuthInfoRepository userAuthInfoRepository;
 
     @Autowired
+    @InjectMocks
     private UserAuthService userAuthService;
 
     @BeforeEach
     void setUp() {
-        when(template.opsForValue()).thenReturn(valueOperations);
-
         UserAuthInfo userAuthInfo = new UserAuthInfo("refreshToken", "accessToken", 1L, CREW.name());
-        template.opsForValue().set("refreshToken", userAuthInfo);
-
         userAuthService.save(userAuthInfo);
     }
 
