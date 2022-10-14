@@ -45,6 +45,12 @@ const MAX_LENGTH = {
 
 const QUESTIONS_LENGTH = 3;
 
+const ERROR_MESSAGE = {
+  INVALID_TOKEN: '유효하지 않은 토큰입니다.',
+  WRONG_TOKEN: '토큰이 잘못되었습니다.',
+  NOT_EXIST_TOKEN: '헤더에 토큰이 존재하지 않습니다.',
+};
+
 export {
   ROUTES,
   DAY_OF_WEEKS,
@@ -55,4 +61,5 @@ export {
   HOUR_MILLISECONDS,
   MAX_LENGTH,
   QUESTIONS_LENGTH,
+  ERROR_MESSAGE,
 };
