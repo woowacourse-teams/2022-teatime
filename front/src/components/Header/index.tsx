@@ -85,6 +85,9 @@ const Header = () => {
               <Link to={ROUTES.SCHEDULE}>
                 <li>스케줄 관리</li>
               </Link>
+              <Link to={ROUTES.QUESTION}>
+                <li>사전질문 관리</li>
+              </Link>
               <Link to={ROUTES.COACH_PROFILE}>
                 <li>프로필 수정</li>
               </Link>

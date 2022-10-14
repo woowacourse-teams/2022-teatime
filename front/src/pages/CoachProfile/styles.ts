@@ -70,59 +70,7 @@ const LabelContainer = styled.div`
     color: ${({ theme }) => theme.colors.GREEN_900};
   }
 `;
-
-const QuestionContainer = styled.div`
-  display: flex;
-`;
-
-const QuestionInner = styled.div`
-  display: flex;
-`;
-
-const QuestionBorderBox = styled(BorderBox)``;
-
-const QuestionNameWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 10px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.GREEN_900};
-`;
-
-const QuestionInputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  input {
-    ${profileInput}
-    margin-bottom: 15px;
-    height: 40px;
-  }
-`;
-
-const QuestionLength = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 10px;
-  color: ${({ theme }) => theme.colors.GREEN_900};
-`;
-
-const QuestionCheckBoxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100px;
-
-  input {
-    margin-bottom: 15px;
-    width: 40px;
-    height: 40px;
-    margin-top: 16.5px;
-    cursor: pointer;
-  }
-`;
-
+ 
 const CardWrapper = styled.div`
   width: 250px;
 `;
@@ -197,13 +145,6 @@ export {
   Grid,
   BorderBox,
   PreviewBorderBox,
-  QuestionContainer,
-  QuestionInner,
-  QuestionBorderBox,
-  QuestionNameWrapper,
-  QuestionInputContainer,
-  QuestionLength,
-  QuestionCheckBoxContainer,
   BorderBoxName,
   LabelContainer,
   CardWrapper,
