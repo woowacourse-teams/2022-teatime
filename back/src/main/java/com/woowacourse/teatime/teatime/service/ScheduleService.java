@@ -11,6 +11,7 @@ import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.jdbc.ScheduleDao;
 import com.woowacourse.teatime.util.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -52,20 +53,22 @@ public class ScheduleService {
                 .flatMap(Collection::stream)
                 .sorted()
                 .collect(Collectors.toList());
+        validateDeletable(coachId, localDateTimes);
 
-        deleteAllByCoachAndDate(coachId, localDateTimes);
+        List<LocalDate> days = requests.stream()
+                .map(ScheduleUpdateRequest::getDate)
+                .collect(Collectors.toList());
+
+        deleteAllByCoachAndDate(coachId, days);
         saveAllByCoachAndDate(coachId, localDateTimes);
     }
 
-    private void deleteAllByCoachAndDate(Long coachId, List<LocalDateTime> localDateTimes) {
-        validateDeletable(coachId, localDateTimes);
-        List<String> localDates = localDateTimes.stream()
-                .map(LocalDateTime::toLocalDate)
-                .distinct()
+    private void deleteAllByCoachAndDate(Long coachId, List<LocalDate> localDates) {
+        List<String> days = localDates.stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());
 
-        scheduleRepository.deleteAllReservableByCoachIdBetween(coachId, localDates);
+        scheduleRepository.deleteAllReservableByCoachIdBetween(coachId, days);
     }
 
     private void validateDeletable(Long coachId, List<LocalDateTime> localDateTimes) {

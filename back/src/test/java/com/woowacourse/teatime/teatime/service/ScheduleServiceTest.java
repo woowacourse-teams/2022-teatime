@@ -257,4 +257,30 @@ class ScheduleServiceTest {
 
         assertThat(totalSchedules).hasSize(4);
     }
+
+    @DisplayName("코치의 스케쥴을 수정할 때, 빈 스케쥴이 들어오면 모두 삭제한다.")
+    @Test
+    void update_allDeleteIfEmptyDates() {
+        // given
+        Coach coach = coachRepository.save(COACH_BROWN);
+        LocalDateTime time1 = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(13, 30));
+        LocalDateTime time2 = LocalDateTime.of(LAST_DATE_OF_MONTH, LocalTime.of(14, 30));
+
+        scheduleRepository.save(new Schedule(coach, time1));
+        scheduleRepository.save(new Schedule(coach, time2));
+
+        // when
+        ScheduleUpdateRequest scheduleUpdateRequest = new ScheduleUpdateRequest(LAST_DATE_OF_MONTH, List.of());
+        scheduleService.update(coach.getId(), List.of(scheduleUpdateRequest));
+
+        // then
+        List<ScheduleFindResponse> responses = scheduleService.find(coach.getId(),
+                new ScheduleFindRequest(LAST_DATE_OF_MONTH.getYear(), LAST_DATE_OF_MONTH.getMonthValue()));
+        List<ScheduleDto> totalSchedules = responses.stream()
+                .map(ScheduleFindResponse::getSchedules)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        assertThat(totalSchedules).isEmpty();
+    }
 }
