@@ -2,10 +2,9 @@ package com.woowacourse.teatime.auth.service;
 
 import com.woowacourse.teatime.auth.controller.dto.GenerateTokenDto;
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
-import com.woowacourse.teatime.auth.exception.WrongCookieTokenException;
+import com.woowacourse.teatime.auth.exception.WrongTokenException;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
-import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.domain.Role;
 import java.util.Map;
 import java.util.UUID;
@@ -43,19 +42,19 @@ public class UserAuthService {
 
     private String getRefreshToken(Cookie cookie) {
         if (cookie == null) {
-            throw new WrongCookieTokenException();
+            throw new WrongTokenException();
         }
         return cookie.getValue();
     }
 
     public UserAuthInfo find(String refreshToken) {
         return userAuthInfoRepository.findById(refreshToken)
-                .orElseThrow(WrongCookieTokenException::new);
+                .orElseThrow(WrongTokenException::new);
     }
 
     private void validateUserAuthInfo(UserAuthInfo userAuthInfo, String refreshToken, String accessToken) {
         if (!userAuthInfo.isSameToken(refreshToken, accessToken)) {
-            throw new UnAuthorizedException();
+            throw new WrongTokenException();
         }
     }
 
