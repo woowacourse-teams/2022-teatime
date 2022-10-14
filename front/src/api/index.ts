@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { clearStorage, getStorage, setStorage } from '@utils/localStorage';
-import { LOCAL_DB } from '@constants/index';
+import { ERROR_MESSAGE, LOCAL_DB } from '@constants/index';
 import { getAccessToken } from './auth';
 
 const BASE_URL = process.env.BACK_URL;
@@ -36,17 +36,19 @@ api.interceptors.response.use(
   },
   async (error) => {
     if (error.response.status === 401) {
-      if (error.response.data.message === '유효하지 않은 토큰입니다.') {
+      if (error.response.data.message === ERROR_MESSAGE.INVALID_TOKEN) {
         const { config } = error;
         const originalRequest = { ...config };
 
-        const { data } = await getAccessToken();
+        const {
+          data: { accessToken },
+        } = await getAccessToken();
 
-        axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
-        originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
 
         const user = getStorage(LOCAL_DB.USER);
-        const newUser = { ...user, token: data.accessToken };
+        const newUser = { ...user, token: accessToken };
         setStorage(LOCAL_DB.USER, newUser);
 
         return api(originalRequest);
@@ -55,8 +57,8 @@ api.interceptors.response.use(
 
     if (error.response.status === 400) {
       if (
-        error.response.data.message === '토큰이 잘못되었습니다.' ||
-        error.response.data.message === '헤더에 토큰이 존재하지 않습니다.'
+        error.response.data.message === ERROR_MESSAGE.WRONG_TOKEN ||
+        error.response.data.message === ERROR_MESSAGE.NOT_EXIST_TOKEN
       ) {
         clearStorage(LOCAL_DB.USER);
         location.href = `${process.env.REDIRECT_URL}`;
