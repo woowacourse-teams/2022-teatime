@@ -23,6 +23,8 @@ const editCrewReservation = (reservationId: string, isSubmitted: boolean, sheets
 
 const editCrewNickName = (name: string) => api.put(`/api/v2/crews/me/profile`, { name });
 
+const postReservationRequest = (coachId: number) => api.post('/api/v2/pokes', { coachId });
+
 export {
   getCrewHistoriesByMe,
   getCrewHistoriesByCoach,
@@ -31,4 +33,5 @@ export {
   getCrewReservationByCoach,
   editCrewReservation,
   editCrewNickName,
+  postReservationRequest,
 };

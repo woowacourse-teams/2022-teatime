@@ -15,7 +15,7 @@ const getCoachReservations = () => api.get<CrewListMap>('/api/v2/coaches/me/rese
 
 const getCoachHistories = () => api.get<CoachHistory[]>('/api/v2/coaches/me/history');
 
-const editCoachProfile = (data: { name: string; description: string }) =>
+const editCoachProfile = (data: { name: string; description: string; isPokable: boolean }) =>
   api.put(`/api/v2/coaches/me/profile`, data);
 
 const editCoachSchedule = (data: { date: string; schedules: string[] }[]) =>
