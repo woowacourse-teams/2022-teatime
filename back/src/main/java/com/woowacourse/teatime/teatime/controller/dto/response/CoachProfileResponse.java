@@ -15,8 +15,9 @@ public class CoachProfileResponse {
     private String name;
     private String description;
     private String image;
+    private Boolean isPokable;
 
     public CoachProfileResponse(Coach coach) {
-        this(coach.getName(), coach.getDescription(), coach.getImage());
+        this(coach.getName(), coach.getDescription(), coach.getImage(), coach.getIsPokable());
     }
 }
