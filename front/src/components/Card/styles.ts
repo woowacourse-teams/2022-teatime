@@ -12,10 +12,11 @@ const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
   background-color: ${({ theme }) => theme.colors.WHITE};
   border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
   overflow: hidden;
-  cursor: ${({ isPreview }) => !isPreview && 'pointer'};
+  cursor: pointer;
+  pointer-events: ${({ isPreview }) => (isPreview ? 'none' : 'auto')};
 
   &:hover {
-    transform: ${({ isPreview }) => !isPreview && 'scale(1.02)'};
+    transform: scale(1.02);
     transition: ease-in-out 0.2s;
   }
 
