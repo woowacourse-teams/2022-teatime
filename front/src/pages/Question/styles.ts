@@ -17,7 +17,7 @@ const Container = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  width: 900px;
+  width: 600px;
   gap: 40px;
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
@@ -99,7 +99,7 @@ const ButtonWrapper = styled.div`
   button {
     background-color: ${({ theme }) => theme.colors.GREEN_700};
     color: ${({ theme }) => theme.colors.WHITE};
-    width: 50%;
+    width: 100%;
     height: 42px;
     border: none;
     border-radius: 10px;
