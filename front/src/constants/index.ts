@@ -3,6 +3,7 @@ const ROUTES = {
   CREW: '/crew',
   COACH: '/coach',
   SCHEDULE: '/schedule',
+  QUESTION: '/question',
   RESERVATION: '/reservation',
   CREW_SHEET: '/crew-sheet',
   COACH_SHEET: '/coach-sheet',

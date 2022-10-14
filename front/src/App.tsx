@@ -13,6 +13,7 @@ const Reservation = lazy(() => import('@pages/Reservation'));
 const Home = lazy(() => import('@pages/Home'));
 const Certification = lazy(() => import('@pages/Certification'));
 const Schedule = lazy(() => import('@pages/Schedule'));
+const Question = lazy(() => import('@pages/Question'));
 const CoachMain = lazy(() => import('@pages/CoachMain'));
 const NotFound = lazy(() => import('@pages/NotFound'));
 const CrewSheet = lazy(() => import('@pages/CrewSheet'));
@@ -41,6 +42,7 @@ const App = () => {
             <Route element={<AuthRoute role="COACH" />}>
               <Route path={ROUTES.COACH} element={<CoachMain />} />
               <Route path={ROUTES.SCHEDULE} element={<Schedule />} />
+              <Route path={ROUTES.QUESTION} element={<Question />} />
               <Route path={ROUTES.COACH_HISTORY} element={<CoachHistory />} />
               <Route path={ROUTES.COACH_PROFILE} element={<CoachProfile />} />
               <Route path={`${ROUTES.COACH_SHEET}/:id`} element={<CoachSheet />} />

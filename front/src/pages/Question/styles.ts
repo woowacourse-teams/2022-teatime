@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr;
   width: 900px;
   gap: 40px;
 
@@ -37,41 +37,56 @@ const BorderBoxName = styled.p`
   font-size: 18px;
 `;
 
-const PreviewBorderBox = styled(BorderBox)`
-  @media screen and (${({ theme }) => theme.devices.tablet}) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
-    display: none;
-  }
+const QuestionContainer = styled.div`
+  display: flex;
 `;
 
-const ProfileForm = styled.form`
-  input {
-    ${profileInput}
-    margin-bottom: 30px;
-  }
-
-  textarea {
-    ${profileInput}
-  }
+const QuestionInner = styled.div`
+  display: flex;
 `;
 
-const LabelContainer = styled.div`
+const QuestionBorderBox = styled(BorderBox)``;
+
+const QuestionNameWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  margin: 10px;
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.GREEN_900};
+`;
 
-  label {
-    font-size: 18px;
-    color: ${({ theme }) => theme.colors.GREEN_900};
+const QuestionInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  input {
+    ${profileInput}
+    margin-bottom: 15px;
+    height: 40px;
   }
 `;
 
-const CardWrapper = styled.div`
-  width: 250px;
+const QuestionLength = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+  color: ${({ theme }) => theme.colors.GREEN_900};
+`;
+
+const QuestionCheckBoxContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+
+  input {
+    margin-bottom: 15px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-top: 16.5px;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -99,12 +114,15 @@ const ButtonWrapper = styled.div`
 
 export {
   Container,
-  ProfileForm,
   Grid,
   BorderBox,
-  PreviewBorderBox,
+  QuestionContainer,
+  QuestionInner,
+  QuestionBorderBox,
+  QuestionNameWrapper,
+  QuestionInputContainer,
+  QuestionLength,
+  QuestionCheckBoxContainer,
   BorderBoxName,
-  LabelContainer,
-  CardWrapper,
   ButtonWrapper,
 };
