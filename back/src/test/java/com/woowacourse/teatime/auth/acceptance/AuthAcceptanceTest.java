@@ -18,6 +18,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -28,6 +30,10 @@ public class AuthAcceptanceTest extends AcceptanceTestSupporter {
 
     @BeforeEach
     void setUp() {
+        RedisConnectionFactory factory = mock(RedisConnectionFactory.class);
+        RedisConnection connection = mock(RedisConnection.class);
+        when(factory.getConnection()).thenReturn(connection);
+
         UserAuthInfo userAuthInfo = new UserAuthInfo("refreshToken", "accessToken", 1L, CREW.name());
         UserAuthInfoRepository authInfoRepository = mock(UserAuthInfoRepository.class);
         when(authInfoRepository.save(userAuthInfo)).thenReturn(userAuthInfo);

@@ -20,6 +20,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -38,6 +40,10 @@ class UserAuthServiceTest {
 
     @BeforeEach
     void setUp() {
+        RedisConnectionFactory factory = mock(RedisConnectionFactory.class);
+        RedisConnection connection = mock(RedisConnection.class);
+        when(factory.getConnection()).thenReturn(connection);
+
         refreshToken = UUID.randomUUID().toString();
         Map<String, Object> claims =
                 Map.of("id", 1L, "role", COACH.name());
