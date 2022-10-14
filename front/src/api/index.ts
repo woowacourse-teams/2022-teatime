@@ -39,10 +39,8 @@ api.interceptors.response.use(
       if (error.response.data.message === '유효하지 않은 토큰입니다.') {
         const { config } = error;
         const originalRequest = { ...config };
-        console.log('originalRequest', originalRequest);
 
         const { data } = await getAccessToken();
-        console.log('data', data);
 
         axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
         originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
