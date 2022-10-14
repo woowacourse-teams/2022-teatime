@@ -17,7 +17,7 @@ public class PokeSlackAlarmDto {
     private static final String TYPE_DIVIDER = "divider";
     private static final String TYPE_IMAGE = "image";
     private static final String MARK_DOWN = "mrkdwn";
-    private static final String IMAGE_URL = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/4d1f389a-f267-4a54-a1e3-2354b69cb436/dd79g53-2d45f61e-6909-4e9b-aff0-38ae288ffef1.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzRkMWYzODlhLWYyNjctNGE1NC1hMWUzLTIzNTRiNjljYjQzNlwvZGQ3OWc1My0yZDQ1ZjYxZS02OTA5LTRlOWItYWZmMC0zOGFlMjg4ZmZlZjEuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.naHFAbVbUXFKW1u10-zbmv0uZcjqAWUzWoyzbKd_dmQ";
+    private static final String IMAGE_URL = "https://user-images.githubusercontent.com/82227098/195831157-009353e4-3e02-44ea-abdc-c34fd073e53c.png";
     private static final String ALT_TEXT = "postman";
 
     private String channel;
