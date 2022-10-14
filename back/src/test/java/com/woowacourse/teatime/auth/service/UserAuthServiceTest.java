@@ -4,29 +4,33 @@ import static com.woowacourse.teatime.teatime.domain.Role.COACH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.woowacourse.teatime.auth.controller.dto.GenerateTokenDto;
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
-import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
 class UserAuthServiceTest {
+
+    @Mock
+    RedisTemplate<String, Object> template;
+
+    @Mock
+    ValueOperations<String, Object> valueOperations;
 
     @Autowired
     private UserAuthService userAuthService;
@@ -40,9 +44,7 @@ class UserAuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        RedisConnectionFactory factory = mock(RedisConnectionFactory.class);
-        RedisConnection connection = mock(RedisConnection.class);
-        when(factory.getConnection()).thenReturn(connection);
+        when(template.opsForValue()).thenReturn(valueOperations);
 
         refreshToken = UUID.randomUUID().toString();
         Map<String, Object> claims =
@@ -50,9 +52,7 @@ class UserAuthServiceTest {
         accessToken = jwtTokenProvider.createToken(claims);
         userAuthInfo = new UserAuthInfo(refreshToken, accessToken, 1L, COACH.name());
 
-        UserAuthInfoRepository mock = mock(UserAuthInfoRepository.class);
-        when(mock.save(userAuthInfo)).thenReturn(userAuthInfo);
-        when(mock.findById(refreshToken)).thenReturn(Optional.of(userAuthInfo));
+        template.opsForValue().set(refreshToken, userAuthInfo);
     }
 
     @DisplayName("유저 인증 정보를 저장한다.")

@@ -3,12 +3,10 @@ package com.woowacourse.teatime.auth.acceptance;
 import static com.woowacourse.teatime.teatime.domain.Role.CREW;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import com.woowacourse.teatime.auth.domain.UserAuthInfo;
-import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
 import com.woowacourse.teatime.auth.service.UserAuthService;
 import com.woowacourse.teatime.teatime.acceptance.AcceptanceTestSupporter;
 import io.restassured.RestAssured;
@@ -17,26 +15,30 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class AuthAcceptanceTest extends AcceptanceTestSupporter {
+
+    @Mock
+    RedisTemplate<String, Object> template;
+
+    @Mock
+    ValueOperations<String, Object> valueOperations;
 
     @Autowired
     private UserAuthService userAuthService;
 
     @BeforeEach
     void setUp() {
-        RedisConnectionFactory factory = mock(RedisConnectionFactory.class);
-        RedisConnection connection = mock(RedisConnection.class);
-        when(factory.getConnection()).thenReturn(connection);
+        when(template.opsForValue()).thenReturn(valueOperations);
 
         UserAuthInfo userAuthInfo = new UserAuthInfo("refreshToken", "accessToken", 1L, CREW.name());
-        UserAuthInfoRepository authInfoRepository = mock(UserAuthInfoRepository.class);
-        when(authInfoRepository.save(userAuthInfo)).thenReturn(userAuthInfo);
+        template.opsForValue().set("refreshToken", userAuthInfo);
 
         userAuthService.save(userAuthInfo);
     }
