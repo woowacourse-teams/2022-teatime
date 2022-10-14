@@ -5,7 +5,6 @@ import com.woowacourse.teatime.auth.domain.UserAuthInfo;
 import com.woowacourse.teatime.auth.exception.WrongCookieTokenException;
 import com.woowacourse.teatime.auth.infrastructure.JwtTokenProvider;
 import com.woowacourse.teatime.auth.repository.UserAuthInfoRepository;
-import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.exception.UnAuthorizedException;
 import com.woowacourse.teatime.teatime.domain.Role;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class UserAuthService {
         return cookie.getValue();
     }
 
-    private UserAuthInfo find(String refreshToken) {
+    public UserAuthInfo find(String refreshToken) {
         return userAuthInfoRepository.findById(refreshToken)
                 .orElseThrow(WrongCookieTokenException::new);
     }
