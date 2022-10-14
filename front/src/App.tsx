@@ -22,6 +22,7 @@ const HistorySheet = lazy(() => import('@pages/HistorySheet'));
 const CrewHistory = lazy(() => import('@pages/CrewHistory'));
 const CoachHistory = lazy(() => import('@pages/CoachHistory'));
 const CoachProfile = lazy(() => import('@pages/CoachProfile'));
+const DemoHome = lazy(() => import('@pages/DemoHome'));
 
 const App = () => {
   return (
@@ -30,7 +31,7 @@ const App = () => {
         <Header />
         <Suspense fallback={<Loading text="Loading..." />}>
           <Routes>
-            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={'/'} element={<DemoHome />} />
             <Route path={ROUTES.CERTIFICATION} element={<Certification />} />
             <Route path="/*" element={<NotFound />} />
             <Route element={<AuthRoute role="CREW" />}>
