@@ -1,4 +1,14 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const Motion = keyframes`
+	0% {
+    margin-top: 0px;
+  }
+
+	100% {
+    margin-top: 25px;
+  } 
+`;
 
 const Layout = styled.div`
   display: flex;
@@ -32,4 +42,28 @@ const CardListContainer = styled.div`
   }
 `;
 
-export { CardListContainer, Layout };
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
+  span {
+    font-size: 30px;
+    animation: ${Motion} 0.8s linear 0s infinite alternate;
+  }
+`;
+
+const RequestText = styled.p`
+  padding: 20px 0;
+  border-radius: 8px;
+  line-height: 20px;
+  background-color: ${({ theme }) => theme.colors.GRAY_100};
+`;
+
+export { CardListContainer, Layout, ImageWrapper, RequestText };

@@ -17,6 +17,7 @@ interface CoachData {
   image: string;
   name: string;
   description: string;
+  isPokable: boolean;
 }
 
 interface Crew {
@@ -34,6 +35,7 @@ interface Coach {
   description: string;
   image: string;
   isPossible: boolean;
+  isPokable: boolean;
 }
 
 interface MonthYear {

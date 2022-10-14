@@ -18,8 +18,15 @@ const CoachProfile = () => {
     image: '',
     name: '',
     description: '',
+    isPokable: true,
   });
-  const { image, name, description } = coachProfile;
+  const { image, name, description, isPokable } = coachProfile;
+
+  const handleIsPokable = () => {
+    setCoachProfile((prev) => {
+      return { ...prev, isPokable: !prev.isPokable };
+    });
+  };
 
   const handleChangeProfile = (e: React.ChangeEvent<HTMLFormElement>) => {
     setCoachProfile((prev) => {
@@ -51,7 +58,7 @@ const CoachProfile = () => {
     }
 
     try {
-      await editCoachProfile({ name, description });
+      await editCoachProfile({ name, description, isPokable });
       dispatch({ type: 'EDIT_USER', name });
       showSnackbar({ message: '저장되었습니다. ✅' });
     } catch (error) {
@@ -136,6 +143,12 @@ const CoachProfile = () => {
               defaultValue={description}
               required
             />
+            <S.ToggleWrapper isPokable={isPokable}>
+              <span>콕 찔러보기 설정</span>
+              <button type="button" onClick={handleIsPokable}>
+                <div />
+              </button>
+            </S.ToggleWrapper>
             <S.ButtonWrapper>
               <button>저장하기</button>
             </S.ButtonWrapper>

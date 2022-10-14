@@ -38,6 +38,7 @@ const TitleWrapper = styled.div`
   }
 
   h1 {
+    margin: 14px 0;
     font-size: 28px;
     background: ${({ theme }) =>
       `linear-gradient(to top, ${theme.colors.YELLOW_400} 40%, transparent 50%)`};
@@ -46,7 +47,7 @@ const TitleWrapper = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  padding: 30px 20px;
+  padding: 20px;
 `;
 
 const CloseIconWrapper = styled.div`
