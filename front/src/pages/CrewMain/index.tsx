@@ -36,11 +36,6 @@ const CrewMain = () => {
       openModal();
       return;
     }
-    if (target === 'subscribe') {
-      showSnackbar({ message: '구독 기능 준비 중입니다. ㅠㅠ' });
-      return;
-    }
-
     navigate(`${ROUTES.RESERVATION}/${id}`, { state: image });
   };
 

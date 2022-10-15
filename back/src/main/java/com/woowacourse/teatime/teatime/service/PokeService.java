@@ -4,6 +4,7 @@ import com.woowacourse.teatime.teatime.controller.dto.request.PokeSaveRequest;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Poke;
+import com.woowacourse.teatime.teatime.exception.CannotPokeException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.repository.CoachRepository;
@@ -25,14 +26,21 @@ public class PokeService {
 
     public Long save(Long crewId, PokeSaveRequest request) {
         Long coachId = request.getCoachId();
-        Crew crew = crewRepository.findById(crewId)
-                .orElseThrow(NotFoundCrewException::new);
         Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(NotFoundCoachException::new);
+        validatePokable(coach);
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(NotFoundCrewException::new);
 
         Poke savedPoke = pokeRepository.save(new Poke(crew, coach));
         alarmService.sendPoke(crew.getName(), coach.getSlackId());
 
         return savedPoke.getId();
+    }
+
+    private void validatePokable(Coach coach) {
+        if (!coach.getIsPokable()) {
+            throw new CannotPokeException();
+        }
     }
 }

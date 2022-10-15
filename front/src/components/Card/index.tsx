@@ -1,6 +1,5 @@
 import * as S from './styles';
 import RequestIcon from '@assets/request.svg';
-import SubscribeIcon from '@assets/subscribe.svg';
 
 interface CardProps {
   image: string;
@@ -25,7 +24,6 @@ const Card = ({
     <S.CardContainer onClick={onClick} isPossible={!!isPossible} isPreview={!!isPreview}>
       <S.IconWrapper>
         <img id="request" src={RequestIcon} alt="티타임 요청 보내기" />
-        <img id="subscribe" src={SubscribeIcon} alt="구독 하기" />
       </S.IconWrapper>
       <S.CardWrapper>
         <S.ImageWrapper>
