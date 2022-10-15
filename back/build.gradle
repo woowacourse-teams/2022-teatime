@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'com.woowacourse'
-version = '1.6.0-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss")
+version = '1.6.0-SNAPSHOT-' + new Date().format("yyyy|MM|dd|HH|mm|ss")
 sourceCompatibility = '11'
 
 ext {
