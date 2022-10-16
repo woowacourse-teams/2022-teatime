@@ -1,6 +1,16 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
-const CardContainer = styled.div<{ isPossible: boolean; isPreview: boolean }>`
+const Refresh = keyframes`
+ 0% { 
+    background-position: calc(-100px); 
+  } 
+  40%,
+  100% { 
+    background-position: 300px; 
+  } 
+`;
+
+const CardContainer = styled.div<{ isPossible?: boolean; isPreview?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -79,12 +89,6 @@ const CardWrapper = styled.div`
   width: 100%;
   height: 100%;
 
-  img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-  }
-
   span {
     font-size: 20px;
     font-weight: 600;
@@ -96,6 +100,60 @@ const CardWrapper = styled.div`
     margin: 10px 0;
     word-break: break-all;
   }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    span {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    p {
+      display: none;
+    }
+  }
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 10px;
+
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    img {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 
   button {
     width: 80%;
@@ -109,34 +167,12 @@ const CardWrapper = styled.div`
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
-    span {
-      font-size: 16px;
-    }
-
-    img {
-      width: 70px;
-      height: 70px;
-    }
-
-    p {
-      font-size: 12px;
-    }
-
     button {
       font-size: 14px;
     }
   }
 
   @media screen and (${({ theme }) => theme.devices.mobileXL}) {
-    img {
-      width: 50px;
-      height: 50px;
-    }
-
-    p {
-      display: none;
-    }
-
     button {
       height: 25px;
       border-radius: 4px;
@@ -144,22 +180,93 @@ const CardWrapper = styled.div`
   }
 `;
 
-const ImageWrapper = styled.div`
+const SkeletonContainer = styled(CardContainer)`
+  background-image: linear-gradient(90deg, #e0e0e0 0px, #ededed 30px, #e0e0e0 60px);
+  background-color: ${({ theme }) => theme.colors.GRAY_150};
+  border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
+  animation: ${Refresh} 2s infinite ease-out;
+`;
+
+const SkeletonInner = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   height: 100%;
-  margin-bottom: 10px;
+
+  span {
+    background-color: ${({ theme }) => theme.colors.GRAY_300};
+    width: 80px;
+    height: 60px;
+    border-radius: 5px;
+  }
+
+  p {
+    background-color: ${({ theme }) => theme.colors.GRAY_300};
+    width: 100%;
+    height: 50px;
+    margin: 20px 0;
+    border-radius: 5px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    span {
+      height: 40px;
+    }
+    p {
+      display: none;
+    }
+  }
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const SkeletonImageWrapper = styled(ImageWrapper)`
+  div {
+    width: 100px;
+    height: 100px;
+    background-color: ${({ theme }) => theme.colors.GRAY_300};
+    border-radius: 50px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    div {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    div {
+      width: 50px;
+      height: 50px;
+    }
+  }
 `;
 
-export { CardContainer, IconWrapper, CardWrapper, ImageWrapper, ButtonWrapper };
+const SkeletonButtonWrapper = styled(ButtonWrapper)`
+  div {
+    background-color: ${({ theme }) => theme.colors.GRAY_300};
+    height: 32px;
+    width: 80%;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.mobileXL}) {
+    div {
+      height: 25px;
+      border-radius: 4px;
+    }
+  }
+`;
+
+export {
+  CardContainer,
+  IconWrapper,
+  CardWrapper,
+  ImageWrapper,
+  ButtonWrapper,
+  SkeletonContainer,
+  SkeletonInner,
+  SkeletonImageWrapper,
+  SkeletonButtonWrapper,
+};
