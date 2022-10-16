@@ -18,7 +18,7 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import { ROUTES } from '@constants/index';
+import { LOCAL_DB, ROUTES } from '@constants/index';
 import type { CrewListMap } from '@typings/domain';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
@@ -52,7 +52,7 @@ const CoachMain = () => {
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
   const { state: selectedBoard, setState: setSelectedBoard } = useLocalStorage(
-    'selectedBoard',
+    LOCAL_DB.BOARD,
     'beforeApproved'
   );
   const showSnackbar = useContext(SnackbarContext);
