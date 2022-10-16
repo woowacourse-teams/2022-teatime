@@ -26,6 +26,12 @@ const DAY_NUMBER = {
   SUNDAY: 0,
 };
 
+const BOARD = {
+  BEFORE_APPROVED: 'beforeApproved',
+  APPROVED: 'approved',
+  IN_PROGRESS: 'inProgress',
+};
+
 const LOCAL_DB = {
   USER: 'user',
   SELECTED_BOARD: 'selectedBoard',
@@ -58,6 +64,7 @@ export {
   DAY_OF_WEEKS,
   CALENDAR_DATE_LENGTH,
   DAY_NUMBER,
+  BOARD,
   LOCAL_DB,
   CACHE,
   HOUR_MILLISECONDS,

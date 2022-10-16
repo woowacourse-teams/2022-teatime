@@ -18,10 +18,17 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import { LOCAL_DB, ROUTES } from '@constants/index';
+import { LOCAL_DB, BOARD, ROUTES } from '@constants/index';
 import type { CrewListMap } from '@typings/domain';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
+
+type ClickBoardButton = (
+  index: number,
+  status: string,
+  reservationId: number,
+  crewId: number
+) => void;
 
 interface BoardItemValue {
   title: string;
@@ -29,18 +36,8 @@ interface BoardItemValue {
   secondButton: string;
   color: string;
   draggedColor: string;
-  handleClickFirstButton: (
-    index: number,
-    status: string,
-    reservationId: number,
-    crewId: number
-  ) => void;
-  handleClickSecondButton: (
-    index: number,
-    status: string,
-    reservationId: number,
-    crewId: number
-  ) => void;
+  handleClickFirstButton: ClickBoardButton;
+  handleClickSecondButton: ClickBoardButton;
 }
 
 interface BoardItem {
@@ -53,14 +50,14 @@ const CoachMain = () => {
   const isWindowFocused = useWindowFocus();
   const { state: selectedBoard, setState: setSelectedBoard } = useLocalStorage(
     LOCAL_DB.SELECTED_BOARD,
-    'beforeApproved'
+    BOARD.BEFORE_APPROVED
   );
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
-    beforeApproved: [],
-    approved: [],
-    inProgress: [],
+    [BOARD.BEFORE_APPROVED]: [],
+    [BOARD.APPROVED]: [],
+    [BOARD.IN_PROGRESS]: [],
   });
 
   const deleteBoardItem = (status: string, index: number) => {
@@ -106,8 +103,8 @@ const CoachMain = () => {
   const handleApprove = async (index: number, status: string, reservationId: number) => {
     try {
       await confirmReservation(reservationId);
-      moveBoardItem('beforeApproved', 'approved', index);
-      sortBoardItemByTime('approved');
+      moveBoardItem(BOARD.BEFORE_APPROVED, BOARD.APPROVED, index);
+      sortBoardItemByTime(BOARD.APPROVED);
       showSnackbar({ message: '승인되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -192,13 +189,19 @@ const CoachMain = () => {
       .status as string;
     const draggedItem = crews[from][itemId];
 
-    if (from === to || from === 'inProgress' || to === 'beforeApproved') return;
-    if (from === 'beforeApproved' && to === 'inProgress') return;
-    if (to === 'inProgress' && getDateTime(draggedItem.dateTime) > new Date()) {
+    if (
+      from === to ||
+      from === BOARD.IN_PROGRESS ||
+      to === BOARD.BEFORE_APPROVED ||
+      (from === BOARD.BEFORE_APPROVED && to === BOARD.IN_PROGRESS)
+    ) {
+      return;
+    }
+    if (to === BOARD.IN_PROGRESS && getDateTime(draggedItem.dateTime) > new Date()) {
       showSnackbar({ message: '진행 가능한 시간이 아닙니다. 🚫' });
       return;
     }
-    if (to === 'inProgress' && getDateTime(draggedItem.dateTime) < new Date()) {
+    if (to === BOARD.IN_PROGRESS && getDateTime(draggedItem.dateTime) < new Date()) {
       moveBoardItem(from, to, itemId);
       return;
     }
@@ -267,9 +270,9 @@ const CoachMain = () => {
     <S.Layout>
       <BoardSelectList
         lists={[
-          { id: 'beforeApproved', text: '대기중인 일정' },
-          { id: 'approved', text: '확정된 일정' },
-          { id: 'inProgress', text: '지난 일정' },
+          { id: BOARD.BEFORE_APPROVED, text: '대기중인 일정' },
+          { id: BOARD.APPROVED, text: '확정된 일정' },
+          { id: BOARD.IN_PROGRESS, text: '지난 일정' },
         ]}
         hidden={width > size.tablet}
         selectedItem={selectedBoard}
@@ -307,7 +310,7 @@ const CoachMain = () => {
                     personName={crewName}
                     firstButton={firstButton}
                     secondButton={secondButton}
-                    isButtonDisabled={status === 'approved' && sheetStatus === 'WRITING'}
+                    isButtonDisabled={status === BOARD.APPROVED && sheetStatus === 'WRITING'}
                     color={color}
                     draggedColor={draggedColor}
                     onClickProfile={() => handleClickProfile(crewId, crewName)}
