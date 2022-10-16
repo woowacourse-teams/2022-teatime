@@ -67,7 +67,7 @@ public class AlarmService {
                     .bodyToMono(SlackAlarmDto.class)
                     .then()
                     .subscribe();
-        } catch (WebClientException e) {
+        } catch (WebClientException ex) {
             throw new SlackAlarmException();
         }
     }
