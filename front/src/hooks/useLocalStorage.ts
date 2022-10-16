@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getStorage, setStorage } from '@utils/localStorage';
 
 const useLocalStorage = <T>(key: string, initialState: T) => {
-  const [state, setState] = useState(getStorage(key) || initialState);
+  const [state, setState] = useState(getStorage(key) ?? initialState);
 
   useEffect(() => {
     setStorage(key, state);
