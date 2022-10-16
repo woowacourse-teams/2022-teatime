@@ -8,7 +8,7 @@ import BoardSelectList from '@components/BoardSelectList';
 import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
-import useSelectList from '@hooks/useSelectList';
+import useLocalStorage from '@hooks/useLocalStorage';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import {
   confirmReservation,
@@ -51,8 +51,10 @@ const CoachMain = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
-  const { selectedItem: selectedBoard, handleSelectItem: handleSelectBoard } =
-    useSelectList('beforeApproved');
+  const { state: selectedBoard, setState: setSelectedBoard } = useLocalStorage(
+    'selectedBoard',
+    'beforeApproved'
+  );
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
@@ -202,6 +204,12 @@ const CoachMain = () => {
     }
 
     handleApprove(itemId, '', draggedItem.reservationId);
+  };
+
+  const handleSelectBoard = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName !== 'LI') return;
+    setSelectedBoard(target.id);
   };
 
   const boardItem: BoardItem = {
