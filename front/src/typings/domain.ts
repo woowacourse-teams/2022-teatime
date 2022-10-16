@@ -1,3 +1,7 @@
+import { BOARD } from '@constants/index';
+
+type ValueOf<T> = T[keyof T];
+
 type UserRole = 'CREW' | 'COACH';
 
 type SheetStatus = 'WRITING' | 'SUBMITTED';
@@ -140,7 +144,9 @@ interface AccessToken {
 
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
-type CrewListMap = Record<string, Crew[]>;
+type BoardValue = ValueOf<typeof BOARD>;
+
+type CrewListMap = Record<BoardValue, Crew[]>;
 
 export {
   UserInfo,
@@ -156,6 +162,7 @@ export {
   MultipleTime,
   MultipleDaySchedule,
   MonthScheduleMap,
+  BoardValue,
   CrewListMap,
   Sheets,
   CrewHistory,

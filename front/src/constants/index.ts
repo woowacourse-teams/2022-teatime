@@ -30,7 +30,7 @@ const BOARD = {
   BEFORE_APPROVED: 'beforeApproved',
   APPROVED: 'approved',
   IN_PROGRESS: 'inProgress',
-};
+} as const;
 
 const LOCAL_DB = {
   USER: 'user',
