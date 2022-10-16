@@ -185,6 +185,10 @@ const SkeletonContainer = styled(CardContainer)`
   background-color: ${({ theme }) => theme.colors.GRAY_150};
   border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
   animation: ${Refresh} 2s infinite ease-out;
+
+  &:hover {
+    transform: scale(1);
+  }
 `;
 
 const SkeletonInner = styled.div`

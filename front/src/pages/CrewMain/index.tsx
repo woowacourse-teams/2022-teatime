@@ -9,7 +9,7 @@ import SkeletonCard from '@components/Card/SkeletonCard';
 import useBoolean from '@hooks/useBoolean';
 import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { CACHE, ROUTES } from '@constants/index';
+import { CACHE, ROUTES, SKELETON_CARD_LENGTH } from '@constants/index';
 import { cacheFetch } from '@utils/cacheFetch';
 import { getCoaches } from '@api/coach';
 import { postReservationRequest } from '@api/crew';
@@ -97,7 +97,8 @@ const CrewMain = () => {
             />
           );
         })}
-        {isLoading && Array.from({ length: 12 }, (_, i) => <SkeletonCard key={i} />)}
+        {isLoading &&
+          Array.from({ length: SKELETON_CARD_LENGTH }, (_, i) => <SkeletonCard key={i} />)}
       </S.CardListContainer>
       {isOpenModal && (
         <Modal
