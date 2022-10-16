@@ -52,7 +52,7 @@ const CoachMain = () => {
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
   const { state: selectedBoard, setState: setSelectedBoard } = useLocalStorage(
-    LOCAL_DB.BOARD,
+    LOCAL_DB.SELECTED_BOARD,
     'beforeApproved'
   );
   const showSnackbar = useContext(SnackbarContext);

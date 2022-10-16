@@ -28,7 +28,7 @@ const DAY_NUMBER = {
 
 const LOCAL_DB = {
   USER: 'user',
-  BOARD: 'selectedBoard',
+  SELECTED_BOARD: 'selectedBoard',
 };
 
 const CACHE = {
