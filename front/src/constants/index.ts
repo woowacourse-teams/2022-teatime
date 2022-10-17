@@ -45,7 +45,7 @@ const MAX_LENGTH = {
 };
 
 const QUESTIONS_LENGTH = 3;
-const SKELETON_CARD_LENGTH = 12;
+const SKELETON_CARD_LENGTH = 8;
 
 const ERROR_MESSAGE = {
   INVALID_TOKEN: '유효하지 않은 토큰입니다.',
