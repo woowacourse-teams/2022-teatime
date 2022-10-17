@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import * as S from './styles';
+import { ROUTES } from '@constants/index';
 
 const DemoHome = () => {
   const navigate = useNavigate();
@@ -20,8 +21,8 @@ const DemoHome = () => {
           <p>티타임은 면담 예약을 편리하게 도와주는 서비스입니다.</p>
         </S.Description>
         <S.ButtonContainer>
-          <S.Button>멘토 체험하기</S.Button>
-          <S.Button>멘티 체험하기</S.Button>
+          <S.MentorButton onClick={() => navigate(ROUTES.COACH)}>멘토 체험하기</S.MentorButton>
+          <S.MenteeButton onClick={() => navigate(ROUTES.CREW)}>멘티 체험하기</S.MenteeButton>
         </S.ButtonContainer>
       </S.MainSection>
     </S.Container>

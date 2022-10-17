@@ -121,15 +121,15 @@ const ButtonContainer = styled.div`
   z-index: 1;
   padding: 0 20%;
   margin-top: 10%;
-  gap: 20px;
+  gap: 25px;
 
   button {
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
-    width: 38%;
-    height: 70px;
+    width: 35%;
+    height: 65px;
     border: none;
     border-radius: 12px;
     font-size: 24px;
@@ -152,14 +152,30 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const Button = styled.button`
+const MentorButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.BLUE_800};
+  color: ${({ theme }) => theme.colors.WHITE};
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const MenteeButton = styled.button`
   color: ${({ theme }) => theme.colors.BLACK};
   background-color: ${({ theme }) => theme.colors.WHITE};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.BLUE_300};
-    color: ${({ theme }) => theme.colors.WHITE};
+    opacity: 0.7;
   }
 `;
 
-export { Container, MainSection, Description, OverlapContent, ButtonContainer, Button };
+export {
+  Container,
+  MainSection,
+  Description,
+  OverlapContent,
+  ButtonContainer,
+  MentorButton,
+  MenteeButton,
+};
