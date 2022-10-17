@@ -193,6 +193,58 @@ const crewList = {
   ],
 };
 
+const history = [
+  {
+    reservationId: 1,
+    coachName: '준',
+    coachImage: 'https://avatars.githubusercontent.com/u/50367798?v=4',
+    dateTime: '2022-07-01T01:00:00.000Z',
+    status: 'BEFORE_APPROVED',
+  },
+  {
+    reservationId: 2,
+    coachName: '포코',
+    coachImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
+    dateTime: '2022-07-01T01:00:00.000Z',
+    status: 'BEFORE_APPROVED',
+  },
+  {
+    reservationId: 3,
+    coachName: '공원',
+    coachImage: 'https://avatars.githubusercontent.com/u/81607552?v=4',
+    dateTime: '2022-07-01T01:00:00.000Z',
+    status: 'BEFORE_APPROVED',
+  },
+];
+
+const sheet = {
+  dateTime: '2022-07-01T01:00:00.000Z',
+  coachName: '준',
+  coachImage: 'https://avatars.githubusercontent.com/u/23068523?v=4',
+  sheetStatus: 'WRITING',
+  reservationStatus: 'DONE',
+  sheets: [
+    {
+      questionNumber: 1,
+      questionContent: '이름이 뭔가요?',
+      isRequired: true,
+      answerContent: '야호입니다.',
+    },
+    {
+      questionNumber: 2,
+      questionContent: '별자리가 뭔가요?',
+      isRequired: true,
+      answerContent: '물고기 자리요.',
+    },
+    {
+      questionNumber: 3,
+      questionContent: '핸드폰 기종은요?',
+      isRequired: true,
+      answerContent: '아이폰 13미니입니다.',
+    },
+  ],
+};
+
 const historySheet = [
   {
     reservationId: 1,
@@ -266,4 +318,4 @@ const historySheet = [
   },
 ];
 
-export { coachList, scheduleList, interviewInfo, crewList, historySheet };
+export { coachList, scheduleList, interviewInfo, historySheet, crewList, history, sheet };
