@@ -53,6 +53,8 @@ const IconWrapper = styled.div`
 
   img {
     margin-right: 8px;
+    width: 22px;
+    height: 22px;
     :hover {
       transform: scale(1.2);
       opacity: 0.7;
