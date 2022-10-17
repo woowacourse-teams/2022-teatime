@@ -65,7 +65,7 @@ const scheduleList = [
   {
     day: 26,
     schedules: [
-      { id: 23323, dateTime: '2022-07-26T10:00:00.000Z', isPossible: true },
+      { id: 23323, dateTime: '2022-07-26T10:00:00.000Z', isPossible: false },
       { id: 33323, dateTime: '2022-07-26T10:30:00.000Z', isPossible: false },
     ],
   },

@@ -11,12 +11,14 @@ interface TitleProps {
 
 const Title = ({ text, highlightText, extraText, hightlightColor, tooltipText }: TitleProps) => {
   return (
-    <S.TitleWrapper>
-      <S.Title>{text}</S.Title>
+    <S.TitleWrapper role="status" aria-label={`${text} ${highlightText} ${extraText}`}>
+      <S.Title aria-hidden="true">{text}</S.Title>
       {highlightText && (
-        <S.HighLightText hightlightColor={hightlightColor}>{highlightText}</S.HighLightText>
+        <S.HighLightText aria-hidden="true" hightlightColor={hightlightColor}>
+          {highlightText}
+        </S.HighLightText>
       )}
-      {extraText && <S.Title>{extraText}</S.Title>}
+      {extraText && <S.Title aria-hidden="true">{extraText}</S.Title>}
       {tooltipText && <Tooltip text={tooltipText} />}
     </S.TitleWrapper>
   );
