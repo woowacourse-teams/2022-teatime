@@ -46,12 +46,18 @@ const Calendar = ({
         </span>
         <div>
           <Conditional condition={startDateTime < currentDateTime}>
-            <img src={LeftArrowDisabled} alt="비활성화된 왼쪽 화살표" />
+            <button>
+              <img src={LeftArrowDisabled} alt="이전 월 보기" aria-disabled="true" />
+            </button>
           </Conditional>
           <Conditional condition={startDateTime >= currentDateTime}>
-            <img src={LeftArrow} alt="왼쪽 화살표" onClick={() => onUpdateMonth(-1)} />
+            <button onClick={() => onUpdateMonth(-1)}>
+              <img src={LeftArrow} alt="이전 월 보기" />
+            </button>
           </Conditional>
-          <img src={RightArrow} alt="오른쪽 화살표" onClick={() => onUpdateMonth(1)} />
+          <button onClick={() => onUpdateMonth(1)}>
+            <img src={RightArrow} alt="다음 월 보기" />
+          </button>
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>
