@@ -10,7 +10,7 @@ const TitleWrapper = styled.div`
   border-radius: 10px;
 `;
 
-const Title = styled.h1`
+const Title = styled.span`
   text-align: center;
   font-size: 24px;
   color: ${({ theme }) => theme.colors.GREEN_900};
