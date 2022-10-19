@@ -8,8 +8,8 @@ import BoardSelectList from '@components/BoardSelectList';
 import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
-import useLocalStorage from '@hooks/useLocalStorage';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { BoardStateContext } from '@context/BoardModeProvider';
 import {
   confirmReservation,
   cancelReservation,
@@ -18,7 +18,7 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import { LOCAL_DB, BOARD, ROUTES } from '@constants/index';
+import { BOARD, ROUTES } from '@constants/index';
 import type { BoardValue, CrewListMap } from '@typings/domain';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
@@ -48,10 +48,7 @@ const CoachMain = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
-  const { state: selectedBoard, setState: setSelectedBoard } = useLocalStorage(
-    LOCAL_DB.SELECTED_BOARD,
-    BOARD.BEFORE_APPROVED
-  );
+  const selectedBoard = useContext(BoardStateContext);
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
@@ -209,12 +206,6 @@ const CoachMain = () => {
     handleApprove(itemId, '', draggedItem.reservationId);
   };
 
-  const handleSelectBoard = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName !== 'LI') return;
-    setSelectedBoard(target.id);
-  };
-
   const boardItem: BoardItem = {
     beforeApproved: {
       title: '대기중인 일정',
@@ -276,7 +267,6 @@ const CoachMain = () => {
         ]}
         hidden={width > size.tablet}
         selectedItem={selectedBoard}
-        onSelect={handleSelectBoard}
       />
       <S.BoardListContainer>
         {(Object.keys(crews) as BoardValue[]).map((status) => {
