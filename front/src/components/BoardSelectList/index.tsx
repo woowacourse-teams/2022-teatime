@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { BoardChangeContext } from '@context/BoardModeProvider';
 import * as S from './styles';
 
