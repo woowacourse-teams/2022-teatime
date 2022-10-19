@@ -31,13 +31,8 @@ const CrewMain = () => {
     const target = (e.target as HTMLImageElement).id;
     if (target === 'request') {
       if (!isPokable) return showSnackbar({ message: '상대방이 OFF 상태 입니다.' });
-
       setSelectedCoach({ id, image });
       openModal();
-      return;
-    }
-    if (target === 'subscribe') {
-      showSnackbar({ message: '구독 기능 준비 중입니다. ㅠㅠ' });
       return;
     }
 

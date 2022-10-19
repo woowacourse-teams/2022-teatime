@@ -70,7 +70,7 @@ const LabelContainer = styled.div`
     color: ${({ theme }) => theme.colors.GREEN_900};
   }
 `;
- 
+
 const CardWrapper = styled.div`
   width: 250px;
 `;
