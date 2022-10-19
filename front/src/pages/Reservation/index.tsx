@@ -167,7 +167,7 @@ const Reservation = () => {
           onClickSecondButton={() => navigate(`${ROUTES.CREW_SHEET}/${reservationId}`)}
           closeModal={closeModal}
         >
-          <p>면담 내용을 지금 작성 하시겠습니까?</p>
+          <p aria-live="polite">면담 내용을 지금 작성 하시겠습니까?</p>
         </Modal>
       )}
     </Frame>

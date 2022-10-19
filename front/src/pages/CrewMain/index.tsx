@@ -5,10 +5,11 @@ import { AxiosError } from 'axios';
 import Card from '@components/Card';
 import EmptyContent from '@components/EmptyContent';
 import Modal from '@components/Modal';
+import SkeletonCard from '@components/Card/SkeletonCard';
 import useBoolean from '@hooks/useBoolean';
 import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { CACHE, ROUTES } from '@constants/index';
+import { CACHE, ROUTES, SKELETON_CARD_LENGTH } from '@constants/index';
 import { cacheFetch } from '@utils/cacheFetch';
 import { getCoaches } from '@api/coach';
 import { postReservationRequest } from '@api/crew';
@@ -26,7 +27,7 @@ const CrewMain = () => {
     id: 0,
     image: '',
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleClickCard = (e: React.MouseEvent, id: number, image: string, isPokable: boolean) => {
     const target = (e.target as HTMLImageElement).id;
     if (target === 'request') {
@@ -55,6 +56,7 @@ const CrewMain = () => {
   useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         const { data } = await cacheFetch(CACHE.KEY, getCoaches, CACHE.TIME);
         setCoaches(data);
       } catch (error) {
@@ -68,16 +70,20 @@ const CrewMain = () => {
           alert(error);
           console.log(error);
         }
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
 
-  if (!coaches) return <EmptyContent text={'등록된 사용자가 없습니다.'} />;
+  if (coaches?.length === 0) {
+    return <EmptyContent text={'등록된 사용자가 없습니다.'} />;
+  }
 
   return (
     <S.Layout>
       <S.CardListContainer>
-        {coaches.map((coach) => {
+        {coaches?.map((coach) => {
           const { id, name, image, description, isPossible, isPokable } = coach;
           return (
             <Card
@@ -91,6 +97,8 @@ const CrewMain = () => {
             />
           );
         })}
+        {isLoading &&
+          Array.from({ length: SKELETON_CARD_LENGTH }, (_, i) => <SkeletonCard key={i} />)}
       </S.CardListContainer>
       {isOpenModal && (
         <Modal
