@@ -55,7 +55,7 @@ const CrewMain = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await cacheFetch(CACHE.KEY, getCoaches, CACHE.TIME);
+        const { data } = await cacheFetch(CACHE.KEY, getCoaches, 0);
         setCoaches(data);
       } catch (error) {
         if (error instanceof AxiosError) {

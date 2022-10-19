@@ -5,8 +5,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 30%;
-  height: 80vh;
+  width: 100%;
+  height: 70vh;
   margin: auto;
 
   label {

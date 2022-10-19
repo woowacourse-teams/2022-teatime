@@ -83,6 +83,7 @@ const CoachProfile = () => {
               maxLength={MAX_LENGTH.NAME}
               defaultValue={name}
               autoComplete="off"
+              disabled
               required
             />
             <S.LabelContainer>
