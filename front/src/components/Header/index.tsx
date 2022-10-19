@@ -8,7 +8,6 @@ import Modal from '@components/Modal';
 import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
-import { SnackbarContext } from '@context/SnackbarProvider';
 import { ROUTES, MAX_LENGTH } from '@constants/index';
 import * as S from './styles';
 
@@ -20,7 +19,6 @@ const Header = () => {
   const profileRef = useRef(null);
   const { userData } = useContext(UserStateContext);
   const dispatch = useContext(UserDispatchContext);
-  const showSnackbar = useContext(SnackbarContext);
   const [isActive, setIsActive] = useOutsideClick(profileRef, false);
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [nickName, setNickName] = useState('');
@@ -73,41 +71,40 @@ const Header = () => {
         <h1>티타임</h1>
       </S.LogoLink>
       {userData && (
-        <>
-          <S.ProfileContainer>
-            <S.RoleButton onClick={handleChangeRole}>
-              {userData.role === 'COACH' ? '멘티 체험' : '멘토 체험'}
-            </S.RoleButton>
-            <S.ProfileWrapper ref={profileRef} onClick={toggleDropdown}>
-              <span>{userData.name}</span>
-              <img src={userData.image} alt="프로필 이미지" />
-            </S.ProfileWrapper>
-            <Dropdown isActive={isActive}>
-              <Conditional condition={userData.role === 'COACH'}>
-                <Link to={ROUTES.COACH_HISTORY}>
-                  <li>히스토리</li>
-                </Link>
-                <Link to={ROUTES.SCHEDULE}>
-                  <li>스케줄 관리</li>
-                </Link>
-                <Link to={ROUTES.QUESTION}>
-                  <li>사전질문 관리</li>
-                </Link>
-                <Link to={ROUTES.COACH_PROFILE}>
-                  <li>프로필 수정</li>
-                </Link>
-              </Conditional>
+        <S.ProfileContainer>
+          <S.RoleButton onClick={handleChangeRole} isRole={userData.role === 'COACH'}>
+            {userData.role === 'COACH' ? '멘토' : '멘티'}
+            <div />
+          </S.RoleButton>
+          <S.ProfileWrapper ref={profileRef} onClick={toggleDropdown}>
+            <span>{userData.name}</span>
+            <img src={userData.image} alt="프로필 이미지" />
+          </S.ProfileWrapper>
+          <Dropdown isActive={isActive}>
+            <Conditional condition={userData.role === 'COACH'}>
+              <Link to={ROUTES.COACH_HISTORY}>
+                <li>히스토리</li>
+              </Link>
+              <Link to={ROUTES.SCHEDULE}>
+                <li>스케줄 관리</li>
+              </Link>
+              <Link to={ROUTES.QUESTION}>
+                <li>사전질문 관리</li>
+              </Link>
+              <Link to={ROUTES.COACH_PROFILE}>
+                <li>프로필 수정</li>
+              </Link>
+            </Conditional>
 
-              <Conditional condition={userData.role === 'CREW'}>
-                <Link to={ROUTES.CREW_HISTORY}>
-                  <li>히스토리</li>
-                </Link>
-                <li onClick={handleOpenModal}>닉네임 수정</li>
-              </Conditional>
-              <li onClick={handleLogout}>로그아웃</li>
-            </Dropdown>
-          </S.ProfileContainer>
-        </>
+            <Conditional condition={userData.role === 'CREW'}>
+              <Link to={ROUTES.CREW_HISTORY}>
+                <li>히스토리</li>
+              </Link>
+              <li onClick={handleOpenModal}>닉네임 수정</li>
+            </Conditional>
+            <li onClick={handleLogout}>로그아웃</li>
+          </Dropdown>
+        </S.ProfileContainer>
       )}
       {isOpenModal && (
         <Modal

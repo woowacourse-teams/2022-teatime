@@ -9,6 +9,8 @@ const DemoLogin = () => {
 
   const handleSubmitNickname = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (nickname.trim().length === 0) return alert('공백은 입력할 수 없습니다.');
     navigate('/demo-home', { state: nickname });
   };
 

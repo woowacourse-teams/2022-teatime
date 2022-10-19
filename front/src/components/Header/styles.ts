@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -32,6 +32,7 @@ const LogoLink = styled(Link)`
 
 const ProfileContainer = styled.div`
   display: flex;
+  align-items: center;
   position: relative;
 `;
 
@@ -75,19 +76,38 @@ const Input = styled.input`
   }
 `;
 
-const RoleButton = styled.button`
-  padding: 8px 24px;
-  margin-right: 14px;
-  background-color: ${({ theme }) => theme.colors.BLUE_800};
-  color: ${({ theme }) => theme.colors.WHITE};
-  border-radius: 22px;
+const RoleButton = styled.button<{ isRole: boolean }>`
+  position: relative;
+  display: flex;
+  justify-content: ${({ isRole }) => (isRole ? 'left' : 'right')};
+  align-items: center;
+  width: 76px;
+  height: 40px;
+  margin-right: 15px;
+  border-radius: 20px;
+  padding: 0 10px;
   border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  background-color: ${({ isRole, theme }) =>
+    isRole ? theme.colors.BLUE_800 : theme.colors.GRAY_500};
+  color: ${({ theme }) => theme.colors.WHITE};
+  transition: all 0.3s ease-out;
   font-size: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 
-  :hover {
-    opacity: 0.7;
+  div {
+    position: absolute;
+    left: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50px;
+    background-color: ${({ theme }) => theme.colors.GRAY_150};
+    transition: all 0.3s ease-out;
+    ${({ isRole }) =>
+      isRole &&
+      css`
+        transform: translate(38px, 0);
+      `}
   }
 `;
 
