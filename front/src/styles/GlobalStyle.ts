@@ -16,6 +16,11 @@ const GlobalStyle = createGlobalStyle`
     a {
       text-decoration: none;
     } 
+
+    button {
+      background-color: inherit;
+      border: inherit;
+    }
 `;
 
 export default GlobalStyle;

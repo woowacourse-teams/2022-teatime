@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'com.woowacourse'
-version = '0.0.1-SNAPSHOT'
+version = '1.6.0-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = '11'
 
 ext {
@@ -118,20 +118,30 @@ tasks.named('test') {
     finalizedBy 'jacocoTestReport'
 }
 
-processResources.dependsOn('copySecret', 'copyDevSecret', 'copyProdSecret', 'copyTestSecret', 'copySlackWebHook')
+processResources.dependsOn('copySecret', 'copyDev1Secret', 'copyDev2Secret', 'copyProd1Secret', 'copyProd2Secret', 'copyTestSecret', 'copySlackWebHook')
 
 task copySecret(type: Copy) {
     from '../config/application.yml'
     into 'src/main/resources'
 }
 
-task copyDevSecret(type: Copy) {
-    from '../config/application-dev.yml'
+task copyDev1Secret(type: Copy) {
+    from '../config/application-dev1.yml'
     into 'src/main/resources'
 }
 
-task copyProdSecret(type: Copy) {
-    from '../config/application-prod.yml'
+task copyDev2Secret(type: Copy) {
+    from '../config/application-dev2.yml'
+    into 'src/main/resources'
+}
+
+task copyProd1Secret(type: Copy) {
+    from '../config/application-prod1.yml'
+    into 'src/main/resources'
+}
+
+task copyProd2Secret(type: Copy) {
+    from '../config/application-prod2.yml'
     into 'src/main/resources'
 }
 

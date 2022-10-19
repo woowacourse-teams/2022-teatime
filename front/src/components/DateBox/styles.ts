@@ -9,7 +9,7 @@ const TodayIndicator = styled.div`
   border-radius: 5px;
 `;
 
-const DateContainer = styled.div<{
+const DateContainer = styled.button<{
   hasSchedule: boolean;
   hasDate: boolean;
   isSelected: boolean;
