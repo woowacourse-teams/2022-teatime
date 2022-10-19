@@ -26,8 +26,15 @@ const DAY_NUMBER = {
   SUNDAY: 0,
 };
 
+const BOARD = {
+  BEFORE_APPROVED: 'beforeApproved',
+  APPROVED: 'approved',
+  IN_PROGRESS: 'inProgress',
+} as const;
+
 const LOCAL_DB = {
   USER: 'user',
+  SELECTED_BOARD: 'selectedBoard',
 };
 
 const CACHE = {
@@ -59,6 +66,7 @@ export {
   CALENDAR_DATE_LENGTH,
   SKELETON_CARD_LENGTH,
   DAY_NUMBER,
+  BOARD,
   LOCAL_DB,
   CACHE,
   HOUR_MILLISECONDS,

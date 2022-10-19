@@ -163,6 +163,7 @@ const crewList = {
       crewImage:
         'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
       dateTime: '2022-08-19T21:00:00.000Z',
+      sheetStatus: 'WRITING',
     },
     {
       crewId: 6,
@@ -171,6 +172,7 @@ const crewList = {
       crewImage:
         'https://user-images.githubusercontent.com/48676844/181402601-b1b2c2ff-29a7-44fb-9613-16bd999abc1e.png',
       dateTime: '2022-08-19T22:00:00.000Z',
+      sheetStatus: 'WRITING',
     },
   ],
   inProgress: [
