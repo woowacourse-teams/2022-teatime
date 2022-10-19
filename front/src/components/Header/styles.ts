@@ -31,6 +31,7 @@ const LogoLink = styled(Link)`
 `;
 
 const ProfileContainer = styled.div`
+  display: flex;
   position: relative;
 `;
 
@@ -74,4 +75,28 @@ const Input = styled.input`
   }
 `;
 
-export { HeaderContainer, LogoLink, LogoImage, ProfileContainer, ProfileWrapper, Input };
+const RoleButton = styled.button`
+  padding: 8px 24px;
+  margin-right: 14px;
+  background-color: ${({ theme }) => theme.colors.BLUE_800};
+  color: ${({ theme }) => theme.colors.WHITE};
+  border-radius: 22px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
+export {
+  HeaderContainer,
+  LogoLink,
+  LogoImage,
+  ProfileContainer,
+  ProfileWrapper,
+  Input,
+  RoleButton,
+};
