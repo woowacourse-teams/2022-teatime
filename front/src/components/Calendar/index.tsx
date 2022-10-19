@@ -41,23 +41,17 @@ const Calendar = ({
   return (
     <S.CalendarContainer isMultipleSelecting={isMultipleSelecting} isOpenTimeList={isOpenTimeList}>
       <S.YearMonthContainer>
-        <span role="status">
+        <span>
           {year}년 {month}월
         </span>
         <div>
           <Conditional condition={startDateTime < currentDateTime}>
-            <button>
-              <img src={LeftArrowDisabled} alt="이전 월 보기 비활성화" aria-disabled="true" />
-            </button>
+            <img src={LeftArrowDisabled} alt="비활성화된 왼쪽 화살표" />
           </Conditional>
           <Conditional condition={startDateTime >= currentDateTime}>
-            <button onClick={() => onUpdateMonth(-1)}>
-              <img src={LeftArrow} alt="이전 월 보기" />
-            </button>
+            <img src={LeftArrow} alt="왼쪽 화살표" onClick={() => onUpdateMonth(-1)} />
           </Conditional>
-          <button onClick={() => onUpdateMonth(1)}>
-            <img src={RightArrow} alt="다음 월 보기" />
-          </button>
+          <img src={RightArrow} alt="오른쪽 화살표" onClick={() => onUpdateMonth(1)} />
         </div>
       </S.YearMonthContainer>
       <S.DateGrid>

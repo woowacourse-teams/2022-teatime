@@ -34,8 +34,6 @@ const DateBox = ({
 
   return (
     <S.DateContainer
-      aria-label={isImpossibleDay ? `${date}일 예약 가능한 시간 없음` : `${date}일`}
-      tabIndex={hasSchedule ? 0 : -1}
       hasSchedule={hasSchedule}
       hasDate={!!date}
       isSelected={!!isSelected || !!isMultipleSelected}

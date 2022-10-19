@@ -32,7 +32,7 @@ const Card = ({
         <span>{name}</span>
         <p>{description}</p>
         <S.ButtonWrapper>
-          <button aria-label={`${name}에게 예약하기`}>{buttonName}</button>
+          <button>{buttonName}</button>
         </S.ButtonWrapper>
       </S.CardWrapper>
     </S.CardContainer>

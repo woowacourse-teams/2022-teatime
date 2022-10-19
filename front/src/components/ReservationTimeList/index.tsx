@@ -20,7 +20,7 @@ const ReservationTimeList = ({
 }: ReservationTimeListProps) => {
   return (
     <S.TimeListContainer>
-      {daySchedule.map((schedule, index) => {
+      {daySchedule.map((schedule) => {
         const time = getHourMinutes(schedule.dateTime);
 
         return (
@@ -28,16 +28,12 @@ const ReservationTimeList = ({
             <Conditional condition={selectedTimeId === schedule.id}>
               <S.ReserveButtonWrapper>
                 <div>{time}</div>
-                <button onClick={() => onClickReservation(schedule.id)} autoFocus>
-                  예약하기
-                </button>
+                <button onClick={() => onClickReservation(schedule.id)}>예약하기</button>
               </S.ReserveButtonWrapper>
             </Conditional>
 
             <Conditional condition={selectedTimeId !== schedule.id}>
               <S.ReservationTimeBox
-                aria-label={schedule.isPossible ? '' : `${time} 예약 불가`}
-                autoFocus={index === 0}
                 isPossible={schedule.isPossible}
                 onClick={() => onClickTime(schedule.id)}
               >

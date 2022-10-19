@@ -19,12 +19,11 @@ api.interceptors.request.use(
       return config;
     }
 
-    const newConfig = {
-      ...config,
-      headers: { ...config.headers, Authorization: `Bearer ${token}` },
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     };
-
-    return newConfig;
+    return config;
   },
 
   (error) => {

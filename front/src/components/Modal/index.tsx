@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import Portal from '../../Portal';
 import * as S from './styles';
 
@@ -31,23 +30,17 @@ const Modal = ({
     }
   };
 
-  const titleRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    titleRef.current !== null && titleRef.current.focus();
-  }, []);
-
   return (
     <Portal id="modal">
       <S.Background onClick={handleClickDimmer}>
-        <S.ModalContainer tabIndex={0} ref={titleRef} aria-label={title}>
+        <S.ModalContainer>
           <S.InnerContainer>
             <S.CloseIconWrapper>
               <img src={CloseIcon} alt="닫기 아이콘" onClick={closeModal} />
             </S.CloseIconWrapper>
             <S.TitleWrapper>
               <h1>{title}</h1>
-              {icon && <img src={icon} alt="" />}
+              {icon && <img src={icon} alt={`${title} 아이콘`} />}
             </S.TitleWrapper>
             {children}
           </S.InnerContainer>

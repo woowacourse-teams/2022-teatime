@@ -1,6 +1,3 @@
-import { useContext } from 'react';
-
-import { BoardChangeContext } from '@context/BoardModeProvider';
 import * as S from './styles';
 
 type Item = {
@@ -12,13 +9,12 @@ interface BoardSelectListProps {
   lists: Item[];
   hidden?: boolean;
   selectedItem: string;
+  onSelect: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const BoardSelectList = ({ lists, hidden, selectedItem }: BoardSelectListProps) => {
-  const changeBoard = useContext(BoardChangeContext);
-
+const BoardSelectList = ({ lists, hidden, selectedItem, onSelect }: BoardSelectListProps) => {
   return (
-    <S.Container onClick={changeBoard} hidden={hidden}>
+    <S.Container onClick={onSelect} hidden={hidden}>
       {lists.map(({ id, text }) => (
         <S.ListItem key={id} id={id} isSelected={selectedItem === id}>
           {text}
