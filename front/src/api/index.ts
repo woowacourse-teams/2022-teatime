@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { clearStorage, getStorage, setStorage } from '@utils/localStorage';
 import { ERROR_MESSAGE, LOCAL_DB } from '@constants/index';
-import { getAccessToken } from './auth';
+import { getAccessToken, logout } from './auth';
 
 const BASE_URL = process.env.BACK_URL;
 
@@ -64,6 +64,7 @@ api.interceptors.response.use(
       ) {
         clearStorage(LOCAL_DB.USER);
         location.href = `${process.env.REDIRECT_URL}`;
+        await logout();
         return;
       }
     }

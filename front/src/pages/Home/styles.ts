@@ -42,7 +42,7 @@ const Container = styled.div`
 `;
 
 const MainSection = styled.section`
-  padding-top: 100px;
+  padding-top: 80px;
   width: 100vw;
 
   &::before {
@@ -130,7 +130,7 @@ const ButtonContainer = styled.div`
     align-items: center;
     justify-content: center;
     z-index: 1;
-    width: 50%;
+    width: 40%;
     height: 70px;
     border: none;
     border-radius: 12px;
@@ -156,6 +156,7 @@ const ButtonContainer = styled.div`
 
     button {
       width: 100%;
+      height: 50px;
       font-size: 16px;
     }
 
@@ -177,7 +178,7 @@ const SlackButton = styled.button`
   }
 `;
 
-const TeamIntroButton = styled.button`
+const ExperienceButton = styled.button`
   color: ${({ theme }) => theme.colors.BLACK};
   background-color: ${({ theme }) => theme.colors.ORANGE_200};
 
@@ -194,5 +195,5 @@ export {
   OverlapContent,
   ButtonContainer,
   SlackButton,
-  TeamIntroButton,
+  ExperienceButton,
 };

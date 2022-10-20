@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,5 +58,14 @@ public class AuthController {
         GenerateTokenDto generateTokenDto = userAuthService.generateToken(cookie, token);
         cookieTokenProvider.set(response, generateTokenDto.getRefreshToken());
         return ResponseEntity.ok(new RefreshAccessTokenResponse(generateTokenDto.getAccessToken()));
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @CookieValue(value = "refreshToken", required = false) Cookie cookie,
+            HttpServletResponse response) {
+        userAuthService.deleteToken(cookie);
+        cookieTokenProvider.delete(response, userAuthService.getRefreshToken(cookie));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

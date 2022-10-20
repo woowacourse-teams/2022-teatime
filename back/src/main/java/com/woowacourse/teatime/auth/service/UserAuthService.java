@@ -40,7 +40,7 @@ public class UserAuthService {
         return new GenerateTokenDto(newAccessToken, newRefreshToken);
     }
 
-    private String getRefreshToken(Cookie cookie) {
+    public String getRefreshToken(Cookie cookie) {
         if (cookie == null) {
             throw new WrongTokenException();
         }
@@ -62,5 +62,10 @@ public class UserAuthService {
         Map<String, Object> claims =
                 Map.of("id", userAuthInfo.getUserId(), "role", Role.valueOf(userAuthInfo.getRole()));
         return jwtTokenProvider.createToken(claims);
+    }
+
+    public void deleteToken(Cookie cookie) {
+        String refreshToken = getRefreshToken(cookie);
+        userAuthInfoRepository.deleteById(refreshToken);
     }
 }
