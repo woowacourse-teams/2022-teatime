@@ -8,8 +8,8 @@ import BoardSelectList from '@components/BoardSelectList';
 import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
-import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { BoardStateContext } from '@context/BoardModeProvider';
 import {
   confirmReservation,
   cancelReservation,
@@ -18,41 +18,37 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import { ROUTES } from '@constants/index';
-import type { CrewListMap } from '@typings/domain';
+import { BOARD, ROUTES } from '@constants/index';
+import type { BoardValue, CrewListMap } from '@typings/domain';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
 
-interface BoardItemValue {
+type ClickBoardButton = (
+  index: number,
+  status: BoardValue,
+  reservationId: number,
+  crewId: number
+) => void;
+
+type BoardItemValue = {
   title: string;
   firstButton: string;
   secondButton: string;
   color: string;
   draggedColor: string;
-  handleClickFirstButton: (
-    index: number,
-    status: string,
-    reservationId: number,
-    crewId: number
-  ) => void;
-  handleClickSecondButton: (
-    index: number,
-    status: string,
-    reservationId: number,
-    crewId: number
-  ) => void;
-}
+  handleClickFirstButton: ClickBoardButton;
+  handleClickSecondButton: ClickBoardButton;
+};
 
-interface BoardItem {
-  [key: string]: BoardItemValue;
-}
+type BoardItem = {
+  [key in BoardValue]: BoardItemValue;
+};
 
 const CoachMain = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
-  const { selectedItem: selectedBoard, handleSelectItem: handleSelectBoard } =
-    useSelectList('beforeApproved');
+  const selectedBoard = useContext(BoardStateContext);
   const showSnackbar = useContext(SnackbarContext);
   const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
@@ -61,7 +57,7 @@ const CoachMain = () => {
     inProgress: [],
   });
 
-  const deleteBoardItem = (status: string, index: number) => {
+  const deleteBoardItem = (status: BoardValue, index: number) => {
     setCrews((allBoards) => {
       const copyBeforeStatusBoard = [...allBoards[status]];
       copyBeforeStatusBoard.splice(index, 1);
@@ -73,7 +69,7 @@ const CoachMain = () => {
     });
   };
 
-  const moveBoardItem = (from: string, to: string, index: number) => {
+  const moveBoardItem = (from: BoardValue, to: BoardValue, index: number) => {
     setCrews((allBoards) => {
       const copyFromBoard = [...allBoards[from]];
       const currentItem = copyFromBoard[index];
@@ -89,7 +85,7 @@ const CoachMain = () => {
     });
   };
 
-  const sortBoardItemByTime = (boardName: string) => {
+  const sortBoardItemByTime = (boardName: BoardValue) => {
     setCrews((allBoards) => {
       const copyBoard = [...allBoards[boardName]];
       copyBoard.sort((a, b) => Number(new Date(a.dateTime)) - Number(new Date(b.dateTime)));
@@ -117,7 +113,7 @@ const CoachMain = () => {
 
   const handleShowContents = (
     index: number,
-    status: string,
+    status: BoardValue,
     reservationId: number,
     crewId: number
   ) => {
@@ -126,7 +122,7 @@ const CoachMain = () => {
 
   const handleCompleteReservation = async (
     index: number,
-    status: string,
+    status: BoardValue,
     reservationId: number
   ) => {
     try {
@@ -145,7 +141,7 @@ const CoachMain = () => {
     navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`, { state: crewName });
   };
 
-  const handleReject = async (index: number, status: string, reservationId: number) => {
+  const handleReject = async (index: number, status: BoardValue, reservationId: number) => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
@@ -160,7 +156,7 @@ const CoachMain = () => {
     }
   };
 
-  const handleCancel = async (index: number, status: string, reservationId: number) => {
+  const handleCancel = async (index: number, status: BoardValue, reservationId: number) => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
@@ -185,13 +181,19 @@ const CoachMain = () => {
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     const itemId = Number(e.dataTransfer?.getData('itemId'));
-    const from = e.dataTransfer?.getData('listId');
+    const from = e.dataTransfer?.getData('listId') as BoardValue;
     const to = ((e.target as Element).closest('[data-status]') as HTMLElement).dataset
-      .status as string;
+      .status as BoardValue;
     const draggedItem = crews[from][itemId];
 
-    if (from === to || from === 'inProgress' || to === 'beforeApproved') return;
-    if (from === 'beforeApproved' && to === 'inProgress') return;
+    if (
+      from === to ||
+      from === 'inProgress' ||
+      to === 'beforeApproved' ||
+      (from === 'beforeApproved' && to === 'inProgress')
+    ) {
+      return;
+    }
     if (to === 'inProgress' && getDateTime(draggedItem.dateTime) > new Date()) {
       showSnackbar({ message: '진행 가능한 시간이 아닙니다. 🚫' });
       return;
@@ -259,16 +261,15 @@ const CoachMain = () => {
     <S.Layout>
       <BoardSelectList
         lists={[
-          { id: 'beforeApproved', text: '대기중인 일정' },
-          { id: 'approved', text: '확정된 일정' },
-          { id: 'inProgress', text: '지난 일정' },
+          { id: BOARD.BEFORE_APPROVED, text: '대기중인 일정' },
+          { id: BOARD.APPROVED, text: '확정된 일정' },
+          { id: BOARD.IN_PROGRESS, text: '지난 일정' },
         ]}
         hidden={width > size.tablet}
         selectedItem={selectedBoard}
-        onSelect={handleSelectBoard}
       />
       <S.BoardListContainer>
-        {Object.keys(crews).map((status) => {
+        {(Object.keys(crews) as BoardValue[]).map((status) => {
           const {
             title,
             firstButton,
