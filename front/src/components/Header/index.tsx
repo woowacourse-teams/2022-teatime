@@ -9,6 +9,7 @@ import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { logout } from '@api/auth';
 import { ROUTES, MAX_LENGTH } from '@constants/index';
 import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
@@ -25,9 +26,10 @@ const Header = () => {
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [nickName, setNickName] = useState('');
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch({ type: 'DELETE_USER' });
     navigate(ROUTES.HOME);
+    await logout();
   };
 
   const toggleDropdown = () => {
