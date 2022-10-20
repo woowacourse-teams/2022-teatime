@@ -10,8 +10,12 @@ const Home = () => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
 
-  const handleLogin = () => {
+  const handleLoginButton = () => {
     location.href = `https://slack.com/openid/connect/authorize?scope=openid,email,profile&response_type=code&redirect_uri=${process.env.REDIRECT_URL}/certification&client_id=3853132979991.3908459157459`;
+  };
+
+  const handleExperienceButton = () => {
+    location.href = 'http://demo.teatime.pe.kr/';
   };
 
   useEffect(() => {
@@ -36,10 +40,11 @@ const Home = () => {
           <p>슬랙로그인으로 시작해보세요!</p>
         </S.Description>
         <S.ButtonContainer>
-          <S.SlackButton onClick={handleLogin}>
+          <S.SlackButton onClick={handleLoginButton}>
             <img src={SlackIcon} alt="슬랙 아이콘" />
-            <span>Slack으로 로그인</span>
+            <span>Slack 로그인</span>
           </S.SlackButton>
+          <S.ExperienceButton onClick={handleExperienceButton}>체험하기</S.ExperienceButton>
         </S.ButtonContainer>
       </S.MainSection>
     </S.Container>
