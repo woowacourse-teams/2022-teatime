@@ -14,7 +14,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="dev">
+    <springProfile name="dev1">
         <include resource="logback/file-info-appender.xml"/>
         <include resource="logback/dev-warn-appender.xml"/>
         <include resource="logback/slack/dev-slack-alarm-appender.xml"/>
@@ -32,8 +32,46 @@
         </logger>
     </springProfile>
 
+    <springProfile name="dev2">
+        <include resource="logback/file-info-appender.xml"/>
+        <include resource="logback/dev-warn-appender.xml"/>
+        <include resource="logback/slack/dev-slack-alarm-appender.xml"/>
 
-    <springProfile name="prod">
+        <logger name="com.woowacourse.teatime" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="DEV-WARN"/>
+            <appender-ref ref="DEV_ASYNC_SLACK"/>
+        </logger>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="DEV-WARN"/>
+            <appender-ref ref="DEV_ASYNC_SLACK"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod1">
+        <include resource="logback/file-info-appender.xml"/>
+        <include resource="logback/prod-warn-appender.xml"/>
+        <include resource="logback/file-error-appender.xml"/>
+        <include resource="logback/slack/prod-slack-alarm-appender.xml"/>
+
+        <logger name="com.woowacourse.teatime" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="PROD-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="PROD_ASYNC_SLACK"/>
+        </logger>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="PROD-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="PROD_ASYNC_SLACK"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod2">
         <include resource="logback/file-info-appender.xml"/>
         <include resource="logback/prod-warn-appender.xml"/>
         <include resource="logback/file-error-appender.xml"/>

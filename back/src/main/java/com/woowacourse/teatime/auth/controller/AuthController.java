@@ -9,8 +9,6 @@ import com.woowacourse.teatime.auth.infrastructure.ResponseCookieTokenProvider;
 import com.woowacourse.teatime.auth.service.AuthService;
 import com.woowacourse.teatime.auth.service.LoginService;
 import com.woowacourse.teatime.auth.service.UserAuthService;
-import com.woowacourse.teatime.auth.support.UserAuthenticationPrincipal;
-import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
 import com.woowacourse.teatime.util.AuthorizationExtractor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +43,7 @@ public class AuthController {
     public ResponseEntity<LoginResponse> loginV2(@Valid @RequestBody LoginRequest request,
                                                  HttpServletResponse response) {
         UserAuthDto userAuthDto = loginService.login(request);
-        cookieTokenProvider.setCookie(response, userAuthDto.getRefreshToken());
+        cookieTokenProvider.set(response, userAuthDto.getRefreshToken());
         return ResponseEntity.ok(LoginResponse.from(userAuthDto));
     }
 
@@ -56,7 +54,7 @@ public class AuthController {
             HttpServletResponse response) {
         String token = AuthorizationExtractor.extract(request);
         GenerateTokenDto generateTokenDto = userAuthService.generateToken(cookie, token);
-        cookieTokenProvider.setCookie(response, generateTokenDto.getRefreshToken());
+        cookieTokenProvider.set(response, generateTokenDto.getRefreshToken());
         return ResponseEntity.ok(new RefreshAccessTokenResponse(generateTokenDto.getAccessToken()));
     }
 }

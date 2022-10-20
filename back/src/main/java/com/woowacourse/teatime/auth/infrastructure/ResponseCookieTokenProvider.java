@@ -16,7 +16,7 @@ public class ResponseCookieTokenProvider {
         this.expireLength = Long.parseLong(expireLength);
     }
 
-    public void setCookie(HttpServletResponse response, String refreshToken) {
+    public void set(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .maxAge(expireLength)
                 .path("/")
