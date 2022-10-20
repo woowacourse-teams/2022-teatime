@@ -20,12 +20,11 @@ const ReservationTimeList = ({
 }: ReservationTimeListProps) => {
   return (
     <S.TimeListContainer>
-      {daySchedule.map((schedule, index) => {
-        const time = getHourMinutes(schedule.dateTime);
-        const { id, isPossible } = schedule;
+      {daySchedule.map(({ id, isPossible, dateTime }, index) => {
+        const time = getHourMinutes(dateTime);
 
         return (
-          <Fragment key={schedule.id}>
+          <Fragment key={id}>
             <Conditional condition={selectedTimeId === id}>
               <S.ReserveButtonWrapper>
                 <div>{time}</div>
