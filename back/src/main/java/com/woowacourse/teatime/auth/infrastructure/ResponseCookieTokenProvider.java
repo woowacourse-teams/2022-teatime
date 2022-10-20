@@ -16,9 +16,20 @@ public class ResponseCookieTokenProvider {
         this.expireLength = Long.parseLong(expireLength);
     }
 
-    public void setCookie(HttpServletResponse response, String refreshToken) {
+    public void set(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .maxAge(expireLength)
+                .path("/")
+                .secure(true)
+                .sameSite(SameSite.NONE.name())
+                .httpOnly(true)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    public void delete(HttpServletResponse response, String refreshToken) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+                .maxAge(0)
                 .path("/")
                 .secure(true)
                 .sameSite(SameSite.NONE.name())
