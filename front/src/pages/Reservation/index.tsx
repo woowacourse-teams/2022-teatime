@@ -88,7 +88,8 @@ const Reservation = () => {
     setSelectedTimeId(null);
   };
 
-  const handleClickTime = (id: number) => {
+  const handleClickTime = (id: number, isPossible?: boolean) => {
+    if (isPossible === false) return;
     setSelectedTimeId(id);
   };
 
