@@ -8,7 +8,7 @@ import * as S from './styles';
 interface ReservationTimeListProps {
   daySchedule: TimeSchedule[];
   selectedTimeId: number | null;
-  onClickTime: (id: number) => void;
+  onClickTime: (id: number, isPossible?: boolean) => void;
   onClickReservation: (scheduleId: number) => void;
 }
 
@@ -20,26 +20,26 @@ const ReservationTimeList = ({
 }: ReservationTimeListProps) => {
   return (
     <S.TimeListContainer>
-      {daySchedule.map((schedule, index) => {
-        const time = getHourMinutes(schedule.dateTime);
+      {daySchedule.map(({ id, isPossible, dateTime }, index) => {
+        const time = getHourMinutes(dateTime);
 
         return (
-          <Fragment key={schedule.id}>
-            <Conditional condition={selectedTimeId === schedule.id}>
+          <Fragment key={id}>
+            <Conditional condition={selectedTimeId === id}>
               <S.ReserveButtonWrapper>
                 <div>{time}</div>
-                <button onClick={() => onClickReservation(schedule.id)} autoFocus>
+                <button onClick={() => onClickReservation(id)} autoFocus>
                   예약하기
                 </button>
               </S.ReserveButtonWrapper>
             </Conditional>
 
-            <Conditional condition={selectedTimeId !== schedule.id}>
+            <Conditional condition={selectedTimeId !== id}>
               <S.ReservationTimeBox
-                aria-label={schedule.isPossible ? '' : `${time} 예약 불가`}
+                aria-label={isPossible ? '' : `${time} 예약 불가`}
                 autoFocus={index === 0}
-                isPossible={schedule.isPossible}
-                onClick={() => onClickTime(schedule.id)}
+                isPossible={isPossible}
+                onClick={() => onClickTime(id, isPossible)}
               >
                 {time}
               </S.ReservationTimeBox>
