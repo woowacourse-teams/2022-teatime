@@ -7,13 +7,13 @@
 [![티타임 소개영상](http://img.youtube.com/vi/R8y-4GqqSg0/0.jpg)](https://youtu.be/R8y-4GqqSg0)<br>
 ⬆️ 티타임 소개 영상 보러가기<br><br>
 
-|스케줄 등록|예약하기|
+|예약하기|질문지 작성|
 |---|---|
-|![aRHRNGbqVSnKssVF2PnVSVCDzMmoHRoHTYl3PBmNlXSJ8rh9TIAM3m06lbcFEtHlF1bAxyFe2gkgZDQs6mc4mVYbqYyRsUYkh9vmy8HJ5w](https://user-images.githubusercontent.com/60432062/196632784-5c153630-6676-445e-8e5a-4e506845ed5c.gif)|![S2rlanEzVoBhhNWdQ2D-e9mhnCnrwQl7GvQvckVZKm4UVWuE3sq-pfJFvcDZB0IDTmI1_pqMyXI9vVHZ_bTGsvOJn8jKUo93KgHteST1ig](https://user-images.githubusercontent.com/60432062/196633002-204e05b1-ef89-4259-a82d-480a42731f00.gif)|
+|![S2rlanEzVoBhhNWdQ2D-e9mhnCnrwQl7GvQvckVZKm4UVWuE3sq-pfJFvcDZB0IDTmI1_pqMyXI9vVHZ_bTGsvOJn8jKUo93KgHteST1ig](https://user-images.githubusercontent.com/60432062/196633002-204e05b1-ef89-4259-a82d-480a42731f00.gif)|![sK5Gy2E9y0BjmpTG-RKwfLTrSPqZ-aaxGesEmfr7yy9F7n4EvFzrzx4rGnNvf1iHjtHLPrGfnJKf1SYP9mZWMS5PVCdeta7MBcKUpvQU5A](https://user-images.githubusercontent.com/60432062/196633305-d4b72c43-eabe-4333-be00-40a952e9571b.gif)|
 
-|질문지 작성|일정 관리|
+|스케줄 등록|일정 관리|
 |---|---|
-|![sK5Gy2E9y0BjmpTG-RKwfLTrSPqZ-aaxGesEmfr7yy9F7n4EvFzrzx4rGnNvf1iHjtHLPrGfnJKf1SYP9mZWMS5PVCdeta7MBcKUpvQU5A](https://user-images.githubusercontent.com/60432062/196633305-d4b72c43-eabe-4333-be00-40a952e9571b.gif)|![imCmlf3extrTxRytSDEj0pKyYE-YEiFx_VN8oGn7XeDb4QsAVD-DEjWCdUKyx_keJiltim5Hr3VuhoInXqILmKmE9SKr39Exi-Dd9XGKgA](https://user-images.githubusercontent.com/60432062/196633487-6faabe26-343d-4211-8723-720fc422287a.gif)|
+|![aRHRNGbqVSnKssVF2PnVSVCDzMmoHRoHTYl3PBmNlXSJ8rh9TIAM3m06lbcFEtHlF1bAxyFe2gkgZDQs6mc4mVYbqYyRsUYkh9vmy8HJ5w](https://user-images.githubusercontent.com/60432062/196632784-5c153630-6676-445e-8e5a-4e506845ed5c.gif)|![imCmlf3extrTxRytSDEj0pKyYE-YEiFx_VN8oGn7XeDb4QsAVD-DEjWCdUKyx_keJiltim5Hr3VuhoInXqILmKmE9SKr39Exi-Dd9XGKgA](https://user-images.githubusercontent.com/60432062/196633487-6faabe26-343d-4211-8723-720fc422287a.gif)|
 <br>
 
 # 기술 스택 🛠
@@ -24,7 +24,7 @@
 # 인프라 구조 🎢
 |Product|CI/CD|
 |---|---|
-|![image](https://user-images.githubusercontent.com/60432062/196639115-095e362d-e27b-4dd7-aa37-5333af326da1.png)|![image-2](https://user-images.githubusercontent.com/60432062/196639106-2735aec4-f53b-4e3c-bc6b-fa11086db7c0.png)|
+|<img width="500" alt="image" src="https://user-images.githubusercontent.com/60432062/197088620-df54e8e3-805a-4550-844c-45c7e1c03e3f.png">|<img width="500" alt="image" src="https://user-images.githubusercontent.com/60432062/196639106-2735aec4-f53b-4e3c-bc6b-fa11086db7c0.png">|
 <br>
 
 # 팀원들 👩‍💻🧑‍💻
