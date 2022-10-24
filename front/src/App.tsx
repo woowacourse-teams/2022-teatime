@@ -23,6 +23,7 @@ const HistorySheet = lazy(() => import('@pages/HistorySheet'));
 const CrewHistory = lazy(() => import('@pages/CrewHistory'));
 const CoachHistory = lazy(() => import('@pages/CoachHistory'));
 const CoachProfile = lazy(() => import('@pages/CoachProfile'));
+const Error = lazy(() => import('@pages/Error'));
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
               <Route path={ROUTES.HOME} element={<Home />} />
               <Route path={ROUTES.CERTIFICATION} element={<Certification />} />
               <Route path="/*" element={<NotFound />} />
+              <Route path={ROUTES.ERROR} element={<Error />} />
               <Route element={<AuthRoute role="CREW" />}>
                 <Route path={ROUTES.CREW} element={<CrewMain />} />
                 <Route path={ROUTES.CREW_HISTORY} element={<CrewHistory />} />

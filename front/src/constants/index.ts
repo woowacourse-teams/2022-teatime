@@ -12,6 +12,7 @@ const ROUTES = {
   COACH_HISTORY: '/coach-history',
   COACH_PROFILE: '/coach-profile',
   CERTIFICATION: '/certification',
+  ERROR: '/error',
 };
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
