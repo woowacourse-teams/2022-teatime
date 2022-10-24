@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import HistoryItem from '@components/HistoryItem';
+import EmptyContent from '@components/EmptyContent';
 import { getCrewHistoriesByCoach } from '@api/crew';
 import type { HistoryList } from '@typings/domain';
+import { logError } from '@utils/logError';
+import { ROUTES } from '@constants/index';
 import * as S from '@styles/common';
-import EmptyContent from '@components/EmptyContent';
 
 const HistorySheet = () => {
+  const navigate = useNavigate();
   const { id: crewId } = useParams();
   const { state: crewName } = useLocation();
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -28,8 +31,9 @@ const HistorySheet = () => {
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

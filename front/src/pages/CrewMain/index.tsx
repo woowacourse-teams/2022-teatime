@@ -7,20 +7,20 @@ import EmptyContent from '@components/EmptyContent';
 import Modal from '@components/Modal';
 import SkeletonCard from '@components/Card/SkeletonCard';
 import useBoolean from '@hooks/useBoolean';
-import { UserDispatchContext, UserStateContext } from '@context/UserProvider';
+import { UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { CACHE, ROUTES, SKELETON_CARD_LENGTH } from '@constants/index';
 import { cacheFetch } from '@utils/cacheFetch';
 import { getCoaches } from '@api/coach';
 import { postReservationRequest } from '@api/crew';
 import type { Coach } from '@typings/domain';
+import { logError } from '@utils/logError';
 import * as S from './styles';
 
 const CrewMain = () => {
   const navigate = useNavigate();
   const { userData } = useContext(UserStateContext);
   const showSnackbar = useContext(SnackbarContext);
-  const dispatch = useContext(UserDispatchContext);
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const [coaches, setCoaches] = useState<Coach[]>();
   const [selectedCoach, setSelectedCoach] = useState({
@@ -47,8 +47,9 @@ const CrewMain = () => {
       closeModal();
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert('요청이 실패하였습니다. 다시 시도해주세요.');
+        return;
       }
     }
   };
@@ -61,14 +62,9 @@ const CrewMain = () => {
         setCoaches(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          if (error.response?.status === 401) {
-            dispatch({ type: 'DELETE_USER' });
-            showSnackbar({ message: '토큰이 만료되었습니다. 다시 로그인해주세요.' });
-            navigate(ROUTES.HOME);
-            return;
-          }
-          alert(error);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       } finally {
         setIsLoading(false);

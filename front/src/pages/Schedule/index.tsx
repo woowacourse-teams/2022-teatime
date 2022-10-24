@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
@@ -25,6 +26,8 @@ import type {
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
+import { logError } from '@utils/logError';
+import { ROUTES } from '@constants/index';
 
 const timeArray = [
   '10:00',
@@ -62,6 +65,7 @@ const getAllTime = (date: string) => {
 };
 
 const Schedule = () => {
+  const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const {
@@ -310,8 +314,23 @@ const Schedule = () => {
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        const errorCode = error.response?.status;
+        logError(error);
+
+        switch (errorCode) {
+          case 400: {
+            alert('스케줄 등록에 실패하였습니다. 다시 시도해주세요.');
+            refetch();
+            setSelectedDay(0);
+            closeTimeList();
+            break;
+          }
+
+          default: {
+            navigate(ROUTES.ERROR);
+            break;
+          }
+        }
       }
     }
   };
@@ -332,8 +351,22 @@ const Schedule = () => {
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        const errorCode = error.response?.status;
+        logError(error);
+
+        switch (errorCode) {
+          case 400: {
+            alert('스케줄 등록에 실패하였습니다. 다시 시도해주세요.');
+            refetch();
+            closeMultipleTimeList();
+            break;
+          }
+
+          default: {
+            navigate(ROUTES.ERROR);
+            break;
+          }
+        }
       }
     }
   };
@@ -367,8 +400,9 @@ const Schedule = () => {
         createScheduleMap(coachSchedules);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

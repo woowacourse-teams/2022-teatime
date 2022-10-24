@@ -10,6 +10,7 @@ import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCrewReservation, getCrewCanceledReservation, getCrewReservationByMe } from '@api/crew';
 import { ROUTES } from '@constants/index';
 import type { Reservation, Sheets } from '@typings/domain';
+import { logError } from '@utils/logError';
 import * as S from '@styles/common';
 
 const CrewSheet = () => {
@@ -30,8 +31,9 @@ const CrewSheet = () => {
       navigate(ROUTES.CREW_HISTORY);
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert('제출이 실패하였습니다. 다시 시도해주세요.');
+        return;
       }
     }
   };
@@ -46,8 +48,9 @@ const CrewSheet = () => {
         setReservationInfo(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

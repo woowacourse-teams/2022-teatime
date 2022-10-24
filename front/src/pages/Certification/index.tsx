@@ -6,6 +6,7 @@ import Loading from '@components/Loading';
 import { UserDispatchContext } from '@context/UserProvider';
 import { login } from '@api/auth';
 import { ROUTES } from '@constants/index';
+import { logError } from '@utils/logError';
 
 const Certification = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Certification = () => {
         if (error instanceof AxiosError) {
           alert('에러가 발생했습니다. 다시 로그인해주세요.');
           navigate(ROUTES.HOME, { replace: true });
-          console.log(error);
+          logError(error);
         }
       }
     })();

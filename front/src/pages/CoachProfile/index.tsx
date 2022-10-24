@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
@@ -6,10 +7,12 @@ import type { CoachData } from '@typings/domain';
 import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { MAX_LENGTH } from '@constants/index';
+import { logError } from '@utils/logError';
+import { MAX_LENGTH, ROUTES } from '@constants/index';
 import * as S from './styles';
 
 const CoachProfile = () => {
+  const navigate = useNavigate();
   const dispatch = useContext(UserDispatchContext);
   const showSnackbar = useContext(SnackbarContext);
   const [coachProfile, setCoachProfile] = useState<CoachData>({
@@ -45,8 +48,9 @@ const CoachProfile = () => {
       showSnackbar({ message: '저장되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert('프로필 수정이 실패하였습니다. 다시 시도해주세요.');
+        return;
       }
     }
   };
@@ -58,8 +62,9 @@ const CoachProfile = () => {
         setCoachProfile(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();
