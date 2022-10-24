@@ -8,7 +8,7 @@ import Filter from '@components/Filter';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
-import { ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { CrewHistory as CrewHistoryType, CrewHistoryStatus } from '@typings/domain';
 import { logError } from '@utils/logError';
 
@@ -90,7 +90,7 @@ const CrewHistory = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('면담을 취소할 수 없습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_CANCEL_RESERVATION);
         return;
       }
     }

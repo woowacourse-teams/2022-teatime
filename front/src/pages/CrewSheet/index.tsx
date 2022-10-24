@@ -8,7 +8,7 @@ import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCrewReservation, getCrewCanceledReservation, getCrewReservationByMe } from '@api/crew';
-import { ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { Reservation, Sheets } from '@typings/domain';
 import { logError } from '@utils/logError';
 import * as S from '@styles/common';
@@ -32,7 +32,7 @@ const CrewSheet = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('제출이 실패하였습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_SUBMIT);
         return;
       }
     }

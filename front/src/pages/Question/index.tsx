@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import type { Question as QuestionType } from '@typings/domain';
 import { getQuestions, editQuestions } from '@api/question';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { MAX_LENGTH, QUESTIONS_LENGTH, ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, MAX_LENGTH, QUESTIONS_LENGTH, ROUTES } from '@constants/index';
 import { logError } from '@utils/logError';
 import * as S from './styles';
 
@@ -39,7 +39,7 @@ const Question = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('저장이 실패하였습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_SAVE);
         return;
       }
     }

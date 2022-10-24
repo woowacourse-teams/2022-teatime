@@ -11,7 +11,7 @@ import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { logError } from '@utils/logError';
 import { logout } from '@api/auth';
-import { ROUTES, MAX_LENGTH } from '@constants/index';
+import { ROUTES, MAX_LENGTH, ERROR_MESSAGE } from '@constants/index';
 import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
 
@@ -49,7 +49,7 @@ const Header = () => {
       closeModal();
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert('닉네임 변경이 실패하였습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_NICKNAME_CHANGE);
         logError(error);
         return;
       }

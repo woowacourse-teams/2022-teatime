@@ -17,7 +17,7 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import { BOARD, ROUTES } from '@constants/index';
+import { BOARD, ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { BoardValue, CrewListMap } from '@typings/domain';
 import { logError } from '@utils/logError';
 import { theme, size } from '@styles/theme';
@@ -105,7 +105,7 @@ const CoachMain = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('승인이 실패하였습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_APPROVE);
         return;
       }
     }
@@ -132,7 +132,7 @@ const CoachMain = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('일정을 완료할 수 없습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_COMPLETE_RESERVATION);
         return;
       }
     }
@@ -152,7 +152,7 @@ const CoachMain = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('면담을 거절할 수 없습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_REJECT_RESERVATION);
         return;
       }
     }
@@ -168,7 +168,7 @@ const CoachMain = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('면담을 취소할 수 없습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_CANCEL_RESERVATION);
         return;
       }
     }

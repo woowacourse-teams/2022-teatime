@@ -8,7 +8,7 @@ import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { logError } from '@utils/logError';
-import { MAX_LENGTH, ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, MAX_LENGTH, ROUTES } from '@constants/index';
 import * as S from './styles';
 
 const CoachProfile = () => {
@@ -39,7 +39,7 @@ const CoachProfile = () => {
     e.preventDefault();
 
     if (name.length > MAX_LENGTH.NAME || description.length > MAX_LENGTH.DESCRIPTION) {
-      return alert('글자 수를 조정해 주세요');
+      return alert(ERROR_MESSAGE.EXCEED_TEXT_LENGTH);
     }
 
     try {
@@ -49,7 +49,7 @@ const CoachProfile = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('프로필 수정이 실패하였습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_EDIT_PROFILE);
         return;
       }
     }

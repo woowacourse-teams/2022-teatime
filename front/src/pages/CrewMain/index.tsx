@@ -9,7 +9,7 @@ import SkeletonCard from '@components/Card/SkeletonCard';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { CACHE, ROUTES, SKELETON_CARD_LENGTH } from '@constants/index';
+import { CACHE, ERROR_MESSAGE, ROUTES, SKELETON_CARD_LENGTH } from '@constants/index';
 import { cacheFetch } from '@utils/cacheFetch';
 import { getCoaches } from '@api/coach';
 import { postReservationRequest } from '@api/crew';
@@ -48,7 +48,7 @@ const CrewMain = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
-        alert('요청이 실패하였습니다. 다시 시도해주세요.');
+        alert(ERROR_MESSAGE.FAIL_REQUEST);
         return;
       }
     }

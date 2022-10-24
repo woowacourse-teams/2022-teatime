@@ -15,6 +15,7 @@ import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
+import { logError } from '@utils/logError';
 import type {
   DaySchedule,
   ScheduleInfo,
@@ -23,11 +24,10 @@ import type {
   TimeSchedule,
   MultipleTime,
 } from '@typings/domain';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
-import { logError } from '@utils/logError';
-import { ROUTES } from '@constants/index';
 
 const timeArray = [
   '10:00',
@@ -319,7 +319,7 @@ const Schedule = () => {
 
         switch (errorCode) {
           case 400: {
-            alert('스케줄 등록에 실패하였습니다. 다시 시도해주세요.');
+            alert(ERROR_MESSAGE.FAIL_ENROLL_SCHEDULE);
             refetch();
             setSelectedDay(0);
             closeTimeList();
@@ -356,7 +356,7 @@ const Schedule = () => {
 
         switch (errorCode) {
           case 400: {
-            alert('스케줄 등록에 실패하였습니다. 다시 시도해주세요.');
+            alert(ERROR_MESSAGE.FAIL_ENROLL_SCHEDULE);
             refetch();
             closeMultipleTimeList();
             break;
