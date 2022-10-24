@@ -70,7 +70,9 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const CheckButton = styled.button``;
+const CheckButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.GRAY_200};
+`;
 
 const ConfirmButton = styled.button`
   background-color: ${({ theme }) => theme.colors.BLUE_300};
