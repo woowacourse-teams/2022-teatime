@@ -4,17 +4,17 @@ import * as S from './styles';
 interface TitleProps {
   text: string;
   highlightText?: string;
-  hightlightColor?: string;
+  highlightColor?: string;
   extraText?: string;
   tooltipText?: string;
 }
 
-const Title = ({ text, highlightText, extraText, hightlightColor, tooltipText }: TitleProps) => {
+const Title = ({ text, highlightText, extraText, highlightColor, tooltipText }: TitleProps) => {
   return (
     <S.TitleWrapper role="status" aria-label={`${text} ${highlightText} ${extraText}`}>
       <S.Title aria-hidden="true">{text}</S.Title>
       {highlightText && (
-        <S.HighLightText aria-hidden="true" hightlightColor={hightlightColor}>
+        <S.HighLightText aria-hidden="true" highlightColor={highlightColor}>
           {highlightText}
         </S.HighLightText>
       )}

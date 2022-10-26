@@ -75,7 +75,7 @@ const Schedule = () => {
   } = useBoolean();
   const {
     selectedItem: selectedCalendarMode,
-    setSeletedItem: setSelectedCalenderMode,
+    setSelectedItem: setSelectedCalenderMode,
     handleSelectItem: handleSelectCalendarMode,
   } = useSelectList('singleSelect');
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
@@ -196,7 +196,7 @@ const Schedule = () => {
     }, [] as string[]);
   };
 
-  const initSelectedMutltipleDates = () => {
+  const initSelectedMultipleDates = () => {
     setSelectedDayList((prev) => {
       return {
         ...prev,
@@ -274,7 +274,7 @@ const Schedule = () => {
     });
   };
 
-  const handleClickMutipleTime = (dateTime: string) => {
+  const handleClickMultipleTime = (dateTime: string) => {
     setSelectedDayList((prev) => {
       const selectedIndex = selectedDayList.times.findIndex((t) => t.dateTime === dateTime);
       const newTimes = [...selectedDayList.times];
@@ -346,7 +346,7 @@ const Schedule = () => {
       await editCoachSchedule(multipleDaySchedules);
       refetch();
       closeMultipleTimeList();
-      initSelectedMutltipleDates();
+      initSelectedMultipleDates();
       setSelectedCalenderMode('singleSelect');
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
@@ -379,7 +379,7 @@ const Schedule = () => {
   useEffect(() => {
     closeTimeList();
     closeMultipleTimeList();
-    initSelectedMutltipleDates();
+    initSelectedMultipleDates();
   }, [selectedCalendarMode]);
 
   useEffect(() => {
@@ -419,7 +419,7 @@ const Schedule = () => {
         <Title
           text="등록 가능한"
           highlightText={isOpenTimeList || isOpenMultipleTimeList ? '시간을' : '날짜를'}
-          hightlightColor={theme.colors.GREEN_300}
+          highlightColor={theme.colors.YELLOW_400}
           extraText="선택해주세요."
           tooltipText="면담 신청자는 30분 단위로 신청할 수 있습니다."
         />
@@ -474,7 +474,7 @@ const Schedule = () => {
           <Conditional condition={isOpenMultipleTimeList}>
             <MultipleTimeList
               selectedTimes={selectedDayList.times}
-              onClickTime={handleClickMutipleTime}
+              onClickTime={handleClickMultipleTime}
               onClickUpdateMultipleDaySchedule={handleUpdateMultipleDaySchedule}
             />
           </Conditional>
