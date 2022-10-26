@@ -30,6 +30,20 @@ const LogoLink = styled(Link)`
   cursor: pointer;
 `;
 
+const MainButton = styled.button`
+  padding: 10px 22px;
+  background-color: ${({ theme }) => theme.colors.GREEN_700};
+  color: ${({ theme }) => theme.colors.WHITE};
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
 const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
@@ -115,6 +129,7 @@ export {
   HeaderContainer,
   LogoLink,
   LogoImage,
+  MainButton,
   ProfileContainer,
   ProfileWrapper,
   Input,

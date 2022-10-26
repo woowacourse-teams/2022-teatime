@@ -70,6 +70,11 @@ const Header = () => {
         <S.LogoImage src={LogoIcon} alt="티타임 로고" />
         <h1>티타임</h1>
       </S.LogoLink>
+      {!userData && (
+        <S.MainButton onClick={() => (location.href = 'https://teatime.pe.kr/')}>
+          체험 종료
+        </S.MainButton>
+      )}
       {userData && (
         <S.ProfileContainer>
           <S.RoleButton onClick={handleChangeRole} isRole={userData.role === 'COACH'}>
