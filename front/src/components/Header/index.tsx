@@ -9,8 +9,9 @@ import useOutsideClick from '@hooks/useOutsideClick';
 import useBoolean from '@hooks/useBoolean';
 import { UserStateContext, UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { logError } from '@utils/logError';
 import { logout } from '@api/auth';
-import { ROUTES, MAX_LENGTH } from '@constants/index';
+import { ROUTES, MAX_LENGTH, ERROR_MESSAGE } from '@constants/index';
 import { editCrewNickName } from '@api/crew';
 import * as S from './styles';
 
@@ -48,11 +49,13 @@ const Header = () => {
       closeModal();
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        alert(ERROR_MESSAGE.FAIL_NICKNAME_CHANGE);
+        logError(error);
         return;
       }
-      if (error instanceof Error) alert(error.message);
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       setNickName('');
     }

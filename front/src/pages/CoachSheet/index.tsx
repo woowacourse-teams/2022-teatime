@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
@@ -8,6 +8,8 @@ import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { getCrewReservationByCoach } from '@api/crew';
 import type { ReservationByCoach } from '@typings/domain';
+import { ROUTES } from '@constants/index';
+import { logError } from '@utils/logError';
 import * as S from '@styles/common';
 
 interface LocationState {
@@ -17,6 +19,7 @@ interface LocationState {
 }
 
 const CoachSheet = () => {
+  const navigate = useNavigate();
   const { id: reservationId } = useParams();
   const {
     state: { crewId },
@@ -30,8 +33,9 @@ const CoachSheet = () => {
         setReservationInfo(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

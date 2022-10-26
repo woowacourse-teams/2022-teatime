@@ -8,8 +8,9 @@ import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCrewReservation, getCrewCanceledReservation, getCrewReservationByMe } from '@api/crew';
-import { ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { Reservation, Sheets } from '@typings/domain';
+import { logError } from '@utils/logError';
 import * as S from '@styles/common';
 
 const CrewSheet = () => {
@@ -30,8 +31,9 @@ const CrewSheet = () => {
       navigate(ROUTES.CREW_HISTORY);
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_SUBMIT);
+        return;
       }
     }
   };
@@ -46,8 +48,9 @@ const CrewSheet = () => {
         setReservationInfo(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

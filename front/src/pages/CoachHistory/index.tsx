@@ -8,6 +8,7 @@ import Filter from '@components/Filter';
 import { ROUTES } from '@constants/index';
 import { getCoachHistories } from '@api/coach';
 import type { CoachHistory as CoachHistoryType, CoachHistoryStatus } from '@typings/domain';
+import { logError } from '@utils/logError';
 import { theme } from '@styles/theme';
 import * as S from '../CrewHistory/styles';
 
@@ -58,8 +59,9 @@ const CoachHistory = () => {
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

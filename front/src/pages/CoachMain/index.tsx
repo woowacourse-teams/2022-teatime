@@ -5,7 +5,6 @@ import { AxiosError } from 'axios';
 import Board from '@components/Board';
 import BoardItem from '@components/BoardItem';
 import BoardSelectList from '@components/BoardSelectList';
-import { UserDispatchContext } from '@context/UserProvider';
 import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
 import { SnackbarContext } from '@context/SnackbarProvider';
@@ -18,8 +17,9 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
-import { BOARD, ROUTES } from '@constants/index';
+import { BOARD, ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { BoardValue, CrewListMap } from '@typings/domain';
+import { logError } from '@utils/logError';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
 
@@ -50,7 +50,6 @@ const CoachMain = () => {
   const isWindowFocused = useWindowFocus();
   const selectedBoard = useContext(BoardStateContext);
   const showSnackbar = useContext(SnackbarContext);
-  const dispatch = useContext(UserDispatchContext);
   const [crews, setCrews] = useState<CrewListMap>({
     beforeApproved: [],
     approved: [],
@@ -105,8 +104,9 @@ const CoachMain = () => {
       showSnackbar({ message: '승인되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_APPROVE);
+        return;
       }
     }
   };
@@ -131,8 +131,9 @@ const CoachMain = () => {
       deleteBoardItem(status, index);
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_COMPLETE_RESERVATION);
+        return;
       }
     }
   };
@@ -150,8 +151,9 @@ const CoachMain = () => {
       showSnackbar({ message: '거절되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_REJECT_RESERVATION);
+        return;
       }
     }
   };
@@ -165,8 +167,9 @@ const CoachMain = () => {
       showSnackbar({ message: '취소되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_CANCEL_RESERVATION);
+        return;
       }
     }
   };
@@ -243,13 +246,9 @@ const CoachMain = () => {
         setCrews(crewListMap);
       } catch (error) {
         if (error instanceof AxiosError) {
-          if (error.response?.status === 401) {
-            dispatch({ type: 'DELETE_USER' });
-            showSnackbar({ message: '토큰이 만료되었습니다. 다시 로그인해주세요.' });
-            navigate(ROUTES.HOME);
-            return;
-          }
-          alert(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     };

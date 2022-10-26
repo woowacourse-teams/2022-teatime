@@ -13,6 +13,7 @@ import { getCoachSchedulesByCrew } from '@api/coach';
 import { createReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
 import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
+import { logError } from '@utils/logError';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
@@ -28,10 +29,15 @@ const Reservation = () => {
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
   const [reservationId, setReservationId] = useState<number | null>(null);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
+  const [refetchCount, setRefetchCount] = useState(0);
   const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
     monthSchedule: {},
     daySchedule: [],
   });
+
+  const refetch = () => {
+    setRefetchCount((prev) => prev + 1);
+  };
 
   const createScheduleMap = (scheduleArray: DaySchedule[]) => {
     setSchedule((allSchedules) => {
@@ -88,7 +94,8 @@ const Reservation = () => {
     setSelectedTimeId(null);
   };
 
-  const handleClickTime = (id: number) => {
+  const handleClickTime = (id: number, isPossible?: boolean) => {
+    if (isPossible === false) return;
     setSelectedTimeId(id);
   };
 
@@ -102,8 +109,24 @@ const Reservation = () => {
       openModal();
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        const errorCode = error.response?.status;
+        const errorMessage = error.response?.data?.message;
+        logError(error);
+
+        switch (errorCode) {
+          case 400: {
+            refetch();
+            closeTimeList();
+            setSelectedDay(0);
+            alert(errorMessage);
+            break;
+          }
+
+          default: {
+            navigate(ROUTES.ERROR);
+            break;
+          }
+        }
       }
     }
   };
@@ -119,12 +142,26 @@ const Reservation = () => {
         createScheduleMap(coachSchedules);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          const errorCode = error.response?.status;
+          const errorMessage = error.response?.data?.message;
+          logError(error);
+
+          switch (errorCode) {
+            case 404: {
+              alert(errorMessage);
+              navigate(ROUTES.HOME);
+              break;
+            }
+
+            default: {
+              navigate(ROUTES.ERROR);
+              break;
+            }
+          }
         }
       }
     })();
-  }, [monthYear]);
+  }, [monthYear, refetchCount]);
 
   return (
     <Frame>

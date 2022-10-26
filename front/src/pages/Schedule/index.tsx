@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Frame from '@components/Frame';
@@ -14,6 +15,7 @@ import useSelectList from '@hooks/useSelectList';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
+import { logError } from '@utils/logError';
 import type {
   DaySchedule,
   ScheduleInfo,
@@ -22,6 +24,7 @@ import type {
   TimeSchedule,
   MultipleTime,
 } from '@typings/domain';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
@@ -62,6 +65,7 @@ const getAllTime = (date: string) => {
 };
 
 const Schedule = () => {
+  const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const {
@@ -310,8 +314,23 @@ const Schedule = () => {
       showSnackbar({ message: '확정되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        const errorCode = error.response?.status;
+        logError(error);
+
+        switch (errorCode) {
+          case 400: {
+            alert(ERROR_MESSAGE.FAIL_ENROLL_SCHEDULE);
+            refetch();
+            setSelectedDay(0);
+            closeTimeList();
+            break;
+          }
+
+          default: {
+            navigate(ROUTES.ERROR);
+            break;
+          }
+        }
       }
     }
   };
@@ -332,8 +351,22 @@ const Schedule = () => {
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        const errorCode = error.response?.status;
+        logError(error);
+
+        switch (errorCode) {
+          case 400: {
+            alert(ERROR_MESSAGE.FAIL_ENROLL_SCHEDULE);
+            refetch();
+            closeMultipleTimeList();
+            break;
+          }
+
+          default: {
+            navigate(ROUTES.ERROR);
+            break;
+          }
+        }
       }
     }
   };
@@ -367,8 +400,9 @@ const Schedule = () => {
         createScheduleMap(coachSchedules);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();
