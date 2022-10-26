@@ -371,6 +371,11 @@ const Schedule = () => {
     }
   };
 
+  const handleSelectMode = (e: React.MouseEvent<HTMLElement>) => {
+    setSelectedDay(0);
+    handleSelectCalendarMode(e);
+  };
+
   useEffect(() => {
     closeTimeList();
     closeMultipleTimeList();
@@ -426,10 +431,7 @@ const Schedule = () => {
                 { id: 'multiSelect', text: '다중 선택' },
               ]}
               selectedItem={selectedCalendarMode}
-              onSelect={(e: React.MouseEvent<HTMLElement>) => {
-                setSelectedDay(0);
-                handleSelectCalendarMode(e);
-              }}
+              onSelect={handleSelectMode}
             />
             <Calendar
               isCoach
