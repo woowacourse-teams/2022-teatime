@@ -1,13 +1,16 @@
 import { useState, useEffect, useContext, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import type { Question as QuestionType } from '@typings/domain';
 import { getQuestions, editQuestions } from '@api/question';
 import { SnackbarContext } from '@context/SnackbarProvider';
-import { MAX_LENGTH, QUESTIONS_LENGTH } from '@constants/index';
+import { ERROR_MESSAGE, MAX_LENGTH, QUESTIONS_LENGTH, ROUTES } from '@constants/index';
+import { logError } from '@utils/logError';
 import * as S from './styles';
 
 const Question = () => {
+  const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
   const [questions, setQuestions] = useState<QuestionType[]>([]);
 
@@ -35,8 +38,9 @@ const Question = () => {
       showSnackbar({ message: '저장되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_SAVE);
+        return;
       }
     }
   };
@@ -48,8 +52,9 @@ const Question = () => {
         setQuestions(data.questions);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Layout = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,4 +44,4 @@ const HomeLink = styled(Link)`
   }
 `;
 
-export { Layout, HomeLink };
+export { Container, HomeLink };

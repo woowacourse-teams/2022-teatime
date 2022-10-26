@@ -5,7 +5,8 @@ import { AxiosError } from 'axios';
 import Loading from '@components/Loading';
 import { UserDispatchContext } from '@context/UserProvider';
 import { login } from '@api/auth';
-import { ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
+import { logError } from '@utils/logError';
 
 const Certification = () => {
   const navigate = useNavigate();
@@ -21,9 +22,9 @@ const Certification = () => {
         navigate(`/${userData.role.toLowerCase()}`, { replace: true });
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert('에러가 발생했습니다. 다시 로그인해주세요.');
+          alert(ERROR_MESSAGE.FAIL_LOGIN);
           navigate(ROUTES.HOME, { replace: true });
-          console.log(error);
+          logError(error);
         }
       }
     })();

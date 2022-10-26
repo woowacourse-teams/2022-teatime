@@ -8,8 +8,9 @@ import Filter from '@components/Filter';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
-import { ROUTES } from '@constants/index';
+import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { CrewHistory as CrewHistoryType, CrewHistoryStatus } from '@typings/domain';
+import { logError } from '@utils/logError';
 
 import { theme } from '@styles/theme';
 import * as S from './styles';
@@ -49,8 +50,8 @@ const historyStatus: HistoryStatus = {
 };
 
 const CrewHistory = () => {
-  const showSnackbar = useContext(SnackbarContext);
   const navigate = useNavigate();
+  const showSnackbar = useContext(SnackbarContext);
   const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
   const [category, setCategory] = useState<string>('ALL');
 
@@ -88,8 +89,9 @@ const CrewHistory = () => {
       showSnackbar({ message: '취소되었습니다. ❎' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.response?.data?.message);
-        console.log(error);
+        logError(error);
+        alert(ERROR_MESSAGE.FAIL_CANCEL_RESERVATION);
+        return;
       }
     }
   };
@@ -113,8 +115,9 @@ const CrewHistory = () => {
         setHistoryList(data);
       } catch (error) {
         if (error instanceof AxiosError) {
-          alert(error.response?.data?.message);
-          console.log(error);
+          logError(error);
+          navigate(ROUTES.ERROR);
+          return;
         }
       }
     })();
