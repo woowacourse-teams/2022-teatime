@@ -187,13 +187,24 @@ const Schedule = () => {
     });
   };
 
-  const getSelectedTimes = <T extends MultipleTime | TimeSchedule>(array: T[]): string[] => {
+  const getSelectedTimes = <T extends TimeSchedule | MultipleTime>(array: T[]): string[] => {
     return array.reduce((newArray, { isSelected, dateTime }) => {
       if (isSelected) {
         newArray.push(dateTime);
       }
       return newArray;
     }, [] as string[]);
+  };
+
+  const changeSelectedTime = <T extends TimeSchedule | MultipleTime>(
+    array: T[],
+    dateTime: string
+  ) => {
+    const selectedIndex = array.findIndex((time) => time.dateTime === dateTime);
+    const newArray = [...array];
+    newArray[selectedIndex].isSelected = !newArray[selectedIndex].isSelected;
+
+    return newArray;
   };
 
   const initSelectedMutltipleDates = () => {
@@ -262,27 +273,23 @@ const Schedule = () => {
   };
 
   const handleClickTime = (dateTime: string) => {
-    setSchedule((allSchedules) => {
-      const selectedIndex = schedule.daySchedule.findIndex((time) => time.dateTime === dateTime);
-      const newSchedules = [...schedule.daySchedule];
-      newSchedules[selectedIndex].isSelected = !newSchedules[selectedIndex].isSelected;
+    setSchedule((prev) => {
+      const newArray = changeSelectedTime(schedule.daySchedule, dateTime);
 
       return {
-        ...allSchedules,
-        daySchedule: newSchedules,
+        ...prev,
+        daySchedule: newArray,
       };
     });
   };
 
   const handleClickMutipleTime = (dateTime: string) => {
     setSelectedDayList((prev) => {
-      const selectedIndex = selectedDayList.times.findIndex((t) => t.dateTime === dateTime);
-      const newTimes = [...selectedDayList.times];
-      newTimes[selectedIndex].isSelected = !newTimes[selectedIndex].isSelected;
+      const newArray = changeSelectedTime(selectedDayList.times, dateTime);
 
       return {
         ...prev,
-        times: newTimes,
+        times: newArray,
       };
     });
   };
