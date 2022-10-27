@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
@@ -7,6 +7,7 @@ import BoardItem from '@components/BoardItem';
 import BoardSelectList from '@components/BoardSelectList';
 import useWindowFocus from '@hooks/useWindowFocus';
 import useWindowSize from '@hooks/useWindowSize';
+import useBoard from './hooks/useBoard';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { BoardStateContext } from '@context/BoardModeProvider';
 import {
@@ -18,7 +19,7 @@ import {
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
 import { BOARD, ERROR_MESSAGE, ROUTES } from '@constants/index';
-import type { BoardName, CrewListMap } from '@typings/domain';
+import type { BoardName } from '@typings/domain';
 import { logError } from '@utils/logError';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
@@ -48,53 +49,9 @@ const CoachMain = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const isWindowFocused = useWindowFocus();
+  const { board, setBoard, deleteBoardItem, moveBoardItem, sortBoardItemByTime } = useBoard();
   const selectedBoard = useContext(BoardStateContext);
   const showSnackbar = useContext(SnackbarContext);
-  const [crews, setCrews] = useState<CrewListMap>({
-    beforeApproved: [],
-    approved: [],
-    inProgress: [],
-  });
-
-  const deleteBoardItem = (status: BoardName, index: number) => {
-    setCrews((allBoards) => {
-      const copyBeforeStatusBoard = [...allBoards[status]];
-      copyBeforeStatusBoard.splice(index, 1);
-
-      return {
-        ...allBoards,
-        [status]: copyBeforeStatusBoard,
-      };
-    });
-  };
-
-  const moveBoardItem = (from: BoardName, to: BoardName, index: number) => {
-    setCrews((allBoards) => {
-      const copyFromBoard = [...allBoards[from]];
-      const currentItem = copyFromBoard[index];
-      const copyToBoard = [...allBoards[to]];
-      copyFromBoard.splice(index, 1);
-      copyToBoard.push(currentItem);
-
-      return {
-        ...allBoards,
-        [from]: copyFromBoard,
-        [to]: copyToBoard,
-      };
-    });
-  };
-
-  const sortBoardItemByTime = (boardName: BoardName) => {
-    setCrews((allBoards) => {
-      const copyBoard = [...allBoards[boardName]];
-      copyBoard.sort((a, b) => Number(new Date(a.dateTime)) - Number(new Date(b.dateTime)));
-
-      return {
-        ...allBoards,
-        [boardName]: copyBoard,
-      };
-    });
-  };
 
   const handleApprove = async (index: number, status: string, reservationId: number) => {
     try {
@@ -127,8 +84,8 @@ const CoachMain = () => {
   ) => {
     try {
       await completeReservation(reservationId);
-      showSnackbar({ message: '히스토리에 저장되었습니다. ✅' });
       deleteBoardItem(status, index);
+      showSnackbar({ message: '히스토리에 저장되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
         logError(error);
@@ -187,7 +144,7 @@ const CoachMain = () => {
     const from = e.dataTransfer?.getData('listId') as BoardName;
     const to = ((e.target as Element).closest('[data-status]') as HTMLElement).dataset
       .status as BoardName;
-    const draggedItem = crews[from][itemId];
+    const draggedItem = board[from][itemId];
 
     if (
       from === to ||
@@ -243,7 +200,7 @@ const CoachMain = () => {
     const getReservationList = async () => {
       try {
         const { data: crewListMap } = await getCoachReservations();
-        setCrews(crewListMap);
+        setBoard(crewListMap);
       } catch (error) {
         if (error instanceof AxiosError) {
           logError(error);
@@ -268,7 +225,7 @@ const CoachMain = () => {
         selectedItem={selectedBoard}
       />
       <S.BoardListContainer>
-        {(Object.keys(crews) as BoardName[]).map((status) => {
+        {(Object.keys(board) as BoardName[]).map((status) => {
           const {
             title,
             firstButton,
@@ -286,10 +243,10 @@ const CoachMain = () => {
               key={status}
               title={title}
               color={color}
-              length={crews[status].length}
+              length={board[status].length}
               onDrop={handleDrop}
             >
-              {crews[status].map((crew, index) => {
+              {board[status].map((crew, index) => {
                 const { crewId, reservationId, dateTime, crewImage, crewName, sheetStatus } = crew;
                 return (
                   <BoardItem
