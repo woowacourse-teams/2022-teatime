@@ -18,14 +18,14 @@ import {
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
 import { BOARD, ERROR_MESSAGE, ROUTES } from '@constants/index';
-import type { BoardValue, CrewListMap } from '@typings/domain';
+import type { BoardName, CrewListMap } from '@typings/domain';
 import { logError } from '@utils/logError';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
 
 type ClickBoardButton = (
   index: number,
-  status: BoardValue,
+  status: BoardName,
   reservationId: number,
   crewId: number
 ) => void;
@@ -41,7 +41,7 @@ type BoardItemValue = {
 };
 
 type BoardItem = {
-  [key in BoardValue]: BoardItemValue;
+  [key in BoardName]: BoardItemValue;
 };
 
 const CoachMain = () => {
@@ -56,7 +56,7 @@ const CoachMain = () => {
     inProgress: [],
   });
 
-  const deleteBoardItem = (status: BoardValue, index: number) => {
+  const deleteBoardItem = (status: BoardName, index: number) => {
     setCrews((allBoards) => {
       const copyBeforeStatusBoard = [...allBoards[status]];
       copyBeforeStatusBoard.splice(index, 1);
@@ -68,7 +68,7 @@ const CoachMain = () => {
     });
   };
 
-  const moveBoardItem = (from: BoardValue, to: BoardValue, index: number) => {
+  const moveBoardItem = (from: BoardName, to: BoardName, index: number) => {
     setCrews((allBoards) => {
       const copyFromBoard = [...allBoards[from]];
       const currentItem = copyFromBoard[index];
@@ -84,7 +84,7 @@ const CoachMain = () => {
     });
   };
 
-  const sortBoardItemByTime = (boardName: BoardValue) => {
+  const sortBoardItemByTime = (boardName: BoardName) => {
     setCrews((allBoards) => {
       const copyBoard = [...allBoards[boardName]];
       copyBoard.sort((a, b) => Number(new Date(a.dateTime)) - Number(new Date(b.dateTime)));
@@ -113,7 +113,7 @@ const CoachMain = () => {
 
   const handleShowContents = (
     index: number,
-    status: BoardValue,
+    status: BoardName,
     reservationId: number,
     crewId: number
   ) => {
@@ -122,7 +122,7 @@ const CoachMain = () => {
 
   const handleCompleteReservation = async (
     index: number,
-    status: BoardValue,
+    status: BoardName,
     reservationId: number
   ) => {
     try {
@@ -142,7 +142,7 @@ const CoachMain = () => {
     navigate(`${ROUTES.HISTORY_SHEET}/${crewId}`, { state: crewName });
   };
 
-  const handleReject = async (index: number, status: BoardValue, reservationId: number) => {
+  const handleReject = async (index: number, status: BoardName, reservationId: number) => {
     if (!confirm('예약을 거절하시겠습니까?')) return;
 
     try {
@@ -158,7 +158,7 @@ const CoachMain = () => {
     }
   };
 
-  const handleCancel = async (index: number, status: BoardValue, reservationId: number) => {
+  const handleCancel = async (index: number, status: BoardName, reservationId: number) => {
     if (!confirm('면담을 취소하시겠습니까?')) return;
 
     try {
@@ -184,9 +184,9 @@ const CoachMain = () => {
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     const itemId = Number(e.dataTransfer?.getData('itemId'));
-    const from = e.dataTransfer?.getData('listId') as BoardValue;
+    const from = e.dataTransfer?.getData('listId') as BoardName;
     const to = ((e.target as Element).closest('[data-status]') as HTMLElement).dataset
-      .status as BoardValue;
+      .status as BoardName;
     const draggedItem = crews[from][itemId];
 
     if (
@@ -268,7 +268,7 @@ const CoachMain = () => {
         selectedItem={selectedBoard}
       />
       <S.BoardListContainer>
-        {(Object.keys(crews) as BoardValue[]).map((status) => {
+        {(Object.keys(crews) as BoardName[]).map((status) => {
           const {
             title,
             firstButton,

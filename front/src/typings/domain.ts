@@ -144,9 +144,9 @@ interface AccessToken {
 
 type MonthScheduleMap = Record<number, TimeSchedule[]>;
 
-type BoardValue = ValueOf<typeof BOARD>;
+type BoardName = ValueOf<typeof BOARD>;
 
-type CrewListMap = Record<BoardValue, Crew[]>;
+type CrewListMap = Record<BoardName, Crew[]>;
 
 export {
   UserInfo,
@@ -162,7 +162,7 @@ export {
   MultipleTime,
   MultipleDaySchedule,
   MonthScheduleMap,
-  BoardValue,
+  BoardName,
   CrewListMap,
   Sheets,
   CrewHistory,
