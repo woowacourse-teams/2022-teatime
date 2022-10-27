@@ -28,6 +28,7 @@ const CrewMain = () => {
     image: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+
   const handleClickCard = (e: React.MouseEvent, id: number, image: string, isPokable: boolean) => {
     const target = (e.target as HTMLImageElement).id;
     if (target === 'request') {
