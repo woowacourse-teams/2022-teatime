@@ -20,10 +20,10 @@ const Title = styled.span`
   }
 `;
 
-const HighLightText = styled(Title)<{ hightlightColor?: string }>`
+const HighLightText = styled(Title)<{ highlightColor?: string }>`
   margin: 0 10px;
-  background: ${({ theme }) =>
-    `linear-gradient(to top, ${theme.colors.YELLOW_400} 50%, transparent 50%)`};
+  background: ${({ highlightColor }) =>
+    `linear-gradient(to top, ${highlightColor} 50%, transparent 50%)`};
 `;
 
 export { TitleWrapper, Title, HighLightText };
