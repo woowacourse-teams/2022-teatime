@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
@@ -10,7 +10,6 @@ import ScheduleTimeList from '@components/ScheduleTimeList';
 import MultipleTimeList from '@components/MultipleTimeList';
 import Conditional from '@components/Conditional';
 import useBoolean from '@hooks/useBoolean';
-import useSelectList from '@hooks/useSelectList';
 import useRefetch from '@hooks/useRefetch';
 import useSchedule from './hooks/useSchedule';
 import useMultipleSchedule from './hooks/useMultipleSchedule';
@@ -35,12 +34,6 @@ const Schedule = () => {
     setFalse: closeMultipleTimeList,
   } = useBoolean();
   const {
-    selectedItem: calendarMode,
-    setSeletedItem: setCalenderMode,
-    handleSelectItem: handleCalendarMode,
-  } = useSelectList('singleSelect');
-
-  const {
     schedule,
     isSelectedAll,
     createScheduleMap,
@@ -63,6 +56,7 @@ const Schedule = () => {
     handleClickMultipleTime,
   } = useMultipleSchedule();
   const { year, month } = monthYear;
+  const [calendarMode, setCalenderMode] = useState('singleSelect');
 
   const isMultipleSelecting = calendarMode === 'multiSelect' && selectedDayList.dates.length > 0;
 
@@ -79,6 +73,12 @@ const Schedule = () => {
   const handleClickDate = (day: number) => {
     openTimeList();
     selectDaySchedule(day);
+  };
+
+  const handleCalendarMode = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName !== 'LI') return;
+    setCalenderMode(target.id);
   };
 
   const handleClickMultipleDate = (day: number) => {
