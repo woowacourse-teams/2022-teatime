@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { changeSelectedTime, timeArray } from '../utils/times';
-import { MultipleDaySchedule } from '@typings/domain';
+import type { MultipleDaySchedule } from '@typings/domain';
 
 const useMultipleSchedule = () => {
   const [selectedDayList, setSelectedDayList] = useState<MultipleDaySchedule>({

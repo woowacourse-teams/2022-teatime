@@ -2,7 +2,7 @@ import { createContext, Dispatch, useReducer } from 'react';
 
 import { clearStorage, getStorage, setStorage } from '@utils/localStorage';
 import { LOCAL_DB } from '@constants/index';
-import { UserInfo } from '@typings/domain';
+import type { UserInfo } from '@typings/domain';
 
 type State = {
   userData: UserInfo | null;

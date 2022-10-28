@@ -1,5 +1,5 @@
 import { HOUR_MILLISECONDS } from '@constants/index';
-import { MonthYear } from '@typings/domain';
+import type { MonthYear } from '@typings/domain';
 
 type DateType = string | number;
 

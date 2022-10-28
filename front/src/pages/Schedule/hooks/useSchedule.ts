@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useCalendar from '@hooks/useCalendar';
 import { getFormatDate } from '@utils/date';
 import { changeSelectedTime, getAllTime } from '../utils/times';
-import { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
+import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 
 const useSchedule = () => {
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
