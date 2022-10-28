@@ -1,12 +1,7 @@
 import { rest } from 'msw';
 
 import { BASE_URL } from '@api/index';
-import type {
-  DaySchedule as DayScheduleResponse,
-  Coach as CoachResponse,
-  Reservation as ReservationResponse,
-  CrewListMap,
-} from '@typings/domain';
+import type { DaySchedule, Coach, Reservation, CrewListMap } from '@typings/domain';
 import {
   coachList,
   crewList,
@@ -15,18 +10,22 @@ import {
   history,
   sheet,
   historySheet,
-} from './data';
+} from '../dummy/data';
 
 const handlers = [
-  rest.get<CoachResponse[]>(`${BASE_URL}/api/v2/coaches`, (req, res, ctx) => {
+  rest.get<Coach[]>(`${BASE_URL}/api/v2/coaches`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(coachList));
   }),
-  rest.get<DayScheduleResponse[]>(`${BASE_URL}/api/v2/coaches/:id/schedules`, (req, res, ctx) => {
+
+  rest.get<DaySchedule[]>(`${BASE_URL}/api/v2/coaches/:id/schedules`, (req, res, ctx) => {
+    const { teamId } = req.params;
     return res(ctx.status(200), ctx.json(scheduleList));
   }),
-  rest.get<ReservationResponse>(`${BASE_URL}/api/v2/crews/me/reservations/1`, (req, res, ctx) => {
+
+  rest.get<Reservation>(`${BASE_URL}/api/v2/crews/me/reservations/1`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(interviewInfo));
   }),
+
   rest.get<CrewListMap[]>(`${BASE_URL}/api/v2/coaches/me/reservations`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(crewList));
   }),
