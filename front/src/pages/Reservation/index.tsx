@@ -18,7 +18,6 @@ import { logError } from '@utils/logError';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
-
 import CheckCircle from '@assets/check-circle.svg';
 
 const Reservation = () => {

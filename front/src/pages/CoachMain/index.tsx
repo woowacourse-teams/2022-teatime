@@ -18,9 +18,9 @@ import {
 } from '@api/reservation';
 import { getCoachReservations } from '@api/coach';
 import { getDateTime } from '@utils/date';
+import { logError } from '@utils/logError';
 import { BOARD, ERROR_MESSAGE, ROUTES } from '@constants/index';
 import type { BoardName } from '@typings/domain';
-import { logError } from '@utils/logError';
 import { theme, size } from '@styles/theme';
 import * as S from './styles';
 

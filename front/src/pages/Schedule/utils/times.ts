@@ -1,4 +1,4 @@
-import { MultipleTime, TimeSchedule } from '@typings/domain';
+import type { MultipleTime, TimeSchedule } from '@typings/domain';
 
 const timeArray = [
   '10:00',
