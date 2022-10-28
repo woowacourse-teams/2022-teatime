@@ -24,6 +24,7 @@ const Reservation = () => {
   const navigate = useNavigate();
   const { id: coachId } = useParams();
   const { state: coachImage } = useLocation();
+  const { refetchCount, refetch } = useRefetch();
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
@@ -31,7 +32,6 @@ const Reservation = () => {
     useSchedule(selectedDay);
   const [reservationId, setReservationId] = useState<number | null>(null);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const { refetchCount, refetch } = useRefetch();
 
   const handleUpdateMonth = (increment: number) => {
     setSchedule({ monthSchedule: {}, daySchedule: [] });
