@@ -9,60 +9,19 @@ import Title from '@components/Title';
 import ScheduleTimeList from '@components/ScheduleTimeList';
 import MultipleTimeList from '@components/MultipleTimeList';
 import Conditional from '@components/Conditional';
-import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
 import useSelectList from '@hooks/useSelectList';
+import useSchedule from './hooks/useSchedule';
+import useMultipleSchedule from './hooks/useMultipleSchedule';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { editCoachSchedule, getCoachSchedulesByMe } from '@api/coach';
 import { getFormatDate } from '@utils/date';
 import { logError } from '@utils/logError';
-import type {
-  DaySchedule,
-  ScheduleInfo,
-  MonthScheduleMap,
-  MultipleDaySchedule,
-  TimeSchedule,
-  MultipleTime,
-} from '@typings/domain';
+import { getSelectedTimes } from './utils/times';
 import { ERROR_MESSAGE, ROUTES } from '@constants/index';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
-
-const timeArray = [
-  '10:00',
-  '10:30',
-  '11:00',
-  '11:30',
-  '12:00',
-  '12:30',
-  '13:00',
-  '13:30',
-  '14:00',
-  '14:30',
-  '15:00',
-  '15:30',
-  '16:00',
-  '16:30',
-  '17:00',
-  '17:30',
-  '18:00',
-  '18:30',
-  '19:00',
-  '19:30',
-  '20:00',
-  '20:30',
-  '21:00',
-  '21:30',
-];
-
-const getAllTime = (date: string) => {
-  return timeArray.map((time, index) => ({
-    id: index,
-    dateTime: `${date}T${time}:00.000Z`,
-    isSelected: false,
-  }));
-};
 
 const Schedule = () => {
   const navigate = useNavigate();
@@ -74,161 +33,39 @@ const Schedule = () => {
     setFalse: closeMultipleTimeList,
   } = useBoolean();
   const {
-    selectedItem: selectedCalendarMode,
-    setSeletedItem: setSelectedCalenderMode,
-    handleSelectItem: handleSelectCalendarMode,
+    selectedItem: calendarMode,
+    setSeletedItem: setCalenderMode,
+    handleSelectItem: handleCalendarMode,
   } = useSelectList('singleSelect');
-  const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
-  const { lastDate, year, month } = monthYear;
   const [refetchCount, setRefetchCount] = useState(0);
-  const [isSelectedAll, setIsSelectedAll] = useState(false);
-  const [schedule, setSchedule] = useState<ScheduleInfo>({
-    monthSchedule: {},
-    daySchedule: [],
-    date: '',
-  });
-  const [selectedDayList, setSelectedDayList] = useState<MultipleDaySchedule>({
-    dates: [],
-    times: [],
-  });
+  const {
+    schedule,
+    isSelectedAll,
+    createScheduleMap,
+    selectDaySchedule,
+    handleSelectAllTimes,
+    updateAvailableTimes,
+    initSelectedTimes,
+    handleClickTime,
+    monthYear,
+    selectedDay,
+    setSelectedDay,
+    dateBoxLength,
+    updateMonthSchedule,
+  } = useSchedule();
+  const {
+    selectedDayList,
+    initSelectedMultipleDates,
+    initSelectedMultipleTimes,
+    selectMultipleDays,
+    handleClickMultipleTime,
+  } = useMultipleSchedule();
+  const { year, month } = monthYear;
 
-  const isMultipleSelecting =
-    selectedCalendarMode === 'multiSelect' && selectedDayList.dates.length > 0;
+  const isMultipleSelecting = calendarMode === 'multiSelect' && selectedDayList.dates.length > 0;
 
   const refetch = () => {
     setRefetchCount((prev) => prev + 1);
-  };
-
-  const selectDaySchedule = (day: number) => {
-    setSchedule((allSchedules) => {
-      const selectedDaySchedule = schedule.monthSchedule[day];
-      const date = getFormatDate(year, month, day);
-
-      return {
-        ...allSchedules,
-        daySchedule: selectedDaySchedule,
-        date,
-      };
-    });
-  };
-
-  const selectMultipleDays = (date: string) => {
-    setSelectedDayList((prev) => {
-      const newDates = [...selectedDayList.dates];
-      const findIndex = newDates.findIndex((newDate) => newDate === date);
-
-      if (newDates.includes(date)) {
-        newDates.splice(findIndex, 1);
-      } else {
-        newDates.push(date);
-      }
-
-      return {
-        ...prev,
-        dates: newDates,
-      };
-    });
-  };
-
-  const createScheduleMap = (scheduleArray: DaySchedule[]) => {
-    setSchedule((allSchedules) => {
-      const initialMonthSchedule = Array.from({ length: lastDate }).reduce(
-        (newObj: MonthScheduleMap, _, index) => {
-          const currentDateFormat = getFormatDate(year, month, index + 1);
-          newObj[index + 1] = getAllTime(currentDateFormat);
-          return newObj;
-        },
-        {}
-      );
-
-      const availableMonthSchedule = scheduleArray.reduce(
-        (newObj: MonthScheduleMap, { day, schedules }) => {
-          const currentDateFormat = getFormatDate(year, month, day);
-          const newSchedule = getAllTime(currentDateFormat).map((time) => {
-            const sameTime = schedules.find((coachTime) => coachTime.dateTime === time.dateTime);
-            if (sameTime) {
-              sameTime.isSelected = sameTime.isPossible;
-              return sameTime;
-            }
-            return time;
-          });
-
-          newObj[day] = newSchedule;
-          return newObj;
-        },
-        {}
-      );
-
-      return {
-        ...allSchedules,
-        monthSchedule: { ...initialMonthSchedule, ...availableMonthSchedule },
-      };
-    });
-  };
-
-  const updateAvailableTimes = (selectedTimes: string[]) => {
-    setSchedule((allSchedules) => {
-      const newDaySchedule = schedule.monthSchedule[selectedDay].map(
-        ({ id, dateTime, isPossible }) => {
-          if (selectedTimes.includes(dateTime)) {
-            return { id, dateTime, isPossible: true, isSelected: true };
-          }
-          if (isPossible === false) {
-            return { id, dateTime, isPossible, isSelected: false };
-          }
-          return { id, dateTime, isSelected: false };
-        }
-      );
-
-      return {
-        ...allSchedules,
-        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
-      };
-    });
-  };
-
-  const getSelectedTimes = <T extends TimeSchedule | MultipleTime>(array: T[]): string[] => {
-    return array.reduce((newArray, { isSelected, dateTime }) => {
-      if (isSelected) {
-        newArray.push(dateTime);
-      }
-      return newArray;
-    }, [] as string[]);
-  };
-
-  const changeSelectedTime = <T extends TimeSchedule | MultipleTime>(
-    array: T[],
-    dateTime: string
-  ) => {
-    const selectedIndex = array.findIndex((time) => time.dateTime === dateTime);
-    const newArray = [...array];
-    newArray[selectedIndex].isSelected = !newArray[selectedIndex].isSelected;
-
-    return newArray;
-  };
-
-  const initSelectedMutltipleDates = () => {
-    setSelectedDayList((prev) => {
-      return {
-        ...prev,
-        dates: [],
-      };
-    });
-  };
-
-  const initSelectedMultipleTimes = () => {
-    setSelectedDayList((prev) => {
-      const initTimes = timeArray.map((dateTime, index) => ({
-        id: index,
-        dateTime,
-        isSelected: false,
-      }));
-
-      return {
-        ...prev,
-        times: initTimes,
-      };
-    });
   };
 
   const handleUpdateMonth = (increment: number) => {
@@ -237,16 +74,13 @@ const Schedule = () => {
       return;
     }
 
-    setSchedule({ monthSchedule: {}, daySchedule: [], date: '' });
     closeTimeList();
-    updateMonthYear(increment);
+    updateMonthSchedule(increment);
   };
 
   const handleClickDate = (day: number) => {
     openTimeList();
     selectDaySchedule(day);
-    setSelectedDay(day);
-    setIsSelectedAll(false);
   };
 
   const handleClickMultipleDate = (day: number) => {
@@ -270,45 +104,6 @@ const Schedule = () => {
   const handleReSelectMultipleDate = () => {
     closeMultipleTimeList();
     initSelectedMultipleTimes();
-  };
-
-  const handleClickTime = (dateTime: string) => {
-    setSchedule((prev) => {
-      const newArray = changeSelectedTime(schedule.daySchedule, dateTime);
-
-      return {
-        ...prev,
-        daySchedule: newArray,
-      };
-    });
-  };
-
-  const handleClickMutipleTime = (dateTime: string) => {
-    setSelectedDayList((prev) => {
-      const newArray = changeSelectedTime(selectedDayList.times, dateTime);
-
-      return {
-        ...prev,
-        times: newArray,
-      };
-    });
-  };
-
-  const handleSelectAll = () => {
-    setIsSelectedAll((prev) => !prev);
-    setSchedule((allSchedules) => {
-      const newSchedules = schedule.daySchedule.map((schedule) => {
-        if (schedule.isPossible !== false) {
-          schedule.isSelected = !isSelectedAll;
-        }
-        return schedule;
-      });
-
-      return {
-        ...allSchedules,
-        daySchedule: newSchedules,
-      };
-    });
   };
 
   const handleUpdateDaySchedule = async () => {
@@ -353,8 +148,8 @@ const Schedule = () => {
       await editCoachSchedule(multipleDaySchedules);
       refetch();
       closeMultipleTimeList();
-      initSelectedMutltipleDates();
-      setSelectedCalenderMode('singleSelect');
+      initSelectedMultipleDates();
+      setCalenderMode('singleSelect');
       showSnackbar({ message: '일괄 적용되었습니다. ✅' });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -378,27 +173,20 @@ const Schedule = () => {
     }
   };
 
+  const handleSelectMode = (e: React.MouseEvent<HTMLElement>) => {
+    setSelectedDay(0);
+    handleCalendarMode(e);
+  };
+
   useEffect(() => {
     closeTimeList();
     closeMultipleTimeList();
-    initSelectedMutltipleDates();
-  }, [selectedCalendarMode]);
+    initSelectedMultipleDates();
+  }, [calendarMode]);
 
   useEffect(() => {
-    const initSelectedTime = () => {
-      setSchedule((allSchedules) => {
-        const newDaySchedule = [...schedule.daySchedule];
-        newDaySchedule.forEach((time) => (time.isSelected = time.isPossible));
-
-        return {
-          ...allSchedules,
-          daySchedule: newDaySchedule,
-        };
-      });
-    };
-
-    initSelectedTime();
-  }, [schedule.date, selectedCalendarMode]);
+    initSelectedTimes();
+  }, [schedule.date, calendarMode]);
 
   useEffect(() => {
     (async () => {
@@ -432,11 +220,8 @@ const Schedule = () => {
                 { id: 'singleSelect', text: '개별 선택' },
                 { id: 'multiSelect', text: '다중 선택' },
               ]}
-              selectedItem={selectedCalendarMode}
-              onSelect={(e: React.MouseEvent<HTMLElement>) => {
-                setSelectedDay(0);
-                handleSelectCalendarMode(e);
-              }}
+              selectedItem={calendarMode}
+              onSelect={handleSelectMode}
             />
             <Calendar
               isCoach
@@ -448,7 +233,7 @@ const Schedule = () => {
               selectedDay={selectedDay}
               selectedDayList={selectedDayList.dates}
               onClickDate={
-                selectedCalendarMode === 'multiSelect' ? handleClickMultipleDate : handleClickDate
+                calendarMode === 'multiSelect' ? handleClickMultipleDate : handleClickDate
               }
               onUpdateMonth={handleUpdateMonth}
             />
@@ -471,7 +256,7 @@ const Schedule = () => {
               isSelectedAll={isSelectedAll}
               daySchedule={schedule.daySchedule}
               onClickTime={handleClickTime}
-              onSelectAll={handleSelectAll}
+              onSelectAll={handleSelectAllTimes}
               onUpdateDaySchedule={handleUpdateDaySchedule}
             />
           </Conditional>
@@ -479,7 +264,7 @@ const Schedule = () => {
           <Conditional condition={isOpenMultipleTimeList}>
             <MultipleTimeList
               selectedTimes={selectedDayList.times}
-              onClickTime={handleClickMutipleTime}
+              onClickTime={handleClickMultipleTime}
               onClickUpdateMultipleDaySchedule={handleUpdateMultipleDaySchedule}
             />
           </Conditional>
