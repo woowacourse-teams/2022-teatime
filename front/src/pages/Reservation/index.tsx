@@ -123,7 +123,7 @@ const Reservation = () => {
         <Title
           text="예약할"
           highlightText={isOpenTimeList ? '시간을' : '날짜를'}
-          hightlightColor={theme.colors.GREEN_300}
+          highlightColor={theme.colors.YELLOW_400}
           extraText="선택해주세요."
         />
         <SS.CalendarContainer>

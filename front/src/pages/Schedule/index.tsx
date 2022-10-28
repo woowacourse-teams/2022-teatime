@@ -207,7 +207,7 @@ const Schedule = () => {
         <Title
           text="등록 가능한"
           highlightText={isOpenTimeList || isOpenMultipleTimeList ? '시간을' : '날짜를'}
-          hightlightColor={theme.colors.GREEN_300}
+          highlightColor={theme.colors.YELLOW_400}
           extraText="선택해주세요."
           tooltipText="면담 신청자는 30분 단위로 신청할 수 있습니다."
         />
