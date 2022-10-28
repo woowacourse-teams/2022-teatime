@@ -11,6 +11,7 @@ import MultipleTimeList from '@components/MultipleTimeList';
 import Conditional from '@components/Conditional';
 import useBoolean from '@hooks/useBoolean';
 import useSelectList from '@hooks/useSelectList';
+import useRefetch from '@hooks/useRefetch';
 import useSchedule from './hooks/useSchedule';
 import useMultipleSchedule from './hooks/useMultipleSchedule';
 import { SnackbarContext } from '@context/SnackbarProvider';
@@ -26,6 +27,7 @@ import * as S from './styles';
 const Schedule = () => {
   const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
+  const { refetchCount, refetch } = useRefetch();
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const {
     value: isOpenMultipleTimeList,
@@ -37,7 +39,7 @@ const Schedule = () => {
     setSeletedItem: setCalenderMode,
     handleSelectItem: handleCalendarMode,
   } = useSelectList('singleSelect');
-  const [refetchCount, setRefetchCount] = useState(0);
+
   const {
     schedule,
     isSelectedAll,
@@ -63,10 +65,6 @@ const Schedule = () => {
   const { year, month } = monthYear;
 
   const isMultipleSelecting = calendarMode === 'multiSelect' && selectedDayList.dates.length > 0;
-
-  const refetch = () => {
-    setRefetchCount((prev) => prev + 1);
-  };
 
   const handleUpdateMonth = (increment: number) => {
     if (isMultipleSelecting) {

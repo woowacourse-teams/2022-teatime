@@ -9,6 +9,7 @@ import Title from '@components/Title';
 import Modal from '@components/Modal';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
+import useRefetch from '@hooks/useRefetch';
 import useSchedule from './hooks/useSchedule';
 import { getCoachSchedulesByCrew } from '@api/coach';
 import { createReservation } from '@api/reservation';
@@ -31,11 +32,7 @@ const Reservation = () => {
     useSchedule(selectedDay);
   const [reservationId, setReservationId] = useState<number | null>(null);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [refetchCount, setRefetchCount] = useState(0);
-
-  const refetch = () => {
-    setRefetchCount((prev) => prev + 1);
-  };
+  const { refetchCount, refetch } = useRefetch();
 
   const handleUpdateMonth = (increment: number) => {
     setSchedule({ monthSchedule: {}, daySchedule: [] });
