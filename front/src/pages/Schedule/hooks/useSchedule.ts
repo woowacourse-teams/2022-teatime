@@ -51,6 +51,8 @@ const useSchedule = () => {
   };
 
   const selectDaySchedule = (day: number) => {
+    setSelectedDay(day);
+    setIsSelectedAll(false);
     setSchedule((allSchedules) => {
       const selectedDaySchedule = schedule.monthSchedule[day];
       const date = getFormatDate(year, month, day);
@@ -61,8 +63,6 @@ const useSchedule = () => {
         date,
       };
     });
-    setSelectedDay(day);
-    setIsSelectedAll(false);
   };
 
   const handleSelectAllTimes = () => {
