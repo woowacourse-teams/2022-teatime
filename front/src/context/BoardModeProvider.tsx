@@ -1,13 +1,14 @@
 import { createContext, useState } from 'react';
 import { BOARD } from '@constants/index';
 import type { BoardName } from '@typings/domain';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 
 type BoardContextType = (e: React.MouseEvent<HTMLElement>) => void;
 
 export const BoardStateContext = createContext<BoardName>(BOARD.BEFORE_APPROVED);
 export const BoardChangeContext = createContext<BoardContextType>(() => null);
 
-const BoardProvider = ({ children }: { children: React.ReactNode }) => {
+const BoardProvider = ({ children }: PropsWithRequiredChildren) => {
   const [selectedBoard, setSelectedBoard] = useState<BoardName>(BOARD.BEFORE_APPROVED);
 
   const changeBoard = (e: React.MouseEvent<HTMLElement>) => {

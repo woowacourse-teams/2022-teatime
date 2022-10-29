@@ -1,11 +1,11 @@
 import reactDom from 'react-dom';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 
 interface PortalProps {
   id: string;
-  children: React.ReactNode;
 }
 
-const Portal = ({ id, children }: PortalProps) => {
+const Portal = ({ id, children }: PropsWithRequiredChildren<PortalProps>) => {
   const element = document.getElementById(id) as HTMLElement;
   return reactDom.createPortal(children, element);
 };

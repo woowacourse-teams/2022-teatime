@@ -1,10 +1,7 @@
+import type { PropsWithRequiredChildren } from '@typings/utils';
 import * as S from './styles';
 
-interface FrameProps {
-  children: React.ReactNode;
-}
-
-const Frame = ({ children }: FrameProps) => {
+const Frame = ({ children }: PropsWithRequiredChildren) => {
   return <S.Container>{children}</S.Container>;
 };
 

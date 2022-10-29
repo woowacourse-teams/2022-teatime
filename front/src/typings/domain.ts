@@ -1,6 +1,5 @@
 import { BOARD } from '@constants/index';
-
-type ValueOf<T> = T[keyof T];
+import type { ValueOf } from './utils';
 
 type UserRole = 'CREW' | 'COACH';
 
