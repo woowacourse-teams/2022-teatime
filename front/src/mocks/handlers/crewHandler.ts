@@ -25,14 +25,14 @@ const crewHandler = [
     }
 
     const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-    const filterSchedules = schedules(year, month).filter((schedule) => {
+    const filteredSchedule = schedules(year, month).filter((schedule) => {
       if (month === currentMonth) {
         return schedule.day > new Date().getDate();
       }
       return schedule;
     });
 
-    return res(ctx.status(200), ctx.json(filterSchedules));
+    return res(ctx.status(200), ctx.json(filteredSchedule));
   }),
 
   // 히스토리 조회
