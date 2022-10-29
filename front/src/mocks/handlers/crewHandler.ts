@@ -27,7 +27,7 @@ const crewHandler = [
     const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
     const filteredSchedule = schedules(year, month).filter((schedule) => {
       if (month === currentMonth) {
-        return schedule.day > new Date().getDate();
+        return schedule.day >= new Date().getDate();
       }
       return schedule;
     });
