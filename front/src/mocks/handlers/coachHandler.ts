@@ -1,7 +1,12 @@
-import { rest } from 'msw';
+import { DefaultBodyType, rest } from 'msw';
 
 import { BASE_URL } from '@api/index';
 import { crews, coachHistories } from '../dummy/coachData';
+
+type DaySchedule = {
+  date: string;
+  schedules: string[];
+}[];
 
 const coachHandler = [
   // 예약 목록 조회
@@ -25,33 +30,39 @@ const coachHandler = [
   }),
 
   // 스케줄 등록
-  rest.put(`${BASE_URL}/api/v2/coaches/me/schedules`, (req, res, ctx) => {
-    const [{ date, schedules }] = req.body;
+  rest.put<DefaultBodyType & DaySchedule>(
+    `${BASE_URL}/api/v2/coaches/me/schedules`,
+    (req, res, ctx) => {
+      const [{ date, schedules }] = req.body;
 
-    if (date === null || schedules === null) {
-      return res(ctx.status(400));
+      if (date === null || schedules === null) {
+        return res(ctx.status(400));
+      }
+
+      return res(ctx.status(204));
     }
-
-    return res(ctx.status(204));
-  }),
+  ),
 
   // 예약 승인 및 거절
-  rest.post(`${BASE_URL}/api/v2/reservations/:reservationId`, (req, res, ctx) => {
-    const { reservationId } = req.params;
-    const { isApproved } = req.body;
+  rest.post<DefaultBodyType & { isApproved: boolean }>(
+    `${BASE_URL}/api/v2/reservations/:reservationId`,
+    (req, res, ctx) => {
+      const { reservationId } = req.params;
+      const { isApproved } = req.body;
 
-    if (reservationId === null || isApproved === null) {
-      return res(ctx.status(400));
+      if (reservationId === null || isApproved === null) {
+        return res(ctx.status(400));
+      }
+
+      if (isApproved) {
+        console.log('승인하기');
+      } else {
+        console.log('거절하기');
+      }
+
+      return res(ctx.status(204));
     }
-
-    if (isApproved) {
-      console.log('승인하기');
-    } else {
-      console.log('거절하기');
-    }
-
-    return res(ctx.status(204));
-  }),
+  ),
 
   // 예약 완료
   rest.put(`${BASE_URL}/api/v2/reservations/:reservationId`, (req, res, ctx) => {
