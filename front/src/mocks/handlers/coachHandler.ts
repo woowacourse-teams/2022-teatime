@@ -3,7 +3,7 @@ import { rest } from 'msw';
 import { BASE_URL } from '@api/index';
 import { crews, coachHistories } from '../dummy/coachData';
 
-type EditScheduleBody = {
+type DaySchedule = {
   date: string;
   schedules: string[];
 };
@@ -30,7 +30,7 @@ const coachHandler = [
   }),
 
   // 스케줄 등록
-  rest.put<EditScheduleBody[]>(`${BASE_URL}/api/v2/coaches/me/schedules`, (req, res, ctx) => {
+  rest.put<DaySchedule[]>(`${BASE_URL}/api/v2/coaches/me/schedules`, (req, res, ctx) => {
     const [{ date, schedules }] = req.body;
 
     if (date === null || schedules === null) {
