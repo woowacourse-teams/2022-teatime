@@ -25,7 +25,7 @@ const useSchedule = () => {
         {}
       );
 
-      const availableMonthSchedule = scheduleArray.reduce(
+      const existingMonthSchedule = scheduleArray.reduce(
         (newObj: MonthScheduleMap, { day, schedules }) => {
           const currentDateFormat = getFormatDate(year, month, day);
           const newSchedule = getAllTime(currentDateFormat).map((time) => {
@@ -45,7 +45,7 @@ const useSchedule = () => {
 
       return {
         ...allSchedules,
-        monthSchedule: { ...initialMonthSchedule, ...availableMonthSchedule },
+        monthSchedule: { ...initialMonthSchedule, ...existingMonthSchedule },
       };
     });
   };
