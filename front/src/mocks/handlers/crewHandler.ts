@@ -1,4 +1,4 @@
-import { DefaultBodyType, rest } from 'msw';
+import { rest } from 'msw';
 
 import { BASE_URL } from '@api/index';
 import { DaySchedule } from '@typings/domain';
@@ -53,18 +53,15 @@ const crewHandler = [
   }),
 
   // 예약하기
-  rest.post<DefaultBodyType & { scheduleId?: number }>(
-    `${BASE_URL}/api/v2/reservations`,
-    (req, res, ctx) => {
-      const { scheduleId } = req.body;
+  rest.post<{ scheduleId: number }>(`${BASE_URL}/api/v2/reservations`, (req, res, ctx) => {
+    const { scheduleId } = req.body;
 
-      if (scheduleId === null) {
-        return res(ctx.status(400));
-      }
-
-      return res(ctx.status(201), ctx.set('Location', '/0'));
+    if (scheduleId === null) {
+      return res(ctx.status(400));
     }
-  ),
+
+    return res(ctx.status(201), ctx.set('Location', '/0'));
+  }),
 ];
 
 export default crewHandler;
