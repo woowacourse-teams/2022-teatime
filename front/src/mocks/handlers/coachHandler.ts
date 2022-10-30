@@ -1,12 +1,12 @@
-import { DefaultBodyType, rest } from 'msw';
+import { rest } from 'msw';
 
 import { BASE_URL } from '@api/index';
 import { crews, coachHistories } from '../dummy/coachData';
 
-type DaySchedule = {
+type EditScheduleBody = {
   date: string;
   schedules: string[];
-}[];
+};
 
 const coachHandler = [
   // 예약 목록 조회
@@ -30,21 +30,18 @@ const coachHandler = [
   }),
 
   // 스케줄 등록
-  rest.put<DefaultBodyType & DaySchedule>(
-    `${BASE_URL}/api/v2/coaches/me/schedules`,
-    (req, res, ctx) => {
-      const [{ date, schedules }] = req.body;
+  rest.put<EditScheduleBody[]>(`${BASE_URL}/api/v2/coaches/me/schedules`, (req, res, ctx) => {
+    const [{ date, schedules }] = req.body;
 
-      if (date === null || schedules === null) {
-        return res(ctx.status(400));
-      }
-
-      return res(ctx.status(204));
+    if (date === null || schedules === null) {
+      return res(ctx.status(400));
     }
-  ),
+
+    return res(ctx.status(204));
+  }),
 
   // 예약 승인 및 거절
-  rest.post<DefaultBodyType & { isApproved: boolean }>(
+  rest.post<{ isApproved: boolean }>(
     `${BASE_URL}/api/v2/reservations/:reservationId`,
     (req, res, ctx) => {
       const { reservationId } = req.params;
