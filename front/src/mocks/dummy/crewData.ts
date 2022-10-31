@@ -57,79 +57,43 @@ const coaches = [
   },
 ];
 
-const schedules = {
-  '2022-10': [
+const schedules = (year: string, month: string) => {
+  return [
     {
       day: 25,
-      schedules: [{ id: 11111, dateTime: '2022-07-25T10:00:00.000Z', isPossible: true }],
+      schedules: [{ id: 11111, dateTime: `${year}-${month}-25T10:00:00.000Z`, isPossible: true }],
     },
     {
       day: 26,
       schedules: [
-        { id: 23323, dateTime: '2022-07-26T10:00:00.000Z', isPossible: false },
-        { id: 33323, dateTime: '2022-07-26T10:30:00.000Z', isPossible: false },
+        { id: 23323, dateTime: `${year}-${month}-26T10:00:00.000Z`, isPossible: false },
+        { id: 33323, dateTime: `${year}-${month}-26T10:00:00.000Z`, isPossible: false },
       ],
     },
     {
       day: 28,
       schedules: [
-        { id: 66666, dateTime: '2022-07-28T10:30:00.000Z', isPossible: false },
-        { id: 141513, dateTime: '2022-07-28T11:00:00.000Z', isPossible: true },
-        { id: 13524536, dateTime: '2022-07-28T15:00:00.000Z', isPossible: false },
-        { id: 1516146, dateTime: '2022-07-28T15:30:00.000Z', isPossible: false },
-        { id: 4132346325, dateTime: '2022-07-28T17:00:00.000Z', isPossible: true },
+        { id: 66666, dateTime: `${year}-${month}-28T10:30:00.000Z`, isPossible: false },
+        { id: 141513, dateTime: `${year}-${month}-28T11:00:00.000Z`, isPossible: true },
+        { id: 13524536, dateTime: `${year}-${month}-28T15:00:00.000Z`, isPossible: false },
+        { id: 1516146, dateTime: `${year}-${month}-28T15:30:00.000Z`, isPossible: false },
+        { id: 4132346325, dateTime: `${year}-${month}-28T17:00:00.000Z`, isPossible: true },
       ],
     },
     {
       day: 29,
       schedules: [
-        { id: 77777, dateTime: '2022-07-29T10:00:00.000Z', isPossible: true },
-        { id: 88888, dateTime: '2022-07-29T11:30:00.000Z', isPossible: true },
-        { id: 127678, dateTime: '2022-07-29T12:00:00.000Z', isPossible: true },
-        { id: 335372, dateTime: '2022-07-29T12:30:00.000Z', isPossible: true },
-        { id: 283351, dateTime: '2022-07-29T15:00:00.000Z', isPossible: false },
-        { id: 283352, dateTime: '2022-07-29T15:30:00.000Z', isPossible: true },
-        { id: 283353, dateTime: '2022-07-29T16:00:00.000Z', isPossible: false },
-        { id: 283357, dateTime: '2022-07-29T16:30:00.000Z', isPossible: true },
+        { id: 77777, dateTime: `${year}-${month}-29T10:00:00.000Z`, isPossible: true },
+        { id: 88888, dateTime: `${year}-${month}-29T11:30:00.000Z`, isPossible: true },
+        { id: 127678, dateTime: `${year}-${month}-29T12:00:00.000Z`, isPossible: true },
+        { id: 335372, dateTime: `${year}-${month}-29T12:30:00.000Z`, isPossible: true },
+        { id: 283351, dateTime: `${year}-${month}-29T15:00:00.000Z`, isPossible: false },
+        { id: 283352, dateTime: `${year}-${month}-29T15:30:00.000Z`, isPossible: true },
+        { id: 283353, dateTime: `${year}-${month}-29T16:00:00.000Z`, isPossible: false },
+        { id: 283357, dateTime: `${year}-${month}-29T16:30:00.000Z`, isPossible: true },
       ],
     },
-  ],
-  '2022-11': [
-    {
-      day: 3,
-      schedules: [{ id: 11111, dateTime: '2022-07-25T10:00:00.000Z', isPossible: true }],
-    },
-    {
-      day: 9,
-      schedules: [
-        { id: 23323, dateTime: '2022-07-26T10:00:00.000Z', isPossible: false },
-        { id: 33323, dateTime: '2022-07-26T10:30:00.000Z', isPossible: false },
-      ],
-    },
-    {
-      day: 10,
-      schedules: [
-        { id: 66666, dateTime: '2022-07-28T10:30:00.000Z', isPossible: false },
-        { id: 141513, dateTime: '2022-07-28T11:00:00.000Z', isPossible: true },
-        { id: 13524536, dateTime: '2022-07-28T15:00:00.000Z', isPossible: false },
-        { id: 1516146, dateTime: '2022-07-28T15:30:00.000Z', isPossible: false },
-        { id: 4132346325, dateTime: '2022-07-28T17:00:00.000Z', isPossible: true },
-      ],
-    },
-    {
-      day: 14,
-      schedules: [
-        { id: 77777, dateTime: '2022-07-29T10:00:00.000Z', isPossible: true },
-        { id: 88888, dateTime: '2022-07-29T11:30:00.000Z', isPossible: true },
-        { id: 127678, dateTime: '2022-07-29T12:00:00.000Z', isPossible: true },
-        { id: 335372, dateTime: '2022-07-29T12:30:00.000Z', isPossible: true },
-        { id: 283351, dateTime: '2022-07-29T15:00:00.000Z', isPossible: false },
-        { id: 283352, dateTime: '2022-07-29T15:30:00.000Z', isPossible: true },
-        { id: 283353, dateTime: '2022-07-29T16:00:00.000Z', isPossible: false },
-        { id: 283357, dateTime: '2022-07-29T16:30:00.000Z', isPossible: true },
-      ],
-    },
-  ],
+  ];
 };
 
 const reservationInfo = [
