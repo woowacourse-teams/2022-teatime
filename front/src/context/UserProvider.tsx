@@ -2,7 +2,8 @@ import { createContext, Dispatch, useReducer } from 'react';
 
 import { clearStorage, getStorage, setStorage } from '@utils/localStorage';
 import { LOCAL_DB } from '@constants/index';
-import { UserInfo } from '@typings/domain';
+import type { UserInfo } from '@typings/domain';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 
 type State = {
   userData: UserInfo | null;
@@ -56,7 +57,7 @@ const initialState: State = {
 export const UserStateContext = createContext<State>(initialState);
 export const UserDispatchContext = createContext<UserDispatch>(() => null);
 
-const UserProvider = ({ children }: { children: React.ReactNode }) => {
+const UserProvider = ({ children }: PropsWithRequiredChildren) => {
   const [userData, dispatch] = useReducer(reducer, initialState);
 
   return (

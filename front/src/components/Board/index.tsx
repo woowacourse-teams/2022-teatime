@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import EmptyContent from '@components/EmptyContent';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 import * as S from './styles';
 
 interface BoardProps {
-  children: React.ReactNode;
   isSelected?: boolean;
   title: string;
   color: string;
@@ -13,7 +13,15 @@ interface BoardProps {
   onDrop: (e: React.DragEvent<HTMLDivElement>) => Promise<void>;
 }
 
-const Board = ({ children, isSelected, title, color, length, status, onDrop }: BoardProps) => {
+const Board = ({
+  children,
+  isSelected,
+  title,
+  color,
+  length,
+  status,
+  onDrop,
+}: PropsWithRequiredChildren<BoardProps>) => {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {

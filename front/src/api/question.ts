@@ -1,5 +1,5 @@
 import { api } from '@api/index';
-import { Question, Questions } from '@typings/domain';
+import type { Question, Questions } from '@typings/domain';
 
 const getQuestions = () => api.get<Questions>(`/api/v2/questions`);
 

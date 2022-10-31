@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import NotFound from '@pages/NotFound';
 import { UserStateContext } from '@context/UserProvider';
-import { UserRole } from '@typings/domain';
+import type { UserRole } from '@typings/domain';
 import { ROUTES } from './constants';
 
 interface AuthRouteProps {

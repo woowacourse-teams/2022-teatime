@@ -3,14 +3,14 @@ import type { TimeSchedule } from '@typings/domain';
 import * as S from './styles';
 
 interface DateBoxProps {
-  date?: number;
-  daySchedule?: TimeSchedule[];
-  onClick?: () => void;
-  selectedDay?: number | null;
-  currentDay?: Date;
-  isMultipleSelected?: boolean;
-  isCoach?: boolean;
-  isPastDay?: boolean;
+  date: number;
+  daySchedule: TimeSchedule[];
+  onClick: () => void;
+  selectedDay: number | null;
+  currentDay: Date;
+  isMultipleSelected: boolean;
+  isCoach: boolean;
+  isPastDay: boolean;
 }
 
 const DateBox = ({
@@ -22,7 +22,7 @@ const DateBox = ({
   isCoach,
   isMultipleSelected,
   isPastDay,
-}: DateBoxProps) => {
+}: Partial<DateBoxProps>) => {
   const isSelected = (daySchedule.length > 0 || isCoach) && selectedDay === date;
   const isToday = currentDay?.getTime() === getCurrentFullDate().getTime();
   const hasSchedule =

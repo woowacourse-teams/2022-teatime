@@ -1,17 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import TableRow from '@components/TableRow';
 import EmptyContent from '@components/EmptyContent';
 import Filter from '@components/Filter';
+import useCategory from '@hooks/useCategory';
+import useHistory from './hooks/useHistory';
 import { SnackbarContext } from '@context/SnackbarProvider';
 import { getCrewHistoriesByMe } from '@api/crew';
 import { cancelReservation } from '@api/reservation';
 import { ERROR_MESSAGE, ROUTES } from '@constants/index';
-import type { CrewHistory as CrewHistoryType, CrewHistoryStatus } from '@typings/domain';
+import type { CrewHistoryStatus } from '@typings/domain';
 import { logError } from '@utils/logError';
-
 import { theme } from '@styles/theme';
 import * as S from './styles';
 
@@ -52,28 +53,8 @@ const historyStatus: HistoryStatus = {
 const CrewHistory = () => {
   const navigate = useNavigate();
   const showSnackbar = useContext(SnackbarContext);
-  const [historyList, setHistoryList] = useState<CrewHistoryType[]>([]);
-  const [category, setCategory] = useState<string>('ALL');
-
-  const changeHistoryStatus = (reservationId: number, status: CrewHistoryStatus) => {
-    setHistoryList((prevHistory) => {
-      return prevHistory.map((history) => {
-        if (history.reservationId === reservationId) {
-          history.status = status;
-        }
-        return history;
-      });
-    });
-  };
-
-  const moveForefrontHistory = (reservationId: number) => {
-    const copyHistoryList = [...historyList];
-    const index = copyHistoryList.findIndex((history) => history.reservationId === reservationId);
-    const changedHistory = copyHistoryList[index];
-    copyHistoryList.splice(index, 1);
-    copyHistoryList.unshift(changedHistory);
-    setHistoryList(copyHistoryList);
-  };
+  const { category, handleChangeCategory } = useCategory('ALL');
+  const { historyList, setHistoryList, changeHistoryStatus, moveForefrontHistory } = useHistory();
 
   const handleShowSheet = (reservationId: number, status: string) => () => {
     navigate(`${ROUTES.CREW_SHEET}/${reservationId}`, { state: status });
@@ -94,10 +75,6 @@ const CrewHistory = () => {
         return;
       }
     }
-  };
-
-  const handleFilterStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
   };
 
   const filteredHistory = () => {
@@ -125,7 +102,7 @@ const CrewHistory = () => {
 
   return (
     <S.Container>
-      <Filter onFilterStatus={handleFilterStatus}>
+      <Filter onFilter={handleChangeCategory}>
         <option value="ALL">전체</option>
         <option value="BEFORE_APPROVED">승인전</option>
         <option value="APPROVED">승인완료</option>
