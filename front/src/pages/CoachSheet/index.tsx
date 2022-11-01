@@ -7,9 +7,9 @@ import ReservationInfo from '@components/ReservationInfo';
 import Sheet from '@components/Sheet';
 import BackButton from '@components/BackButton';
 import { getCrewReservationByCoach } from '@api/crew';
+import { logError } from '@utils/logError';
 import type { ReservationByCoach } from '@typings/domain';
 import { ROUTES } from '@constants/index';
-import { logError } from '@utils/logError';
 import * as S from '@styles/common';
 
 interface LocationState {

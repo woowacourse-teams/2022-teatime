@@ -1,9 +1,10 @@
+import type { PropsWithRequiredChildren } from '@typings/utils';
+
 interface ConditionalProps {
-  children: React.ReactNode;
   condition: boolean;
 }
 
-const Conditional = ({ children, condition }: ConditionalProps) => {
+const Conditional = ({ children, condition }: PropsWithRequiredChildren<ConditionalProps>) => {
   return <>{condition && children}</>;
 };
 

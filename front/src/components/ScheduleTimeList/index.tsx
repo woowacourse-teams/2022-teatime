@@ -20,17 +20,17 @@ const ScheduleTimeList = ({
   return (
     <S.TimeListContainer>
       <S.ScrollContainer>
-        {daySchedule.map((schedule) => {
-          const time = getHourMinutes(schedule.dateTime);
-          const isPastTime = new Date() > getDateTime(schedule.dateTime);
+        {daySchedule.map(({ id, dateTime, isPossible, isSelected }) => {
+          const time = getHourMinutes(dateTime);
+          const isPastTime = new Date() > getDateTime(dateTime);
 
           return (
             <S.ScheduleTimeBox
-              key={schedule.id}
-              isPossible={schedule.isPossible}
+              key={id}
+              isPossible={isPossible}
               isPastTime={isPastTime}
-              isSelected={schedule.isSelected ? true : false}
-              onClick={() => onClickTime(schedule.dateTime)}
+              isSelected={isSelected ? true : false}
+              onClick={() => onClickTime(dateTime)}
             >
               {time}
             </S.ScheduleTimeBox>

@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from 'react';
+
 import Snackbar from '@components/Snackbar';
 import Portal from '../Portal';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 
 type SnackbarType = 'success' | 'error';
 
@@ -13,7 +15,7 @@ type SnackbarContextType = ({ message, type }: SnackbarInfo) => void;
 
 export const SnackbarContext = createContext<SnackbarContextType>(() => null);
 
-const SnackbarProvider = ({ children }: { children: React.ReactNode }) => {
+const SnackbarProvider = ({ children }: PropsWithRequiredChildren) => {
   const [snackbarInfo, setSnackbarInfo] = useState<SnackbarInfo>({
     message: '',
     type: 'success',

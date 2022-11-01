@@ -9,7 +9,13 @@ interface TitleProps {
   tooltipText?: string;
 }
 
-const Title = ({ text, highlightText, extraText, highlightColor, tooltipText }: TitleProps) => {
+const Title = ({
+  text,
+  highlightText = '',
+  extraText = '',
+  highlightColor = 'transparent',
+  tooltipText = '',
+}: TitleProps) => {
   return (
     <S.TitleWrapper role="status" aria-label={`${text} ${highlightText} ${extraText}`}>
       <S.Title aria-hidden="true">{text}</S.Title>

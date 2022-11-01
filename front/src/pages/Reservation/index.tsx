@@ -9,77 +9,29 @@ import Title from '@components/Title';
 import Modal from '@components/Modal';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
+import useRefetch from '@hooks/useRefetch';
+import useSchedule from './hooks/useSchedule';
 import { getCoachSchedulesByCrew } from '@api/coach';
 import { createReservation } from '@api/reservation';
 import { ROUTES } from '@constants/index';
-import type { DaySchedule, MonthScheduleMap, ScheduleInfo } from '@typings/domain';
 import { logError } from '@utils/logError';
 import { theme } from '@styles/theme';
 import * as SS from '@styles/common';
 import * as S from './styles';
-
 import CheckCircle from '@assets/check-circle.svg';
 
 const Reservation = () => {
   const navigate = useNavigate();
   const { id: coachId } = useParams();
   const { state: coachImage } = useLocation();
+  const { refetchCount, refetch } = useRefetch();
   const { value: isOpenModal, setTrue: openModal, setFalse: closeModal } = useBoolean();
   const { value: isOpenTimeList, setTrue: openTimeList, setFalse: closeTimeList } = useBoolean();
   const { monthYear, selectedDay, setSelectedDay, dateBoxLength, updateMonthYear } = useCalendar();
+  const { schedule, setSchedule, createScheduleMap, selectDaySchedule, updateTimeIsPossible } =
+    useSchedule(selectedDay);
   const [reservationId, setReservationId] = useState<number | null>(null);
   const [selectedTimeId, setSelectedTimeId] = useState<number | null>(null);
-  const [refetchCount, setRefetchCount] = useState(0);
-  const [schedule, setSchedule] = useState<Omit<ScheduleInfo, 'date'>>({
-    monthSchedule: {},
-    daySchedule: [],
-  });
-
-  const refetch = () => {
-    setRefetchCount((prev) => prev + 1);
-  };
-
-  const createScheduleMap = (scheduleArray: DaySchedule[]) => {
-    setSchedule((allSchedules) => {
-      const newMonthSchedule = scheduleArray.reduce((newObj, { day, schedules }) => {
-        newObj[day] = schedules;
-        return newObj;
-      }, {} as MonthScheduleMap);
-
-      return {
-        ...allSchedules,
-        monthSchedule: newMonthSchedule,
-      };
-    });
-  };
-
-  const selectDaySchedule = (day: number) => {
-    setSchedule((allSchedules) => {
-      const selectedDaySchedule = schedule.monthSchedule[day];
-
-      return {
-        ...allSchedules,
-        daySchedule: selectedDaySchedule,
-      };
-    });
-  };
-
-  const updateTimeIsPossible = (scheduleId: number, isPossible: boolean) => {
-    setSchedule((allSchedules) => {
-      const newDaySchedule = schedule.daySchedule.map((time) => {
-        if (time.id === scheduleId) {
-          return { id: scheduleId, dateTime: time.dateTime, isPossible };
-        }
-        return time;
-      });
-
-      return {
-        ...allSchedules,
-        monthSchedule: { ...schedule.monthSchedule, [selectedDay]: newDaySchedule },
-        daySchedule: newDaySchedule,
-      };
-    });
-  };
 
   const handleUpdateMonth = (increment: number) => {
     setSchedule({ monthSchedule: {}, daySchedule: [] });
