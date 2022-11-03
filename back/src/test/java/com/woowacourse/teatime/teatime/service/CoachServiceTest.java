@@ -10,23 +10,15 @@ import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfile
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachProfileResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
-public class CoachServiceTest {
+public class CoachServiceTest extends ServiceTestSupporter {
 
     @Autowired
     private CoachService coachService;
-
-    @Autowired
-    private CoachRepository coachRepository;
 
     @DisplayName("코치 목록을 조회한다.")
     @Test

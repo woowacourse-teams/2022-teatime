@@ -23,31 +23,19 @@ import com.woowacourse.teatime.teatime.controller.dto.response.SheetQuestionResp
 import com.woowacourse.teatime.teatime.controller.dto.response.SheetQuestionsResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.teatime.repository.QuestionRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
-public class QuestionServiceTest {
+public class QuestionServiceTest extends ServiceTestSupporter {
 
     private Coach coach;
 
     @Autowired
-    QuestionService questionService;
-
-    @Autowired
-    QuestionRepository questionRepository;
-
-    @Autowired
-    CoachRepository coachRepository;
+    private QuestionService questionService;
 
     @BeforeEach
     void setUp() {

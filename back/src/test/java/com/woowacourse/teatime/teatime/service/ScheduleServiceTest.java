@@ -18,9 +18,6 @@ import com.woowacourse.teatime.teatime.domain.Crew;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
 import com.woowacourse.teatime.teatime.exception.UnableToUpdateScheduleException;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.teatime.repository.CrewRepository;
-import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,15 +29,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@TestConstructor(autowireMode = AutowireMode.ALL)
-class ScheduleServiceTest {
+class ScheduleServiceTest extends ServiceTestSupporter {
 
     private static final LocalDate NOW = LocalDate.now();
     private static final LocalDate LAST_DATE_OF_MONTH = NOW.withDayOfMonth(NOW.lengthOfMonth());
@@ -50,14 +40,6 @@ class ScheduleServiceTest {
 
     @Autowired
     private ScheduleService scheduleService;
-    @Autowired
-    private CoachRepository coachRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-    @Autowired
-    private ReservationService reservationService;
-    @Autowired
-    private CrewRepository crewRepository;
 
     @DisplayName("코치의 오늘 이후 한달 스케줄 목록을 조회한다.")
     @Test
