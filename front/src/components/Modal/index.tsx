@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
+
 import Portal from '../../Portal';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 import * as S from './styles';
 
 import CloseIcon from '@assets/close.svg';
@@ -7,7 +9,6 @@ import CloseIcon from '@assets/close.svg';
 interface ModalProps {
   icon?: string;
   title: string;
-  children: React.ReactNode;
   firstButtonName: string;
   secondButtonName: string;
   closeModal: () => void;
@@ -24,7 +25,7 @@ const Modal = ({
   closeModal,
   onClickFirstButton,
   onClickSecondButton,
-}: ModalProps) => {
+}: PropsWithRequiredChildren<ModalProps>) => {
   const handleClickDimmer = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       closeModal();

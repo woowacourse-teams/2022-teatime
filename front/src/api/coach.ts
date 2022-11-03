@@ -1,5 +1,5 @@
 import { api } from '@api/index';
-import { Coach, DaySchedule, CrewListMap, CoachHistory, CoachData } from '@typings/domain';
+import type { Coach, DaySchedule, CrewListMap, CoachHistory, CoachData } from '@typings/domain';
 
 const getCoaches = () => api.get<Coach[]>(`/api/v2/coaches`);
 

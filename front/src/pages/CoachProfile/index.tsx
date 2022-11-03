@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import Card from '@components/Card';
-import type { CoachData } from '@typings/domain';
-import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { UserDispatchContext } from '@context/UserProvider';
 import { SnackbarContext } from '@context/SnackbarProvider';
+import { editCoachProfile, getCoachProfile } from '@api/coach';
 import { logError } from '@utils/logError';
 import { ERROR_MESSAGE, MAX_LENGTH, ROUTES } from '@constants/index';
+import type { CoachData } from '@typings/domain';
 import * as S from './styles';
 
 const CoachProfile = () => {

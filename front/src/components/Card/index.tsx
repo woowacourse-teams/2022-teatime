@@ -1,5 +1,9 @@
+import { useRef } from 'react';
+
+import useIntersectionObserver from '@hooks/useIntersectionObserver';
 import * as S from './styles';
 import RequestIcon from '@assets/request.svg';
+import PersonIcon from '@assets/person.svg';
 
 interface CardProps {
   image: string;
@@ -20,6 +24,10 @@ const Card = ({
   onClick,
   isPreview,
 }: CardProps) => {
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const entry = useIntersectionObserver(imgRef, { rootMargin: '5%' });
+  const isVisible = entry?.isIntersecting;
+
   return (
     <S.CardContainer onClick={onClick} isPossible={!!isPossible} isPreview={!!isPreview}>
       <S.IconWrapper>
@@ -27,7 +35,7 @@ const Card = ({
       </S.IconWrapper>
       <S.CardWrapper>
         <S.ImageWrapper>
-          <img src={image} alt={`${name} 카드 이미지`} />
+          <img src={isVisible ? image : PersonIcon} alt={`${name} 카드 이미지`} ref={imgRef} />
         </S.ImageWrapper>
         <span>{name}</span>
         <p>{description}</p>

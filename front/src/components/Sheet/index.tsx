@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import Textarea from '@components/Textarea';
-import { Sheets } from '@typings/domain';
 import { ERROR_MESSAGE, MAX_LENGTH } from '@constants/index';
+import type { Sheets } from '@typings/domain';
 import * as S from './styles';
 
 interface SheetProps {
