@@ -1,30 +1,22 @@
-package com.woowacourse.teatime.teatime.repository.jdbc;
+package com.woowacourse.teatime.teatime.repository;
 
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.DATE_TIME;
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJason;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.woowacourse.teatime.support.RepositoryTestSupporter;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Schedule;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
-import com.woowacourse.teatime.teatime.support.RepositoryTest;
+import com.woowacourse.teatime.teatime.repository.jdbc.ScheduleDao;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@RepositoryTest
-class ScheduleDaoTest {
+class ScheduleDaoTest extends RepositoryTestSupporter {
 
     @Autowired
     private ScheduleDao scheduleDao;
-
-    @Autowired
-    private CoachRepository coachRepository;
-
-    @Autowired
-    private ScheduleRepository scheduleRepository;
 
     @DisplayName("스케줄을 한번에 저장한다.")
     @Test

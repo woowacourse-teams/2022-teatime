@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.woowacourse.teatime.auth.controller.dto.GenerateTokenDto;
-import com.woowacourse.teatime.teatime.controller.ControllerTestSupporter;
+import com.woowacourse.teatime.support.ControllerTestSupporter;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

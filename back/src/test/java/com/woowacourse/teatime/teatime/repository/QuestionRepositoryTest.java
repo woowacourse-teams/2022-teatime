@@ -7,26 +7,18 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getQuestion3
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.woowacourse.teatime.support.RepositoryTestSupporter;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Question;
-import com.woowacourse.teatime.teatime.repository.jdbc.QuestionDao;
-import com.woowacourse.teatime.teatime.support.RepositoryTest;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@RepositoryTest
-class QuestionRepositoryTest {
+class QuestionRepositoryTest extends RepositoryTestSupporter {
 
     @Autowired
     private QuestionRepository questionRepository;
-
-    @Autowired
-    private QuestionDao questionDao;
-
-    @Autowired
-    private CoachRepository coachRepository;
 
     @Test
     void findAllByCoachIdOrderByNumber() {

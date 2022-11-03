@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.support.ServiceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.support.ControllerTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.exception.AlreadyApprovedException;
@@ -33,7 +34,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(1L))
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -49,7 +50,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(null))
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -68,7 +69,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(1L))
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -93,7 +94,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(post("/api/v2/reservations", new ReservationReserveRequest(1L))
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -181,7 +182,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(delete("/api/v2/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -200,7 +201,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(delete("/api/v2/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -222,7 +223,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(delete("/api/v2/reservations/a")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -241,7 +242,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(delete("/api/v2/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -263,7 +264,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -279,7 +280,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/reservations/a")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then
@@ -298,7 +299,7 @@ class ReservationControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc.perform(put("/api/v2/reservations/1")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then

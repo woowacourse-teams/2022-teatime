@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.teatime.controller;
+package com.woowacourse.teatime.support;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

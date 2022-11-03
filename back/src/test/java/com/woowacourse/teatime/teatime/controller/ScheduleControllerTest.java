@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.support.ControllerTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleFindRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleUpdateRequest;
 import com.woowacourse.teatime.teatime.exception.NotFoundCoachException;
@@ -167,7 +168,7 @@ class ScheduleControllerTest extends ControllerTestSupporter {
         //when
         LocalDate date = LocalDate.now();
         ResultActions perform = mockMvc.perform(put("/api/v2/coaches/me/schedules",
-                       List.of( new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date)))))
+                        List.of(new ScheduleUpdateRequest(date, List.of(Date.findLastTime(date)))))
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
 

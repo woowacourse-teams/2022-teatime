@@ -8,6 +8,7 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.woowacourse.teatime.support.ServiceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleFindRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ScheduleUpdateRequest;

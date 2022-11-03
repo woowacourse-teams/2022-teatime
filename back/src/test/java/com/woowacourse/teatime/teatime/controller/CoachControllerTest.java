@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.woowacourse.teatime.support.ControllerTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindResponse;
 import java.util.List;
@@ -160,8 +161,9 @@ class CoachControllerTest extends ControllerTestSupporter {
 
         //when
         ResultActions perform = mockMvc
-                .perform(put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name, "안녕하세요 티타임 코치입니다.", true))
-                        .header("Authorization", "Bearer " + token))
+                .perform(
+                        put("/api/v2/coaches/me/profile", new CoachUpdateProfileRequest(name, "안녕하세요 티타임 코치입니다.", true))
+                                .header("Authorization", "Bearer " + token))
                 .andDo(print());
 
         //then

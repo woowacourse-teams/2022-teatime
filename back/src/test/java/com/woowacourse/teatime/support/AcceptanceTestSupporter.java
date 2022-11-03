@@ -1,4 +1,4 @@
-package com.woowacourse.teatime.teatime.acceptance;
+package com.woowacourse.teatime.support;
 
 import static com.woowacourse.teatime.teatime.domain.Role.COACH;
 import static com.woowacourse.teatime.teatime.domain.Role.CREW;
@@ -56,13 +56,13 @@ public class AcceptanceTestSupporter extends DatabaseSupporter {
                                                 .removePort(),
                                         prettyPrint()
                                 ).withResponseDefaults(
-                                removeHeaders(
-                                        "Transfer-Encoding",
-                                        "Date",
-                                        "Keep-Alive",
-                                        "Connection"),
-                                prettyPrint()
-                        )
+                                        removeHeaders(
+                                                "Transfer-Encoding",
+                                                "Date",
+                                                "Keep-Alive",
+                                                "Connection"),
+                                        prettyPrint()
+                                )
                 ).build();
     }
 
@@ -76,7 +76,8 @@ public class AcceptanceTestSupporter extends DatabaseSupporter {
                 .extract();
     }
 
-    protected static ExtractableResponse<Response> get(String uri, String token, Map<String, Object> pathParams, Map<String, Object> queryParams) {
+    protected static ExtractableResponse<Response> get(String uri, String token, Map<String, Object> pathParams,
+                                                       Map<String, Object> queryParams) {
         return RestAssured.given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .pathParams(pathParams)

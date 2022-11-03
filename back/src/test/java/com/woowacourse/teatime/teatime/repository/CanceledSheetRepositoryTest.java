@@ -4,6 +4,7 @@ import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCoachJaso
 import static com.woowacourse.teatime.teatime.fixture.DomainFixture.getCrew;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.woowacourse.teatime.support.RepositoryTestSupporter;
 import com.woowacourse.teatime.teatime.domain.CanceledReservation;
 import com.woowacourse.teatime.teatime.domain.CanceledSheet;
 import com.woowacourse.teatime.teatime.domain.Coach;
@@ -16,10 +17,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
-public class CanceledSheetRepositoryTest {
+public class CanceledSheetRepositoryTest extends RepositoryTestSupporter {
 
     private Crew crew;
     private Coach coach;
@@ -28,18 +27,6 @@ public class CanceledSheetRepositoryTest {
 
     @Autowired
     private CanceledSheetRepository canceledSheetRepository;
-    @Autowired
-    private CanceledReservationRepository canceledReservationRepository;
-    @Autowired
-    private SheetRepository sheetRepository;
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private CrewRepository crewRepository;
-    @Autowired
-    private CoachRepository coachRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
 
     @BeforeEach
     void setUp() {

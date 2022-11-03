@@ -4,8 +4,8 @@ import static com.woowacourse.teatime.teatime.fixture.DtoFixture.COACH_BROWN_SAV
 import static com.woowacourse.teatime.teatime.fixture.DtoFixture.CREW_SAVE_REQUEST;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import com.woowacourse.teatime.support.AcceptanceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.PokeSaveRequest;
-import com.woowacourse.teatime.teatime.service.AlarmService;
 import com.woowacourse.teatime.teatime.service.CoachService;
 import com.woowacourse.teatime.teatime.service.CrewService;
 import io.restassured.RestAssured;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -24,9 +23,6 @@ class PokeAcceptanceTest extends AcceptanceTestSupporter {
 
     @Autowired
     private CrewService crewService;
-
-    @MockBean
-    private AlarmService alarmService;
 
     private Long coachId;
     private Long crewId;
