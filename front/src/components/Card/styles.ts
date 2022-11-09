@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { FadeIn } from '@styles/common';
 
 const Refresh = keyframes`
  0% { 
@@ -132,6 +133,7 @@ const ImageWrapper = styled.div`
     width: 100px;
     height: 100px;
     border-radius: 50%;
+    animation: ${FadeIn} 0.5s;
   }
 
   @media screen and (${({ theme }) => theme.devices.tablet}) {
@@ -183,7 +185,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const SkeletonContainer = styled(CardContainer)`
-  background-image: linear-gradient(90deg, #e0e0e0 0px, #ededed 30px, #e0e0e0 60px);
+  background-image: linear-gradient(90deg, #e0e0e0 0px, #ebebeb 30px, #e0e0e0 60px);
   background-color: ${({ theme }) => theme.colors.GRAY_150};
   border: 2px solid ${({ theme }) => theme.colors.GRAY_250};
   animation: ${Refresh} 2s infinite ease-out;
