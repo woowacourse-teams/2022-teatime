@@ -14,6 +14,7 @@ import { getCoaches } from '@api/coach';
 import { postReservationRequest } from '@api/crew';
 import type { Coach } from '@typings/domain';
 import * as S from './styles';
+import SkeletonCard from '@components/Card/SkeletonCard';
 
 const CrewMain = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const CrewMain = () => {
     id: 0,
     image: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClickCard = (e: React.MouseEvent, id: number, image: string, isPokable: boolean) => {
     const target = (e.target as HTMLImageElement).id;
@@ -55,6 +57,7 @@ const CrewMain = () => {
   useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         const { data } = await cacheFetch(CACHE.KEY, getCoaches, 0);
         setCoaches(data);
       } catch (error) {
@@ -68,16 +71,20 @@ const CrewMain = () => {
           alert(error);
           console.log(error);
         }
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
 
-  if (!coaches) return <EmptyContent text={'등록된 사용자가 없습니다.'} />;
+  if (coaches?.length === 0) {
+    return <EmptyContent text={'등록된 사용자가 없습니다.'} />;
+  }
 
   return (
     <S.Layout>
       <S.CardListContainer>
-        {coaches.map((coach) => {
+        {coaches?.map((coach) => {
           const { id, name, image, description, isPossible, isPokable } = coach;
           return (
             <Card
@@ -91,6 +98,7 @@ const CrewMain = () => {
             />
           );
         })}
+        {isLoading && Array.from({ length: 8 }, (_, i) => <SkeletonCard key={i} />)}
       </S.CardListContainer>
       {isOpenModal && (
         <Modal
