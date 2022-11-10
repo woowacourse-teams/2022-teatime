@@ -1,19 +1,15 @@
 package com.woowacourse.teatime.teatime.repository.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+public interface CoachWithPossible {
+    Long getId();
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CoachWithPossible {
+    String getName();
 
-    private Long id;
-    private String name;
-    private String description;
-    private String image;
-    private Boolean isPossible;
-    private Boolean isPokable;
+    String getDescription();
+
+    String getImage();
+
+    Boolean getPokable();
+
+    Boolean getPossible();
 }
