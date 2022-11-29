@@ -20,7 +20,7 @@ const ReservationTimeList = ({
 }: ReservationTimeListProps) => {
   return (
     <TimeList>
-      {data?.map(({ id, dateTime, isPossible, ...props }, index) => {
+      {data.map(({ id, dateTime, isPossible, ...props }, index) => {
         const time = getHourMinutes(dateTime);
         return (
           <Fragment key={id}>

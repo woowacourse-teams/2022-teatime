@@ -20,7 +20,7 @@ const ScheduleTimeList = ({
   return (
     <TimeList>
       <TimeList.Scroll>
-        {data?.map(({ id, dateTime, ...props }) => (
+        {data.map(({ id, dateTime, ...props }) => (
           <TimeList.Time
             key={id}
             onClick={() => onClickTime(dateTime)}

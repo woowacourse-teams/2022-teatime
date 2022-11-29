@@ -11,7 +11,7 @@ const MultipleTimeList = ({ data, onClickTime, onSubmit }: MultipleTimeListProps
   return (
     <TimeList>
       <TimeList.Scroll>
-        {data?.map(({ id, dateTime, ...props }) => (
+        {data.map(({ id, dateTime, ...props }) => (
           <TimeList.Time key={id} onClick={() => onClickTime(dateTime)} {...props}>
             {dateTime}
           </TimeList.Time>
