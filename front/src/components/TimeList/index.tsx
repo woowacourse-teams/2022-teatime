@@ -1,4 +1,4 @@
-import { PropsWithRequiredChildren } from '@typings/utils';
+import type { PropsWithRequiredChildren } from '@typings/utils';
 import * as S from './styles';
 
 interface TimeProps {
