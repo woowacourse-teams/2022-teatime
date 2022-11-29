@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
-import ReservationTimeList from '@components/ReservationTimeList';
 import Calendar from '@components/Calendar';
 import Frame from '@components/Frame';
 import Title from '@components/Title';
 import Modal from '@components/Modal';
+import ReservationTimeList from '@components/TimeList/ReservationTimeList';
 import useCalendar from '@hooks/useCalendar';
 import useBoolean from '@hooks/useBoolean';
 import useRefetch from '@hooks/useRefetch';
@@ -137,9 +137,9 @@ const Reservation = () => {
           />
           {isOpenTimeList && (
             <ReservationTimeList
-              daySchedule={schedule.daySchedule}
-              selectedTimeId={selectedTimeId}
+              data={schedule.daySchedule}
               onClickTime={handleClickTime}
+              selectedTimeId={selectedTimeId}
               onClickReservation={handleClickReservation}
             />
           )}

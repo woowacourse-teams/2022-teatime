@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { TimeBox } from '@components/TimeBox/styles';
 import { FadeIn } from '@styles/common';
 
 const TimeListContainer = styled.div`
@@ -12,8 +11,11 @@ const TimeListContainer = styled.div`
   @media screen and (${({ theme }) => theme.devices.tablet}) {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
     width: 100%;
     margin-left: 0;
+    margin-top: 20px;
   }
 `;
 
@@ -29,11 +31,32 @@ const ScrollContainer = styled.div`
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 50px 0 60px;
+    margin-bottom: 60px;
   }
 `;
 
-const ScheduleTimeBox = styled(TimeBox)`
+const TimeItem = styled.button<{
+  isPossible?: boolean;
+  isSelected?: boolean;
+  isPastTime?: boolean;
+}>`
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.GREEN_900};
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    border: 3px solid ${({ theme }) => theme.colors.GREEN_900};
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    width: 100px;
+  }
+
   ${(props) =>
     (props.isPossible === false || props.isPastTime) &&
     css`
@@ -52,15 +75,16 @@ const ScheduleTimeBox = styled(TimeBox)`
     `}
 `;
 
-const ButtonContainer = styled.div`
+const Controls = styled.div`
   display: flex;
   justify-content: space-between;
   position: absolute;
   bottom: 0;
   width: 250px;
+  gap: 10px;
 
   button {
-    width: 120px;
+    width: 100%;
     height: 50px;
     border: none;
     border-radius: 4px;
@@ -70,7 +94,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const CheckButton = styled.button`
+const SelectAllButton = styled.button`
   background-color: ${({ theme }) => theme.colors.GRAY_200};
 `;
 
@@ -79,11 +103,54 @@ const ConfirmButton = styled.button`
   color: ${({ theme }) => theme.colors.BLACK};
 `;
 
+const Divider = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  animation: ${FadeIn} 0.8s;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: ${({ theme }) => theme.colors.WHITE};
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  button {
+    width: 120px;
+    height: 50px;
+    background-color: ${({ theme }) => theme.colors.BLUE_600};
+    color: ${({ theme }) => theme.colors.WHITE};
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  @media screen and (${({ theme }) => theme.devices.tablet}) {
+    div {
+      display: none;
+    }
+
+    button {
+      width: 100px;
+    }
+  }
+`;
+
 export {
   TimeListContainer,
   ScrollContainer,
-  ScheduleTimeBox,
-  ButtonContainer,
-  CheckButton,
+  TimeItem,
+  Controls,
+  Divider,
+  SelectAllButton,
   ConfirmButton,
 };

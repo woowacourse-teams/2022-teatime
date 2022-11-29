@@ -1,53 +1,53 @@
 import { Fragment } from 'react';
 
+import TimeList from '.';
 import Conditional from '@components/Conditional';
 import { getHourMinutes } from '@utils/date';
 import type { TimeSchedule } from '@typings/domain';
-import * as S from './styles';
 
 interface ReservationTimeListProps {
-  daySchedule: TimeSchedule[];
-  selectedTimeId: number | null;
+  data: TimeSchedule[];
   onClickTime: (id: number, isPossible?: boolean) => void;
+  selectedTimeId: number | null;
   onClickReservation: (scheduleId: number) => void;
 }
 
 const ReservationTimeList = ({
-  daySchedule,
-  selectedTimeId,
+  data,
   onClickTime,
+  selectedTimeId,
   onClickReservation,
 }: ReservationTimeListProps) => {
   return (
-    <S.TimeListContainer>
-      {daySchedule.map(({ id, isPossible, dateTime }, index) => {
+    <TimeList>
+      {data.map(({ id, dateTime, isPossible, ...props }, index) => {
         const time = getHourMinutes(dateTime);
-
         return (
           <Fragment key={id}>
             <Conditional condition={selectedTimeId === id}>
-              <S.ReserveButtonWrapper>
-                <div>{time}</div>
-                <button onClick={() => onClickReservation(id)} autoFocus>
+              <TimeList.Divider>
+                <TimeList.SelectedTime>{time}</TimeList.SelectedTime>
+                <TimeList.ReservationButton onClick={() => onClickReservation(id)}>
                   예약하기
-                </button>
-              </S.ReserveButtonWrapper>
+                </TimeList.ReservationButton>
+              </TimeList.Divider>
             </Conditional>
 
             <Conditional condition={selectedTimeId !== id}>
-              <S.ReservationTimeBox
-                aria-label={isPossible ? '' : `${time} 예약 불가`}
-                autoFocus={index === 0}
-                isPossible={isPossible}
+              <TimeList.Time
                 onClick={() => onClickTime(id, isPossible)}
+                isPossible={isPossible}
+                dateTime={time}
+                index={index}
+                {...props}
               >
                 {time}
-              </S.ReservationTimeBox>
+              </TimeList.Time>
             </Conditional>
           </Fragment>
         );
       })}
-    </S.TimeListContainer>
+    </TimeList>
   );
 };
 
