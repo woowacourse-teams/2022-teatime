@@ -6,9 +6,8 @@ import Frame from '@components/Frame';
 import Calendar from '@components/Calendar';
 import CalendarSelectList from '@components/CalendarSelectList';
 import Title from '@components/Title';
-import ScheduleTimeList from '@components/ScheduleTimeList';
-import MultipleTimeList from '@components/MultipleTimeList';
 import Conditional from '@components/Conditional';
+import { MultipleTimeList, ScheduleTimeList } from '@components/TimeList';
 import useBoolean from '@hooks/useBoolean';
 import useRefetch from '@hooks/useRefetch';
 import useSchedule from './hooks/useSchedule';
@@ -251,19 +250,19 @@ const Schedule = () => {
 
           <Conditional condition={isOpenTimeList}>
             <ScheduleTimeList
-              isSelectedAll={isSelectedAll}
-              daySchedule={schedule.daySchedule}
+              data={schedule.daySchedule}
               onClickTime={handleClickTime}
               onSelectAll={handleSelectAllTimes}
-              onUpdateDaySchedule={handleUpdateDaySchedule}
+              onSubmit={handleUpdateDaySchedule}
+              isSelectedAll={isSelectedAll}
             />
           </Conditional>
 
           <Conditional condition={isOpenMultipleTimeList}>
             <MultipleTimeList
-              selectedTimes={selectedDayList.times}
+              data={selectedDayList.times}
               onClickTime={handleClickMultipleTime}
-              onClickUpdateMultipleDaySchedule={handleUpdateMultipleDaySchedule}
+              onSubmit={handleUpdateMultipleDaySchedule}
             />
           </Conditional>
         </SS.CalendarContainer>
