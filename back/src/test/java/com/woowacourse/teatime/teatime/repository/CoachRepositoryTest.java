@@ -78,7 +78,7 @@ public class CoachRepositoryTest {
                 () -> assertThat(coaches.get(0).getName()).isEqualTo(coach.getName()),
                 () -> assertThat(coaches.get(0).getDescription()).isEqualTo(coach.getDescription()),
                 () -> assertThat(coaches.get(0).getImage()).isEqualTo(coach.getImage()),
-                () -> assertThat(coaches.get(0).getIsPossible()).isFalse()
+                () -> assertThat(coaches.get(0).getPossible()).isFalse()
         );
     }
 
@@ -98,7 +98,7 @@ public class CoachRepositoryTest {
         assertAll(
                 () -> assertThat(coaches).hasSize(1),
                 () -> assertThat(coaches.get(0).getName()).isEqualTo(coach.getName()),
-                () -> assertThat(coaches.get(0).getIsPossible()).isFalse()
+                () -> assertThat(coaches.get(0).getPossible()).isFalse()
         );
     }
 
@@ -119,7 +119,7 @@ public class CoachRepositoryTest {
         assertAll(
                 () -> assertThat(coaches).hasSize(1),
                 () -> assertThat(coaches.get(0).getName()).isEqualTo(coach.getName()),
-                () -> assertThat(coaches.get(0).getIsPossible()).isTrue()
+                () -> assertThat(coaches.get(0).getPossible()).isTrue()
         );
     }
 
@@ -138,7 +138,7 @@ public class CoachRepositoryTest {
         assertAll(
                 () -> assertThat(coaches).hasSize(1),
                 () -> assertThat(coaches.get(0).getName()).isEqualTo(coach.getName()),
-                () -> assertThat(coaches.get(0).getIsPossible()).isFalse()
+                () -> assertThat(coaches.get(0).getPossible()).isFalse()
         );
     }
 
@@ -162,7 +162,7 @@ public class CoachRepositoryTest {
         assertAll(
                 () -> assertThat(coaches).hasSize(1),
                 () -> assertThat(coaches.get(0).getName()).isEqualTo(coach.getName()),
-                () -> assertThat(coaches.get(0).getIsPossible()).isFalse()
+                () -> assertThat(coaches.get(0).getPossible()).isFalse()
         );
     }
 }

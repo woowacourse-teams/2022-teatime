@@ -29,7 +29,7 @@ public class CoachFindResponse {
     public static List<CoachFindResponse> of(List<CoachWithPossible> coachWithPossibles) {
         return coachWithPossibles.stream()
                 .map(c -> new CoachFindResponse(c.getId(), c.getName(), c.getDescription(), c.getImage(),
-                        c.getIsPossible(), c.getIsPokable()))
+                        c.getPossible(), c.getPokable()))
                 .collect(Collectors.toList());
     }
 }
