@@ -3,6 +3,7 @@ package com.woowacourse.teatime.teatime.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.woowacourse.teatime.support.RepositoryTestSupporter;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.fixture.DomainFixture;
@@ -10,17 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
-public class ScheduleRepositoryTest {
-
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-
-    @Autowired
-    private CoachRepository coachRepository;
+public class ScheduleRepositoryTest extends RepositoryTestSupporter {
 
     @DisplayName("스케줄 전체 목록을 조회한다.")
     @Test

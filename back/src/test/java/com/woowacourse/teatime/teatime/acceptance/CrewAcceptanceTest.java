@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import com.woowacourse.teatime.support.AcceptanceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.CrewUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;

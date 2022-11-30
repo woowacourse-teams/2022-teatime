@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.support.ServiceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateDto;
 import com.woowacourse.teatime.teatime.controller.dto.request.SheetAnswerUpdateRequest;
@@ -32,11 +33,6 @@ import com.woowacourse.teatime.teatime.domain.Schedule;
 import com.woowacourse.teatime.teatime.exception.CannotSubmitBlankException;
 import com.woowacourse.teatime.teatime.exception.NotFoundCrewException;
 import com.woowacourse.teatime.teatime.exception.NotFoundReservationException;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.teatime.repository.CrewRepository;
-import com.woowacourse.teatime.teatime.repository.QuestionRepository;
-import com.woowacourse.teatime.teatime.repository.ReservationRepository;
-import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,15 +41,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@TestConstructor(autowireMode = AutowireMode.ALL)
-class SheetServiceTest {
+class SheetServiceTest extends ServiceTestSupporter {
 
     private Crew crew;
     private Coach coach;
@@ -62,18 +51,6 @@ class SheetServiceTest {
 
     @Autowired
     private SheetService sheetService;
-    @Autowired
-    private ReservationService reservationService;
-    @Autowired
-    private CoachRepository coachRepository;
-    @Autowired
-    private CrewRepository crewRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
 
     @BeforeEach
     void setUp() {

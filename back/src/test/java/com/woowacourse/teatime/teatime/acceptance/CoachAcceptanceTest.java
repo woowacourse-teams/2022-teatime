@@ -12,6 +12,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import com.woowacourse.teatime.support.AcceptanceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.CoachUpdateProfileRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;

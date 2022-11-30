@@ -17,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 import com.woowacourse.teatime.auth.support.dto.UserRoleDto;
+import com.woowacourse.teatime.support.ServiceTestSupporter;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationApproveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.request.ReservationReserveRequest;
 import com.woowacourse.teatime.teatime.controller.dto.response.CoachFindCrewHistoryResponse;
@@ -25,7 +26,6 @@ import com.woowacourse.teatime.teatime.controller.dto.response.CoachReservations
 import com.woowacourse.teatime.teatime.controller.dto.response.CrewFindOwnHistoryResponse;
 import com.woowacourse.teatime.teatime.domain.Coach;
 import com.woowacourse.teatime.teatime.domain.Crew;
-import com.woowacourse.teatime.teatime.domain.Question;
 import com.woowacourse.teatime.teatime.domain.Reservation;
 import com.woowacourse.teatime.teatime.domain.ReservationStatus;
 import com.woowacourse.teatime.teatime.domain.Role;
@@ -39,11 +39,6 @@ import com.woowacourse.teatime.teatime.exception.SlackAlarmException;
 import com.woowacourse.teatime.teatime.exception.UnableToSubmitSheetException;
 import com.woowacourse.teatime.teatime.repository.CanceledReservationRepository;
 import com.woowacourse.teatime.teatime.repository.CanceledSheetRepository;
-import com.woowacourse.teatime.teatime.repository.CoachRepository;
-import com.woowacourse.teatime.teatime.repository.CrewRepository;
-import com.woowacourse.teatime.teatime.repository.QuestionRepository;
-import com.woowacourse.teatime.teatime.repository.ReservationRepository;
-import com.woowacourse.teatime.teatime.repository.ScheduleRepository;
 import com.woowacourse.teatime.teatime.repository.SheetRepository;
 import com.woowacourse.teatime.teatime.service.dto.AlarmInfoDto;
 import java.time.LocalDateTime;
@@ -55,38 +50,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
-class ReservationServiceTest {
+class ReservationServiceTest extends ServiceTestSupporter {
+
+    @Autowired
+    private CanceledReservationRepository canceledReservationRepository;
+
+    @Autowired
+    private CanceledSheetRepository canceledSheetRepository;
+
+    @Autowired
+    private SheetRepository sheetRepository;
 
     private Crew crew;
     private Coach coach;
     private Schedule schedule;
-
-    @Autowired
-    private ReservationService reservationService;
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private CanceledReservationRepository canceledReservationRepository;
-    @Autowired
-    private CanceledSheetRepository canceledSheetRepository;
-    @Autowired
-    private CrewRepository crewRepository;
-    @Autowired
-    private CoachRepository coachRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-    @MockBean
-    private AlarmService alarmService;
-    @Autowired
-    private SheetRepository sheetRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
 
     @BeforeEach
     void setUp() {
